@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+// 可选 代码支持通过view id 获取对象，不再需要findViewById
+apply plugin: 'kotlin-android-extensions'
+// 编译kotlin代码
+apply plugin: 'kotlin-android'
+
+android {
+
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        applicationId "com.ntxm.smart"
+        versionName "1.0"
+        versionCode 1
+        minSdkVersion 23
+        targetSdkVersion 28
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: "libs", includes: ['*.jar'])
+
+    // android 依赖包, 主要以androidx为主
+    implementation 'androidx.multidex:multidex:2.0.1' // 支持分包
+    implementation 'androidx.recyclerview:recyclerview:1.0.0' // recyclerview
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0' // v4
+    implementation 'androidx.viewpager:viewpager:1.0.0' // view pager
+
+    // 约束布局
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // kotlin
+
+    // bugly崩溃框架
+
+    // 网络框架
+
+    // 图片框架
+
+    // 内存泄露框架
+}
+repositories {
+    mavenCentral()
+}

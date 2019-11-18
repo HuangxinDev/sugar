@@ -1,0 +1,14 @@
+// 此文件用于屏蔽不需要上传的文件
+
+.gradle
+.idea
+gradle/
+*.iml
+
+local.properties
+
+gradlew*
+
+build/
+
+app/build
