@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">"智慧工地"</string>
+    <string name="app_name">"智慧云"</string>
+    <string name="user_login">登录</string>
+    <string name="quick_login_text">快捷登录</string>
+    <string name="password_login_text">密码登录</string>
+
+
+    <!--    登录页面文案-->
+    <string name="user_account_hint_text">请输入手机号或身份证</string>
+    <string name="user_password_hint_text">"请输入6&#8211;12位密码"</string>
 </resources>

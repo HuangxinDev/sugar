@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:orientation="vertical">
+
+    <com.njxm.smart.view.NoScrollViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/text_color_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:paddingStart="11dp">
+
+        <LinearLayout
+            android:id="@+id/attendance_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:id="@+id/picture_attendance_icon"
+                android:layout_width="@dimen/icon_width_22dp"
+                android:layout_height="@dimen/icon_height_22dp"
+                android:src="@drawable/picture_attendance_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="考勤" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/workcenter_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="@dimen/icon_width_22dp"
+                android:layout_height="@dimen/icon_height_22dp"
+                android:src="@drawable/picture_workcenter_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="工作中心" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/messages_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="@dimen/icon_width_22dp"
+                android:layout_height="@dimen/icon_height_22dp"
+                android:src="@drawable/picture_message_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="消息" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/personal_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="@dimen/icon_width_22dp"
+                android:layout_height="@dimen/icon_height_22dp"
+                android:src="@drawable/picture_mine_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="我的" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

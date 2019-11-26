@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="font_size_login">18sp</dimen>
+    <dimen name="font_size_11sp">11sp</dimen>
+    <dimen name="font_size_15sp">15sp</dimen>
+    <dimen name="font_size_16sp">16sp</dimen>
+    <dimen name="main_navi_icon_size">22dp</dimen>
+
+    <dimen name="icon_width_22dp">22dp</dimen>
+    <dimen name="icon_height_22dp">22dp</dimen>
+</resources>
+
+

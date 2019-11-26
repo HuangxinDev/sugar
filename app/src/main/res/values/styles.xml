@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+
+    <!--    闪屏主题-->
+    <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@mipmap/flash_screen</item>
+        <item name="android:screenOrientation">portrait</item>
+<!--        <item name="android:windowFullscreen">true</item>-->
+    </style>
+
+    <style name="TextViewStyle1">
+        <item name="android:textColor">@color/text_color_white</item>
+        <item name="android:textSize">@dimen/font_size_16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/msyh</item>
+        <item name="android:background">@drawable/background_btn_flavor_1</item>
+    </style>
+</resources>
