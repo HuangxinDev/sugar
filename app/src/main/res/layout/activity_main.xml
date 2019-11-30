@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
@@ -12,6 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -19,100 +21,58 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingStart="11dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-        <LinearLayout
+        <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/attendance_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            app:icon="@drawable/picture_attendance_icon"
+            app:iconNormal="@mipmap/picture_attendance_normal"
+            app:iconSelected="@mipmap/picture_attendance_selected"
+            app:spacing="6dp"
+            app:text="考勤"
+            app:textColor="@drawable/login_text_color_selector" />
 
-            <ImageView
-                android:layout_marginTop="8dp"
-                android:id="@+id/picture_attendance_icon"
-                android:layout_width="@dimen/icon_width_22dp"
-                android:layout_height="@dimen/icon_height_22dp"
-                android:src="@drawable/picture_attendance_icon" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="考勤" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/workcenter_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            app:icon="@drawable/picture_workcenter_icon"
+            app:iconNormal="@mipmap/picture_workcenter_normal"
+            app:iconSelected="@mipmap/picture_workcenter_selected"
+            app:spacing="6dp"
+            app:text="工作中心"
+            app:textColor="@drawable/login_text_color_selector" />
 
-            <ImageView
-                android:layout_marginTop="8dp"
-                android:layout_width="@dimen/icon_width_22dp"
-                android:layout_height="@dimen/icon_height_22dp"
-                android:src="@drawable/picture_workcenter_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="工作中心" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/messages_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            app:iconNormal="@mipmap/picture_message_normal"
+            app:iconSelected="@mipmap/picture_message_selected"
+            app:spacing="6dp"
+            app:text="消息"
+            app:textColor="@drawable/login_text_color_selector" />
 
-            <ImageView
-                android:layout_marginTop="8dp"
-                android:layout_width="@dimen/icon_width_22dp"
-                android:layout_height="@dimen/icon_height_22dp"
-                android:src="@drawable/picture_message_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="消息" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/personal_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_marginTop="8dp"
-                android:layout_width="@dimen/icon_width_22dp"
-                android:layout_height="@dimen/icon_height_22dp"
-                android:src="@drawable/picture_mine_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="我的" />
-
-        </LinearLayout>
-
+            app:iconNormal="@mipmap/picture_mine_normal"
+            app:iconSelected="@mipmap/picture_mine_selected"
+            app:spacing="6dp"
+            app:text="我的"
+            app:textColor="@drawable/login_text_color_selector" />
     </LinearLayout>
-
 
 </LinearLayout>
