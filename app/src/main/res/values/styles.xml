@@ -15,7 +15,7 @@
 
     <style name="TextViewStyle1">
         <item name="android:textColor">@color/text_color_white</item>
-        <item name="android:textSize">@dimen/font_size_16sp</item>
+        <item name="android:textSize">@dimen/sp_16</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">@font/msyh</item>
         <item name="android:background">@drawable/background_btn_flavor_1</item>

@@ -7,7 +7,11 @@
 
 
     <!--    登录页面文案-->
-    <string name="user_account_hint_text">请输入手机号或身份证</string>
+    <string name="hint_user_login_account">请输入手机号或身份证号</string>
+    <string name="hint_user_login_account2">请输入手机号</string>
     <string name="user_password_hint_text">"请输入6&#8211;12位密码"</string>
     <string name="description_item_content">工作中心Item</string>
+    <string name="hint_user_login_pic">请输入图形验证码</string>
+    <string name="text_get_code">获取验证码</string>
+    <string name="hint_user_login_code_pop">请输入验证码</string>
 </resources>

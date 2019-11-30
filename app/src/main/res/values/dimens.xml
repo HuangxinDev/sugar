@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="font_size_login">18sp</dimen>
-    <dimen name="font_size_11sp">11sp</dimen>
-    <dimen name="font_size_15sp">15sp</dimen>
-    <dimen name="font_size_16sp">16sp</dimen>
-    <dimen name="main_navi_icon_size">22dp</dimen>
+    <!-- 字体大小集合 -->
+    <dimen name="sp_18">18sp</dimen>
+    <dimen name="sp_11">11sp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+
+    <!-- 控件大小集合 -->
+    <dimen name="dp_22">22dp</dimen>
 
     <dimen name="icon_width_22dp">22dp</dimen>
     <dimen name="icon_height_22dp">22dp</dimen>
+
+    <!-- 设置AppCompatTextView 最小、最大字体 -->
+    <dimen name="font_min_size">8sp</dimen>
+    <dimen name="font_max_size">30sp</dimen>
 </resources>
 
 

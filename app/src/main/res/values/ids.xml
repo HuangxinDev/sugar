@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="holder" type="id" />
+    <item name="icon" type="id" />
 </resources>
