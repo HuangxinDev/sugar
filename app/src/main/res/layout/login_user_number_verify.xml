@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/user_account_verify"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/user_code_edit"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="1dp"
+        android:background="@null"
+        android:textSize="@dimen/sp_11"
+        android:hint="@string/hint_user_login_code_pop"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/icon"
+        app:layout_constraintRight_toLeftOf="@id/user_pwd_show_btn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/user_pwd_show_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="46dp"
+        android:gravity="center_vertical"
+        android:hint="@string/text_get_code"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/text_color_blue"
+        app:layout_constraintLeft_toRightOf="@id/user_code_edit"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/background_gray"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="@id/user_code_edit"
+        app:layout_constraintRight_toRightOf="@id/user_pwd_show_btn"
+        app:layout_constraintTop_toBottomOf="@id/user_code_edit" />
+</androidx.constraintlayout.widget.ConstraintLayout>

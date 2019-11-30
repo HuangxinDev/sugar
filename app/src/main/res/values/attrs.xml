@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ButtonBarItem">
+        <attr name="text" format="reference|string" />
+
+        <attr name="icon" format="reference" />
+        <attr name="iconNormal" format="reference" />
+        <attr name="iconSelected" format="reference" />
+        <attr name="spacing" format="reference|dimension" />
+        <attr name="textStyle" format="reference" />
+        <attr name="textColor" format="reference|color" />
+    </declare-styleable>
+
+</resources>
