@@ -7,6 +7,8 @@
 
     <color name="text_color_blue">#ff007aff</color>
 
+    <color name="color_black_1">#ff252525</color>
+
 
     <!--    背景颜色-->
     <color name="background_white">#FFFFFF</color>

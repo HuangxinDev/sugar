@@ -30,11 +30,7 @@ public class WorkCenterFragment extends BaseFragment {
     @Override
     protected void setUpView() {
         mRecyclerView = getContentView().findViewById(R.id.type_data);
-
-
         List<WorkCenterData> titles = new ArrayList<>();
-
-
         titles.add(new WorkCenterData(true, "内外勤管理", -1, ""));
         titles.add(new WorkCenterData(false, "内外勤管理", -1, "考勤1"));
         titles.add(new WorkCenterData(false, "内外勤管理", -1, "考勤2"));
