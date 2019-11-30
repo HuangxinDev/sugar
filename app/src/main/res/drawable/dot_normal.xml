@@ -4,7 +4,7 @@
 
     <!--    未选中-->
     <item android:state_enabled="true">
-        <shape android:shape="rectangle">
+        <shape android:shape="oval">
             <solid android:color="#ffdedede" />
             <size android:width="6dp" android:height="6dp" />
             <padding android:left="3.6dp" android:right="3.6dp" />

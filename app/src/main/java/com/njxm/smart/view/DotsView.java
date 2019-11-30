@@ -35,8 +35,6 @@ public class DotsView extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-//        super.onLayout(changed, l, t, r, b);
-        LogTool.printD("left: %s, top: %s, right: %s, bottom: %s, child view size: %s", l, t, r, b, getChildCount());
 
         for (int i = 0; i < getChildCount(); i++) {
             if (i != getChildCount() - 1) {
@@ -61,14 +59,12 @@ public class DotsView extends LinearLayout {
 //        normal.setMargins(10, 0, 10, 0);
 //        selectedParams.setMargins(9, 0, 9, 0);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 0, 7, 0);
+        params.setMargins(11, 0, 11, 0);
         ImageView imageView;
         for (int i = 0; i < size; i++) {
             imageView = new ImageView(context);
             imageView.setBackgroundResource(R.drawable.dot_normal);
-            if (i != size - 1) {
-                imageView.setLayoutParams(params);
-            }
+            imageView.setLayoutParams(params);
             addView(imageView);
         }
 

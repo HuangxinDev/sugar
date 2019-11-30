@@ -79,6 +79,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mUserPwdLayout = findViewById(R.id.verify_pwd);
         mUserCodeLayout = findViewById(R.id.verify_code);
 
+        mUserAccountEditText = findViewById(R.id.user_account_edit);
+
         switchLoginWay(true);
     }
 
@@ -109,6 +111,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             mUserPwdLayout.setVisibility(View.VISIBLE);
             mUserPicLayout.setVisibility(View.GONE);
             mUserCodeLayout.setVisibility(View.GONE);
+
+            mUserAccountEditText.setHint(R.string.hint_user_login_account);
         } else {
             mPasswordLoginBtn.setEnabled(true);
             mQuickLoginBtn.setEnabled(false);
@@ -118,6 +122,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             mUserPwdLayout.setVisibility(View.GONE);
             mUserPicLayout.setVisibility(View.VISIBLE);
             mUserCodeLayout.setVisibility(View.VISIBLE);
+
+            mUserAccountEditText.setHint(R.string.hint_user_login_account2);
         }
     }
 }
