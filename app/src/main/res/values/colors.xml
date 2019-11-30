@@ -12,5 +12,8 @@
     <color name="background_white">#FFFFFF</color>
     <color name="background_gray">#EFEFF4</color>
 
+    <!--  分割线颜色  -->
+    <color name="divider_color_ffdedede">#ffdedede</color>
+
 
 </resources>

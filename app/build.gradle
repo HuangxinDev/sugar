@@ -24,8 +24,9 @@ dependencies {
 
     // android 依赖包, 主要以androidx为主
     implementation 'androidx.multidex:multidex:2.0.1' // 支持分包
-    implementation 'androidx.recyclerview:recyclerview:1.0.0' // recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0' // recyclerview
     implementation 'androidx.legacy:legacy-support-v4:1.0.0' // 对应com.android.support:support-v4
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     implementation 'androidx.appcompat:appcompat:1.1.0' // 对应com.android.support:appcompat-v7
     implementation 'androidx.viewpager:viewpager:1.0.0' // view pager
 

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.njxm.smart.activities.fragments.AttendanceFragment;
@@ -14,6 +15,7 @@ import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
+import com.njxm.smart.view.ButtonBarItem;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ns.demo.R;
 
@@ -25,7 +27,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     // ViewPager
     private NoScrollViewPager mViewPager;
 
-    private int mCurrentPostion = 0;
+    private int mCurrentPosition = 0;
 
     // FragmentManager
     private FragmentManager mFragmentManager;
@@ -38,13 +40,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     private String[] mFragmentTabs = {"考勤", "工作中心", "消息", "我的"};
 
-    private View mAttendanceBtn;
-    private View mWorkCenterBtn;
-    private View mMessagesBtn;
-    private View mPersonalBtn;
-
-    private View mPictureAttendance;
-
+    private ButtonBarItem mAttendanceBtn;
+    private ButtonBarItem mWorkCenterBtn;
+    private ButtonBarItem mMessagesBtn;
+    private ButtonBarItem mPersonalBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,22 +65,20 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mFragmentAdapter.setFragmentDatas(fragments);
         mViewPager.setAdapter(mFragmentAdapter);
-        mViewPager.setCurrentItem(mCurrentPostion);
-
+        mViewPager.setCurrentItem(mCurrentPosition);
 
         mAttendanceBtn = findViewById(R.id.attendance_btn);
         mAttendanceBtn.setActivated(true);
         mAttendanceBtn.setOnClickListener(this);
         mWorkCenterBtn = findViewById(R.id.workcenter_btn);
         mWorkCenterBtn.setOnClickListener(this);
+        mWorkCenterBtn.setActivated(false);
         mMessagesBtn = findViewById(R.id.messages_btn);
         mMessagesBtn.setOnClickListener(this);
+        mMessagesBtn.setActivated(false);
         mPersonalBtn = findViewById(R.id.personal_btn);
         mPersonalBtn.setOnClickListener(this);
-
-        mPictureAttendance = findViewById(R.id.picture_attendance_icon);
-        mPictureAttendance.setActivated(false);
-
+        mPersonalBtn.setActivated(false);
     }
 
     @Override
@@ -91,7 +88,21 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int position) {
-        mViewPager.setCurrentItem(position);
+//        mViewPager.setCurrentItem(position);
+        showFragment(position);
+    }
+
+    public void showFragment(int index) {
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        if (fragments.get(mCurrentPosition) != null) {
+            transaction.hide(fragments.get(mCurrentPosition));
+        }
+        mCurrentPosition = index;
+        if (fragments.get(mCurrentPosition) != null) {
+            transaction.show(fragments.get(mCurrentPosition));
+        }
+        transaction.commitAllowingStateLoss();
+
     }
 
     @Override
@@ -104,17 +115,32 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         switch (v.getId()) {
             case R.id.attendance_btn:
                 mViewPager.setCurrentItem(0);
+                mAttendanceBtn.setActivated(true);
+                mWorkCenterBtn.setActivated(false);
+                mMessagesBtn.setActivated(false);
+                mPersonalBtn.setActivated(false);
                 break;
             case R.id.workcenter_btn:
                 mViewPager.setCurrentItem(1);
                 mAttendanceBtn.setActivated(false);
-                mPictureAttendance.setActivated(true);
+                mWorkCenterBtn.setActivated(true);
+                mMessagesBtn.setActivated(false);
+                mPersonalBtn.setActivated(false);
+
                 break;
             case R.id.messages_btn:
                 mViewPager.setCurrentItem(2);
+                mAttendanceBtn.setActivated(false);
+                mWorkCenterBtn.setActivated(false);
+                mMessagesBtn.setActivated(true);
+                mPersonalBtn.setActivated(false);
                 break;
             case R.id.personal_btn:
                 mViewPager.setCurrentItem(3);
+                mAttendanceBtn.setActivated(false);
+                mWorkCenterBtn.setActivated(false);
+                mMessagesBtn.setActivated(false);
+                mPersonalBtn.setActivated(true);
                 break;
 
         }

@@ -31,9 +31,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LogTool.printD("%s exec onCreateView", getClass().getSimpleName());
-//        if (mContentView != null) {
-//            return mContentView;
-//        }
+        if (mContentView != null) {
+            return mContentView;
+        }
         mContentView = inflater.inflate(setLayoutResourceID(), null);
         mContext = getContext();
         init();
