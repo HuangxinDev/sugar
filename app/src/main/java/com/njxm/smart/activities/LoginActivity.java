@@ -62,7 +62,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         mLoginBtn = findViewById(R.id.btn_login);
         mLoginBtn.setOnClickListener(this);
 
@@ -82,6 +81,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mUserAccountEditText = findViewById(R.id.user_account_edit);
 
         switchLoginWay(true);
+    }
+
+    @Override
+    protected int setContentLayoutId() {
+        return R.layout.activity_login;
     }
 
     @Override

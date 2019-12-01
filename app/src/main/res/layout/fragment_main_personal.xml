@@ -22,6 +22,69 @@
         app:layout_constraintBottom_toBottomOf="@id/header_background" />
 
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/user_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/user_head"
+        app:layout_constraintBottom_toBottomOf="@id/personal_news"
+        app:layout_constraintHorizontal_bias="0.17"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/personal_news"
+        app:layout_constraintVertical_bias="0.55" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:fontFamily="@font/msyh"
+        android:text="李建国"
+        android:textColor="@color/color_black_1"
+        android:textSize="@dimen/sp_17"
+        app:layout_constraintBottom_toBottomOf="@id/personal_news"
+        app:layout_constraintLeft_toRightOf="@id/user_head"
+        app:layout_constraintTop_toTopOf="@id/personal_news"
+        app:layout_constraintVertical_bias="0.46" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/user_score_pop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="安全分 "
+        android:textSize="@dimen/sp_11"
+        android:fontFamily="@font/msyh"
+        android:textColor="@color/color_gray_1"
+        app:layout_constraintBottom_toBottomOf="@id/personal_news"
+        app:layout_constraintLeft_toLeftOf="@id/user_name"
+        app:layout_constraintTop_toTopOf="@id/personal_news"
+        app:layout_constraintVertical_bias="0.69" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/personal_news"
+        app:layout_constraintBottom_toBottomOf="@id/personal_news"
+        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintVertical_bias="0.55"
+        android:src="@mipmap/scan_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/user_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="95分 "
+        android:fontFamily="@font/msyh"
+        app:layout_constraintBottom_toBottomOf="@id/user_score_pop"
+        android:textColor="@color/color_blue_1"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintLeft_toRightOf="@id/user_score_pop"
+        app:layout_constraintTop_toTopOf="@id/user_score_pop"
+        app:layout_constraintVertical_bias="0.69" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/personal_recycler_view"
         android:layout_width="match_parent"

@@ -8,18 +8,14 @@
     android:paddingTop="12dp"
     android:paddingBottom="12dp">
 
-    <ImageView
-        android:id="@+id/item_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/real_name_auth" />
-
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="考勤"
-        android:textSize="11sp" />
-
+        android:drawableTop="@mipmap/real_name_auth"
+        android:drawablePadding="9dp"
+        android:fontFamily="@font/msyh"
+        android:text="Item"
+        android:textColor="@color/color_black_1"
+        android:textSize="@dimen/sp_11" />
 </LinearLayout>

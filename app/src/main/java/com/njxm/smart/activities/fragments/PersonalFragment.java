@@ -1,12 +1,15 @@
 package com.njxm.smart.activities.fragments;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.fragments.adapter.PersonFragmentListAdapter;
 import com.njxm.smart.model.component.PersonListItem;
 import com.ns.demo.R;
@@ -50,10 +53,18 @@ public class PersonalFragment extends BaseFragment {
         datas.add(new PersonListItem(R.mipmap.abount_us, "关于我们", "", false));
         datas.add(new PersonListItem(R.mipmap.settings, "设置", "", false));
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
         mPersonFragmentListAdapter = new PersonFragmentListAdapter(R.layout.item_fragment_personal_list, datas);
         mPersonFragmentListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                if (position == 3) {
+                    Intent intent = new Intent(getActivity(), AboutUsActivity.class);
+                    startActivity(intent);
+                }
+
                 Toast.makeText(getActivity(),
                         "data： " + ((PersonListItem) adapter.getData().get(position)).getTitleRes(), Toast.LENGTH_SHORT).show();
             }

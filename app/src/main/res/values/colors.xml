@@ -3,15 +3,15 @@
     <!--    字体颜色-->
     <color name="text_color_white">#ffffffff</color>
 
-    <color name="text_color_gray">#ff96a1ad</color>
+    <color name="color_gray_1">#ff96a1ad</color>
 
-    <color name="text_color_blue">#ff007aff</color>
+    <color name="color_blue_1">#ff007aff</color>
 
     <color name="color_black_1">#ff252525</color>
 
 
     <!--    背景颜色-->
-    <color name="background_white">#FFFFFF</color>
+    <color name="background_white">#FFFFFFFF</color>
     <color name="background_gray">#EFEFF4</color>
 
     <!--  分割线颜色  -->

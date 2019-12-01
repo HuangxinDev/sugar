@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
@@ -23,7 +22,7 @@ import java.util.List;
 /**
  * 引导页
  */
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends BaseActivity {
 
 
     private int[] res = {R.mipmap.startup_one, R.mipmap.startup_three, R.mipmap.startup_two};
@@ -48,7 +47,6 @@ public class HomeActivity extends FragmentActivity {
             startLoginActivity();
             return;
         }
-        setContentView(R.layout.activity_home);
 
         mDotsView = findViewById(R.id.dots_view);
         mTextView = findViewById(R.id.experience);
@@ -88,6 +86,11 @@ public class HomeActivity extends FragmentActivity {
                 startLoginActivity();
             }
         });
+    }
+
+    @Override
+    protected int setContentLayoutId() {
+        return R.layout.activity_home;
     }
 
     private void startLoginActivity() {

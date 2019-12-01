@@ -10,7 +10,11 @@
     <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@mipmap/flash_screen</item>
         <item name="android:screenOrientation">portrait</item>
-<!--        <item name="android:windowFullscreen">true</item>-->
+    </style>
+
+    <style name="ActivityStyle" parent="LaunchTheme">
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:launchMode">singleInstance</item>
     </style>
 
     <style name="TextViewStyle1">

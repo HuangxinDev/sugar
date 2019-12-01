@@ -48,7 +48,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         mViewPager = findViewById(R.id.view_pager);
 //        mViewPager.setNeedScroll(true);
         mFragmentManager = getSupportFragmentManager();
@@ -79,6 +78,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mPersonalBtn = findViewById(R.id.personal_btn);
         mPersonalBtn.setOnClickListener(this);
         mPersonalBtn.setActivated(false);
+    }
+
+    @Override
+    protected int setContentLayoutId() {
+        return R.layout.activity_main;
     }
 
     @Override

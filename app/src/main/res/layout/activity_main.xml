@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ll_root"
+    android:id="@id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <com.njxm.smart.view.NoScrollViewPager
@@ -17,7 +18,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/text_color_gray" />
+        android:background="@color/color_gray_1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,11 +28,11 @@
         <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/attendance_btn"
             android:layout_width="0dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             app:icon="@drawable/picture_attendance_icon"
             app:iconNormal="@mipmap/picture_attendance_normal"
             app:iconSelected="@mipmap/picture_attendance_selected"
@@ -57,10 +58,10 @@
         <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/messages_btn"
             android:layout_width="0dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             app:iconNormal="@mipmap/picture_message_normal"
             app:iconSelected="@mipmap/picture_message_selected"
             app:spacing="6dp"
@@ -70,10 +71,10 @@
         <com.njxm.smart.view.ButtonBarItem
             android:id="@+id/personal_btn"
             android:layout_width="0dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             app:iconNormal="@mipmap/picture_mine_normal"
             app:iconSelected="@mipmap/picture_mine_selected"
             app:spacing="6dp"
