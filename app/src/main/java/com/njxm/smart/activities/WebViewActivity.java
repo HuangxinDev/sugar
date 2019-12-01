@@ -2,8 +2,6 @@ package com.njxm.smart.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -11,6 +9,9 @@ import androidx.annotation.Nullable;
 
 import com.ns.demo.R;
 
+/**
+ * WebView 加载 webView 页面
+ */
 public class WebViewActivity extends BaseActivity {
 
     private WebView mWebView;
@@ -29,23 +30,17 @@ public class WebViewActivity extends BaseActivity {
         setWebViewSettings(mWebView);
 
         Bundle bundle = getIntent().getExtras();
-        mActionBarBackBtn.setImageResource(R.mipmap.arrow_back);
-
-        mActionBarBackBtn.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        mActionBarRightBtn.setVisibility(View.GONE);
+        showLeftBtn(true, R.mipmap.arrow_back);
         if (bundle != null) {
             mWebView.loadUrl("file:///android_asset/html/" + bundle.getString("asset_name"));
-            mActionBarTitle.setText(bundle.getString("title_name"));
+            showTitle(true, bundle.getString("title_name"));
         }
+    }
 
-
-//        mWebView.loadUrl("file:///android_asset/html/privacy.html");
-//        mWebView.loadUrl("file:///android_asset/html/service.html");
+    @Override
+    public void onClickLeftBtn() {
+        super.onClickLeftBtn();
+        finish();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
