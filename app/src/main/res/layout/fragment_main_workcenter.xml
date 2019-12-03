@@ -47,7 +47,7 @@
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/docSearch"
         app:layout_constraintTop_toTopOf="@id/top_bg2"
         app:layout_constraintVertical_bias="0.83" />
 
@@ -64,7 +64,26 @@
         android:textSize="@dimen/sp_11"
         app:layout_constraintBottom_toBottomOf="@id/top_bg2"
         app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/toDo"
+        app:layout_constraintRight_toLeftOf="@id/suggestion_box"
+        app:layout_constraintTop_toTopOf="@id/top_bg2"
+        app:layout_constraintVertical_bias="0.83" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/suggestion_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/suggestion_box"
+        android:drawablePadding="7dp"
+        android:fontFamily="@font/msyh"
+        android:gravity="center"
+        android:text="意见箱"
+        android:textColor="@color/color_black_1"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintBottom_toBottomOf="@id/top_bg2"
+        app:layout_constraintLeft_toRightOf="@id/docSearch"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/top_bg2"
         app:layout_constraintVertical_bias="0.83" />

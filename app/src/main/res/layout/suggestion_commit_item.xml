@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_16"
+    android:paddingBottom="@dimen/dp_16"
+    android:background="@color/background_white"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/suggestion_user_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:src="@mipmap/user_head"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/suggestion_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:text="名字"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintLeft_toRightOf="@id/suggestion_user_head"
+        app:layout_constraintTop_toTopOf="@id/suggestion_user_head" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/suggestion_user_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="职位"
+        android:textColor="@color/color_gray_1"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintBottom_toBottomOf="@id/suggestion_user_head"
+        app:layout_constraintLeft_toLeftOf="@id/suggestion_user_name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/suggestion_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="管理意见嘻嘻嘻嘻嘻嘻嘻嘻寻寻寻"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="@id/suggestion_user_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/suggestion_user_head" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@color/color_gray_1"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="@id/suggestion_user_head"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/suggestion_message" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/suggestion_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="2019-11-16 15:30"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/suggestion_user_head"
+        app:layout_constraintTop_toBottomOf="@id/suggestion_message" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

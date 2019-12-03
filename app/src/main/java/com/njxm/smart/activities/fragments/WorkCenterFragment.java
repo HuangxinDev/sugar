@@ -1,13 +1,17 @@
 package com.njxm.smart.activities.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.fragments.adapter.WorkCenterFragmentAdapter;
 import com.ns.demo.R;
 
@@ -141,6 +145,15 @@ public class WorkCenterFragment extends BaseFragment {
         LinearLayoutManager layoutManager =  new GridLayoutManager(this.getContext(), 4);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(baseViewHolderAdapter);
+
+
+        AppCompatTextView appCompatTextView = getContentView().findViewById(R.id.suggestion_box);
+        appCompatTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SuggestionsActivity.class));
+            }
+        });
 
     }
 

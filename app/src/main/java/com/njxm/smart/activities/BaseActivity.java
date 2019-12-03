@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.njxm.smart.utils.LogTool;
@@ -26,9 +27,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     protected final String TAG;
 
-    protected AppCompatImageButton mActionBarBackBtn;
+    protected AppCompatImageView mActionBarBackBtn;
     protected AppCompatTextView mActionBarTitle;
-    protected AppCompatImageButton mActionBarRightBtn;
+    protected AppCompatImageView mActionBarRightBtn;
 
     protected BaseActivity() {
         TAG = this.getClass().getSimpleName();
@@ -169,5 +170,12 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         format = (format == null) ? "null" : ((objects != null && objects.length != 0) ?
                 String.format(Locale.US, format, objects) : format);
         Toast.makeText(this, format, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void setVisiable(View view, int visiable) {
+        if (view == null) {
+            return;
+        }
+        view.setVisibility(visiable);
     }
 }

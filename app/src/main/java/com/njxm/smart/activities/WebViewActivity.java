@@ -30,7 +30,7 @@ public class WebViewActivity extends BaseActivity {
         setWebViewSettings(mWebView);
 
         Bundle bundle = getIntent().getExtras();
-        showLeftBtn(true, R.mipmap.arrow_back);
+        showLeftBtn(true, R.mipmap.arrow_back_blue);
         if (bundle != null) {
             mWebView.loadUrl("file:///android_asset/html/" + bundle.getString("asset_name"));
             showTitle(true, bundle.getString("title_name"));

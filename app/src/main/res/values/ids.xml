@@ -5,9 +5,43 @@
 
     <item name="icon" type="id" />
 
+    <item name="item_list" type="id" />
+
+    <!-- 我的、设置页面的Item布局Id -->
+    <item name="item_title" type="id" />
+    <item name="item_sub_title" type="id" />
+
     <!--    导航栏Item ID-->
+    <item name="action_bar" type="id" /> <!-- 导航Item父布局 -->
     <item name="action_bar_left" type="id" />
     <item name="action_bar_title" type="id" />
     <item name="action_bar_right" type="id" />
 
+    <!--     分割线ID -->
+    <item name="divider1" type="id" />
+    <item name="divider2" type="id" />
+    <item name="divider3" type="id" />
+    <item name="divider4" type="id" />
+    <item name="divider5" type="id" />
+    <item name="divider6" type="id" />
+
+    <!--     ListView ID -->
+    <item name="recycler_view" type="id" />
+
+    <!--    自定义登录页编辑框ID-->
+    <item name="edit_icon" type="id" />
+    <item name="edit" type="id" />
+    <item name="edit_image_text" type="id" />
+
+    <!-- 登录页面编辑框ID-->
+    <item name="login_account" type="id" />
+    <item name="login_pwd" type="id" />
+    <item name="login_qr_code" type="id" />
+    <item name="login_number_code" type="id" />
+    <item name="login_phone" type="id" />
+    <item name="next_step" type="id" />
+    <item name="login_confirm" type="id" />
+    <item name="ll_1" type="id" />
+    <item name="ll_2" type="id" />
+    <item name="login_exit" type="id" />
 </resources>

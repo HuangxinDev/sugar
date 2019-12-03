@@ -6,10 +6,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.njxm.smart.view.AppEditText;
 import com.ns.demo.R;
 
 /**
@@ -30,34 +29,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private View mQuickLoginDivider, mPasswordLoginDivider;
 
     // 账号验证布局
-    private ConstraintLayout mUserAccountLayout;
+    private AppEditText mLoginAccountEditText;
 
     // 密码验证布局
-    private ConstraintLayout mUserPwdLayout;
+    private AppEditText mLoginPwdEditText;
 
     // 图形验证布局
-    private ConstraintLayout mUserPicLayout;
+    private AppEditText mLoginQrEditText;
 
     // 验证码登录
-    private ConstraintLayout mUserCodeLayout;
+    private AppEditText mLoginNumberEditText;
 
-    // 用户名编辑框
-    private AppCompatEditText mUserAccountEditText;
-
-    // 密码编辑框
-    private AppCompatEditText mUserPasswordEditText;
-
-    // 图形验证码编辑框
-    private AppCompatEditText mUserPicEditText;
-
-    // 验证码编辑框
-    private AppCompatEditText mUserVerifyCodeEditText;
-
-    // 获取验证码按钮
-    private AppCompatTextView mGetVerifyCodeBtn;
-
-    // 密码显示/隐藏按钮
-    private AppCompatTextView mShowPwdBtn;
+    // 忘记密码
+    private AppCompatTextView mForgetPwdBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,12 +57,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mQuickLoginDivider = findViewById(R.id.quick_login_divider);
         mPasswordLoginDivider = findViewById(R.id.password_login_divider);
 
-        mUserAccountLayout = findViewById(R.id.verify_account);
-        mUserPicLayout = findViewById(R.id.verify_picture);
-        mUserPwdLayout = findViewById(R.id.verify_pwd);
-        mUserCodeLayout = findViewById(R.id.verify_code);
+        mForgetPwdBtn = findViewById(R.id.forget_password);
+        mForgetPwdBtn.setOnClickListener(this);
 
-        mUserAccountEditText = findViewById(R.id.user_account_edit);
+        mLoginAccountEditText = findViewById(R.id.login_account);
+        mLoginPwdEditText = findViewById(R.id.login_pwd);
+        mLoginQrEditText = findViewById(R.id.login_qr_code);
+        mLoginNumberEditText = findViewById(R.id.login_number_code);
 
         switchLoginWay(true);
     }
@@ -97,6 +82,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             switchLoginWay(false);
         } else if (v == mPasswordLoginBtn) {
             switchLoginWay(true);
+        } else if (v == mForgetPwdBtn) {
+            Intent intent = new Intent(this, ResetPasswordActivity.class);
+            intent.putExtra("action", "1");
+            startActivity(intent);
         }
     }
 
@@ -112,22 +101,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             mPasswordLoginDivider.setVisibility(View.VISIBLE);
             mQuickLoginDivider.setVisibility(View.INVISIBLE);
 
-            mUserPwdLayout.setVisibility(View.VISIBLE);
-            mUserPicLayout.setVisibility(View.GONE);
-            mUserCodeLayout.setVisibility(View.GONE);
+            mLoginPwdEditText.setVisibility(View.VISIBLE);
+            mLoginQrEditText.setVisibility(View.GONE);
+            mLoginNumberEditText.setVisibility(View.GONE);
 
-            mUserAccountEditText.setHint(R.string.hint_user_login_account);
         } else {
             mPasswordLoginBtn.setEnabled(true);
             mQuickLoginBtn.setEnabled(false);
             mQuickLoginDivider.setVisibility(View.VISIBLE);
             mPasswordLoginDivider.setVisibility(View.INVISIBLE);
 
-            mUserPwdLayout.setVisibility(View.GONE);
-            mUserPicLayout.setVisibility(View.VISIBLE);
-            mUserCodeLayout.setVisibility(View.VISIBLE);
 
-            mUserAccountEditText.setHint(R.string.hint_user_login_account2);
+            mLoginPwdEditText.setVisibility(View.GONE);
+            mLoginQrEditText.setVisibility(View.VISIBLE);
+            mLoginNumberEditText.setVisibility(View.VISIBLE);
         }
     }
 }

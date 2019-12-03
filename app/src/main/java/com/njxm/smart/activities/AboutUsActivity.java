@@ -1,16 +1,29 @@
 package com.njxm.smart.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.njxm.smart.SmartCloudApplication;
+import com.njxm.smart.activities.adapter.StringRecyclerAdapter;
+import com.njxm.smart.divider.MyRecyclerViewItemDecoration;
+import com.njxm.smart.model.component.ListItem;
 import com.ns.demo.R;
 
-public class AboutUsActivity extends BaseActivity implements OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 关于我们
+ */
+public class AboutUsActivity extends BaseActivity {
 
 
     // 服务协议
@@ -30,36 +43,39 @@ public class AboutUsActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActionBarTitle.setText("关于我们");
+        setActionBarTitle("关于我们");
+        showLeftBtn(true, R.mipmap.arrow_back_blue);
 
-        mActionBarBackBtn.setImageResource(R.mipmap.arrow_back);
-        mActionBarBackBtn.setOnClickListener(this);
-        mActionBarRightBtn.setVisibility(View.GONE);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        List<ListItem> mListItems = new ArrayList<>();
+        Drawable back = SmartCloudApplication.getApplication().getDrawable(R.mipmap.arrow_detail);
+        mListItems.add(new ListItem("服务协议"));
+        mListItems.add(new ListItem("版权信息"));
+        mListItems.add(new ListItem("隐私政策"));
+        mListItems.add(new ListItem("新功能介绍"));
+        StringRecyclerAdapter adapter = new StringRecyclerAdapter(R.layout.item_list, mListItems);
+        MyRecyclerViewItemDecoration itemDecoration = new MyRecyclerViewItemDecoration();
+        itemDecoration.setPositions(10, 3);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(itemDecoration);
 
-        mAppServiceProtolBtn = findViewById(R.id.app_service_protocol);
-        mAppCopyRightBtn = findViewById(R.id.app_copyright);
-        mAppPrivacyBtn = findViewById(R.id.app_privacy);
-        mAppNewFeaturesBtn = findViewById(R.id.app_new_features);
-        mAppServiceProtolBtn.setOnClickListener(this);
-        mAppCopyRightBtn.setOnClickListener(this);
-        mAppPrivacyBtn.setOnClickListener(this);
-        mAppNewFeaturesBtn.setOnClickListener(this);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                startWebView(HTMLS[position],
+                        ((ListItem) adapter.getItem(position)).getTitle());
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == mActionBarBackBtn) {
-            finish();
-        } else if (v == mAppServiceProtolBtn) {
-            startWebView("service.html", "服务协议");
-        } else if (v == mAppCopyRightBtn) {
-            startWebView("service.html", "版权信息");
-        } else if (v == mAppNewFeaturesBtn) {
-            startWebView("features.html", "新功能介绍");
-        } else if (v == mAppPrivacyBtn) {
-            startWebView("privacy.html", "隐私协议");
-        }
+    public void onClickLeftBtn() {
+        super.onClickLeftBtn();
+        finish();
     }
+
+    private static final String[] HTMLS = {"service.html", "service.html", "privacy.html", "features.html"};
 
     private void startWebView(String assetResource, String title) {
         Intent intent = new Intent(this, WebViewActivity.class);

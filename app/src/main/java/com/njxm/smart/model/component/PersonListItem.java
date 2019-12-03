@@ -12,10 +12,15 @@ public class PersonListItem {
 
     private boolean showStar = false;
 
-    public PersonListItem(int iconRes, String title, String subTitle, boolean showStar) {
+    private int paddingTop;
+
+    public PersonListItem(int iconRes, String title, String subTitle, boolean showStar,
+                          int paddintRes) {
         this.iconRes = iconRes;
         this.subTitle = subTitle;
         this.titleRes = title;
+        this.showStar = showStar;
+//        this.paddingTop = Resources.getSystem().getDimensionPixelSize(paddintRes);
     }
 
 

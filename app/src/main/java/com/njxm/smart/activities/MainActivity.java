@@ -22,6 +22,9 @@ import com.ns.demo.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 主页
+ */
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     // ViewPager

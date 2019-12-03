@@ -1,6 +1,5 @@
 package com.njxm.smart.activities.fragments.adapter;
 
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +21,7 @@ public class PersonFragmentListAdapter extends BaseQuickAdapter<PersonListItem, 
         ((TextView) helper.getView(R.id.item_title)).setText(item.getTitleRes());
         ((ImageView) helper.getView(R.id.item_header)).setImageResource(item.getIconRes());
         ((TextView) helper.getView(R.id.item_sub_title)).setText(item.getSubTitle());
-        helper.getView(R.id.item_star_icon).setVisibility(item.isShowStar() ? View.VISIBLE :
-                View.INVISIBLE);
+//        helper.getView(R.id.item_star_icon).setVisibility(item.isShowStar() ? View.VISIBLE :
+//                View.INVISIBLE);
     }
 }
