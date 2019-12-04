@@ -6,6 +6,8 @@
     <dimen name="sp_15">15sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_17">17sp</dimen>
+    <dimen name="sp_19">19sp</dimen>
+    <dimen name="sp_23">23sp</dimen>
     <dimen name="sp_26">26sp</dimen>
 
     <!-- 控件大小集合 -->

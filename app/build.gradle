@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 // 可选 代码支持通过view id 获取对象，不再需要findViewById
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
 // 编译kotlin代码
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 
 android {
 
@@ -42,7 +42,7 @@ dependencies {
     // bugly崩溃框架
     implementation 'com.tencent.bugly:crashreport_upgrade:1.1.2'
     // 网络框架
-
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     // 图片框架
 
     // 内存泄露框架

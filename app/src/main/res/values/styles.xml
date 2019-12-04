@@ -24,4 +24,64 @@
         <item name="android:fontFamily">@font/msyh</item>
         <item name="android:background">@drawable/background_btn_flavor_1</item>
     </style>
+
+    <!--    基本字体风格 微软雅黑字体-->
+    <style name="BaseTextViewStyle">
+        <item name="android:fontFamily">@font/msyh</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black">
+        <item name="android:textColor">@color/color_black_1</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black.11">
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black.14">
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black.17">
+        <item name="android:textSize">@dimen/sp_17</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black.26">
+        <item name="android:textColorHint">@color/color_gray_1</item>
+        <item name="android:textColor">@color/color_black_1</item>
+        <item name="android:textSize">@dimen/sp_26</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black2">
+        <item name="android:textColor">@color/color_black_2</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Black2.14">
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Blue">
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:textColor">@color/color_blue_1</item>
+    </style>
+
+    <style name="BaseTextViewStyle.White">
+        <item name="android:textColor">@color/text_color_white</item>
+    </style>
+
+    <style name="BaseTextViewStyle.White.23">
+        <item name="android:textSize">@dimen/sp_23</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Gray">
+        <item name="android:textColor">@color/color_gray_1</item>
+    </style>
+
+    <style name="BaseTextViewStyle.Gray.11">
+        <item name="android:textSize">@dimen/sp_11</item>
+    </style>
+
+
 </resources>

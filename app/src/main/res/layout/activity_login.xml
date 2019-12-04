@@ -6,18 +6,15 @@
     android:background="@color/background_white"
     android:fitsSystemWindows="true">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/login_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="121dp"
         android:enabled="false"
-        android:fontFamily="@font/msyh"
-        android:gravity="center"
         android:text="@string/user_login"
-        android:textColor="#ff252525"
-        android:textSize="@dimen/sp_18"
+        style="@style/BaseTextViewStyle.Black.26"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

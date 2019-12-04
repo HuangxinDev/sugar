@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:drawableTop="@mipmap/real_name_auth"
         android:drawablePadding="9dp"
-        android:fontFamily="@font/msyh"
+        style="@style/BaseTextViewStyle.Black.11"
         android:text="Item"
         android:textColor="@color/color_black_1"
         android:textSize="@dimen/sp_11" />
