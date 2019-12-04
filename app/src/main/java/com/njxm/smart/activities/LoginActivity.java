@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.tools.HttpUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ns.demo.R;
 
@@ -64,8 +65,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mLoginPwdEditText = findViewById(R.id.login_pwd);
         mLoginQrEditText = findViewById(R.id.login_qr_code);
         mLoginNumberEditText = findViewById(R.id.login_number_code);
-
         switchLoginWay(true);
+
+
+        HttpUtils.execute(HttpUtils.loginRequest);
+        HttpUtils.execute(HttpUtils.qrRequest);
     }
 
     @Override
