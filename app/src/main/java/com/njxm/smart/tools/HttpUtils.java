@@ -29,6 +29,11 @@ public class HttpUtils {
             .url("http://119.3.136.127:7777/auth/kaptcha/get")
             .build();
 
+
+    public static Request loginRequest2 = new Request.Builder()
+            .url("http://119.3.136.127:7777/auth/user/login?username=admin&password=123456&code=cb72&kaptchaToken=ba23986a3f204155bf1314bb28f01df2")
+            .build();
+
     private static OkHttpClient getsOkHttpClient() {
         if (sOkHttpClient == null) {
             sOkHttpClient = new OkHttpClient.Builder()

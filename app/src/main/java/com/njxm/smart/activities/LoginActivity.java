@@ -70,6 +70,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         HttpUtils.execute(HttpUtils.loginRequest);
         HttpUtils.execute(HttpUtils.qrRequest);
+        HttpUtils.execute(HttpUtils.loginRequest2);
     }
 
     @Override

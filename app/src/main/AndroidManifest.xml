@@ -70,7 +70,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.njxm.smart.activities.UploadTelPhoneActivity"
+            android:name="com.njxm.smart.activities.UpdateTelPhoneActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity

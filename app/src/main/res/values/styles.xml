@@ -12,9 +12,9 @@
         <item name="android:screenOrientation">portrait</item>
     </style>
 
-    <style name="ActivityStyle" parent="LaunchTheme">
-        <item name="android:screenOrientation">portrait</item>
-        <item name="android:launchMode">singleInstance</item>
+    <style name="XmlBackground">
+        <item name="android:background">@color/background_white</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <style name="TextViewStyle1">

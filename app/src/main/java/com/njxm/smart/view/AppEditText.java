@@ -16,6 +16,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
 
@@ -186,6 +187,19 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
         if (mAppCompatEditText != null) {
             mAppCompatEditText.getEditableText().clear();
         }
+    }
+
+    /**
+     * 判断文本是否为空
+     *
+     * @return true 为空
+     */
+    public boolean isEmpty() {
+        if (mAppCompatEditText == null) {
+            return true;
+        }
+
+        return StringUtils.isEmpty(mAppCompatEditText.getText().toString());
     }
 
     /**

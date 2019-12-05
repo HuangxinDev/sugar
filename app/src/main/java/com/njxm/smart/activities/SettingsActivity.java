@@ -75,9 +75,17 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void startActivityOfIndex(int index) {
-        if (index == 0) {
-            Intent intent = new Intent(this, ResetPasswordActivity.class);
-            intent.putExtra("action", "2");
+        Intent intent = null;
+        switch (index) {
+            case 0:
+                intent = new Intent(this, ResetPasswordActivity.class);
+                intent.putExtra("action", "2");
+
+                break;
+            case 1:
+                intent = new Intent(this, UpdateTelPhoneActivity.class);
+        }
+        if (intent != null) {
             startActivity(intent);
         }
     }
