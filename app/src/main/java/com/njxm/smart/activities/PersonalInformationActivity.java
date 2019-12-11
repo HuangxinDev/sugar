@@ -32,7 +32,7 @@ public class PersonalInformationActivity extends BaseActivity {
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
         final List<ListItem> mListItems = new ArrayList<>();
-        mListItems.add(new ListItem("头像", "", R.mipmap.user_head));
+        mListItems.add(new ListItem("头像", "", R.mipmap.personals_item_user_head));
         mListItems.add(new ListItem("姓名", "赵建国", 0));
         mListItems.add(new ListItem("手机", "188xxxxxxx  "));
         ListItem person = new ListItem("基本信息");

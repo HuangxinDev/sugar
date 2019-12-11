@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.AboutUsActivity;
+import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
@@ -35,7 +36,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected int setLayoutResourceID() {
-        return R.layout.fragment_main_personal;
+        return R.layout.my_activity;
     }
 
     @Override
@@ -56,12 +57,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
         List<PersonListItem> datas = new ArrayList<>();
-        datas.add(new PersonListItem(R.mipmap.real_name_auth, "实名认证", "* 请实名认证", true, 0));
-        datas.add(new PersonListItem(R.mipmap.medical_report, "体检报告", "* 请上传体检报告", true,
+        datas.add(new PersonListItem(R.mipmap.mine_icon_real_name_auth, "实名认证", "* 请实名认证", true, 0));
+        datas.add(new PersonListItem(R.mipmap.mine_icon_medical_report, "体检报告", "* 请上传体检报告", true,
                 R.dimen.dp_1));
-        datas.add(new PersonListItem(R.mipmap.upload_certificate, "证书上传", "", false, R.dimen.dp_1));
+        datas.add(new PersonListItem(R.mipmap.mine_icon_upload_certificate, "证书上传", "", false, R.dimen.dp_1));
         datas.add(new PersonListItem(R.mipmap.abount_us, "关于我们", "", false, R.dimen.dp_10));
-        datas.add(new PersonListItem(R.mipmap.settings, "设置", "", false, R.dimen.dp_1));
+        datas.add(new PersonListItem(R.mipmap.mine_icon_settings, "设置", "", false, R.dimen.dp_1));
         mRecyclerView.setLayoutManager(layoutManager);
 
         MyRecyclerViewItemDecoration itemDecoration = new MyRecyclerViewItemDecoration();
@@ -77,6 +78,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     startActivity(intent);
                 } else if (position == 4) {
                     Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    startActivity(intent);
+                } else if (position == 1) {
+                    Intent intent = new Intent(getActivity(), MedicalReportActivity.class);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getActivity(), RealNameAuthenticationActivity.class);

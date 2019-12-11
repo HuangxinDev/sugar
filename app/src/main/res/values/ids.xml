@@ -44,4 +44,8 @@
     <item name="ll_1" type="id" />
     <item name="ll_2" type="id" />
     <item name="login_exit" type="id" />
+
+    <item name="user_head" type="id" /> <!-- 用户头像 -->
+    <item name="user_name" type="id" /> <!-- 用户名字 -->
+    <item name="user_work" type="id" /> <!-- 用户职位 -->
 </resources>

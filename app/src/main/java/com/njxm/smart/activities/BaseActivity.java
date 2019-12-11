@@ -113,6 +113,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     public void setActionBarTitle(String title) {
         if (mActionBarTitle != null) {
             mActionBarTitle.setText(title);
+            mActionBarTitle.setVisibility(View.VISIBLE);
         }
     }
 

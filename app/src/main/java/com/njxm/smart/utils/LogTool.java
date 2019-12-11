@@ -68,7 +68,7 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printD(String format, Object... objects) {
-        return print(0, format, objects);
+        return print(1, format, objects);
     }
 
     /**
@@ -79,7 +79,7 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printI(String format, Object... objects) {
-        return print(1, format, objects);
+        return print(0, format, objects);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.njxm.smart.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.LruCache;
 
 /**
  * SharedPreference工具类
@@ -10,32 +11,48 @@ import android.preference.PreferenceManager;
 public final class SPUtils {
 
     private static SharedPreferences sSharedPreferences;
+    private static LruCache<String, String> sLruCache;
+    private static boolean init = false;
 
-    private static boolean initSharedPreferences(Context context) {
+    public static boolean initSharedPreferences(Context context) {
         if (sSharedPreferences == null) {
             sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            init = true;
         }
+
+        sLruCache = new LruCache<String, String>(4 * 1024 * 1024) {
+            @Override
+            protected int sizeOf(String key, String value) {
+                return value.length() * 2 + 40;
+            }
+        };
+
         return sSharedPreferences != null;
     }
 
-    public static boolean putVaule(Context context, String key, Object object) {
-        if (context == null || StringUtils.isEmpty(key) || object == null || !initSharedPreferences(context)) {
-            return false;
+    public static void putValue(String key, String value) {
+        if (StringUtils.isEmpty(key) || value == null) {
+            return;
+        }
+        sLruCache.put(key, value);
+
+        if (init) {
+            SharedPreferences.Editor editor = sSharedPreferences.edit();
+            editor.putString(key, value);
+            editor.apply();
+        }
+    }
+
+    public static String getValue(String key, String defValue) {
+        String result = sLruCache.get(key);
+        if (StringUtils.isEmpty(result) && init) {
+            result = sSharedPreferences.getString(key, defValue);
+        }
+        if (StringUtils.isEmpty(result)) {
+            return defValue;
         }
 
-        SharedPreferences.Editor editor = sSharedPreferences.edit();
-        if (object instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) object);
-        } else if (object instanceof String) {
-            editor.putString(key, (String) object);
-        } else if (object instanceof Integer) {
-            editor.putInt(key, (Integer) object);
-        } else if (object instanceof Long) {
-            editor.putLong(key, (Long) object);
-        } else {
-            throw new IllegalArgumentException("不支持该类型的参数");
-        }
-        return editor.commit();
+        return result;
     }
 
 //    public static <T> T getValue(Context context, String key, T def) {
@@ -44,7 +61,7 @@ public final class SPUtils {
 //        }
 //
 //        if (def instanceof Boolean) {
-//            return (T) sSharedPreferences.getBoolean(key, def);
+//            return sSharedPreferences.getBoolean(key, false);
 //        } else if (def instanceof String) {
 //            sSharedPreferences.getString(key, (String) def);
 //        } else if (def instanceof Integer) {

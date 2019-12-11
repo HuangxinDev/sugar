@@ -34,8 +34,8 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             app:icon="@drawable/picture_attendance_icon"
-            app:iconNormal="@mipmap/picture_attendance_normal"
-            app:iconSelected="@mipmap/picture_attendance_selected"
+            app:iconNormal="@mipmap/navigation_attendance"
+            app:iconSelected="@mipmap/navigation_attendance_pressed"
             app:spacing="6dp"
             app:text="考勤"
             app:textColor="@drawable/login_text_color_selector" />
@@ -49,8 +49,8 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             app:icon="@drawable/picture_workcenter_icon"
-            app:iconNormal="@mipmap/picture_workcenter_normal"
-            app:iconSelected="@mipmap/picture_workcenter_selected"
+            app:iconNormal="@mipmap/navigation_workcenter"
+            app:iconSelected="@mipmap/navigation_workcenter_pressed"
             app:spacing="6dp"
             app:text="工作中心"
             app:textColor="@drawable/login_text_color_selector" />
@@ -62,8 +62,8 @@
             android:layout_weight="1"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            app:iconNormal="@mipmap/picture_message_normal"
-            app:iconSelected="@mipmap/picture_message_selected"
+            app:iconNormal="@mipmap/navigation_message"
+            app:iconSelected="@mipmap/navigation_message_pressed"
             app:spacing="6dp"
             app:text="消息"
             app:textColor="@drawable/login_text_color_selector" />
@@ -75,8 +75,8 @@
             android:layout_weight="1"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            app:iconNormal="@mipmap/picture_mine_normal"
-            app:iconSelected="@mipmap/picture_mine_selected"
+            app:iconNormal="@mipmap/navigation_mine"
+            app:iconSelected="@mipmap/navigation_mine_pressed"
             app:spacing="6dp"
             app:text="我的"
             app:textColor="@drawable/login_text_color_selector" />

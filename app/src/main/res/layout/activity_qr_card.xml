@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?><!--二维码名片-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_gray">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="297dp"
+        android:layout_height="396dp"
+        android:layout_marginTop="@dimen/dp_61"
+        android:background="@color/background_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action_bar">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@id/user_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:src="@mipmap/personals_item_user_head"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@id/user_name"
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="李建国"
+            app:layout_constraintLeft_toRightOf="@id/user_head"
+            app:layout_constraintTop_toTopOf="@id/user_head" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@id/user_work"
+            style="@style/BaseTextViewStyle.Gray.11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="普工"
+            android:textColor="@color/color_gray_2"
+            app:layout_constraintLeft_toLeftOf="@id/user_name"
+            app:layout_constraintTop_toBottomOf="@id/user_name" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_head" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

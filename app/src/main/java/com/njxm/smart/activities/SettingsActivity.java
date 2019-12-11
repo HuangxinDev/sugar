@@ -22,10 +22,13 @@ import java.util.List;
 /**
  * 设置页面 主页我的-设置
  */
+///////////////////////////////////////////////////////////////////////////
+// 设置页面
+///////////////////////////////////////////////////////////////////////////
 public class SettingsActivity extends BaseActivity {
     @Override
     protected int setContentLayoutId() {
-        return R.layout.activity_settings;
+        return R.layout.my_setting;
     }
 
     private List<ListItem> mListItems = new ArrayList<>();
@@ -39,7 +42,6 @@ public class SettingsActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         mExitLoginBtn = findViewById(R.id.login_exit);
         mExitLoginBtn.setOnClickListener(this);
-
         mListItems.add(new ListItem("重置密码"));
         mListItems.add(new ListItem("更换手机"));
         mListItems.add(new ListItem("检查更新", "当前版本1.0  "));

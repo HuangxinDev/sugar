@@ -8,13 +8,13 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/login_tv"
+        style="@style/BaseTextViewStyle.Black.26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="121dp"
         android:enabled="false"
         android:text="@string/user_login"
-        style="@style/BaseTextViewStyle.Black.26"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +93,8 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             app:hint="@string/hint_user_login_account"
-            app:leftIcon="@mipmap/user_account"
+            app:inputType="text"
+            app:leftIcon="@mipmap/edt_icon_user_account"
             app:right_type="none" />
 
         <com.njxm.smart.view.AppEditText
@@ -101,7 +102,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_44"
             app:hint="@string/hint_user_login_pic"
-            app:leftIcon="@mipmap/account_verify"
+            app:inputType="text"
+            app:leftIcon="@mipmap/edt_icon_pwd_verify"
             app:rightIcon="@mipmap/ic_launcher"
             app:right_type="image"
             app:toRightOfEdit="true" />
@@ -112,17 +114,19 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_44"
             app:hint="请输入验证码"
-            app:leftIcon="@mipmap/account_verify"
+            app:inputType="number"
+            app:leftIcon="@mipmap/edt_icon_pwd_verify"
             app:rightText="@string/text_get_code"
+            app:rightTextColor="@color/color_blue_1"
             app:right_type="text" />
 
         <com.njxm.smart.view.AppEditText
             android:id="@id/login_pwd"
             android:layout_width="match_parent"
-            app:inputType="textPassword"
             android:layout_height="@dimen/dp_44"
             app:hint="@string/user_password_hint_text"
-            app:leftIcon="@mipmap/user_password"
+            app:inputType="textPassword"
+            app:leftIcon="@mipmap/edt_icon_user_password"
             app:right_type="none" />
 
 

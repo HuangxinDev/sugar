@@ -2,7 +2,7 @@
 <resources>
 
     <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/flash_screen</item>
+        <item name="android:windowBackground">@mipmap/app_background_lunch_screen</item>
         <item name="android:screenOrientation">portrait</item>
 <!--        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>-->
     </style>

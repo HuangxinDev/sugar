@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.SPUtils;
 
 public class SmartCloudApplication extends Application {
 
@@ -17,6 +18,7 @@ public class SmartCloudApplication extends Application {
     public void onCreate() {
         super.onCreate();
         smartCloudApplication = this;
+        SPUtils.initSharedPreferences(this);
 //        CrashReport.initCrashReport(this, "2af2871764", true);
 
         LogTool.enableDebug(true);
