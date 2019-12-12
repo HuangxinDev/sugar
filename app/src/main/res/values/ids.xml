@@ -48,4 +48,21 @@
     <item name="user_head" type="id" /> <!-- 用户头像 -->
     <item name="user_name" type="id" /> <!-- 用户名字 -->
     <item name="user_work" type="id" /> <!-- 用户职位 -->
+
+
+    <!--占位id-->
+    <item name="seat1" type="id" />
+    <item name="seat2" type="id" />
+    <item name="seat3" type="id" />
+    <item name="seat4" type="id" />
+
+
+    <!--体检报告-->
+    <item name="default_layout" type="id" />
+    <item name="commit_layout" type="id" />
+    <item name="wait_check_layout" type="id" />
+    <item name="check_failed_layout" type="id" />
+    <item name="upload_btn" type="id" />
+    <item name="commit_btn" type="id" />
+    <item name="retry_upload_btn" type="id" />
 </resources>

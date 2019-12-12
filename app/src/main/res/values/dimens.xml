@@ -3,6 +3,7 @@
     <!-- 字体大小集合 -->
     <dimen name="sp_18">18sp</dimen>
     <dimen name="sp_11">11sp</dimen>
+    <dimen name="sp_13">13sp</dimen>
     <dimen name="sp_15">15sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_17">17sp</dimen>
@@ -36,6 +37,10 @@
     <dimen name="dp_42">42dp</dimen>
     <dimen name="dp_275">275dp</dimen>
     <dimen name="sp_9">9sp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_11">11dp</dimen>
+    <dimen name="dp_66">66dp</dimen>
+    <dimen name="dp_7">7dp</dimen>
 </resources>
 
 
