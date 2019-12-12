@@ -3,19 +3,18 @@ package com.njxm.smart.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.ns.demo.R;
 
 public class RealNameAuthenticationActivity extends BaseActivity {
 
-    private AppCompatTextView mCardId;
+    private ImageView mCardId;
 
     public static final int ACTION_CAPTURE = 100;
 
@@ -77,8 +76,7 @@ public class RealNameAuthenticationActivity extends BaseActivity {
             showToast("bitmap return");
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             if (bitmap != null) {
-                mCardId.setCompoundDrawablesWithIntrinsicBounds(null,
-                        new BitmapDrawable(getResources(), bitmap), null, null);
+                mCardId.setImageBitmap(bitmap);
             }
         }
     }

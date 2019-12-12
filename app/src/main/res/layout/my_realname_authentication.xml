@@ -3,26 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
+    android:background="@color/background_white"
     android:fitsSystemWindows="true"
-    android:paddingStart="@dimen/dp_16"
-    android:paddingEnd="@dimen/dp_16">
+    android:orientation="vertical">
 
     <include
         android:id="@id/action_bar"
         layout="@layout/layout_action_bar" />
 
-    <ScrollView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/divider_color_ffdedede" />
+
+    <RelativeLayout
+        android:id="@id/ll_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16">
 
         <LinearLayout
-            android:id="@id/ll_1"
+            android:id="@id/seat1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_53"
-            android:background="@color/background_white"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/action_bar">
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewStyle.Black.14"
@@ -42,13 +49,18 @@
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>
 
+        <View
+            android:id="@id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_below="@id/seat1"
+            android:background="@color/divider_color_ffdedede" />
+
         <LinearLayout
-            android:id="@id/ll_2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_53"
-            android:background="@color/background_white"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_1">
+            android:layout_below="@id/divider1"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewStyle.Black.14"
@@ -67,74 +79,176 @@
                 android:text="321331198600280031"
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>
+    </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/color_gray_2" />
 
+    <ScrollView
+        android:id="@id/ll_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19">
+
+                <ImageView
+                    android:id="@+id/card_id_face"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/realname_card_id_face" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/card_id_face"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="#ffff6600"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray.11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="请上传身份证" />
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="人像面"
+                        android:textSize="@dimen/sp_11" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_24"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/card_id_native"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/realname_card_id_native_emblem" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/card_id_native"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="#ffff6600"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray.11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="请上传身份证" />
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="国徽面"
+                        android:textSize="@dimen/sp_11" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_24"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/face_detect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/realname_face_detect" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/face_detect"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="#ffff6600"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray.11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="人脸识别" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/commitBtn"
+                style="@style/BaseTextViewStyle.White"
+                android:layout_width="@dimen/dp_275"
+                android:layout_height="@dimen/dp_42"
+                android:layout_marginTop="@dimen/dp_38"
+                android:background="@drawable/background_btn_flavor_1"
+                android:text="确认提交"
+                android:textSize="@dimen/sp_15"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/face_detect" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/BaseTextViewStyle.Gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_marginTop="@dimen/dp_12"
+                android:drawableStart="@mipmap/edt_icon_user_password"
+                android:drawablePadding="@dimen/dp_4"
+                android:text="您的信息仅用于验证身份"
+                android:textSize="@dimen/sp_9"
+                android:layout_marginBottom="@dimen/dp_38"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/commitBtn" />
+
+        </LinearLayout>
     </ScrollView>
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/card_id_face"
-        style="@style/BaseTextViewStyle.Gray.11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        android:drawableTop="@mipmap/realname_card_id_face"
-        android:text="*请上传身份证人像面"
-        app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_2" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/card_id_native"
-        style="@style/BaseTextViewStyle.Gray.11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        android:drawableTop="@mipmap/realname_card_id_native_emblem"
-        android:text="*请上传身份证国徽面"
-        app:layout_constraintHorizontal_weight="8"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_id_face" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/face_detect"
-        style="@style/BaseTextViewStyle.Gray.11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        android:drawableTop="@mipmap/realname_face_detect"
-        android:text="*人脸识别"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_id_native" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/commitBtn"
-        style="@style/BaseTextViewStyle.White"
-        android:layout_width="@dimen/dp_275"
-        android:layout_height="@dimen/dp_42"
-        android:background="@drawable/background_btn_flavor_1"
-        android:text="确认提交"
-        android:textSize="@dimen/sp_15"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/face_detect" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        style="@style/BaseTextViewStyle.Gray"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_4"
-        android:drawableLeft="@mipmap/edt_icon_user_password"
-        android:drawablePadding="@dimen/dp_4"
-        android:text="您的信息仅用于验证身份"
-        android:textSize="@dimen/sp_9"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/commitBtn" />
 
 
 </LinearLayout>
