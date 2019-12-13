@@ -55,6 +55,10 @@
     <item name="seat2" type="id" />
     <item name="seat3" type="id" />
     <item name="seat4" type="id" />
+    <item name="star1" type="id" />
+    <item name="star2" type="id" />
+    <item name="star3" type="id" />
+    <item name="star4" type="id" />
 
 
     <!--体检报告-->
@@ -65,4 +69,13 @@
     <item name="upload_btn" type="id" />
     <item name="commit_btn" type="id" />
     <item name="retry_upload_btn" type="id" />
+
+    <!--我的-->
+    <item name="my_real_item" type="id" />
+    <item name="my_real_item_star" type="id" />
+    <item name="my_medical_item" type="id" />
+    <item name="my_medical_item_star" type="id" />
+    <item name="my_cert_item" type="id" />
+    <item name="my_about_us_item" type="id" />
+    <item name="my_setting_item" type="id" />
 </resources>

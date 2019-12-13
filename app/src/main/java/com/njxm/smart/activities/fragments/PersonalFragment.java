@@ -2,25 +2,26 @@ package com.njxm.smart.activities.fragments;
 
 import android.content.Intent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
-import com.njxm.smart.activities.fragments.adapter.PersonFragmentListAdapter;
-import com.njxm.smart.divider.MyRecyclerViewItemDecoration;
-import com.njxm.smart.model.component.PersonListItem;
+import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.tools.network.HttpCallBack;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
-import java.util.ArrayList;
-import java.util.List;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * "我的" Fragment
@@ -28,11 +29,19 @@ import java.util.List;
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
 
 
-    private RecyclerView mRecyclerView;
     private BaseQuickAdapter mPersonFragmentListAdapter;
 
     // 个人信息页面按钮
     private AppCompatTextView mUserNewsBtn;
+
+    // 实名认证
+    View mRealItem;
+    View mRealStarItem;
+    View mMedicalItem;
+    View mMedicalStarItem;
+    View mCertItem;
+    View mAboutUsItem;
+    View mSettingItem;
 
     @Override
     protected int setLayoutResourceID() {
@@ -42,9 +51,53 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void init() {
         super.init();
-        mRecyclerView = getContentView().findViewById(R.id.personal_recycler_view);
         mUserNewsBtn = getContentView().findViewById(R.id.user_name);
         mUserNewsBtn.setOnClickListener(this);
+        mRealItem = getContentView().findViewById(R.id.my_real_item);
+        mRealStarItem = getContentView().findViewById(R.id.my_real_item_star);
+        mMedicalItem = getContentView().findViewById(R.id.my_medical_item);
+        mMedicalStarItem = getContentView().findViewById(R.id.my_medical_item_star);
+        mCertItem = getContentView().findViewById(R.id.my_cert_item);
+        mAboutUsItem = getContentView().findViewById(R.id.my_about_us_item);
+        mSettingItem = getContentView().findViewById(R.id.my_setting_item);
+        mRealItem.setOnClickListener(this);
+        mMedicalItem.setOnClickListener(this);
+        mCertItem.setOnClickListener(this);
+        mAboutUsItem.setOnClickListener(this);
+        mSettingItem.setOnClickListener(this);
+
+
+        JSONObject object = new JSONObject();
+        object.put("id", SPUtils.getStringValue("id"));
+
+        RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
+                object.toString());
+        Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/findUserForIndex")
+                .addHeader("Platform", "APP")
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Account", SPUtils.getStringValue("userAccount"))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue("token"))
+                .post(formBody)
+                .build();
+
+        HttpUtils.getInstance().postData(0, request, new HttpCallBack() {
+            @Override
+            public void onSuccess(int requestId, boolean success, int code, final String data) {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject json = JSONObject.parseObject(data);
+                        mUserNewsBtn.setText(json.getString("userName"));
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
     }
 
     @Override
@@ -54,51 +107,24 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void setUpData() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
-        List<PersonListItem> datas = new ArrayList<>();
-        datas.add(new PersonListItem(R.mipmap.mine_icon_real_name_auth, "实名认证", "* 请实名认证", true, 0));
-        datas.add(new PersonListItem(R.mipmap.mine_icon_medical_report, "体检报告", "* 请上传体检报告", true,
-                R.dimen.dp_1));
-        datas.add(new PersonListItem(R.mipmap.mine_icon_upload_certificate, "证书上传", "", false, R.dimen.dp_1));
-        datas.add(new PersonListItem(R.mipmap.abount_us, "关于我们", "", false, R.dimen.dp_10));
-        datas.add(new PersonListItem(R.mipmap.mine_icon_settings, "设置", "", false, R.dimen.dp_1));
-        mRecyclerView.setLayoutManager(layoutManager);
-
-        MyRecyclerViewItemDecoration itemDecoration = new MyRecyclerViewItemDecoration();
-        itemDecoration.setPositions(10, 3);
-        mRecyclerView.addItemDecoration(itemDecoration);
-        mPersonFragmentListAdapter = new PersonFragmentListAdapter(R.layout.item_fragment_personal_list, datas);
-        mPersonFragmentListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-                if (position == 3) {
-                    Intent intent = new Intent(getActivity(), AboutUsActivity.class);
-                    startActivity(intent);
-                } else if (position == 4) {
-                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                    startActivity(intent);
-                } else if (position == 1) {
-                    Intent intent = new Intent(getActivity(), MedicalReportActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getActivity(), RealNameAuthenticationActivity.class);
-                    intent.putExtra("title", ((PersonListItem) adapter.getItem(position)).getTitleRes());
-                    startActivity(intent);
-                }
-
-                Toast.makeText(getActivity(),
-                        "data： " + ((PersonListItem) adapter.getData().get(position)).getTitleRes(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        mRecyclerView.setAdapter(mPersonFragmentListAdapter);
     }
 
     @Override
     public void onClick(View v) {
         if (v == mUserNewsBtn) {
             Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
+            startActivity(intent);
+        } else if (v == mAboutUsItem) {
+            Intent intent = new Intent(getActivity(), AboutUsActivity.class);
+            startActivity(intent);
+        } else if (v == mRealItem) {
+            Intent intent = new Intent(getActivity(), RealNameAuthenticationActivity.class);
+            startActivity(intent);
+        } else if (v == mMedicalItem) {
+            Intent intent = new Intent(getActivity(), MedicalReportActivity.class);
+            startActivity(intent);
+        } else if (v == mSettingItem) {
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
             startActivity(intent);
         }
     }

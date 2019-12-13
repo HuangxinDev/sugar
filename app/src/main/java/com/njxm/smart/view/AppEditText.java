@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
@@ -147,9 +150,20 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
                 mAppCompatEditText.getText().toString().trim();
     }
 
-    public void setRightText(CharSequence charSequence) {
+    Handler handler = new Handler(Looper.getMainLooper());
+
+    public void setRightText(final CharSequence charSequence) {
         if (mAppCompatTextView != null && mRightType == RIGHT_TEXT) {
-            mAppCompatTextView.setText(charSequence);
+            if (AppUtils.isMainThread()) {
+                mAppCompatTextView.setText(charSequence);
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAppCompatTextView.setText(charSequence);
+                    }
+                });
+            }
         }
     }
 

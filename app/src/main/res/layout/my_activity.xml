@@ -52,46 +52,271 @@
         android:id="@+id/user_score_pop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="安全分 "
-        android:textSize="@dimen/sp_11"
         android:fontFamily="@font/msyh"
+        android:text="安全分 "
         android:textColor="@color/color_gray_1"
+        android:textSize="@dimen/sp_11"
         app:layout_constraintBottom_toBottomOf="@id/personal_news"
         app:layout_constraintLeft_toLeftOf="@id/user_name"
         app:layout_constraintTop_toTopOf="@id/personal_news"
         app:layout_constraintVertical_bias="0.69" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/qr_code"
+        app:layout_constraintBottom_toBottomOf="@id/personal_news"
+        app:layout_constraintHorizontal_bias="0.89"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/personal_news"
-        app:layout_constraintBottom_toBottomOf="@id/personal_news"
-        app:layout_constraintHorizontal_bias="0.89"
-        app:layout_constraintVertical_bias="0.55"
-        android:src="@mipmap/qr_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintVertical_bias="0.55" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/user_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="95分 "
         android:fontFamily="@font/msyh"
-        app:layout_constraintBottom_toBottomOf="@id/user_score_pop"
+        android:text="95分 "
         android:textColor="@color/color_blue_1"
         android:textSize="@dimen/sp_11"
+        app:layout_constraintBottom_toBottomOf="@id/user_score_pop"
         app:layout_constraintLeft_toRightOf="@id/user_score_pop"
         app:layout_constraintTop_toTopOf="@id/user_score_pop"
         app:layout_constraintVertical_bias="0.69" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/personal_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_gray"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/personal_news" />
+        android:layout_marginTop="@dimen/dp_10"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/personal_news">
 
+        <RelativeLayout
+            android:id="@id/my_real_item"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:background="@color/background_white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/mine_icon_real_name_auth" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_11"
+                    android:text="实名认证" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@id/my_real_item_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_toStartOf="@id/seat1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textColor="#ffff6600"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Gray.11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:text="请实名认证" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@id/seat1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/arrow_detail" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@id/my_medical_item"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/background_white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/mine_icon_medical_report" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_11"
+                    android:text="体检报告" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@id/my_medical_item_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_toStartOf="@id/seat1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textColor="#ffff6600"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Gray.11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:text="请上传体检报告" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@id/seat1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/arrow_detail" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@id/my_cert_item"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/background_white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/mine_icon_upload_certificate" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_11"
+                    android:text="证书上传" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/arrow_detail" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@id/my_about_us_item"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/background_white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/mine_icon_about_us" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_11"
+                    android:text="关于我们" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/arrow_detail" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@id/my_setting_item"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/background_white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/mine_icon_settings" />
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_11"
+                    android:text="设置" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/arrow_detail" />
+        </RelativeLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

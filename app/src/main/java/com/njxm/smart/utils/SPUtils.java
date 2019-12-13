@@ -43,6 +43,10 @@ public final class SPUtils {
         }
     }
 
+    public static String getStringValue(String key) {
+        return getValue(key, "");
+    }
+
     public static String getValue(String key, String defValue) {
         String result = sLruCache.get(key);
         if (StringUtils.isEmpty(result) && init) {

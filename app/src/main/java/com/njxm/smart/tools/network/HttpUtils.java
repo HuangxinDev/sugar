@@ -2,10 +2,12 @@ package com.njxm.smart.tools.network;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.utils.LogTool;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
@@ -28,23 +31,14 @@ public final class HttpUtils {
 
     private static OkHttpClient sOkHttpClient;
 
+    // 图形验证码
+    public static final int REQUEST_QR = 0;
 
     // 登录接口
-    public static Request loginRequest = new Request.Builder()
-            .url("http://119.3.136.127:7777/auth/mobile/login?mobile=13951320937&code=807427")
-            .addHeader("Platform", "App")
-            .header("Content-Type", "application/x-www-form-urlencoded")
-            .build();
+    public static final int REQUEST_LOGIN = 1;
 
-    // 图形验证接口
-    public static Request qrRequest = new Request.Builder()
-            .url("http://119.3.136.127:7777/auth/kaptcha/get")
-            .build();
-
-
-    public static Request loginRequest2 = new Request.Builder()
-            .url("http://119.3.136.127:7777/auth/user/login?username=admin&password=123456&code=cb72&kaptchaToken=ba23986a3f204155bf1314bb28f01df2")
-            .build();
+    // SMS接口
+    public static final int REQUEST_SMS = 2;
 
     ///////////////////////////////////////////////////////////////////////////
     // 单例模式，避免创建多个HttpClient
@@ -75,33 +69,45 @@ public final class HttpUtils {
         return sOkHttpClient;
     }
 
-    public void postData(String url, Map<String, String> paramMap,
-                         String contentType, final CallBack callBack, boolean isBody) {
+
+    public void postData(final int requestId, final Request request, final HttpCallBack callBack) {
+        sOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                JSONObject object = JSONObject.parseObject(response.body().string());
+                LogTool.printD("result: %s", object.toString());
+                if (callBack != null) {
+                    callBack.onSuccess(requestId, object.getBoolean("success"),
+                            object.getInteger("code"), object.getString("data"));
+                }
+            }
+        });
+    }
+
+
+    public void postDataWithParams(final int requestId, String url, Map<String, String> paramMap,
+                                   String contentType, final HttpCallBack callBack) {
         StringBuilder urlParams = new StringBuilder(url.length());
         urlParams.append(url);
 
-        FormBody.Builder builder = new FormBody.Builder(Charset.forName("UTF-8"));
-
-        if (isBody && paramMap != null && paramMap.size() > 0) {
+        FormBody.Builder builder = new FormBody.Builder();
+        try {
+            if (paramMap.size() <= 0) {
+                return;
+            }
+            urlParams.append("?");
             Set<Map.Entry<String, String>> aa = paramMap.entrySet();
             for (Map.Entry<String, String> entry : aa) {
-                builder.add(entry.getKey(), entry.getValue());
+                urlParams.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
             }
-        } else {
-            try {
-                if (paramMap.size() <= 0) {
-                    return;
-                }
-                urlParams.append("?");
-
-                Set<Map.Entry<String, String>> aa = paramMap.entrySet();
-                for (Map.Entry<String, String> entry : aa) {
-                    urlParams.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-                }
-                urlParams.deleteCharAt(urlParams.length() - 1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            urlParams.deleteCharAt(urlParams.length() - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         RequestBody requestBody = builder.build();
@@ -109,16 +115,8 @@ public final class HttpUtils {
         Request request = new Request.Builder().url(urlParams.toString())
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", contentType)
-//                .header("Platform", "App")
-//                .addHeader("Platform", "PC")
-//                .addHeader("Content-Type", "application/json")
                 .post(requestBody)
-//                .header("Content-Type", "application/x-www-form-urlencoded")
                 .build();
-
-
-        LogTool.printD("host: %s, headers: %s", request.url(), request.headers().toString());
-
         sOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -133,11 +131,49 @@ public final class HttpUtils {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                LogTool.printD("host: %s/%s, result: %s", call.request().url().host(),
-                        call.request().url().url().getPath(),
-                        result);
+                JSONObject jsonObject = JSONObject.parseObject(result);
+
+                LogTool.printD("response result: %s", result);
+                boolean success = jsonObject.getBoolean("success");
+                int code = jsonObject.getInteger("code");
+                String data = jsonObject.getString("data");
                 if (callBack != null) {
-                    callBack.onSuccess(result);
+                    callBack.onSuccess(requestId, success, code, data);
+                }
+            }
+        });
+
+    }
+
+    public void postDataWithBody(final int requestId, String url,
+                                 HashMap<String, String> paramMaps, final HttpCallBack callBack) {
+
+        JSONObject body = new JSONObject();
+        if (paramMaps != null && paramMaps.size() > 0) {
+            for (Map.Entry<String, String> entry : paramMaps.entrySet()) {
+                body.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
+                body.toString());
+
+        Request request = new Request.Builder().url(url)
+                .post(requestBody)
+                .build();
+
+        sOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                JSONObject jsonObject = JSONObject.parseObject(response.body().string());
+                if (callBack != null) {
+                    callBack.onSuccess(requestId, jsonObject.getBoolean("success"),
+                            jsonObject.getInteger("code"), jsonObject.getString("data"));
                 }
             }
         });

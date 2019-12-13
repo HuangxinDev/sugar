@@ -12,28 +12,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.tools.network.CallBack;
+import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ns.demo.R;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-public class ResetPasswordActivity extends BaseActivity {
+public class ResetPasswordActivity extends BaseActivity implements HttpCallBack {
     @Override
     protected int setContentLayoutId() {
         return R.layout.activity_reset_password;
@@ -94,36 +86,12 @@ public class ResetPasswordActivity extends BaseActivity {
         mAccountEdit.getEditText().addTextChangedListener(textWatcher);
         mAccountQR.getEditText().addTextChangedListener(textWatcher);
         mAccountNumber.getEditText().addTextChangedListener(textWatcher);
-
-//        if (isResetPwd) {
-        HttpUtils.getInstance().postData("http://119.3.136.127:7777/auth/kaptcha/get", null,
-                HttpUtils.MimeType.JSON,
-                new CallBack() {
-                    @Override
-                    public void onSuccess(String param) {
-                        JSONObject object = JSONObject.parseObject(param);
-                        boolean isSuccess = object.getBoolean("success");
-                        LogTool.printD("qr result: " + param);
-                        if (isSuccess) {
-                            JSONObject dataObject = object.getJSONObject("data");
-                            mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
-                            SPUtils.putValue("kaptchaToken", dataObject.getString("kaptchaToken"));
-                        }
-                    }
-
-                    @Override
-                    public void onFailed() {
-
-                    }
-                }, false);
-
         mAccountNumber.getRightTextView().setOnClickListener(this);
-//        }
-
-
+        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
+                HttpUtils.MimeType.JSON, this);
     }
 
-    private static int count = 60;
+    private int count = 60;
 
     @Override
     public void onClick(View v) {
@@ -138,38 +106,19 @@ public class ResetPasswordActivity extends BaseActivity {
                     mAccountNumber.setRightText((count--) + "秒");
                     if (count < 0) {
                         mAccountNumber.setRightText("获取验证码");
+                        count = 60;
                         cancel();
                     }
                 }
             }, 0, 1000);
 
-            OkHttpClient client = HttpUtils.getInstance().getOkHttpClient();
+            HashMap<String, String> params = new HashMap<>();
+            params.put("kaptchaToken", SPUtils.getStringValue("kaptchaToken"));
+            params.put("code", mAccountQR.getText().trim());
+            params.put("mobile", mAccountEdit.getText().trim());
 
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("kaptchaToken", SPUtils.getValue("kaptchaToken", ""));
-            jsonObject.put("code", mAccountQR.getText().trim());
-            jsonObject.put("mobile", mAccountEdit.getText().trim());
-
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
-                    jsonObject.toString());
-
-            Request request = new Request.Builder().url("http://119.3.136" +
-                    ".127:7777/auth/sms/sendSms")
-                    .post(requestBody)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    LogTool.printE("failed: " + e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    LogTool.printD("%s success result: %s", call.request().url(),
-                            response.body().string());
-                }
-            });
+            HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
+                    HttpUrlGlobal.HTTP_SMS_URL, params, null);
         } else if (v == mConfirmBtn) {
 
             if (TextUtils.isEmpty(mNewPwd1.getText()) || TextUtils.isEmpty(mNewPwd2.getText()) || !TextUtils.equals(mNewPwd1.getText(),
@@ -177,38 +126,13 @@ public class ResetPasswordActivity extends BaseActivity {
                 showToast("两次密码输入不一致");
                 return;
             }
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mobile", mAccountEdit.getText().trim());
+            params.put("code", mAccountNumber.getText().trim());
+            params.put("password", mNewPwd2.getText().trim());
 
-            OkHttpClient client = HttpUtils.getInstance().getOkHttpClient();
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("mobile", mAccountEdit.getText().trim());
-            jsonObject.put("code", mAccountNumber.getText().trim());
-            jsonObject.put("password", mNewPwd2.getText().trim());
-
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
-                    jsonObject.toString());
-
-            Request request = new Request.Builder().url("http://119.3.136.127:7776/sys/user/updatePassByMobile")
-                    .post(requestBody)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    LogTool.printE("failed: " + e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    JSONObject object = JSONObject.parseObject(response.body().string());
-
-                    if (object.getInteger("code") == 200) {
-                        // 密码修改成功
-                        startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
-                        finish();
-                    }
-                }
-            });
+            HttpUtils.getInstance().postDataWithBody(-1, HttpUrlGlobal.HTTP_RESET_PWD_URL, params
+                    , this);
         }
     }
 
@@ -256,4 +180,26 @@ public class ResetPasswordActivity extends BaseActivity {
     };
 
 
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+        if (requestId == HttpUtils.REQUEST_QR) {
+            if (success) {
+                JSONObject dataObject = JSONObject.parseObject(data);
+                mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
+                SPUtils.putValue("kaptchaToken", dataObject.getString("kaptchaToken"));
+            }
+        } else if (requestId == -1) {
+            if (success && code == 200) {
+                // 密码修改成功
+                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                finish();
+            }
+        }
+
+    }
+
+    @Override
+    public void onFailed() {
+
+    }
 }
