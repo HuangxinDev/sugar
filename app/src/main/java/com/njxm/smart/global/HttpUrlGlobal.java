@@ -30,6 +30,11 @@ public final class HttpUrlGlobal {
      */
     public static final String HTTP_RESET_PWD_URL = "http://119.3.136.127:7776/sys/user/updatePassByMobile";
 
+    /**
+     * 关于我们页面
+     */
+    public static final String HTTP_ABOUT_US = "http://119.3.136.127:7776/sys/link/aboutUsIndex";
+
 
     ///////////////////////////////////////////////////////////////////////////
     // ContentType类型

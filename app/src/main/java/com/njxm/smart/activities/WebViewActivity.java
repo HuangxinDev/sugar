@@ -1,12 +1,14 @@
 package com.njxm.smart.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 
+import com.njxm.smart.utils.LogTool;
 import com.ns.demo.R;
 
 /**
@@ -29,11 +31,17 @@ public class WebViewActivity extends BaseActivity {
         mWebView = findViewById(R.id.webview);
         setWebViewSettings(mWebView);
 
-        Bundle bundle = getIntent().getExtras();
         showLeftBtn(true, R.mipmap.arrow_back_blue);
-        if (bundle != null) {
-            mWebView.loadUrl("file:///android_asset/html/" + bundle.getString("asset_name"));
-            showTitle(true, bundle.getString("title_name"));
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            showTitle(true, intent.getStringExtra("title_name"));
+            if (intent.getBooleanExtra("loadUrl", false)) {
+                LogTool.printD("url: %s", intent.getStringExtra("resUrl"));
+                mWebView.loadUrl(intent.getStringExtra("resUrl"));
+            } else {
+                mWebView.loadUrl("file:///android_asset/html/" + intent.getStringExtra("resUrl"));
+            }
         }
     }
 

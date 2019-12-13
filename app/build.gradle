@@ -16,7 +16,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
 
-        resValue("string", "app_version", versionName)
+        resValue("string", "app_version", "当前版本" + versionName)
     }
 }
 

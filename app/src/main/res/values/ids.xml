@@ -78,4 +78,10 @@
     <item name="my_cert_item" type="id" />
     <item name="my_about_us_item" type="id" />
     <item name="my_setting_item" type="id" />
+
+    <!--我的-关于我们-->
+    <item name="about_us_service" type="id" />
+    <item name="about_us_version" type="id" />
+    <item name="about_us_secret" type="id" />
+    <item name="about_us_feature" type="id" />
 </resources>
