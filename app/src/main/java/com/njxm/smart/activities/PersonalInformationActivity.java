@@ -87,6 +87,8 @@ public class PersonalInformationActivity extends BaseActivity {
             mUserNewsImage.setImageResource(showDetails ? R.mipmap.arrow_down : R.mipmap.arrow_detail);
         } else if (v == llUserPhone) {
             startActivity(new Intent(this, UserPhoneActivity.class));
+        } else if (v == llUserInputFace) {
+            startActivity(new Intent(this, InputFaceActivity.class));
         }
     }
 

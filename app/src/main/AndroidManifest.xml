@@ -87,6 +87,9 @@
             android:name="com.njxm.smart.activities.UserPhoneActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.InputFaceActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
