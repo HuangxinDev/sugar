@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_gray"
@@ -27,22 +28,22 @@
                 android:layout_height="@dimen/dp_53"
                 android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/background_white"
-                android:gravity="center_vertical"
                 android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16">
+                android:paddingEnd="@dimen/dp_38">
 
                 <TextView
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="头像" />
-                />
 
                 <ImageView
                     android:id="@id/news_user_head"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:src="@mipmap/personal_news_head" />
             </RelativeLayout>
 
@@ -53,7 +54,7 @@
                 android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16">
+                android:paddingEnd="@dimen/dp_38">
 
                 <TextView
                     style="@style/BaseTextViewStyle.Black.14"
@@ -74,6 +75,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@id/news_user_phone_ll"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
                 android:layout_marginTop="@dimen/dp_1"
@@ -137,7 +139,8 @@
                 android:id="@id/news_user_base_new_sub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -272,7 +275,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@id/news_user_input_face"
+                android:id="@id/news_user_input_face_ll"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
                 android:layout_marginTop="@dimen/dp_10"
@@ -304,14 +307,13 @@
 
                     <TextView
                         android:id="@id/news_user_name"
-                        style="@style/BaseTextViewStyle.Gray"
+                        style="@style/BaseTextViewStyle.Gray.11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_4"
                         android:gravity="end"
                         android:text="请录入人脸用于考勤"
-                        android:textColor="@color/color_gray_7c7c7c"
-                        android:textSize="@dimen/sp_14" />
+                        android:textColor="@color/color_gray_7c7c7c" />
 
                 </LinearLayout>
 
@@ -324,8 +326,8 @@
             </LinearLayout>
 
 
-            <RelativeLayout
-                android:id="@id/news_user_education"
+            <LinearLayout
+                android:id="@id/news_user_education_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
                 android:layout_marginTop="@dimen/dp_1"
@@ -341,16 +343,25 @@
                     android:text="学历"
                     android:textColor="@color/color_black_383838" />
 
+                <TextView
+                    android:id="@id/news_user_education"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:paddingEnd="@dimen/dp_15"
+                    android:textColor="@color/color_gray_7c7c7c" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:src="@mipmap/arrow_detail" />
-            </RelativeLayout>
+            </LinearLayout>
 
 
             <LinearLayout
-                android:id="@id/news_user_address"
+                android:id="@id/news_user_address_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
                 android:layout_marginTop="@dimen/dp_1"
@@ -367,9 +378,15 @@
                     android:textColor="@color/color_black_383838" />
 
                 <TextView
+                    android:id="@id/news_user_address"
+                    style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:paddingEnd="@dimen/dp_15"
+                    android:textColor="@color/color_gray_7c7c7c"
+                    tools:ignore="RtlSymmetry" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -386,7 +403,8 @@
                 android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16">
+                android:paddingEnd="@dimen/dp_16"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/BaseTextViewStyle.Black.14"
@@ -410,7 +428,8 @@
                 android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16">
+                android:paddingEnd="@dimen/dp_16"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/BaseTextViewStyle.Black.14"
@@ -423,7 +442,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -460,7 +480,8 @@
                 android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16">
+                android:paddingEnd="@dimen/dp_16"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/BaseTextViewStyle.Black.14"

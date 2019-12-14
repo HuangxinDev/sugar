@@ -112,7 +112,11 @@
     <item name="news_user_holding_certificates" type="id" />
     <item name="news_user_medical_report" type="id" />
     <item name="news_user_real_verify" type="id" />
-    <item name="news_user_emergency_contact" type="id" /> <!-- 用户职位 -->
+    <item name="news_user_emergency_contact" type="id" />
+    <item name="news_user_address_item" type="id" />
+    <item name="news_user_education_item" type="id" />
+    <item name="news_user_phone_ll" type="id" />
+    <item name="news_user_input_face_ll" type="id" /> <!-- 用户职位 -->
 
 
 </resources>

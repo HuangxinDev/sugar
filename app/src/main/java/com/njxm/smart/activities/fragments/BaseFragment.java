@@ -2,6 +2,8 @@ package com.njxm.smart.activities.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
 
 // 类似于android support v4包下的Fragment
@@ -17,14 +21,17 @@ import com.njxm.smart.utils.LogTool;
 /**
  * Fragment基类
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements BaseRunnable {
 
     private View mContentView;
     private Context mContext;
 
+    private Handler mHandler;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     @Nullable
@@ -72,5 +79,18 @@ public abstract class BaseFragment extends Fragment {
 
     public Context getContext() {
         return mContext;
+    }
+
+    protected Handler getMainHandler() {
+        return mHandler;
+    }
+
+    @Override
+    public void invoke(Runnable runnable) {
+        if (AppUtils.isMainThread()) {
+            runnable.run();
+        } else {
+            mHandler.post(runnable);
+        }
     }
 }

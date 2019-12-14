@@ -2,6 +2,7 @@ package com.njxm.smart.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -13,6 +14,8 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ns.demo.R;
@@ -23,9 +26,11 @@ import java.util.Locale;
  * 基类，提供共用方法和回调
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange,
-        OnClickListener {
+        OnClickListener, BaseRunnable {
 
     protected final String TAG;
+
+    protected static Handler mHandler = new Handler();
 
     protected AppCompatImageView mActionBarBackBtn;
     protected AppCompatTextView mActionBarTitle;
@@ -178,5 +183,18 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
             return;
         }
         view.setVisibility(visiable);
+    }
+
+    @Override
+    public void invoke(Runnable runnable) {
+        if (AppUtils.isMainThread()) {
+            runnable.run();
+        } else {
+            mHandler.post(runnable);
+        }
+    }
+
+    public static Handler getMainHandler() {
+        return mHandler;
     }
 }

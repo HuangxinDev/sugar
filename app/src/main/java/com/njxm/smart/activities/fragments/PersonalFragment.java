@@ -13,6 +13,7 @@ import com.njxm.smart.activities.PersonalInformationActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -26,8 +27,12 @@ import okhttp3.RequestBody;
 /**
  * "我的" Fragment
  */
-public class PersonalFragment extends BaseFragment implements View.OnClickListener {
+public class PersonalFragment extends BaseFragment implements View.OnClickListener,
+        HttpCallBack {
 
+
+    private static final int REQUEST_USER_INFO_BASE = 344;
+    private static final int REQUEST_USER_INFO_DETAIL = 545;
 
     private BaseQuickAdapter mPersonFragmentListAdapter;
 
@@ -72,6 +77,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
         RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
                 object.toString());
+
+
         Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/findUserForIndex")
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
@@ -80,24 +87,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 .post(formBody)
                 .build();
 
-        HttpUtils.getInstance().postData(0, request, new HttpCallBack() {
-            @Override
-            public void onSuccess(int requestId, boolean success, int code, final String data) {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject json = JSONObject.parseObject(data);
-                        mUserNewsBtn.setText(json.getString("userName"));
-                    }
-                });
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-        });
+        HttpUtils.getInstance().postData(REQUEST_USER_INFO_BASE, request, this);
     }
 
     @Override
@@ -128,4 +118,24 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+        if (success) {
+            final UserBean bean = JSONObject.parseObject(data, UserBean.class);
+            SPUtils.putValue("userName", bean.getUserName());
+            invoke(new Runnable() {
+                public void run() {
+                    mUserNewsBtn.setText(bean.getUserName());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onFailed() {
+
+    }
+
+
 }
