@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
@@ -113,7 +114,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
             }, 0, 1000);
 
             HashMap<String, String> params = new HashMap<>();
-            params.put("kaptchaToken", SPUtils.getStringValue("kaptchaToken"));
+            params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
             params.put("code", mAccountQR.getText().trim());
             params.put("mobile", mAccountEdit.getText().trim());
 
@@ -186,7 +187,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
             if (success) {
                 JSONObject dataObject = JSONObject.parseObject(data);
                 mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
-                SPUtils.putValue("kaptchaToken", dataObject.getString("kaptchaToken"));
+                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE, dataObject.getString("kaptchaToken"));
             }
         } else if (requestId == -1) {
             if (success && code == 200) {

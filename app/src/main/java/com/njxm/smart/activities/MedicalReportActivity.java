@@ -2,40 +2,60 @@ package com.njxm.smart.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
+import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpCallBack;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.ResolutionUtil;
+import com.njxm.smart.utils.SPUtils;
+import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 
-public class MedicalReportActivity extends BaseActivity {
+public class MedicalReportActivity extends BaseActivity implements HttpCallBack {
 
 
     private SimpleImageAdapter adapter;
 
-    private static final int MEDICAL_VOID = 704;
-    private static final int MEDICAL_COMMIT = 5;
-    private static final int MEDICAL_CHECK_WAIT = 854;
-    private static final int MEDICAL_CHECK_SUCCESS = 751;
-    private static final int MEDICAL_CHECK_RETRY = 328;
+    private static final int MEDICAL_VOID = 0; // 未上传
+    private static final int MEDICAL_CHECK_WAIT = 1; // 未审批
+    private static final int MEDICAL_CHECK_SUCCESS = 2; // 审核完成
+    private static final int MEDICAL_CHECK_FAILED = 3; // 审批未通过
+
+    private static final int MEDICAL_COMMIT = 194;
 
     private int mMedicalState = MEDICAL_VOID;
 
@@ -53,6 +73,10 @@ public class MedicalReportActivity extends BaseActivity {
 
     // 重新申请
     TextView mRetryUploadBtn;
+
+    private List<File> medicalFiles = new ArrayList<>();
+    private static final int REQUEST_UPLOAD_MEDICAL = 100;
+    private static final int REQUEST_UPDATE_LIST = 783;
 
     @Override
     protected int setContentLayoutId() {
@@ -80,24 +104,6 @@ public class MedicalReportActivity extends BaseActivity {
         mRetryUploadBtn = findViewById(R.id.retry_upload_btn);
         mRetryUploadBtn.setOnClickListener(this);
 
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                SystemClock.sleep(500);
-
-                MedicalReportActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMedicalState = MEDICAL_CHECK_RETRY;
-                        invalidateLayoutState();
-                    }
-                });
-            }
-        }).start();
-
-
         mRecyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -107,8 +113,14 @@ public class MedicalReportActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                if (adapter.getData().size() >= 9) {
+                    showToast("上传图片已达上限");
+                    return;
+                }
+
                 if (position == adapter.getData().size() - 1) {
-                    takePhoto();
+                    takePhoto(100);
                 }
             }
         });
@@ -122,27 +134,45 @@ public class MedicalReportActivity extends BaseActivity {
             }
         });
         mRecyclerView.setAdapter(adapter);
-        invalidateLayoutState();
 
+        mMedicalState = Integer.parseInt(SPUtils.getStringValue(KeyConstant.KEY_MEDICAL_STATUS));
+        if (mMedicalState == 2) {
+            showRightBtn(true, "更新");
+            updateImages();
+        }
+
+        invalidateLayoutState();
+    }
+
+    /**
+     * 更新图片
+     */
+    private void updateImages() {
+
+        JSONObject object = new JSONObject();
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        RequestBody requestBody =
+                FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE), object.toString());
+        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE)
+                .addHeader("Platform", "APP")
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
+                .post(requestBody)
+                .build();
+
+        HttpUtils.getInstance().postData(REQUEST_UPDATE_LIST, request, this);
     }
 
     private void invalidateLayoutState() {
-        switch (mMedicalState) {
+        switch (mMedicalState) { // 未上传
             case MEDICAL_VOID:
                 mMedicalVoidLayout.setVisibility(View.VISIBLE);
                 mMedicalCommitLayout.setVisibility(View.GONE);
                 mMedicalCheckWaitLayout.setVisibility(View.GONE);
                 mMedicalCheckRetryLayout.setVisibility(View.GONE);
                 break;
-            case MEDICAL_COMMIT:
-                mMedicalVoidLayout.setVisibility(View.GONE);
-                mMedicalCommitLayout.setVisibility(View.VISIBLE);
-                mMedicalCheckSuccessHeaderLayout.setVisibility(View.GONE);
-                mCommitBtn.setVisibility(View.VISIBLE);
-                mMedicalCheckWaitLayout.setVisibility(View.GONE);
-                mMedicalCheckRetryLayout.setVisibility(View.GONE);
-                break;
-            case MEDICAL_CHECK_WAIT:
+            case MEDICAL_CHECK_WAIT: // 未审查
                 mMedicalVoidLayout.setVisibility(View.GONE);
                 mMedicalCommitLayout.setVisibility(View.GONE);
                 mMedicalCheckWaitLayout.setVisibility(View.VISIBLE);
@@ -156,12 +186,21 @@ public class MedicalReportActivity extends BaseActivity {
                 mMedicalCheckWaitLayout.setVisibility(View.GONE);
                 mMedicalCheckRetryLayout.setVisibility(View.GONE);
                 break;
-            case MEDICAL_CHECK_RETRY:
+            case MEDICAL_CHECK_FAILED:
                 mMedicalVoidLayout.setVisibility(View.GONE);
                 mMedicalCommitLayout.setVisibility(View.GONE);
                 mCommitBtn.setVisibility(View.GONE);
                 mMedicalCheckWaitLayout.setVisibility(View.GONE);
                 mMedicalCheckRetryLayout.setVisibility(View.VISIBLE);
+                break;
+
+            case MEDICAL_COMMIT: // 提交页面
+                mMedicalVoidLayout.setVisibility(View.GONE);
+                mMedicalCommitLayout.setVisibility(View.VISIBLE);
+                mMedicalCheckSuccessHeaderLayout.setVisibility(View.GONE);
+                mCommitBtn.setVisibility(View.VISIBLE);
+                mMedicalCheckWaitLayout.setVisibility(View.GONE);
+                mMedicalCheckRetryLayout.setVisibility(View.GONE);
                 break;
         }
     }
@@ -169,8 +208,10 @@ public class MedicalReportActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+        if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
+            medicalFiles.add(photoFile);
+            Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
             adapter.getData().add(0, new BitmapDrawable(getResources(), bitmap));
             adapter.notifyDataSetChanged();
             invalidateLayoutState();
@@ -190,7 +231,7 @@ public class MedicalReportActivity extends BaseActivity {
                 break;
             case MEDICAL_VOID:
             case MEDICAL_CHECK_WAIT:
-            case MEDICAL_CHECK_SUCCESS:
+            case MEDICAL_CHECK_FAILED:
             default:
                 finish();
         }
@@ -201,15 +242,75 @@ public class MedicalReportActivity extends BaseActivity {
         super.onClick(v);
         if (v == mUploadBtn || v == mRetryUploadBtn) {
             mMedicalState = MEDICAL_COMMIT;
-            takePhoto();
+            takePhoto(100);
         } else if (v == mCommitBtn) {
             mMedicalState = MEDICAL_CHECK_WAIT;
             invalidateLayoutState();
+            uploadMedicalReports();
         }
     }
 
-    private void takePhoto() {
-        Intent starter = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(starter, 100);
+    private void uploadMedicalReports() {
+
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+
+        for (int i = 0; i < medicalFiles.size(); i++) {
+            builder.addFormDataPart("files", medicalFiles.get(i).getName(),
+                    RequestBody.create(MediaType.parse("image/png"), medicalFiles.get(i)));
+        }
+
+        RequestBody requestBody = builder.build();
+
+        Request request = new Request.Builder()
+                .url(HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE)
+                .addHeader("Platform", "APP")
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
+                .post(requestBody)
+                .build();
+
+        HttpUtils.getInstance().postData(REQUEST_UPLOAD_MEDICAL, request, this);
+    }
+
+    private File photoFile;
+
+    public void takePhoto(int requestId) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        UUID uuid = UUID.randomUUID();
+        photoFile = new File(getFilesDir(), uuid + ".jpg");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
+                    ".fileProvider", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        } else {
+            Uri uri = Uri.fromFile(photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        }
+        startActivityForResult(intent, requestId);
+    }
+
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+
+        if (requestId == REQUEST_UPLOAD_MEDICAL) {
+            for (File item : medicalFiles) {
+                LogTool.printD("delete file: %s state: %s", item.getName(), item.delete());
+            }
+            medicalFiles.clear();
+        } else if (requestId == REQUEST_UPDATE_LIST) {
+            LogTool.printD("data: %s,", data);
+        }
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
+        for (File item : medicalFiles) {
+            LogTool.printD("delete file: %s state: %s", item.getName(), item.delete());
+        }
+        medicalFiles.clear();
     }
 }

@@ -12,11 +12,11 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (StringUtils.isNotEmpty(SPUtils.getStringValue("token"))) {
+        if (StringUtils.isNotEmpty(SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -124,7 +124,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 urlParams.put("username", username);
                 urlParams.put("password", msgCode);
                 urlParams.put("code", qrCode);
-                urlParams.put("kaptchaToken", SPUtils.getValue("kaptchaToken", ""));
+                urlParams.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
             } else {
                 url = HttpUrlGlobal.HTTP_MOBILE_LOGIN_URL;
                 password = mLoginNumberEditText.getText().trim();
@@ -164,7 +164,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }, 0, 1000);
 
             HashMap<String, String> params = new HashMap<>();
-            params.put("kaptchaToken", SPUtils.getStringValue("kaptchaToken"));
+            params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
             params.put("code", mLoginQrEditText.getText().trim());
             params.put("mobile", mLoginAccountEditText.getText().trim());
             HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
@@ -224,7 +224,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (requestId == HttpUtils.REQUEST_QR) {
             if (success) {
                 final String bitmapStr = dataObject.getString("kaptcha");
-                SPUtils.putValue("kaptchaToken", dataObject.getString("kaptchaToken"));
+                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE, dataObject.getString("kaptchaToken"));
                 invoke(new Runnable() {
                     @Override
                     public void run() {
@@ -235,11 +235,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else if (requestId == HttpUtils.REQUEST_LOGIN) {
             if (success) {
                 if (code == 200) {
-                    SPUtils.putValue("id", dataObject.getString("id"));
-                    SPUtils.putValue("token", dataObject.getString("token"));
-                    SPUtils.putValue("userAccount", dataObject.getString("suAccount"));
-                    LogTool.printD("id: %s , token: %s", SPUtils.getStringValue("id"),
-                            SPUtils.getStringValue("token"));
+                    SPUtils.putValue(KeyConstant.KEY_USE_ID, dataObject.getString("id"));
+                    SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, dataObject.getString("token"));
+                    SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, dataObject.getString("suAccount"));
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

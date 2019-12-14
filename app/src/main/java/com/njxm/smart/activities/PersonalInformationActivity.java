@@ -9,27 +9,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.global.HttpUrlGlobal;
-import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpCallBack;
-import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-
 /**
  * 个人信息页面（由主页 我的-姓名跳转）
  */
-public class PersonalInformationActivity extends BaseActivity implements HttpCallBack {
-
-
-    private static final int REQUEST_USER_INFO = 532;
+public class PersonalInformationActivity extends BaseActivity {
 
     private View mUserBaseNews;
     private ImageView mUserNewsImage;
@@ -81,23 +69,12 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         tvUserAddress = findViewById(R.id.news_user_address);
         tvUserEducation = findViewById(R.id.news_user_education);
 
-        tvUserName.setText(SPUtils.getStringValue("userName"));
+        tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
 
-        JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue("id"));
-
-        RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
-                object.toString());
-
-        Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/findById")
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue("userAccount"))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue("token"))
-                .post(formBody)
-                .build();
-
-        HttpUtils.getInstance().postData(REQUEST_USER_INFO, request, this);
+        tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
+        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
+        final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
+        tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
     }
 
     @Override
@@ -114,29 +91,5 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     public void onClickLeftBtn() {
         super.onClickLeftBtn();
         finish();
-    }
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (requestId == REQUEST_USER_INFO) {
-            if (success) {
-                initData(JSONObject.parseObject(data, UserBean.class));
-            }
-        }
-    }
-
-    private void initData(UserBean bean) {
-        if (bean == null) {
-            return;
-        }
-
-        tvUserPhone.setText(bean.getPhone());
-        tvUserAddress.setText(bean.getAllAddress());
-        tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-
     }
 }

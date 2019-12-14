@@ -2,17 +2,18 @@ package com.njxm.smart.activities.fragments;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -34,19 +35,20 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private static final int REQUEST_USER_INFO_BASE = 344;
     private static final int REQUEST_USER_INFO_DETAIL = 545;
 
-    private BaseQuickAdapter mPersonFragmentListAdapter;
-
     // 个人信息页面按钮
     private AppCompatTextView mUserNewsBtn;
 
     // 实名认证
-    View mRealItem;
-    View mRealStarItem;
-    View mMedicalItem;
-    View mMedicalStarItem;
-    View mCertItem;
-    View mAboutUsItem;
-    View mSettingItem;
+    private View mRealItem;
+    private View mRealStarItem;
+    private View mMedicalItem;
+    private View mMedicalStarItem;
+    private View mCertItem;
+    private View mAboutUsItem;
+    private View mSettingItem;
+
+    private LinearLayout llRealNamePop; // 实名认证提示
+    private LinearLayout llMedicalPop; // 体检报告提示
 
     @Override
     protected int setLayoutResourceID() {
@@ -70,20 +72,42 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mCertItem.setOnClickListener(this);
         mAboutUsItem.setOnClickListener(this);
         mSettingItem.setOnClickListener(this);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestUserBaseNews();
+        requestUserDetailNews();
+    }
 
-        JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue("id"));
+    private void requestUserDetailNews() {
+        JSONObject object1 = new JSONObject();
+        object1.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        RequestBody formBody1 = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
+                object1.toJSONString());
 
-        RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
-                object.toString());
-
-
-        Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/findUserForIndex")
+        Request request1 = new Request.Builder().url(HttpUrlGlobal.HTTP_USER_DETAIL_NEWS)
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue("userAccount"))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue("token"))
+                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
+                .post(formBody1)
+                .build();
+
+        HttpUtils.getInstance().postData(REQUEST_USER_INFO_DETAIL, request1, this);
+    }
+
+    private void requestUserBaseNews() {
+        JSONObject object = new JSONObject();
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
+                object.toString());
+        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_USER_INIT_NEWS)
+                .addHeader("Platform", "APP")
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
                 .post(formBody)
                 .build();
 
@@ -121,15 +145,19 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (success) {
-            final UserBean bean = JSONObject.parseObject(data, UserBean.class);
-            SPUtils.putValue("userName", bean.getUserName());
-            invoke(new Runnable() {
-                public void run() {
-                    mUserNewsBtn.setText(bean.getUserName());
-                }
-            });
+        if (!success) {
+            return;
         }
+        final UserBean bean = JSONObject.parseObject(data, UserBean.class);
+        if (requestId == REQUEST_USER_INFO_BASE) {
+            SPUtils.putValue(KeyConstant.KEY_USERNAME, bean.getUserName());
+            SPUtils.putValue(KeyConstant.KEY_MEDICAL_STATUS, bean.getMedicalStatus());
+        } else if (requestId == REQUEST_USER_INFO_DETAIL) {
+            SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, bean.getPhone());
+            SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, bean.getAllAddress());
+            SPUtils.putValue(KeyConstant.KEY_USER_EDUCATION_STATUS, bean.getEducation());
+        }
+        initData(bean);
     }
 
     @Override
@@ -137,5 +165,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     }
 
+    private void initData(final UserBean bean) {
+        invoke(new Runnable() {
+            public void run() {
+                mUserNewsBtn.setText(bean.getUserName());
+            }
+        });
+    }
 
 }

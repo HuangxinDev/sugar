@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -15,6 +16,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
@@ -34,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     protected AppCompatImageView mActionBarBackBtn;
     protected AppCompatTextView mActionBarTitle;
-    protected AppCompatImageView mActionBarRightBtn;
+    protected AppCompatTextView mActionBarRightBtn;
 
     protected BaseActivity() {
         TAG = this.getClass().getSimpleName();
@@ -46,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         LogTool.printI("[%s] %s", TAG, ">>> onCreate <<<");
 //        StatusBarUtil.setStatusBarColor(this, R.color.text_color_gray);
 
+        PermissionManager.requestPermission(this, 100, PermissionManager.sRequestPermissions);
         setContentView(setContentLayoutId());
 //        getWindow().setStatusBarColor(setStatusBarColor());
 //        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
@@ -151,12 +154,15 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Override
     public void showRightBtn(boolean show, int resourcesId) {
         if (mActionBarRightBtn != null) {
-            if (show) {
-                mActionBarRightBtn.setImageResource(resourcesId);
-                mActionBarRightBtn.setVisibility(View.VISIBLE);
-            } else {
-                mActionBarRightBtn.setVisibility(View.GONE);
-            }
+            mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
+            mActionBarRightBtn.setBackgroundResource(resourcesId);
+        }
+    }
+
+    public void showRightBtn(boolean show, String text) {
+        if (mActionBarRightBtn != null) {
+            mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
+            mActionBarRightBtn.setText(text);
         }
     }
 
@@ -192,6 +198,12 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         } else {
             mHandler.post(runnable);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
 
     public static Handler getMainHandler() {

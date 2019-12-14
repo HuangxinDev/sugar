@@ -17,6 +17,7 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -108,7 +109,7 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
         MediaType imageType = MediaType.parse("image/jpg");
 
         RequestBody body = new MultipartBody.Builder()
-                .addFormDataPart("id", SPUtils.getStringValue("id"))
+                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID))
                 .addFormDataPart("name", etCardName.getText().toString().trim())
                 .addFormDataPart("idCardNum", etCardId.getText().toString().trim())
                 .addFormDataPart("frontFile", "1zm.jpg", RequestBody.create(imageType,
@@ -122,8 +123,8 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
         Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/personVerify")
                 .header("Platform", "APP")
                 .header("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE)
-                .header("Account", SPUtils.getStringValue("userAccount"))
-                .header("Authorization", "Bearer-" + SPUtils.getStringValue("token"))
+                .header("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .header("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
                 .post(body)
                 .build();
 

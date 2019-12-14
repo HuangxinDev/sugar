@@ -19,22 +19,24 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@id/action_bar_title"
+        style="@style/BaseTextViewStyle.Black.17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="标题"
-        style="@style/BaseTextViewStyle.Black.17"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@id/action_bar_right"
+        style="@style/BaseTextViewStyle.Blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:textSize="@dimen/sp_13"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

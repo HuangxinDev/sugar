@@ -8,7 +8,9 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.AlertDialogUtils;
+import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
 /**
@@ -66,6 +68,7 @@ public class SettingsActivity extends BaseActivity {
                 @Override
                 public void onNegativeButtonClick(AlertDialog dialog) {
                     dialog.dismiss();
+                    SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }

@@ -36,6 +36,32 @@ public final class HttpUrlGlobal {
     public static final String HTTP_ABOUT_US = "http://119.3.136.127:7776/sys/link/aboutUsIndex";
 
 
+    /**
+     * 体检报告状态检查接口
+     */
+    public static final String HTTP_MEDICAL_STATE = "http://119.3.136.127:7776/api/sys/userMedical/updateStatus";
+
+    /**
+     * 体检报告提交或者更新接口
+     */
+    public static final String HTTP_MEDICAL_COMMIT_UPDATE = "http://119.3.136.127:7776/api/sys/userMedical/insert";
+
+    /**
+     * 体检报告获取已经上传的文件
+     */
+    public static final String HTTP_MEDICAL_GET_IMAGE = "http://119.3.136.127:7776/api/sys/userMedical/findByUserId";
+
+    /**
+     * 个人信息-初始化页面
+     */
+    public static final String HTTP_USER_INIT_NEWS = "http://119.3.136.127:7776/api/sys/user/findUserForIndex";
+
+    /**
+     * 个人信息-信息详情
+     */
+    public static final String HTTP_USER_DETAIL_NEWS = "http://119.3.136.127:7776/api/sys/user/findById";
+
+
     ///////////////////////////////////////////////////////////////////////////
     // ContentType类型
     ///////////////////////////////////////////////////////////////////////////
