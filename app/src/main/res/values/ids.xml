@@ -84,4 +84,10 @@
     <item name="about_us_version" type="id" />
     <item name="about_us_secret" type="id" />
     <item name="about_us_feature" type="id" />
+
+    <!--我的-设置-->
+    <item name="settings_reset_pwd" type="id" />
+    <item name="settings_update_phone" type="id" />
+    <item name="settings_check_update" type="id" />
+    <item name="settings_clean_cache" type="id" />
 </resources>
