@@ -64,7 +64,7 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setActionBarTitle(getIntent().getStringExtra("title"));
+        setActionBarTitle("实名认证");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
         ivCard1 = findViewById(R.id.card_id_face);

@@ -1,5 +1,6 @@
 package com.njxm.smart.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -84,6 +85,8 @@ public class PersonalInformationActivity extends BaseActivity {
             showDetails = !showDetails;
             mUserBaseDetailNews.setVisibility(showDetails ? View.VISIBLE : View.GONE);
             mUserNewsImage.setImageResource(showDetails ? R.mipmap.arrow_down : R.mipmap.arrow_detail);
+        } else if (v == llUserPhone) {
+            startActivity(new Intent(this, UserPhoneActivity.class));
         }
     }
 

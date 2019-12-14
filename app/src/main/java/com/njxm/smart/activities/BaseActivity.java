@@ -109,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Override
     public void onClickLeftBtn() {
-
+        finish();
     }
 
     @Override

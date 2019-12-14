@@ -169,6 +169,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         invoke(new Runnable() {
             public void run() {
                 mUserNewsBtn.setText(bean.getUserName());
+                int medicalStatus =
+                        Integer.parseInt(SPUtils.getValue(KeyConstant.KEY_MEDICAL_STATUS, "0"));
+
+                mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
+                        View.VISIBLE : View.GONE);
             }
         });
     }

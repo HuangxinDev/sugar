@@ -79,7 +79,14 @@
             android:name="com.njxm.smart.activities.RealNameAuthenticationActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name="com.njxm.smart.activities.MedicalReportActivity" />
+        <activity
+            android:name="com.njxm.smart.activities.MedicalReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.UserPhoneActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
