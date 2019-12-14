@@ -16,6 +16,7 @@
         android:name="com.njxm.smart.SmartCloudApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/LaunchTheme"
         android:usesCleartextTraffic="true">
 
@@ -80,6 +81,16 @@
             android:screenOrientation="portrait" />
         <activity android:name="com.njxm.smart.activities.MedicalReportActivity" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -116,7 +116,9 @@
     <item name="news_user_address_item" type="id" />
     <item name="news_user_education_item" type="id" />
     <item name="news_user_phone_ll" type="id" />
-    <item name="news_user_input_face_ll" type="id" /> <!-- 用户职位 -->
+    <item name="news_user_input_face_ll" type="id" />
+    <item name="card_id" type="id" />
+    <item name="card_name" type="id" /> <!-- 用户职位 -->
 
 
 </resources>

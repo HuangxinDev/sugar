@@ -126,7 +126,7 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errMsg) {
     }
 
     private static class UrlBean {

@@ -46,10 +46,10 @@ public final class HttpUtils {
     private HttpUtils() {
         //no instance
         sOkHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
-                .protocols(Util.immutableList(Protocol.HTTP_1_1))
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .protocols(Util.immutableList(Protocol.HTTP_2, Protocol.HTTP_1_1))
                 .build();
     }
 
@@ -74,7 +74,11 @@ public final class HttpUtils {
         sOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                LogTool.printE("request url: %s, error: %s , %s", call.request().url(),
+                        e.getMessage(), Log.getStackTraceString(e.getCause()));
+                if (callBack != null) {
+                    callBack.onFailed(e.getMessage());
+                }
             }
 
             @Override
@@ -87,7 +91,7 @@ public final class HttpUtils {
                     if (success && code == 200) {
                         callBack.onSuccess(requestId, true, 200, object.getString("data"));
                     } else {
-                        callBack.onFailed();
+                        callBack.onFailed(object.getString("message"));
                     }
                 }
             }
@@ -129,7 +133,7 @@ public final class HttpUtils {
                 LogTool.printW("request Fail, %s, exception: %s", call.request().url(),
                         Log.getStackTraceString(e));
                 if (callBack != null) {
-                    callBack.onFailed();
+                    callBack.onFailed(e.getMessage());
                 }
             }
 

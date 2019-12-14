@@ -133,7 +133,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errMsg) {
 
     }
 

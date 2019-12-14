@@ -199,7 +199,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errMsg) {
 
     }
 }

@@ -136,7 +136,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errMsg) {
 
     }
 }

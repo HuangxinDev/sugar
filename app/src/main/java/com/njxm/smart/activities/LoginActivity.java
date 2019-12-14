@@ -18,6 +18,7 @@ import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ns.demo.R;
 
@@ -61,6 +62,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (StringUtils.isNotEmpty(SPUtils.getStringValue("token"))) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         mLoginBtn = findViewById(R.id.btn_login);
         mLoginBtn.setOnClickListener(this);
 
@@ -102,14 +111,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         if (v == mLoginBtn) {
-
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-
-            if (true) {
-                return;
-            }
-
             boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
             String username = mLoginAccountEditText.getText().trim();
             String qrCode = mLoginQrEditText.getText().trim();
@@ -222,8 +223,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         JSONObject dataObject = JSONObject.parseObject(data);
         if (requestId == HttpUtils.REQUEST_QR) {
             if (success) {
-                mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
+                final String bitmapStr = dataObject.getString("kaptcha");
                 SPUtils.putValue("kaptchaToken", dataObject.getString("kaptchaToken"));
+                invoke(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr)));
+                    }
+                });
             }
         } else if (requestId == HttpUtils.REQUEST_LOGIN) {
             if (success) {
@@ -251,7 +258,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errMsg) {
 
     }
 }

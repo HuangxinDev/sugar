@@ -4,6 +4,6 @@ public interface HttpCallBack {
 
     void onSuccess(int requestId, boolean success, int code, String data);
 
-    void onFailed();
+    void onFailed(String errMsg);
 
 }

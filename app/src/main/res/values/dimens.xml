@@ -47,6 +47,10 @@
     <dimen name="dp_73">73dp</dimen>
     <dimen name="dp_23">23dp</dimen>
     <dimen name="dp_39">39dp</dimen>
+    <dimen name="dp_173">173dp</dimen>
+    <dimen name="dp_110">110dp</dimen>
+    <dimen name="dp_56">56dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
 </resources>
 
 
