@@ -1,20 +1,533 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_gray"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <include
         android:id="@id/action_bar"
         layout="@layout/layout_action_bar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@id/recycler_view"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/background_gray"
-        app:layout_constraintTop_toBottomOf="@id/action_bar"
-        app:layout_constraintVertical_weight="1" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_1"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="头像" />
+                />
+
+                <ImageView
+                    android:id="@id/news_user_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/personal_news_head" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="姓名"
+                    android:textColor="@color/color_black_383838" />
+
+                <TextView
+                    android:id="@id/news_user_name"
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="赵建国"
+                    android:textColor="@color/color_gray_7c7c7c"
+                    android:textSize="@dimen/sp_14" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手机"
+                    android:textColor="@color/color_black_383838" />
+
+                <TextView
+                    android:id="@id/news_user_phone"
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="18551602857"
+                    android:textColor="@color/color_gray_7c7c7c"
+                    android:textSize="@dimen/sp_14" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:src="@mipmap/arrow_detail" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@id/news_user_base_new"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="基本信息"
+                    android:textColor="@color/color_black_383838" />
+
+                <ImageView
+                    android:id="@id/news_user_base_new_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:src="@mipmap/arrow_detail" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@id/news_user_base_new_sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_53"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/background_white"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_16"
+                    android:paddingEnd="@dimen/dp_39">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="单位名称"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@id/user_company_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="单位" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_53"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/background_white"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_16"
+                    android:paddingEnd="@dimen/dp_39">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="部门名称"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@id/user_department_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="部门" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_53"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/background_white"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_16"
+                    android:paddingEnd="@dimen/dp_39">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="班组"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@id/user_team_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="施工二组" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_53"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/background_white"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_16"
+                    android:paddingEnd="@dimen/dp_39">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="岗位名称"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@id/user_post_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="普工" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_53"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/background_white"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_16"
+                    android:paddingEnd="@dimen/dp_39">
+
+                    <TextView
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="人员编号"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@id/user_job_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="xc123455" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@id/news_user_input_face"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="录入人脸"
+                    android:textColor="@color/color_black_383838" />
+
+                <LinearLayout
+                    android:id="@id/news_user_input_face_state"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="#ffff6600"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        android:id="@id/news_user_name"
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:gravity="end"
+                        android:text="请录入人脸用于考勤"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:src="@mipmap/arrow_detail" />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@id/news_user_education"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="学历"
+                    android:textColor="@color/color_black_383838" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/arrow_detail" />
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@id/news_user_address"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="现居地址"
+                    android:textColor="@color/color_black_383838" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/arrow_detail" />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@id/news_user_holding_certificates"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="持有证书"
+                    android:textColor="@color/color_black_383838" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/arrow_detail" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@id/news_user_medical_report"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="体检报告"
+                    android:textColor="@color/color_black_383838" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="#ffff6600"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        android:id="@id/news_user_name"
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:gravity="end"
+                        android:text="请上传体检报告"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:src="@mipmap/arrow_detail" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@id/news_user_real_verify"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="实名认证"
+                    android:textColor="@color/color_black_383838" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="#ffff6600"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        android:id="@id/news_user_name"
+                        style="@style/BaseTextViewStyle.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:gravity="end"
+                        android:text="请实名认证"
+                        android:textColor="@color/color_gray_7c7c7c"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:src="@mipmap/arrow_detail" />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@id/news_user_emergency_contact"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_73"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_53"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16">
+
+                <TextView
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="紧急联系人"
+                    android:textColor="@color/color_black_383838" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/arrow_detail" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

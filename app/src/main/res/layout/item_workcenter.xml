@@ -16,6 +16,6 @@
         android:drawablePadding="9dp"
         style="@style/BaseTextViewStyle.Black.11"
         android:text="Item"
-        android:textColor="@color/color_black_1"
+        android:textColor="@color/color_black_252525"
         android:textSize="@dimen/sp_11" />
 </LinearLayout>

@@ -45,10 +45,6 @@
     <item name="ll_2" type="id" />
     <item name="login_exit" type="id" />
 
-    <item name="user_head" type="id" /> <!-- 用户头像 -->
-    <item name="user_name" type="id" /> <!-- 用户名字 -->
-    <item name="user_work" type="id" /> <!-- 用户职位 -->
-
 
     <!--占位id-->
     <item name="seat1" type="id" />
@@ -90,4 +86,33 @@
     <item name="settings_update_phone" type="id" />
     <item name="settings_check_update" type="id" />
     <item name="settings_clean_cache" type="id" />
+
+    <!--我的-个人信息页面-->
+    <item name="news_user_head" type="id" /> <!-- 用户头像 -->
+    <item name="news_user_name" type="id" /> <!-- 用户名字 -->
+    <item name="news_user_phone" type="id" /> <!-- 用户名字 -->
+    <item name="news_user_work_type" type="id" /> <!-- 用户职位 -->
+    <item name="news_user_base_new" type="id" />
+    <item name="news_user_base_new_sub" type="id" />
+    <item name="news_user_input_face" type="id" />
+    <item name="news_user_input_face_state" type="id" />
+    <item name="news_user_education" type="id" />
+
+
+    <item name="user_head" type="id" /> <!-- 用户头像 -->
+    <item name="user_name" type="id" /> <!-- 用户名字 -->
+    <item name="user_work" type="id" />
+    <item name="news_user_base_new_detail" type="id" />
+    <item name="user_company_name" type="id" />
+    <item name="user_department_name" type="id" />
+    <item name="user_team_name" type="id" />
+    <item name="user_post_name" type="id" />
+    <item name="user_job_number" type="id" />
+    <item name="news_user_address" type="id" />
+    <item name="news_user_holding_certificates" type="id" />
+    <item name="news_user_medical_report" type="id" />
+    <item name="news_user_real_verify" type="id" />
+    <item name="news_user_emergency_contact" type="id" /> <!-- 用户职位 -->
+
+
 </resources>

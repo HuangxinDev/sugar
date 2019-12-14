@@ -132,6 +132,7 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
     private static class UrlBean {
         @JSONField(name = "key")
         public String name;
+
         public String url;
 
         public String getName() {

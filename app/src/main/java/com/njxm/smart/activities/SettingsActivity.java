@@ -1,5 +1,6 @@
 package com.njxm.smart.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.utils.AlertDialogUtils;
 import com.ns.demo.R;
 
 /**
@@ -53,7 +55,21 @@ public class SettingsActivity extends BaseActivity {
     public void onClick(View v) {
         Intent intent = null;
         if (mExitLoginBtn == v) {
-            intent = new Intent(this, LoginActivity.class);
+
+
+            AlertDialogUtils.getInstance().showConfirmDialog(this, "确定退出？", "取消", "确定", new AlertDialogUtils.OnButtonClickListener() {
+                @Override
+                public void onPositiveButtonClick(AlertDialog dialog) {
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onNegativeButtonClick(AlertDialog dialog) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
         } else if (v == mResetPwdBtn) {
             intent = new Intent(this, ResetPasswordActivity.class);
             intent.putExtra("action", "2");

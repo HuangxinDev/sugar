@@ -84,7 +84,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
-        android:background="@color/color_gray_2" />
+        android:background="@color/color_gray_b0b0b0" />
 
     <ScrollView
         android:id="@id/ll_2"

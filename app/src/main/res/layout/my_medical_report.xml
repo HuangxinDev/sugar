@@ -14,7 +14,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/color_gray_1" />
+        android:background="@color/color_gray_96a1ad" />
 
     <RelativeLayout
         android:id="@id/default_layout"
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="还没有体检报告"
-                android:textColor="@color/color_gray_2" />
+                android:textColor="@color/color_gray_b0b0b0" />
 
             <TextView
                 android:id="@id/upload_btn"
@@ -139,7 +139,7 @@
             android:layout_below="@id/seat2"
             android:layout_marginTop="@dimen/dp_13"
             android:text="提交成功，等待审核"
-            android:textColor="@color/color_gray_2" />
+            android:textColor="@color/color_gray_b0b0b0" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="非常抱歉，体检报告审核失败"
-                android:textColor="@color/color_gray_2" />
+                android:textColor="@color/color_gray_b0b0b0" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -182,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="您可以"
-                    android:textColor="@color/color_gray_2" />
+                    android:textColor="@color/color_gray_b0b0b0" />
 
                 <TextView
                     android:id="@id/retry_upload_btn"
