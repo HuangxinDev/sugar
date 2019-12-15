@@ -1,8 +1,12 @@
 package com.njxm.smart.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -14,15 +18,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.FileProvider;
 
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
+import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
 
+import java.io.File;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * 基类，提供共用方法和回调
@@ -208,5 +216,23 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     public static Handler getMainHandler() {
         return mHandler;
+    }
+
+    protected File photoFile;
+
+    public void takePhoto(int requestId) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        UUID uuid = UUID.randomUUID();
+        photoFile = new File(getFilesDir(), uuid + ".jpg");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
+                    ".fileProvider", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        } else {
+            Uri uri = Uri.fromFile(photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        }
+        startActivityForResult(intent, requestId);
     }
 }

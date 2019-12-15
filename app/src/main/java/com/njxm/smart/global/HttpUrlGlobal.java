@@ -54,17 +54,22 @@ public final class HttpUrlGlobal {
     /**
      * 个人信息-初始化页面
      */
-    public static final String HTTP_USER_INIT_NEWS = "http://119.3.136.127:7776/api/sys/user/findUserForIndex";
+    public static final String HTTP_MY_USER_INIT_NEWS = "http://119.3.136.127:7776/api/sys/user/findUserForIndex";
 
     /**
      * 个人信息-信息详情
      */
-    public static final String HTTP_USER_DETAIL_NEWS = "http://119.3.136.127:7776/api/sys/user/findById";
+    public static final String HTTP_MY_USER_DETAIL_NEWS = "http://119.3.136.127:7776/api/sys/user/findById";
+
+    /**
+     * 个人信息-修改头像
+     */
+    public static final String HTTP_MY_USER_HEAD = "http://119.3.136.127:7776/api/sys/user/updateIcon";
 
     /**
      * 个人信息-录入人脸
      */
-    public static final String HTTP_USER_INPUT_FACE = "http://119.3.136.127:7776/api/sys/user/updateFace";
+    public static final String HTTP_MY_USER_INPUT_FACE = "http://119.3.136.127:7776/api/sys/user/updateFace";
 
     /**
      * 个人信息-修改学历
@@ -75,6 +80,11 @@ public final class HttpUrlGlobal {
      * 个人信息-紧急联系人
      */
     public static final String HTTP_MY_USER_EMERGENCY_CONTACT = "http://119.3.136.127:7776/api/sys/user/updateContact";
+
+    /**
+     * 个人信息-用户头像图片地址前缀
+     */
+    public static final String HTTP_MY_USER_HEAD_URL_PREFIX = "http://119.3.136.127:8080/business_modules_api_app/proxy/show/";
 
 
     ///////////////////////////////////////////////////////////////////////////

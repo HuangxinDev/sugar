@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
@@ -38,6 +40,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     // 个人信息页面按钮
     private AppCompatTextView mUserNewsBtn;
 
+    private AppCompatImageView ivUserHead;
+
     // 实名认证
     private View mRealItem;
     private View mRealStarItem;
@@ -67,6 +71,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mCertItem = getContentView().findViewById(R.id.my_cert_item);
         mAboutUsItem = getContentView().findViewById(R.id.my_about_us_item);
         mSettingItem = getContentView().findViewById(R.id.my_setting_item);
+        ivUserHead = getContentView().findViewById(R.id.user_head);
         mRealItem.setOnClickListener(this);
         mMedicalItem.setOnClickListener(this);
         mCertItem.setOnClickListener(this);
@@ -87,7 +92,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         RequestBody formBody1 = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
                 object1.toJSONString());
 
-        Request request1 = new Request.Builder().url(HttpUrlGlobal.HTTP_USER_DETAIL_NEWS)
+        Request request1 = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
                 .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
@@ -103,7 +108,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
         RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
                 object.toString());
-        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_USER_INIT_NEWS)
+        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_USER_INIT_NEWS)
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
                 .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
@@ -158,6 +163,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             SPUtils.putValue(KeyConstant.KEY_USER_EDUCATION_STATUS, bean.getEducation());
             SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, bean.getContact());
             SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, bean.getContactPhone());
+            SPUtils.putValue(KeyConstant.KEY_USER_HEAD_ICON, bean.getIcon());
         }
         initData(bean);
     }
@@ -176,6 +182,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
                 mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
                         View.VISIBLE : View.GONE);
+
+                Glide.with(getActivity())
+                        .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                        .into(ivUserHead);
             }
         });
     }

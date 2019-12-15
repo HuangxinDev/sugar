@@ -77,7 +77,7 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
 
 
         Request request = new Request.Builder()
-                .url(HttpUrlGlobal.HTTP_USER_INPUT_FACE)
+                .url(HttpUrlGlobal.HTTP_MY_USER_INPUT_FACE)
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
                 .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))

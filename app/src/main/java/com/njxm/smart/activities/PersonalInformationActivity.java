@@ -9,20 +9,30 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpCallBack;
+import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 /**
  * 个人信息页面（由主页 我的-姓名跳转）
  */
-public class PersonalInformationActivity extends BaseActivity {
+public class PersonalInformationActivity extends BaseActivity implements HttpCallBack {
 
     private View mUserBaseNews;
     private ImageView mUserNewsImage;
     private View mUserBaseDetailNews;
 
+    private ImageView ivUserHead;
     private TextView tvUserName;
     private TextView tvUserPhone;
     private TextView tvUserAddress;
@@ -37,10 +47,12 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private boolean showDetails = false;
 
+    private static final int REQUEST_USER_HEAD = 412;
+
 
     @Override
     protected int setContentLayoutId() {
-        return R.layout.activity_personal_info;
+        return R.layout.my_user_activity;
     }
 
     @Override
@@ -65,11 +77,14 @@ public class PersonalInformationActivity extends BaseActivity {
         llUserEmergencyContact = findViewById(R.id.news_user_emergency_contact_item);
         llUserEmergencyContact.setOnClickListener(this);
 
+        ivUserHead = findViewById(R.id.news_user_head);
         tvUserName = findViewById(R.id.news_user_name);
         tvUserPhone = findViewById(R.id.news_user_phone);
         tvUserAddress = findViewById(R.id.news_user_address);
         tvUserEducation = findViewById(R.id.news_user_education);
         tvUsereEmergencyContact = findViewById(R.id.news_user_emergency_contact);
+
+        ivUserHead.setOnClickListener(this);
 
         tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
 
@@ -77,6 +92,8 @@ public class PersonalInformationActivity extends BaseActivity {
         tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
         final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
         tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
+
+        Glide.with(this).load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON)).into(ivUserHead);
     }
 
     @Override
@@ -100,12 +117,75 @@ public class PersonalInformationActivity extends BaseActivity {
             startActivity(new Intent(this, UserEducationActivity.class));
         } else if (v == llUserEmergencyContact) {
             startActivity(new Intent(this, UserEmergencyContactActivity.class));
+        } else if (v == ivUserHead) {
+            takePhoto(1);
+        } else if (v == llUserAddress) {
+            startActivity(new Intent(this, UserAddressActivity.class));
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            invoke(new Runnable() {
+                @Override
+                public void run() {
+                    if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
+                        Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead);
+                        uploadHeadFile();
+                    }
+                }
+            });
+        }
+    }
+
+    private void uploadHeadFile() {
+
+        MultipartBody builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID))
+                .addFormDataPart("file", photoFile.getName(),
+                        RequestBody.create(MediaType.parse("image/png"), photoFile))
+                .build();
+
+
+        Request request = new Request.Builder()
+                .url(HttpUrlGlobal.HTTP_MY_USER_HEAD)
+                .addHeader("Platform", "APP")
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
+                .post(builder)
+                .build();
+
+        HttpUtils.getInstance().postData(REQUEST_USER_HEAD, request, this);
     }
 
     @Override
     public void onClickLeftBtn() {
         super.onClickLeftBtn();
         finish();
+    }
+
+    @Override
+    public void onSuccess(int requestId, final boolean success, int code, final String data) {
+        if (requestId == REQUEST_USER_HEAD) {
+            invoke(new Runnable() {
+                @Override
+                public void run() {
+                    if (success) {
+                        showToast("头像上传成功");
+                    } else {
+                        showToast(data);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
+
     }
 }
