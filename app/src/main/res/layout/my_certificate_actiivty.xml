@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/color_gray_96a1ad" />
+
+    <RelativeLayout
+        android:id="@id/default_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@id/seat1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/certificate_void" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seat1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_11"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/BaseTextViewStyle.Gray.11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="还没有证书"
+                android:textColor="@color/color_gray_b0b0b0" />
+
+            <TextView
+                android:id="@id/upload_btn"
+                style="@style/BaseTextViewStyle.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:text="开始上传"
+                android:textSize="@dimen/sp_14" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@id/adapter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@id/commit_btn"
+                style="@style/BaseTextViewStyle.White"
+                android:layout_width="@dimen/dp_275"
+                android:layout_height="@dimen/dp_42"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/background_btn_flavor_1"
+                android:gravity="center"
+                android:text="确认提交" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

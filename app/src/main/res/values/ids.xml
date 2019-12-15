@@ -127,5 +127,12 @@
     <item name="user_address_details" type="id" />
     <item name="simple_text" type="id" />
 
+    <!--证书页面-->
+    <item name="certificate_name" type="id" />
+    <item name="certificate_update_state" type="id" />
+    <item name="certificate_add" type="id" />
+    <item name="certificate_image_show" type="id" />
+    <item name="adapter_layout" type="id" />
+
 
 </resources>

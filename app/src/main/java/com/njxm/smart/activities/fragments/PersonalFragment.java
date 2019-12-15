@@ -14,12 +14,14 @@ import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
+import com.njxm.smart.activities.UserCertificateActivity;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
 import okhttp3.FormBody;
@@ -145,6 +147,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         } else if (v == mSettingItem) {
             Intent intent = new Intent(getActivity(), SettingsActivity.class);
             startActivity(intent);
+        } else if (v == mCertItem) {
+            startActivity(new Intent(getActivity(), UserCertificateActivity.class));
         }
     }
 
@@ -185,7 +189,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
                         View.VISIBLE : View.GONE);
 
-                if (getActivity() != null) {
+                if (getActivity() != null && StringUtils.isNotEmpty(bean.getIcon())) {
                     Glide.with(getActivity())
                             .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
                             .into(ivUserHead);
