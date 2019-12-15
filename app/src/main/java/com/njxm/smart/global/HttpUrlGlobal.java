@@ -35,6 +35,11 @@ public final class HttpUrlGlobal {
      */
     public static final String HTTP_ABOUT_US = "http://119.3.136.127:7776/sys/link/aboutUsIndex";
 
+    /**
+     * 设置页面-登出
+     */
+    public static final String HTTP_MY_SETTING_LOGOUT = "http://119.3.136.127:7777/auth/user/logout";
+
 
     /**
      * 体检报告状态检查接口

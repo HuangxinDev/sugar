@@ -150,6 +150,10 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (photoFile == null || !photoFile.exists() || photoFile.length() == 0) {
+            return;
+        }
+
         if (requestCode == REQUEST_CARD_1) {
             File file = new File(getFilesDir(), "zm.jpg");
             Glide.with(this).load(BitmapFactory.decodeFile(file.getAbsolutePath())).into(ivCard1);
