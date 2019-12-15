@@ -93,6 +93,10 @@
         <activity
             android:name="com.njxm.smart.activities.UserEducationActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.UserAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.njxm.smart.activities.UserEmergencyContactActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

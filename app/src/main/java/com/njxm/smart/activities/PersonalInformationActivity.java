@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,12 +27,13 @@ public class PersonalInformationActivity extends BaseActivity {
     private TextView tvUserPhone;
     private TextView tvUserAddress;
     private TextView tvUserEducation;
+    private TextView tvUsereEmergencyContact;
 
     private LinearLayout llUserPhone;
     private LinearLayout llUserInputFace;
     private LinearLayout llUserEducation;
     private LinearLayout llUserAddress;
-    private RelativeLayout rlUserEmergencyContact;
+    private LinearLayout llUserEmergencyContact;
 
     private boolean showDetails = false;
 
@@ -62,13 +62,14 @@ public class PersonalInformationActivity extends BaseActivity {
         llUserEducation.setOnClickListener(this);
         llUserAddress = findViewById(R.id.news_user_address_item);
         llUserAddress.setOnClickListener(this);
-        rlUserEmergencyContact = findViewById(R.id.news_user_emergency_contact);
-        rlUserEmergencyContact.setOnClickListener(this);
+        llUserEmergencyContact = findViewById(R.id.news_user_emergency_contact_item);
+        llUserEmergencyContact.setOnClickListener(this);
 
         tvUserName = findViewById(R.id.news_user_name);
         tvUserPhone = findViewById(R.id.news_user_phone);
         tvUserAddress = findViewById(R.id.news_user_address);
         tvUserEducation = findViewById(R.id.news_user_education);
+        tvUsereEmergencyContact = findViewById(R.id.news_user_emergency_contact);
 
         tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
 
@@ -76,6 +77,12 @@ public class PersonalInformationActivity extends BaseActivity {
         tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
         final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
         tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tvUsereEmergencyContact.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
     }
 
     @Override
@@ -91,6 +98,8 @@ public class PersonalInformationActivity extends BaseActivity {
             startActivity(new Intent(this, InputFaceActivity.class));
         } else if (v == llUserEducation) {
             startActivity(new Intent(this, UserEducationActivity.class));
+        } else if (v == llUserEmergencyContact) {
+            startActivity(new Intent(this, UserEmergencyContactActivity.class));
         }
     }
 

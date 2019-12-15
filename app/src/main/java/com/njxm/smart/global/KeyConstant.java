@@ -11,5 +11,8 @@ public final class KeyConstant {
     public static final String KEY_USER_REALNAME_STATUS = "realname_status";
     public static final String KEY_USER_EDUCATION_STATUS = "education_status";
 
+    public static final String KEY_USER_EMERGENCY_CONTACT = "emergency_contact";
+    public static final String KEY_USER_EMERGENCY_CONTACT_PHONE = "emergency_contact_phone";
+
     public static final String KEY_QR_IMAGE = "qrImage";
 }

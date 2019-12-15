@@ -38,7 +38,7 @@ public class UserEducationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showLeftBtn(true, R.mipmap.arrow_back);
+        showLeftBtn(true, R.mipmap.arrow_back_blue);
         setActionBarTitle("学历");
 
         View llHightStudent = findViewById(R.id.ll_1);

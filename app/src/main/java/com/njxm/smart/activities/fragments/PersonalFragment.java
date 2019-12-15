@@ -156,6 +156,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, bean.getPhone());
             SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, bean.getAllAddress());
             SPUtils.putValue(KeyConstant.KEY_USER_EDUCATION_STATUS, bean.getEducation());
+            SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, bean.getContact());
+            SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, bean.getContactPhone());
         }
         initData(bean);
     }

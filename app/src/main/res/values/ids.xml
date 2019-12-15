@@ -99,6 +99,7 @@
     <item name="news_user_input_face" type="id" />
     <item name="news_user_input_face_state" type="id" />
     <item name="news_user_education" type="id" />
+    <item name="news_user_emergency_contact" type="id" />
 
 
     <item name="user_head" type="id" /> <!-- 用户头像 -->
@@ -114,13 +115,13 @@
     <item name="news_user_holding_certificates" type="id" />
     <item name="news_user_medical_report" type="id" />
     <item name="news_user_real_verify" type="id" />
-    <item name="news_user_emergency_contact" type="id" />
     <item name="news_user_address_item" type="id" />
     <item name="news_user_education_item" type="id" />
     <item name="news_user_phone_ll" type="id" />
     <item name="news_user_input_face_ll" type="id" />
     <item name="card_id" type="id" />
     <item name="card_name" type="id" />
+    <item name="news_user_emergency_contact_item" type="id" />
 
 
 </resources>

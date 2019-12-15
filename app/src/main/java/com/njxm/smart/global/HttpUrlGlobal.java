@@ -66,6 +66,11 @@ public final class HttpUrlGlobal {
      */
     public static final String HTTP_MY_USER_EDUCATION = "http://119.3.136.127:7776/api/sys/user/updateEducation";
 
+    /**
+     * 个人信息-紧急联系人
+     */
+    public static final String HTTP_MY_USER_EMERGENCY_CONTACT = "http://119.3.136.127:7776/api/sys/user/updateContact";
+
 
     ///////////////////////////////////////////////////////////////////////////
     // ContentType类型

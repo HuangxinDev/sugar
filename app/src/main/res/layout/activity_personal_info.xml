@@ -524,8 +524,8 @@
             </LinearLayout>
 
 
-            <RelativeLayout
-                android:id="@id/news_user_emergency_contact"
+            <LinearLayout
+                android:id="@id/news_user_emergency_contact_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_73"
                 android:layout_marginTop="@dimen/dp_10"
@@ -542,12 +542,19 @@
                     android:text="紧急联系人"
                     android:textColor="@color/color_black_383838" />
 
+                <TextView
+                    android:id="@id/news_user_emergency_contact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:paddingEnd="@dimen/dp_16" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:src="@mipmap/arrow_detail" />
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
