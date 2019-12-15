@@ -57,7 +57,7 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAKE_PHOTO && photoFile != null) {
+        if (requestCode == TAKE_PHOTO && photoFile != null && photoFile.exists() && photoFile.length() > 0) {
             Glide.with(this).load(photoFile).into(ivPhoto);
             uploadInputFace();
         }
@@ -125,17 +125,23 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
             public void run() {
                 if (success) {
                     showToast("上传成功");
-                    photoFile.delete();
                     finish();
                 } else {
                     showToast(data);
                 }
+
+                photoFile.delete();
             }
         });
     }
 
     @Override
-    public void onFailed(String errMsg) {
-
+    public void onFailed(final String errMsg) {
+        invoke(new Runnable() {
+            @Override
+            public void run() {
+                showToast(errMsg);
+            }
+        });
     }
 }
