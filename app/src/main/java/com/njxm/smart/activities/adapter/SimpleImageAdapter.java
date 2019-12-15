@@ -26,6 +26,8 @@ public class SimpleImageAdapter extends BaseQuickAdapter<Drawable, BaseViewHolde
         this(R.layout.item_simple_image_layout, null);
     }
 
+
+
     @Override
     protected void convert(final BaseViewHolder helper, final Drawable item) {
         helper.setImageDrawable(R.id.item_image, item);

@@ -11,7 +11,7 @@ public final class StringUtils {
      * @param paramString 判定字符
      */
     public static boolean isEmpty(String paramString) {
-        return paramString == null || paramString.isEmpty();
+        return paramString == null || paramString.trim().isEmpty();
     }
 
     /**

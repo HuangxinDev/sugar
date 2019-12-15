@@ -5,6 +5,7 @@ public final class KeyConstant {
     public static final String KEY_USERNAME = "userName";
     public static final String KEY_USER_TEL_PHONE = "telPhone";
     public static final String KEY_USER_ADDRESS = "address";
+    public static final String KEY_USER_DETAIL_ADDRESS = "address_detail";
     public static final String KEY_USE_ID = "userId";
     public static final String KEY_USER_ACCOUNT = "userAccount";
     public static final String KEY_USER_TOKEN = "userToken";
@@ -16,4 +17,7 @@ public final class KeyConstant {
     public static final String KEY_USER_EMERGENCY_CONTACT_PHONE = "emergency_contact_phone";
 
     public static final String KEY_QR_IMAGE = "qrImage";
+
+
+    public static final String KEY_COMMON_ADDRESS_LIST = "addressList";
 }

@@ -160,10 +160,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         } else if (requestId == REQUEST_USER_INFO_DETAIL) {
             SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, bean.getPhone());
             SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, bean.getAllAddress());
+            SPUtils.putValue(KeyConstant.KEY_USER_DETAIL_ADDRESS, bean.getAddress());
             SPUtils.putValue(KeyConstant.KEY_USER_EDUCATION_STATUS, bean.getEducation());
             SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, bean.getContact());
             SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, bean.getContactPhone());
             SPUtils.putValue(KeyConstant.KEY_USER_HEAD_ICON, bean.getIcon());
+
         }
         initData(bean);
     }
@@ -183,9 +185,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
                         View.VISIBLE : View.GONE);
 
-                Glide.with(getActivity())
-                        .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
-                        .into(ivUserHead);
+                if (getActivity() != null) {
+                    Glide.with(getActivity())
+                            .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                            .into(ivUserHead);
+                }
             }
         });
     }

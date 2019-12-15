@@ -89,7 +89,6 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
 
         tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
-        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
         final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
         tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
 
@@ -100,6 +99,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     protected void onResume() {
         super.onResume();
         tvUsereEmergencyContact.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
+        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
     }
 
     @Override

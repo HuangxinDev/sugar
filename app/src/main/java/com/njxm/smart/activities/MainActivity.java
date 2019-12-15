@@ -15,12 +15,20 @@ import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
+import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpCallBack;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.ButtonBarItem;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ns.demo.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.Request;
 
 /**
  * 主页
@@ -151,5 +159,30 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 break;
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Request request = new Request.Builder()
+                .url("http://119.3.136.127:7776/sys/provinceAndCity/findAll")
+                .header("Platform", "APP")
+                .header("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .post(new FormBody.Builder().build())
+                .build();
+
+        HttpUtils.getInstance().postData(-1, request, new HttpCallBack() {
+            @Override
+            public void onSuccess(int requestId, boolean success, int code, String data) {
+                if (success) {
+                    SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, data);
+                }
+            }
+
+            @Override
+            public void onFailed(String errMsg) {
+
+            }
+        });
     }
 }
