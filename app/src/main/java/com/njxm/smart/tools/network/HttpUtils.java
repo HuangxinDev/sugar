@@ -84,15 +84,14 @@ public final class HttpUtils {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 JSONObject object = JSONObject.parseObject(response.body().string());
-                LogTool.printD("result: %s\n headers: %s", object.toString(),
-                        call.request().headers().toString());
+                LogTool.printD("result: %s", object.toString());
                 boolean success = object.getBoolean("success");
                 int code = object.getInteger("code");
                 if (callBack != null) {
                     if (success && code == 200) {
-                        callBack.onSuccess(requestId, true, 200, object.getString("data"));
+                        callBack.onSuccess(requestId, true, code, object.getString("data"));
                     } else {
-                        callBack.onFailed(object.getString("message"));
+                        callBack.onSuccess(requestId, false, code, object.getString("message"));
                     }
                 }
             }
