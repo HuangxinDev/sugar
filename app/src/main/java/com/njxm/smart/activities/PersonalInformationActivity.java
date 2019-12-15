@@ -89,6 +89,8 @@ public class PersonalInformationActivity extends BaseActivity {
             startActivity(new Intent(this, UserPhoneActivity.class));
         } else if (v == llUserInputFace) {
             startActivity(new Intent(this, InputFaceActivity.class));
+        } else if (v == llUserEducation) {
+            startActivity(new Intent(this, UserEducationActivity.class));
         }
     }
 

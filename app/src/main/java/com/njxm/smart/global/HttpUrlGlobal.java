@@ -61,6 +61,11 @@ public final class HttpUrlGlobal {
      */
     public static final String HTTP_USER_DETAIL_NEWS = "http://119.3.136.127:7776/api/sys/user/findById";
 
+    /**
+     * 个人信息-修改学历
+     */
+    public static final String HTTP_MY_USER_EDUCATION = "http://119.3.136.127:7776/api/sys/user/updateEducation";
+
 
     ///////////////////////////////////////////////////////////////////////////
     // ContentType类型

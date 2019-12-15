@@ -43,6 +43,8 @@
     <item name="login_confirm" type="id" />
     <item name="ll_1" type="id" />
     <item name="ll_2" type="id" />
+    <item name="ll_4" type="id" />
+    <item name="ll_3" type="id" /> <!-- 用户职位 -->
     <item name="login_exit" type="id" />
 
 
@@ -118,7 +120,7 @@
     <item name="news_user_phone_ll" type="id" />
     <item name="news_user_input_face_ll" type="id" />
     <item name="card_id" type="id" />
-    <item name="card_name" type="id" /> <!-- 用户职位 -->
+    <item name="card_name" type="id" />
 
 
 </resources>

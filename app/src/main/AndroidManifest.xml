@@ -90,6 +90,9 @@
         <activity
             android:name="com.njxm.smart.activities.InputFaceActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.UserEducationActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
