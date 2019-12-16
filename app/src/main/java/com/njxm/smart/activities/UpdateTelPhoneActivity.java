@@ -240,6 +240,7 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
                 public void run() {
                     showToast("修改密码成功");
                     mVerifySuccess.setEnabled(true);
+                    finish();
                 }
             });
         }

@@ -88,8 +88,6 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
         mAccountQR.getEditText().addTextChangedListener(textWatcher);
         mAccountNumber.getEditText().addTextChangedListener(textWatcher);
         mAccountNumber.getRightTextView().setOnClickListener(this);
-        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                HttpUtils.MimeType.JSON, this);
     }
 
     private int count = 60;
@@ -135,6 +133,13 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
             HttpUtils.getInstance().postDataWithBody(-1, HttpUrlGlobal.HTTP_RESET_PWD_URL, params
                     , this);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
+                HttpUtils.MimeType.JSON, this);
     }
 
     @Override

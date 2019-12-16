@@ -107,15 +107,15 @@ public final class HttpUtils {
 
         FormBody.Builder builder = new FormBody.Builder();
         try {
-            if (paramMap.size() <= 0) {
-                return;
+            if (paramMap != null && paramMap.size() <= 0) {
+                urlParams.append("?");
+                Set<Map.Entry<String, String>> aa = paramMap.entrySet();
+                for (Map.Entry<String, String> entry : aa) {
+                    urlParams.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                }
+                urlParams.deleteCharAt(urlParams.length() - 1);
             }
-            urlParams.append("?");
-            Set<Map.Entry<String, String>> aa = paramMap.entrySet();
-            for (Map.Entry<String, String> entry : aa) {
-                urlParams.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-            }
-            urlParams.deleteCharAt(urlParams.length() - 1);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,13 +142,24 @@ public final class HttpUtils {
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 JSONObject jsonObject = JSONObject.parseObject(result);
+                int code = jsonObject.getInteger("code");
+
+                if (code == 401) {
+                    // TODO 登录过期，退回登录页面
+                    return;
+                }
+
+                if (callBack == null) {
+                    return;
+                }
 
                 LogTool.printD("response result: %s", result);
                 boolean success = jsonObject.getBoolean("success");
-                int code = jsonObject.getInteger("code");
-                String data = jsonObject.getString("data");
-                if (callBack != null) {
+                if (code == 200) {
+                    String data = jsonObject.getString("data");
                     callBack.onSuccess(requestId, success, code, data);
+                } else {
+                    callBack.onFailed(jsonObject.getString("message"));
                 }
             }
         });

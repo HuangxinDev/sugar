@@ -243,6 +243,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     finish();
                 } else if (code == 401) {
                     // TODO 登出
+                } else {
+                    LoginActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialog();
+                        }
+                    });
                 }
             } else {
                 LoginActivity.this.runOnUiThread(new Runnable() {
@@ -256,7 +263,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void onFailed(String errMsg) {
-
+    public void onFailed(final String errMsg) {
+        LoginActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showDialog();
+            }
+        });
     }
 }
