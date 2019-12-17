@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
  */
 public class UserEducationActivity extends BaseActivity {
 
-    private static final String[] EDU_STRING = {"高中", "大专", "本科", "研究生"};
+    private static final String[] EDU_STRING = {"初中", "高中", "大学", "大学以上"};
 
     private ImageView[] ivs = new ImageView[4];
 
@@ -96,7 +96,7 @@ public class UserEducationActivity extends BaseActivity {
 
         if (selected >= 0 && selected <= 3) {
             JSONObject object = new JSONObject();
-            object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+            object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
             object.put("education", selected + "");
 
             RequestBody requestBody =

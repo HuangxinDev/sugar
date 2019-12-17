@@ -117,6 +117,7 @@ public class SettingsActivity extends BaseActivity {
                             SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
                             Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                             startActivity(intent);
+                            finish();
                         }
                     });
                 }

@@ -150,7 +150,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
     private void updateImages() {
 
         JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         RequestBody requestBody =
                 FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE), object.toString());
         Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE)
@@ -254,7 +254,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
 
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+                .addFormDataPart("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
 
         for (int i = 0; i < medicalFiles.size(); i++) {
             builder.addFormDataPart("files", medicalFiles.get(i).getName(),
@@ -295,7 +295,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-
+        super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_UPLOAD_MEDICAL) {
             for (File item : medicalFiles) {
                 LogTool.printD("delete file: %s state: %s", item.getName(), item.delete());

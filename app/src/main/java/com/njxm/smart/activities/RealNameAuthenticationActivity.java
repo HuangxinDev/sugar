@@ -109,7 +109,7 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
         MediaType imageType = MediaType.parse("image/jpg");
 
         RequestBody body = new MultipartBody.Builder()
-                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID))
+                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .addFormDataPart("name", etCardName.getText().toString().trim())
                 .addFormDataPart("idCardNum", etCardId.getText().toString().trim())
                 .addFormDataPart("frontFile", "1zm.jpg", RequestBody.create(imageType,
@@ -177,6 +177,7 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, final String data) {
+        super.onSuccess(requestId, success, code, data);
         if (!success) {
             invoke(new Runnable() {
                 @Override
@@ -185,15 +186,5 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
                 }
             });
         }
-    }
-
-    @Override
-    public void onFailed(final String errMsg) {
-        invoke(new Runnable() {
-            @Override
-            public void run() {
-                showToast(errMsg);
-            }
-        });
     }
 }

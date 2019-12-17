@@ -144,7 +144,7 @@ public class UserAddressActivity extends BaseActivity {
         }
 
         JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         object.put("province", province);
         object.put("city", city);
         object.put("district", distance);

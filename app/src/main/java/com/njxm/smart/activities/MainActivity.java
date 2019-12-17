@@ -17,7 +17,6 @@ import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.ButtonBarItem;
@@ -26,9 +25,6 @@ import com.ns.demo.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.FormBody;
-import okhttp3.Request;
 
 /**
  * 主页
@@ -89,6 +85,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mPersonalBtn = findViewById(R.id.personal_btn);
         mPersonalBtn.setOnClickListener(this);
         mPersonalBtn.setActivated(false);
+
+        HttpUtils.getInstance().postDataWithParams(-1, HttpUrlGlobal.HTTP_COMMON_CITY_URL, null,
+                this);
     }
 
     @Override
@@ -157,32 +156,19 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 mMessagesBtn.setActivated(false);
                 mPersonalBtn.setActivated(true);
                 break;
-
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Request request = new Request.Builder()
-                .url("http://119.3.136.127:7776/sys/provinceAndCity/findAll")
-                .header("Platform", "APP")
-                .header("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .post(new FormBody.Builder().build())
-                .build();
+    }
 
-        HttpUtils.getInstance().postData(-1, request, new HttpCallBack() {
-            @Override
-            public void onSuccess(int requestId, boolean success, int code, String data) {
-                if (success) {
-                    SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, data);
-                }
-            }
-
-            @Override
-            public void onFailed(String errMsg) {
-
-            }
-        });
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+        super.onSuccess(requestId, success, code, data);
+        if (requestId == -1 && code == 200) {
+            SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, data);
+        }
     }
 }

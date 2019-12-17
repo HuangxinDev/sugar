@@ -56,14 +56,14 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
         View title = findViewById(R.id.title);
 
         if (action.equals("1")) {
-            setVisiable(mActionBarTitle, View.GONE);
-            setVisiable(divider, View.GONE);
+            setVisible(mActionBarTitle, View.GONE);
+            setVisible(divider, View.GONE);
             isResetPwd = true;
         } else {
             isResetPwd = false;
             setActionBarTitle("重置密码");
-            setVisiable(mActionBarRightBtn, View.GONE);
-            setVisiable(title, View.GONE);
+            setVisible(mActionBarRightBtn, View.GONE);
+            setVisible(title, View.GONE);
         }
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
@@ -76,10 +76,10 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
         mAccountNumber = findViewById(R.id.login_number_code);
         mNextStepBtn = findViewById(R.id.next_step);
         mNextStepBtn.setOnClickListener(this);
-        setVisiable(root_two, View.VISIBLE);
+        setVisible(root_two, View.VISIBLE);
         mConfirmBtn = findViewById(R.id.login_confirm);
         mConfirmBtn.setOnClickListener(this);
-        setVisiable(root_two, View.GONE);
+        setVisible(root_two, View.GONE);
 
         mNewPwd1 = findViewById(R.id.new_pwd1);
         mNewPwd2 = findViewById(R.id.new_pwd2);
@@ -96,8 +96,8 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
     public void onClick(View v) {
         super.onClick(v);
         if (v == mNextStepBtn) {
-            setVisiable(root_one, View.GONE);
-            setVisiable(root_two, View.VISIBLE);
+            setVisible(root_one, View.GONE);
+            setVisible(root_two, View.VISIBLE);
         } else if (v == mAccountNumber.getRightTextView()) {
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -112,7 +112,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
             }, 0, 1000);
 
             HashMap<String, String> params = new HashMap<>();
-            params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
+            params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
             params.put("code", mAccountQR.getText().trim());
             params.put("mobile", mAccountEdit.getText().trim());
 
@@ -139,7 +139,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
     protected void onResume() {
         super.onResume();
         HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                HttpUtils.MimeType.JSON, this);
+                this);
     }
 
     @Override
@@ -150,8 +150,8 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
 
     private void clickBack() {
         if (root_two.getVisibility() == View.VISIBLE) {
-            setVisiable(root_one, View.VISIBLE);
-            setVisiable(root_two, View.GONE);
+            setVisible(root_one, View.VISIBLE);
+            setVisible(root_two, View.GONE);
         } else {
             finish();
         }
@@ -188,11 +188,12 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
+        super.onSuccess(requestId, success, code, data);
         if (requestId == HttpUtils.REQUEST_QR) {
             if (success) {
                 JSONObject dataObject = JSONObject.parseObject(data);
                 mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
-                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE, dataObject.getString("kaptchaToken"));
+                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
             }
         } else if (requestId == -1) {
             if (success && code == 200) {

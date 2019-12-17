@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import androidx.core.content.FileProvider;
 
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.tools.PermissionManager;
+import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
@@ -36,7 +38,7 @@ import java.util.UUID;
  * 基类，提供共用方法和回调
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange,
-        OnClickListener, BaseRunnable {
+        OnClickListener, HttpCallBack, BaseRunnable {
 
     protected final String TAG;
 
@@ -53,7 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogTool.printI("[%s] %s", TAG, ">>> onCreate <<<");
 //        StatusBarUtil.setStatusBarColor(this, R.color.text_color_gray);
 
         PermissionManager.requestPermission(this, 100, PermissionManager.sRequestPermissions);
@@ -115,6 +116,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
     }
 
+    /**
+     * 默认返回键-点击返回
+     */
     @Override
     public void onClickLeftBtn() {
         finish();
@@ -186,17 +190,36 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
     }
 
+    /**
+     * 显示弹窗错误信息
+     *
+     * @param format
+     * @param objects
+     */
     protected void showToast(String format, Object... objects) {
-        format = (format == null) ? "null" : ((objects != null && objects.length != 0) ?
-                String.format(Locale.US, format, objects) : format);
-        Toast.makeText(this, format, Toast.LENGTH_SHORT).show();
+        final String toastMsg = (format == null) ? "null" :
+                ((objects != null && objects.length != 0) ?
+                        String.format(Locale.US, format, objects) : format);
+        invoke(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(BaseActivity.this, toastMsg, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        });
     }
 
-    protected void setVisiable(View view, int visiable) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    protected void setVisible(View view, int visible) {
         if (view == null) {
             return;
         }
-        view.setVisibility(visiable);
+        view.setVisibility(visible);
     }
 
     @Override
@@ -206,12 +229,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         } else {
             mHandler.post(runnable);
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
     }
 
     public static Handler getMainHandler() {
@@ -234,5 +251,30 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         startActivityForResult(intent, requestId);
+    }
+
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+        if (code == 401 || code == 999) {
+            // TODO 验证过期,需要退回登录页
+            invoke(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onFailed(final String errMsg) {
+        invoke(new Runnable() {
+            @Override
+            public void run() {
+                showToast(errMsg);
+            }
+        });
     }
 }

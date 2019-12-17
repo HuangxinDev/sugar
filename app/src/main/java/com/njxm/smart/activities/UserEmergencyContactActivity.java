@@ -55,7 +55,7 @@ public class UserEmergencyContactActivity extends BaseActivity {
             return;
         }
         JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         object.put("contact", etUserName.getText().toString().trim());
         object.put("contactPhone", etUserPhone.getText().toString().trim());
 

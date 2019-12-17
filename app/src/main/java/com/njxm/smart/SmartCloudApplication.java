@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class SmartCloudApplication extends Application {
 
@@ -19,7 +20,7 @@ public class SmartCloudApplication extends Application {
         super.onCreate();
         smartCloudApplication = this;
         SPUtils.initSharedPreferences(this);
-//        CrashReport.initCrashReport(this, "2af2871764", true);
+        CrashReport.initCrashReport(this, "2af2871764", true);
 
         LogTool.enableDebug(true);
 

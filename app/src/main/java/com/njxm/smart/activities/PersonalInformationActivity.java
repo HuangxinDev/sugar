@@ -144,7 +144,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
         MultipartBody builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID))
+                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .addFormDataPart("file", photoFile.getName(),
                         RequestBody.create(MediaType.parse("image/png"), photoFile))
                 .build();
@@ -170,6 +170,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
     @Override
     public void onSuccess(int requestId, final boolean success, int code, final String data) {
+        super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_USER_HEAD) {
             invoke(new Runnable() {
                 @Override

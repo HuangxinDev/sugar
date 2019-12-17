@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             app:hint="@string/hint_user_login_account"
-            app:inputType="text"
+            app:inputType="phone"
             app:leftIcon="@mipmap/edt_icon_user_account"
             app:right_type="none" />
 
@@ -102,7 +102,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_44"
             app:hint="@string/hint_user_login_pic"
-            app:inputType="text"
+            app:inputType="textCapWords"
+
             app:leftIcon="@mipmap/edt_icon_pwd_verify"
             app:rightIcon="@mipmap/ic_launcher"
             app:right_type="image"

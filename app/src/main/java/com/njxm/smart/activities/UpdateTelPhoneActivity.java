@@ -187,7 +187,7 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
         }
 
         JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         object.put("mobile", mBindPhoneEdit.getText().trim());
         object.put("code", mNewPhoneNumberCode.getText().trim());
         RequestBody requestBody =
@@ -207,13 +207,12 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
     protected void onResume() {
         super.onResume();
         HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                HttpUtils.MimeType.JSON,
                 this);
     }
 
     public void getSMS() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
+        params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
         params.put("code", mQRCode.getText().trim());
         params.put("mobile", mBindPhoneEdit.getText().trim());
         HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
@@ -222,11 +221,12 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
+        super.onSuccess(requestId, success, code, data);
         if (requestId == HttpUtils.REQUEST_QR) {
             JSONObject jsonObject = JSON.parseObject(data);
 
             final String bitmapStr = jsonObject.getString("kaptcha");
-            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE, jsonObject.getString("kaptchaToken"));
+            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, jsonObject.getString("kaptchaToken"));
             invoke(new Runnable() {
                 @Override
                 public void run() {

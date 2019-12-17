@@ -91,6 +91,11 @@ public final class HttpUrlGlobal {
      */
     public static final String HTTP_MY_USER_HEAD_URL_PREFIX = "http://119.3.136.127:8080/business_modules_api_app/proxy/show/";
 
+    /**
+     * 个人信息-现居地址
+     */
+    public static final String HTTP_COMMON_CITY_URL = "http://119.3.136.127:7776/sys/provinceAndCity/findAll";
+
 
     ///////////////////////////////////////////////////////////////////////////
     // ContentType类型

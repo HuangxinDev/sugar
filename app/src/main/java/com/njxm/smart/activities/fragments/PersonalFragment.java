@@ -90,7 +90,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     private void requestUserDetailNews() {
         JSONObject object1 = new JSONObject();
-        object1.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        object1.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         RequestBody formBody1 = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
                 object1.toJSONString());
 
@@ -107,7 +107,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     private void requestUserBaseNews() {
         JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID));
+        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
                 object.toString());
         Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_USER_INIT_NEWS)

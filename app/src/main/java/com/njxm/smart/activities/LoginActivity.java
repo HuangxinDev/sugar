@@ -92,15 +92,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         mLoginNumberEditText.getRightTextView().setOnClickListener(this);
 
-
+        mLoginQrEditText.setOnRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
+                        LoginActivity.this);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                HttpUtils.MimeType.JSON,
-                this);
+
     }
 
     @Override
@@ -113,18 +117,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (v == mLoginBtn) {
             boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
             String username = mLoginAccountEditText.getText().trim();
-            String qrCode = mLoginQrEditText.getText().trim();
-            String msgCode;
             String password;
-            Map<String, String> urlParams = new HashMap<>();
+            String qrCode = mLoginQrEditText.getText().trim();
             String url;
+            Map<String, String> urlParams = new HashMap<>();
             if (!isQuickLogin) {
                 url = HttpUrlGlobal.HTTP_USER_LOGIN_URL;
-                msgCode = mLoginPwdEditText.getText().trim();
+                password = mLoginPwdEditText.getText().trim();
                 urlParams.put("username", username);
-                urlParams.put("password", msgCode);
+                urlParams.put("password", password);
                 urlParams.put("code", qrCode);
-                urlParams.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
+                urlParams.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
             } else {
                 url = HttpUrlGlobal.HTTP_MOBILE_LOGIN_URL;
                 password = mLoginNumberEditText.getText().trim();
@@ -132,7 +135,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 urlParams.put("code", password);
             }
 
-            HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_LOGIN, url, urlParams, HttpUtils.MimeType.TEXT, this);
+            if (StringUtils.isEmpty(username) || !username.matches("1[0-9]{10}")) {
+                showToast("手机号不符");
+                return;
+            }
+
+            if (!isQuickLogin && StringUtils.isEmpty(mLoginQrEditText.getText())) {
+                showToast("图形验证为空");
+                return;
+            }
+
+            if (StringUtils.isEmpty(password)) {
+                showToast(isQuickLogin ? "验证码为空" : "密码为空");
+                return;
+            }
+
+            HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_LOGIN, url, urlParams, this);
         } else if (v == mQuickLoginBtn) {
             switchLoginWay(false);
         } else if (v == mPasswordLoginBtn) {
@@ -142,58 +160,52 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             intent.putExtra("action", "1");
             startActivity(intent);
         } else if (v == mLoginNumberEditText.getRightTextView()) {
+            if (count != 60) {
+                return;
+            }
+
+            String mobile = mLoginAccountEditText.getText().trim();
+            if (StringUtils.isEmpty(mobile) || !mobile.matches("1[0-9]{10}")) {
+                showToast("手机号格式不正确");
+                return;
+            }
+
+            if (StringUtils.isEmpty(mLoginQrEditText.getText())) {
+                showToast("图形验证码为空");
+                return;
+            }
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
+            params.put("code", mLoginQrEditText.getText().trim());
+            params.put("mobile", mLoginAccountEditText.getText().trim());
+            HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
+                    HttpUrlGlobal.HTTP_SMS_URL, params, null);
+
             Timer timer = new Timer();
 
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
-                    LoginActivity.this.runOnUiThread(new Runnable() {
+                    invoke(new Runnable() {
                         @Override
                         public void run() {
                             mLoginNumberEditText.setRightText((count--) + " 秒");
                             if (count == 0) {
-                                mLoginNumberEditText.setRightText("获取验证码");
+                                mLoginNumberEditText.setRightText("重新获取");
                                 count = 60;
                                 cancel();
                             }
                         }
                     });
-
                 }
             }, 0, 1000);
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE));
-            params.put("code", mLoginQrEditText.getText().trim());
-            params.put("mobile", mLoginAccountEditText.getText().trim());
-            HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
-                    HttpUrlGlobal.HTTP_SMS_URL, params, null);
+
         }
     }
 
     private int count = 60;
-
-    public void showDialog() {
-
-        AlertDialogUtils.getInstance().showConfirmDialog(LoginActivity.this,
-                "账号或密码输入错误", "忘记密码", "重新输入", new AlertDialogUtils.OnButtonClickListener() {
-                    @Override
-                    public void onPositiveButtonClick(AlertDialog dialog) {
-                        Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-                        intent.putExtra("action", "1");
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-
-
-                    @Override
-                    public void onNegativeButtonClick(AlertDialog dialog) {
-                        dialog.dismiss();
-                    }
-                }
-        );
-    }
 
     /**
      * 切换登录方式
@@ -208,6 +220,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             mQuickLoginDivider.setVisibility(View.INVISIBLE);
             mLoginPwdEditText.setVisibility(View.VISIBLE);
             mLoginNumberEditText.setVisibility(View.GONE);
+            mLoginNumberEditText.clearText();
+            mForgetPwdBtn.setVisibility(View.VISIBLE);
         } else {
             mPasswordLoginBtn.setEnabled(true);
             mQuickLoginBtn.setEnabled(false);
@@ -215,16 +229,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             mPasswordLoginDivider.setVisibility(View.INVISIBLE);
             mLoginPwdEditText.setVisibility(View.GONE);
             mLoginNumberEditText.setVisibility(View.VISIBLE);
+            mLoginPwdEditText.clearText();
+            mForgetPwdBtn.setVisibility(View.GONE);
         }
+        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null, this);
+        mLoginQrEditText.clearText();
     }
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
+        super.onSuccess(requestId, success, code, data);
+        if (StringUtils.isEmpty(data)) {
+            return;
+        }
+
         JSONObject dataObject = JSONObject.parseObject(data);
         if (requestId == HttpUtils.REQUEST_QR) {
             if (success) {
                 final String bitmapStr = dataObject.getString("kaptcha");
-                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE, dataObject.getString("kaptchaToken"));
+                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
                 invoke(new Runnable() {
                     @Override
                     public void run() {
@@ -233,41 +256,38 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 });
             }
         } else if (requestId == HttpUtils.REQUEST_LOGIN) {
-            if (success) {
-                if (code == 200) {
-                    SPUtils.putValue(KeyConstant.KEY_USE_ID, dataObject.getString("id"));
-                    SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, dataObject.getString("token"));
-                    SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, dataObject.getString("suAccount"));
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (code == 401) {
-                    // TODO 登出
-                } else {
-                    LoginActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showDialog();
-                        }
-                    });
-                }
-            } else {
-                LoginActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showDialog();
-                    }
-                });
-            }
+            SPUtils.putValue(KeyConstant.KEY_USER_ID, dataObject.getString(KeyConstant.KEY_USER_ID));
+            SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, dataObject.getString(KeyConstant.KEY_USER_TOKEN));
+            SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, dataObject.getString(KeyConstant.KEY_USER_ACCOUNT));
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
-    @Override
-    public void onFailed(final String errMsg) {
-        LoginActivity.this.runOnUiThread(new Runnable() {
+    /**
+     * 使用错误Dialog
+     */
+    private void showDialog() {
+        invoke(new Runnable() {
             @Override
             public void run() {
-                showDialog();
+                AlertDialogUtils.getInstance().showConfirmDialog(LoginActivity.this,
+                        "账号或密码输入错误", "忘记密码", "重新输入", new AlertDialogUtils.OnButtonClickListener() {
+                            @Override
+                            public void onPositiveButtonClick(AlertDialog dialog) {
+                                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                                intent.putExtra("action", "1");
+                                startActivity(intent);
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onNegativeButtonClick(AlertDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
             }
         });
     }

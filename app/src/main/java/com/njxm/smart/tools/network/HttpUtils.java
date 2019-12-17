@@ -1,10 +1,14 @@
 package com.njxm.smart.tools.network;
 
-import android.util.Log;
+import android.content.Intent;
 
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.SmartCloudApplication;
+import com.njxm.smart.activities.LoginActivity;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.SPUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -65,49 +70,25 @@ public final class HttpUtils {
         return sInstance;
     }
 
+    /**
+     * 获取OKHttpClient实例
+     *
+     * @return OKHttpClient实例
+     */
     public OkHttpClient getOkHttpClient() {
         return sOkHttpClient;
     }
 
 
     public void postData(final int requestId, final Request request, final HttpCallBack callBack) {
-        sOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogTool.printE("request url: %s, error: %s , %s", call.request().url(),
-                        e.getMessage(), Log.getStackTraceString(e.getCause()));
-                if (callBack != null) {
-                    callBack.onFailed(e.getMessage());
-                }
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                JSONObject object = JSONObject.parseObject(response.body().string());
-                boolean success = object.getBoolean("success");
-                int code = object.getInteger("code");
-                LogTool.printD("url: %s, success: %s, code: %s, message: %s",
-                        call.request().url(), success, code, object.getString("message"));
-                if (callBack != null) {
-                    if (success && code == 200) {
-                        callBack.onSuccess(requestId, true, code, object.getString("data"));
-                    } else {
-                        callBack.onSuccess(requestId, false, code, object.getString("message"));
-                    }
-                }
-            }
-        });
+        sOkHttpClient.newCall(request).enqueue(new OKHttpCallback(requestId, callBack));
     }
 
-
-    public void postDataWithParams(final int requestId, String url, Map<String, String> paramMap,
-                                   String contentType, final HttpCallBack callBack) {
+    public void postDataWithParams(final int requestId, String url, Map<String, String> paramMap, final HttpCallBack callBack) {
         StringBuilder urlParams = new StringBuilder(url.length());
         urlParams.append(url);
-
-        FormBody.Builder builder = new FormBody.Builder();
         try {
-            if (paramMap != null && paramMap.size() <= 0) {
+            if (paramMap != null && paramMap.size() > 0) {
                 urlParams.append("?");
                 Set<Map.Entry<String, String>> aa = paramMap.entrySet();
                 for (Map.Entry<String, String> entry : aa) {
@@ -119,51 +100,33 @@ public final class HttpUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        RequestBody requestBody = builder.build();
-
-        Request request = new Request.Builder().url(urlParams.toString())
+        final Request request = new Request.Builder().url(urlParams.toString())
                 .addHeader("Platform", "APP")
-                .addHeader("Content-Type", contentType)
-                .post(requestBody)
+                .addHeader("Content-Type", MimeType.JSON)
+                .post(new FormBody.Builder().build())
                 .build();
-        sOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
+        sOkHttpClient.newCall(request).enqueue(new OKHttpCallback(requestId, callBack));
+    }
 
-                LogTool.printW("request Fail, %s, exception: %s", call.request().url(),
-                        Log.getStackTraceString(e));
-                if (callBack != null) {
-                    callBack.onFailed(e.getMessage());
-                }
-            }
+    public static Headers getHeaders() {
+        Headers.Builder builder = new Headers.Builder();
+        builder.add("Content-Type", "application/json");
+        return builder.build();
+    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                JSONObject jsonObject = JSONObject.parseObject(result);
-                int code = jsonObject.getInteger("code");
+    public static Headers getHeader1() {
+        Headers.Builder builder = new Headers.Builder();
+        builder.add("Content-Type", "application/x-www-form-urlencoded");
+        return builder.build();
+    }
 
-                if (code == 401) {
-                    // TODO 登录过期，退回登录页面
-                    return;
-                }
-
-                if (callBack == null) {
-                    return;
-                }
-
-                LogTool.printD("response result: %s", result);
-                boolean success = jsonObject.getBoolean("success");
-                if (code == 200) {
-                    String data = jsonObject.getString("data");
-                    callBack.onSuccess(requestId, success, code, data);
-                } else {
-                    callBack.onFailed(jsonObject.getString("message"));
-                }
-            }
-        });
-
+    public static Headers getPostHeaders() {
+        Headers.Builder builder = new Headers.Builder();
+        builder.add("Platform", "APP")
+                .add("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .add("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .add("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
+        return builder.build();
     }
 
     public void postDataWithBody(final int requestId, String url,
@@ -180,77 +143,75 @@ public final class HttpUtils {
                 body.toString());
 
         Request request = new Request.Builder().url(url)
+                .header("Content-Type", "application/json")
                 .post(requestBody)
                 .build();
 
-        sOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
+        sOkHttpClient.newCall(request).enqueue(new OKHttpCallback(callBack));
 
+    }
+
+    /**
+     * 网络回调
+     */
+    private static class OKHttpCallback implements Callback {
+
+        private HttpCallBack httpCallBack;
+        private int requestId;
+
+        private OKHttpCallback(HttpCallBack httpCallBack) {
+            this.httpCallBack = httpCallBack;
+        }
+
+        private OKHttpCallback(int requestId, HttpCallBack httpCallBack) {
+            this.requestId = requestId;
+            this.httpCallBack = httpCallBack;
+        }
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            LogTool.printE("url: %s, exception: %s", call.request().url(), e.getMessage());
+            if (httpCallBack != null) {
+                httpCallBack.onFailed("网络异常,稍后再试");
+                SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
+                Intent intent = new Intent(SmartCloudApplication.getApplication(),
+                        LoginActivity.class);
+                SmartCloudApplication.getApplication().startActivity(intent);
+            }
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            String result = response.body().string();
+            JSONObject resultObj = JSONObject.parseObject(result);
+            boolean success = resultObj.getBoolean("success");
+
+            if (httpCallBack == null) {
+                return;
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                JSONObject jsonObject = JSONObject.parseObject(response.body().string());
-                if (callBack != null) {
-                    callBack.onSuccess(requestId, jsonObject.getBoolean("success"),
-                            jsonObject.getInteger("code"), jsonObject.getString("data"));
+            int code = 0;
+            try {
+                code = resultObj.getInteger("code");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            LogTool.printD("url: %s, code: %s, content: %s", call.request().url(), code,
+                    resultObj.getString((code == 200) ? "data" : "message"));
+
+            if (success && code == 200) {
+                String data = resultObj.getString("data");
+                if (data.equals("[]") || data.equals("null")) {
+                    data = "";
                 }
+                httpCallBack.onSuccess(requestId, true, 200, data);
+            } else if (code == 401) {
+                httpCallBack.onSuccess(requestId, true, 401, "");
+            } else {
+                httpCallBack.onFailed(resultObj.getString("message"));
             }
-        });
-
+        }
     }
-
-    public void execute(Request request, Map<String, String> paramMap) {
-
-        Call call = sOkHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogTool.printE("%s 请求失败，原因: %s", call.request().url(), e.getCause());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                LogTool.printD("%s 请求成功，数据: %s", call.request().url(), response.toString());
-            }
-        });
-    }
-
-
-//    File file =
-//            new File(Environment.getExternalStoragePublicDirectory("") + "/Android/data/" + getPackageName() + "/xx.png");
-//
-//    http://119.3.136.127:7776/api/sys/userMedical/insert
-//
-//    RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
-//
-//    RequestBody requestBody1 = new MultipartBody.Builder()
-//            .setType(MultipartBody.FORM)
-//            .addFormDataPart("file", "testImage.png", requestBody)
-//            .addFormDataPart("sumrUserId", "1")
-//            .addFormDataPart("userName", "user_android").build();
-//
-//    Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/userMedical/insert")
-//            .header("Platform", "App")
-//            .header("Content-Type", "application/x-www-form-urlencoded")
-//            .header("Account", "admin")
-//            .header("Authorization", "Bearer-eyJhbGciOiJIUzI1NiJ9" +
-//                    ".eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNTc4NDgyNDYxLCJ1c2VySWQiOiIzZWQwZTU2YzM5Yzc0ZWE4ZjJhNjU5Yzk3MmIyMzBiZSIsImlhdCI6MTU3NTg5MDQ2MSwianRpIjoiNGQwYjJkZjctNWE5NS00ZDVjLTg5MjctYzJmNmNkYzM4NGM5In0.1ky3wwlp-RwSCgVxga1AxPuT4Umq6y4IwH4f-ESUBao").post(requestBody1)
-//            .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//        @Override
-//        public void onFailure(Call call, IOException e) {
-//            LogTool.printD("post failed & response: ");
-//        }
-//
-//        @Override
-//        public void onResponse(Call call, Response response) throws IOException {
-//            LogTool.printD("post %s success & response: %s ", call.request().url(),
-//                    response.code());
-//        }
-//    });
 
     public static final class MimeType {
         public static final String JSON = "application/json";

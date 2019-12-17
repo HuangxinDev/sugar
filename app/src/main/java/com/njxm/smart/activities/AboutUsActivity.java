@@ -117,6 +117,7 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
+        super.onSuccess(requestId, success, code, data);
         if (success && code == 200) {
             loadUrl = true;
 

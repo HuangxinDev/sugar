@@ -86,10 +86,10 @@ public class SuggestionsActivity extends BaseActivity {
     public void onClick(View v) {
         super.onClick(v);
         if (v == mCommitBtnAppCompatTextView) {
-            setVisiable(mRecyclerView, View.VISIBLE);
-            setVisiable(mActionBarRightBtn, View.VISIBLE);
-            setVisiable(mSuggestionEdit, View.GONE);
-            setVisiable(mAppCompatTextView, View.GONE);
+            setVisible(mRecyclerView, View.VISIBLE);
+            setVisible(mActionBarRightBtn, View.VISIBLE);
+            setVisible(mSuggestionEdit, View.GONE);
+            setVisible(mAppCompatTextView, View.GONE);
 
             mAppCompatEditText.getText().clear();
             mSuggestion = Suggestion.COMMIT;
@@ -114,10 +114,10 @@ public class SuggestionsActivity extends BaseActivity {
     public void onClickRightBtn() {
         super.onClickRightBtn();
         if (mSuggestion == Suggestion.NONE || mSuggestion == Suggestion.COMMIT) {
-            setVisiable(mActionBarRightBtn, View.GONE);
-            setVisiable(mSuggestionEdit, View.VISIBLE);
-            setVisiable(mAppCompatTextView, View.GONE);
-            setVisiable(mRecyclerView, View.GONE);
+            setVisible(mActionBarRightBtn, View.GONE);
+            setVisible(mSuggestionEdit, View.VISIBLE);
+            setVisible(mAppCompatTextView, View.GONE);
+            setVisible(mRecyclerView, View.GONE);
             mSuggestion = Suggestion.EDIT;
         }
     }

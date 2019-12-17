@@ -122,10 +122,16 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
         ta.recycle();
 
         mAppCompatTextView.setOnClickListener(this);
+        mAppCompatImageView.setOnClickListener(this);
     }
+
+    private OnClickListener clickListener;
 
     @Override
     public void onClick(View v) {
+        if (clickListener != null) {
+            clickListener.onClick(v);
+        }
         if (mAppCompatTextView == v) {
             mAppCompatEditText.setInputType(showPwd ? EditorInfo.TYPE_TEXT_VARIATION_PASSWORD :
                     EditorInfo.TYPE_NULL);
@@ -223,5 +229,9 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
      */
     public AppCompatTextView getRightTextView() {
         return mAppCompatTextView;
+    }
+
+    public void setOnRightClickListener(OnClickListener onRightClickListener) {
+        this.clickListener = onRightClickListener;
     }
 }

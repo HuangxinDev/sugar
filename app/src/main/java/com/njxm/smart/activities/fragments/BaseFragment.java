@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
 
@@ -21,7 +23,7 @@ import com.njxm.smart.utils.LogTool;
 /**
  * Fragment基类
  */
-public abstract class BaseFragment extends Fragment implements BaseRunnable {
+public abstract class BaseFragment extends Fragment implements BaseRunnable, HttpCallBack {
 
     private View mContentView;
     private Context mContext;
@@ -91,6 +93,20 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
             runnable.run();
         } else {
             mHandler.post(runnable);
+        }
+    }
+
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).onSuccess(requestId, success, code, data);
+        }
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).onFailed(errMsg);
         }
     }
 }

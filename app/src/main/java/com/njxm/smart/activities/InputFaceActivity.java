@@ -22,6 +22,7 @@ import com.ns.demo.R;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -58,8 +59,24 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TAKE_PHOTO && photoFile != null && photoFile.exists() && photoFile.length() > 0) {
-            Glide.with(this).load(photoFile).into(ivPhoto);
-            uploadInputFace();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        photoFile = Glide.with(InputFaceActivity.this)
+                                .asFile()
+                                .load(photoFile)
+                                .submit(200, 200)
+                                .get();
+                        uploadInputFace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
         }
     }
 
@@ -69,19 +86,14 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
     public void uploadInputFace() {
 
         MultipartBody builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USE_ID))
-                .addFormDataPart("file", photoFile.getName(),
-                        RequestBody.create(MediaType.parse("image/png"), photoFile))
+                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .addFormDataPart("file", photoFile.getName(), RequestBody.create(MediaType.parse(
+                        "image/jpg"), photoFile))
                 .build();
-
 
         Request request = new Request.Builder()
                 .url(HttpUrlGlobal.HTTP_MY_USER_INPUT_FACE)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
+                .headers(HttpUtils.getPostHeaders())
                 .post(builder)
                 .build();
 
@@ -120,6 +132,7 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
 
     @Override
     public void onSuccess(final int requestId, final boolean success, int code, final String data) {
+        super.onSuccess(requestId, success, code, data);
         invoke(new Runnable() {
             @Override
             public void run() {
@@ -131,16 +144,6 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
                 }
 
                 photoFile.delete();
-            }
-        });
-    }
-
-    @Override
-    public void onFailed(final String errMsg) {
-        invoke(new Runnable() {
-            @Override
-            public void run() {
-                showToast(errMsg);
             }
         });
     }
