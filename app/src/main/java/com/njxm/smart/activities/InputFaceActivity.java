@@ -85,16 +85,17 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
      */
     public void uploadInputFace() {
 
-        MultipartBody builder = new MultipartBody.Builder()
+        RequestBody body = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
                 .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addFormDataPart("file", photoFile.getName(), RequestBody.create(MediaType.parse(
-                        "image/jpg"), photoFile))
+                .addFormDataPart("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"),
+                        photoFile))
                 .build();
 
         Request request = new Request.Builder()
                 .url(HttpUrlGlobal.HTTP_MY_USER_INPUT_FACE)
                 .headers(HttpUtils.getPostHeaders())
-                .post(builder)
+                .post(body)
                 .build();
 
         HttpUtils.getInstance().postData(REQUEST_INPUT_FACE, request, this);

@@ -265,6 +265,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
+
+    @Override
+    public void onFailed(String errMsg) {
+        showDialog();
+    }
+
     /**
      * 使用错误Dialog
      */

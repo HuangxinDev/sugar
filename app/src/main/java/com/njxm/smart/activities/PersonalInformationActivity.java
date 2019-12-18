@@ -152,10 +152,11 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
         Request request = new Request.Builder()
                 .url(HttpUrlGlobal.HTTP_MY_USER_HEAD)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
+                .headers(HttpUtils.getPostHeaders())
+//                .addHeader("Platform", "APP")
+//                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+//                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+//                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
                 .post(builder)
                 .build();
 

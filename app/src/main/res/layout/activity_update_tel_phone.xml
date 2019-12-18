@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/XmlBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:background="@color/background_white"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <include
         android:id="@id/action_bar"
         layout="@layout/layout_action_bar" />
 
-    <com.njxm.smart.view.DividerLine
-        android:id="@id/divider1"
+    <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        app:layout_constraintTop_toBottomOf="@id/action_bar"
-        app:lineColor="@color/color_gray_96a1ad" />
+        android:background="@color/divider_color_ffdedede"
+        app:layout_constraintTop_toBottomOf="@id/action_bar" />
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/bind_phone"
@@ -23,10 +25,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_26"
         android:src="@mipmap/bind_phone_pressed"
-        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/verify_phone"
-        app:layout_constraintTop_toBottomOf="@id/divider1" />
+        app:layout_constraintTop_toBottomOf="@id/action_bar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/verify_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/update_phone_verify"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/bind_phone"
+        app:layout_constraintRight_toLeftOf="@id/verify_phone_success"
+        app:layout_constraintTop_toTopOf="@id/bind_phone" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/verify_phone_success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/update_phone_success"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/verify_phone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bind_phone" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/bind_phone_text"
@@ -37,17 +59,6 @@
         app:layout_constraintRight_toRightOf="@id/bind_phone"
         app:layout_constraintTop_toBottomOf="@id/bind_phone" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/verify_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/update_phone_verify"
-        app:layout_constraintBottom_toBottomOf="@id/bind_phone"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@id/bind_phone"
-        app:layout_constraintRight_toLeftOf="@id/verify_phone_success"
-        app:layout_constraintTop_toTopOf="@id/bind_phone" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/verify_phone_text"
         android:layout_width="wrap_content"
@@ -55,18 +66,7 @@
         android:text="验证码"
         app:layout_constraintLeft_toLeftOf="@id/verify_phone"
         app:layout_constraintRight_toRightOf="@id/verify_phone"
-        app:layout_constraintTop_toBottomOf="@id/verify_phone" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/verify_phone_success"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/update_phone_success"
-        app:layout_constraintBottom_toBottomOf="@id/bind_phone"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@id/verify_phone"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/bind_phone" />
+        app:layout_constraintTop_toTopOf="@id/bind_phone_text" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/verify_phone_success_text"
@@ -75,7 +75,19 @@
         android:text="更换成功"
         app:layout_constraintLeft_toLeftOf="@id/verify_phone_success"
         app:layout_constraintRight_toRightOf="@id/verify_phone_success"
-        app:layout_constraintTop_toBottomOf="@id/verify_phone_success" />
+        app:layout_constraintTop_toTopOf="@id/bind_phone_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/phone_pop"
+        style="@style/BaseTextViewStyle.Gray.11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="@dimen/dp_19"
+        android:text="*更换手机号后，下次登录可使用新手机号登录"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/verify_phone_text" />
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -105,10 +117,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_44"
         android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="@dimen/dp_16"
         app:hint="新手机号"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/phone_pop"
         app:leftIcon="@mipmap/edt_icon_user_phone" />
 
     <LinearLayout
@@ -116,6 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="@dimen/dp_16"
         android:orientation="vertical"
         android:visibility="gone"
@@ -150,10 +164,11 @@
         android:layout_height="@dimen/dp_42"
         android:layout_marginTop="@dimen/dp_61"
         android:background="@drawable/background_btn_flavor_1"
+        android:enabled="false"
         android:text="下一步"
         android:textSize="@dimen/sp_15"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent    "
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_1" />
 
 
