@@ -11,15 +11,25 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.njxm.smart.activities.adapter.MyCerticateListAdapter;
 import com.njxm.smart.activities.adapter.MyCertificateAdapter;
+import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserCertificateActivity extends BaseActivity {
+
+
+    private static final int GET_CERTIFICATE_LIST = 686;
 
     public static class CertificateItem {
         public String name;
@@ -27,8 +37,19 @@ public class UserCertificateActivity extends BaseActivity {
     }
 
     public static class CertificateListItem {
-        public String name;
-        public String state;
+        @JSONField(name = "filePath")
+        public String certificateImage;
+        @JSONField(name = "typeName")
+        public String certificateName;
+
+        @JSONField(name = "typeIcon")
+        public String certificateIcon;
+
+        @JSONField(name = "id")
+        public String certificateId;
+
+        @JSONField(name = "status")
+        public String status;
     }
 
     /**
@@ -78,10 +99,16 @@ public class UserCertificateActivity extends BaseActivity {
         showLeftBtn(true, R.mipmap.arrow_back_blue);
         showRightBtn(true, R.mipmap.new_add);
 
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
+        HttpUtils.getInstance().postData(GET_CERTIFICATE_LIST,
+                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST, hashMap), this);
+
+
         recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         myCertificateAdapter = new MyCertificateAdapter(this);
-        myCerticateListAdapter = new MyCerticateListAdapter(mCertificateListItems);
+        myCerticateListAdapter = new MyCerticateListAdapter(this, mCertificateListItems);
         recyclerView.setLayoutManager(layoutManager);
 
         rlDefault = findViewById(R.id.default_layout);
@@ -93,10 +120,10 @@ public class UserCertificateActivity extends BaseActivity {
 
         llAdapterLayout = findViewById(R.id.adapter_layout);
         tvCommitBtn = findViewById(R.id.commit_btn);
-        init();
     }
 
-    private void init() {
+    private void init(int certificateState) {
+        this.certificateState = certificateState;
         if (certificateState == 0) {
             llAdapterLayout.setVisibility(View.GONE);
             rlDefault.setVisibility(View.VISIBLE);
@@ -127,7 +154,7 @@ public class UserCertificateActivity extends BaseActivity {
             lastCertificateState = 0;
             certificateState = 2;
         }
-        init();
+        init(certificateState);
     }
 
     @Override
@@ -144,7 +171,7 @@ public class UserCertificateActivity extends BaseActivity {
             return;
         }
         certificateState = lastCertificateState;
-        init();
+        init(certificateState);
     }
 
     @Override
@@ -153,10 +180,26 @@ public class UserCertificateActivity extends BaseActivity {
         lastCertificateState = certificateState;
         if (certificateState == 0 || certificateState == 1) {
             certificateState = 2;
-            init();
+            init(certificateState);
         } else if (certificateState == 2) {
             myCertificateAdapter.addData(new CertificateItem());
             myCertificateAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onSuccess(int requestId, boolean success, int code, String data) {
+        super.onSuccess(requestId, success, code, data);
+
+        if (requestId == GET_CERTIFICATE_LIST) {
+            if (data.equals("{}")) { // 空列表
+                init(0);
+            } else {
+                mCertificateListItems = JSONObject.parseArray(data, CertificateListItem.class);
+                myCerticateListAdapter.setNewData(mCertificateListItems);
+                init(1);
+            }
+        }
+
     }
 }

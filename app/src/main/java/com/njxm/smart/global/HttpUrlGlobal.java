@@ -107,6 +107,14 @@ public final class HttpUrlGlobal {
     public static final String URL_EDUCATION_LIST = "http://119.3.136.127:7776/api/sys/dict/findList";
 
     /**
+     * 个人信息-持有证书-获取证书列表
+     */
+    public static final String URL_GET_USER_CERTIFICATE_LIST = "http://119.3.136" +
+            ".127:7776/api/sys/userCertificate/findCertificateList";
+
+
+
+    /**
      * 设置-更换手机号
      */
     public static final String URL_SETTINGS_UPDATE_TEL_PHONE = "http://119.3.136" +

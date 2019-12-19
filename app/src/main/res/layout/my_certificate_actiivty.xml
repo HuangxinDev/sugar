@@ -13,7 +13,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/color_gray_96a1ad" />
+        android:background="@color/divider_color_ffdedede" />
 
     <RelativeLayout
         android:id="@id/default_layout"

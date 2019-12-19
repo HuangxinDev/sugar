@@ -1,51 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="95dp"
     android:background="@color/background_white"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
+    <ImageView
+        android:id="@id/certificate_image_show"
+        android:layout_width="@dimen/dp_61"
+        android:layout_height="49dp"
+        android:layout_marginStart="@dimen/dp_16"
+        android:src="@mipmap/certificate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/certificate" />
+    <TextView
+        android:id="@id/certificate_name"
+        style="@style/BaseTextViewStyle.Black.14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_26"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="一级建造工程师"
+        app:layout_constraintLeft_toRightOf="@id/certificate_image_show"
+        app:layout_constraintTop_toTopOf="@id/certificate_image_show" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_26"
-            android:orientation="vertical">
+    <TextView
+        android:id="@id/certificate_update_state"
+        style="@style/BaseTextViewStyle.Gray.11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="提交成功，审核中"
+        app:layout_constraintLeft_toLeftOf="@id/certificate_name"
+        app:layout_constraintTop_toBottomOf="@id/certificate_name" />
 
-            <TextView
-                android:id="@id/certificate_name"
-                style="@style/BaseTextViewStyle.Black.14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="一级建造工程师" />
-
-            <TextView
-                android:id="@id/certificate_update_state"
-                style="@style/BaseTextViewStyle.Gray.11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_11"
-                android:text="提交成功，审核中" />
-
-        </LinearLayout>
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/divider_color_ffdedede" />
+        android:background="@color/divider_color_ffdedede"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
