@@ -1,5 +1,6 @@
 package com.njxm.smart.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -85,6 +86,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mPersonalBtn = findViewById(R.id.personal_btn);
         mPersonalBtn.setOnClickListener(this);
         mPersonalBtn.setActivated(false);
+        setViewPage(0);
 
         HttpUtils.getInstance().postDataWithParams(-1, HttpUrlGlobal.HTTP_COMMON_CITY_URL, null,
                 this);
@@ -128,35 +130,26 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.attendance_btn:
-                mViewPager.setCurrentItem(0);
-                mAttendanceBtn.setActivated(true);
-                mWorkCenterBtn.setActivated(false);
-                mMessagesBtn.setActivated(false);
-                mPersonalBtn.setActivated(false);
+                setViewPage(0);
                 break;
             case R.id.workcenter_btn:
-                mViewPager.setCurrentItem(1);
-                mAttendanceBtn.setActivated(false);
-                mWorkCenterBtn.setActivated(true);
-                mMessagesBtn.setActivated(false);
-                mPersonalBtn.setActivated(false);
-
+                setViewPage(1);
                 break;
             case R.id.messages_btn:
-                mViewPager.setCurrentItem(2);
-                mAttendanceBtn.setActivated(false);
-                mWorkCenterBtn.setActivated(false);
-                mMessagesBtn.setActivated(true);
-                mPersonalBtn.setActivated(false);
+                setViewPage(2);
                 break;
             case R.id.personal_btn:
-                mViewPager.setCurrentItem(3);
-                mAttendanceBtn.setActivated(false);
-                mWorkCenterBtn.setActivated(false);
-                mMessagesBtn.setActivated(false);
-                mPersonalBtn.setActivated(true);
+                setViewPage(3);
                 break;
         }
+    }
+
+    private void setViewPage(int position) {
+        mViewPager.setCurrentItem(position);
+        mAttendanceBtn.setActivated(position == 0);
+        mWorkCenterBtn.setActivated(position == 1);
+        mMessagesBtn.setActivated(position == 2);
+        mPersonalBtn.setActivated(position == 3);
     }
 
     @Override
@@ -171,4 +164,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, data);
         }
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setViewPage(0);
+    }
+
 }
