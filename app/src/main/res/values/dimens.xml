@@ -54,6 +54,7 @@
     <dimen name="sp_21">21sp</dimen>
     <dimen name="dp_25">25dp</dimen>
     <dimen name="dp_135">135dp</dimen>
+    <dimen name="dp_54">54dp</dimen>
 </resources>
 
 

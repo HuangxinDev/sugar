@@ -89,8 +89,6 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
 
         tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
-        final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
-        tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
 
         Glide.with(this).load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON)).into(ivUserHead);
     }
@@ -100,6 +98,8 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         super.onResume();
         tvUsereEmergencyContact.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
         tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
+        final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
+        tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
     }
 
     @Override
@@ -141,7 +141,6 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     }
 
     private void uploadHeadFile() {
-
         MultipartBody builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
@@ -149,14 +148,9 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
                         RequestBody.create(MediaType.parse("image/png"), photoFile))
                 .build();
 
-
         Request request = new Request.Builder()
                 .url(HttpUrlGlobal.HTTP_MY_USER_HEAD)
                 .headers(HttpUtils.getPostHeaders())
-//                .addHeader("Platform", "APP")
-//                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-//                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-//                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
                 .post(builder)
                 .build();
 

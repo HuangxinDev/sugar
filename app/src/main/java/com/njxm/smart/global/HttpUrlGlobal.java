@@ -97,6 +97,11 @@ public final class HttpUrlGlobal {
     public static final String HTTP_COMMON_CITY_URL = "http://119.3.136.127:7776/sys/provinceAndCity/findAll";
 
     /**
+     * 个人信息-获取学历列表
+     */
+    public static final String URL_EDUCATION_LIST = "http://119.3.136.127:7776/api/sys/dict/findList";
+
+    /**
      * 设置-更换手机号
      */
     public static final String URL_SETTINGS_UPDATE_TEL_PHONE = "http://119.3.136" +

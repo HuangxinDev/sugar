@@ -8,7 +8,7 @@ public abstract class AppTextWatcher implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        beforeTextChanged(s);
     }
 
     @Override
@@ -22,4 +22,8 @@ public abstract class AppTextWatcher implements TextWatcher {
     }
 
     public abstract void afterTextChanged(String s);
+
+    public void beforeTextChanged(CharSequence s) {
+
+    }
 }

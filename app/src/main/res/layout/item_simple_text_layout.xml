@@ -4,7 +4,7 @@
     style="@style/BaseTextViewStyle.Black.14"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_53"
-    android:background="@color/background_white"
+    android:background="@drawable/btn_click_style_gray_white"
     android:fitsSystemWindows="true"
     android:gravity="center_vertical"
     android:paddingStart="@dimen/dp_16"

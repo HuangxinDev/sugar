@@ -152,6 +152,27 @@ public final class HttpUtils {
     }
 
     /**
+     * 获取body里面放json的Request
+     */
+    public static Request getJsonRequest(String url, HashMap<String, String> jsonMap) {
+        if (jsonMap == null || jsonMap.size() == 0) {
+            throw new IllegalArgumentException("非法参数");
+        }
+        JSONObject object = new JSONObject();
+        for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+            object.put(entry.getKey(), entry.getValue());
+        }
+        RequestBody requestBody = FormBody.create(MediaType.parse(MimeType.JSON),
+                object.toJSONString());
+
+        return new Request.Builder()
+                .url(url)
+                .headers(getPostHeaders())
+                .post(requestBody)
+                .build();
+    }
+
+    /**
      * 网络回调
      */
     private static class OKHttpCallback implements Callback {
@@ -202,7 +223,7 @@ public final class HttpUtils {
             if (success && code == 200) {
                 String data = resultObj.getString("data");
                 if (data.equals("[]") || data.equals("null")) {
-                    data = "";
+                    data = "{}";
                 }
                 httpCallBack.onSuccess(requestId, true, 200, data);
             } else if (code == 401) {
