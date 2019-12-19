@@ -134,10 +134,12 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
         });
         mRecyclerView.setAdapter(adapter);
 
-        updateImages();
 
         mMedicalState = Integer.parseInt(SPUtils.getStringValue(KeyConstant.KEY_MEDICAL_STATUS));
 
+        if (mMedicalState != 0) {
+            updateImages();
+        }
         invalidateLayoutState(mMedicalState);
     }
 
@@ -289,7 +291,13 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
         } else if (requestId == REQUEST_GET_MEDICAL_LIST) {
             LogTool.printD("data: %s,", data);
             if (data.equals("{}")) {
-                invalidateLayoutState(0);
+                invoke(new Runnable() {
+                    @Override
+                    public void run() {
+//                        invalidateLayoutState(0);
+                    }
+                });
+
             }
         }
     }
