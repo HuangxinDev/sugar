@@ -16,6 +16,7 @@ import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
 import okhttp3.MediaType;
@@ -32,7 +33,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     private ImageView mUserNewsImage;
     private View mUserBaseDetailNews;
 
-    private ImageView ivUserHead;
+    private CircleImageView ivUserHead;
     private TextView tvUserName;
     private TextView tvUserPhone;
     private TextView tvUserAddress;

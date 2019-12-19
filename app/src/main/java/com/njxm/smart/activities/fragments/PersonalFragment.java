@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -22,6 +21,7 @@ import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
 import okhttp3.FormBody;
@@ -42,7 +42,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     // 个人信息页面按钮
     private AppCompatTextView mUserNewsBtn;
 
-    private AppCompatImageView ivUserHead;
+    private CircleImageView ivUserHead;
 
     // 实名认证
     private View mRealItem;

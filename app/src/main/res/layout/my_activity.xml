@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="@id/header_background" />
 
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.njxm.smart.view.CircleImageView
         android:id="@+id/user_head"
         android:layout_width="58dp"
         android:layout_height="58dp"
