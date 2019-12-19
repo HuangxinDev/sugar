@@ -169,7 +169,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, bean.getContact());
             SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, bean.getContactPhone());
             SPUtils.putValue(KeyConstant.KEY_USER_HEAD_ICON, bean.getIcon());
-
+            SPUtils.putValue(KeyConstant.KEY_USER_FACE_URL, bean.getFaceUrl());
         }
         initData(bean);
     }

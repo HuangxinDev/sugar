@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
 import com.njxm.smart.global.HttpUrlGlobal;
@@ -35,10 +34,10 @@ import com.ns.demo.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -76,7 +75,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
 
     private List<File> medicalFiles = new ArrayList<>();
     private static final int REQUEST_UPLOAD_MEDICAL = 100;
-    private static final int REQUEST_UPDATE_LIST = 783;
+    private static final int REQUEST_GET_MEDICAL_LIST = 783;
 
     @Override
     protected int setContentLayoutId() {
@@ -135,36 +134,25 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
         });
         mRecyclerView.setAdapter(adapter);
 
-        mMedicalState = Integer.parseInt(SPUtils.getStringValue(KeyConstant.KEY_MEDICAL_STATUS));
-        if (mMedicalState == 2) {
-            showRightBtn(true, "更新");
-            updateImages();
-        }
+        updateImages();
 
-        invalidateLayoutState();
+        mMedicalState = Integer.parseInt(SPUtils.getStringValue(KeyConstant.KEY_MEDICAL_STATUS));
+
+        invalidateLayoutState(mMedicalState);
     }
 
     /**
      * 更新图片
      */
     private void updateImages() {
-
-        JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        RequestBody requestBody =
-                FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE), object.toString());
-        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .post(requestBody)
-                .build();
-
-        HttpUtils.getInstance().postData(REQUEST_UPDATE_LIST, request, this);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
+        HttpUtils.getInstance().postData(REQUEST_GET_MEDICAL_LIST,
+                HttpUtils.getJsonRequest(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE, hashMap),
+                this);
     }
 
-    private void invalidateLayoutState() {
+    private void invalidateLayoutState(int mMedicalState) {
         switch (mMedicalState) { // 未上传
             case MEDICAL_VOID:
                 mMedicalVoidLayout.setVisibility(View.VISIBLE);
@@ -214,7 +202,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
             Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
             adapter.getData().add(0, new BitmapDrawable(getResources(), bitmap));
             adapter.notifyDataSetChanged();
-            invalidateLayoutState();
+            invalidateLayoutState(mMedicalState);
         }
     }
 
@@ -227,7 +215,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
     public void onClickLeftBtn() {
         switch (mMedicalState) {
             case MEDICAL_COMMIT:
-                invalidateLayoutState();
+                invalidateLayoutState(mMedicalState);
                 break;
             case MEDICAL_VOID:
             case MEDICAL_CHECK_WAIT:
@@ -245,7 +233,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
             takePhoto(100);
         } else if (v == mCommitBtn) {
             mMedicalState = MEDICAL_CHECK_WAIT;
-            invalidateLayoutState();
+            invalidateLayoutState(mMedicalState);
             uploadMedicalReports();
         }
     }
@@ -297,12 +285,12 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
     public void onSuccess(int requestId, boolean success, int code, String data) {
         super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_UPLOAD_MEDICAL) {
-            for (File item : medicalFiles) {
-                LogTool.printD("delete file: %s state: %s", item.getName(), item.delete());
-            }
-            medicalFiles.clear();
-        } else if (requestId == REQUEST_UPDATE_LIST) {
+            showToast("上传成功");
+        } else if (requestId == REQUEST_GET_MEDICAL_LIST) {
             LogTool.printD("data: %s,", data);
+            if (data.equals("{}")) {
+                invalidateLayoutState(0);
+            }
         }
     }
 
