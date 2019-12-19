@@ -63,7 +63,7 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
 
         int n = ta.getIndexCount();
 
-        int inputType = ta.getInt(R.styleable.AppEditText_inputType, EditorInfo.TYPE_CLASS_TEXT);
+        int inputType = ta.getInt(R.styleable.AppEditText_inputType, -1);
         boolean toRightOfEdit = false;
         String editText = null;
         String rightText = ta.getString(R.styleable.AppEditText_rightText);

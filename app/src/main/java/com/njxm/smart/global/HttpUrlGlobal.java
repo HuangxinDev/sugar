@@ -26,9 +26,14 @@ public final class HttpUrlGlobal {
     public static final String HTTP_SMS_URL = "http://119.3.136.127:7777/auth/sms/sendSms";
 
     /**
-     * 重置密码接口
+     * 忘记密码修改密码
      */
     public static final String HTTP_RESET_PWD_URL = "http://119.3.136.127:7776/sys/user/updatePassByMobile";
+
+    /**
+     * 重置密码修改密码
+     */
+    public static final String URL_SETTINGS_RESET_PWD = "http://119.3.136.127:7776/api/sys/user/updatePass";
 
     /**
      * 关于我们页面
