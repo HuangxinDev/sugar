@@ -2,6 +2,7 @@ package com.njxm.smart.activities;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -14,8 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.model.jsonbean.BaseAddressBean;
-import com.njxm.smart.model.jsonbean.ProvinceBean;
+import com.njxm.smart.model.jsonbean.AddressBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.LogTool;
@@ -36,21 +36,21 @@ public class UserAddressActivity extends BaseActivity {
     private AppCompatTextView tvUserAddress;
     private AppCompatEditText etUserAddressDetail;
 
-    private RecyclerView mRecyclerView;
-
-    private List<BaseAddressBean> mProvinceBeans = new ArrayList<>();
-
-    private boolean selectSuccess = false;
-
     private SimpleTextAdapter simpleTextAdapter;
 
-    private List<BaseAddressBean> proviceBaseBeans;
-    private List<BaseAddressBean> cityBaseBeans;
-    private List<BaseAddressBean> areaBaseBeans;
+    private List<AddressBean> provinceBaseBeans = new ArrayList<>();
+    private List<AddressBean> cityBaseBeans = new ArrayList<>();
+    private List<AddressBean> areaBaseBeans = new ArrayList<>();
 
-    String province;
-    String city;
-    String distance;
+    private TextView tvPop;
+
+    String province = "";
+    String city = "";
+    String distance = "";
+
+    String provinceId = "";
+    String cityId = "";
+    String distanceId = "";
 
     /**
      * 0:选择省份
@@ -77,56 +77,44 @@ public class UserAddressActivity extends BaseActivity {
         tvUserAddress.setOnClickListener(this);
         etUserAddressDetail = findViewById(R.id.user_address_details);
         etUserAddressDetail.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_DETAIL_ADDRESS));
-        mProvinceBeans.addAll(JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), ProvinceBean.class));
+        provinceBaseBeans =
+                JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
 
-        mRecyclerView = findViewById(R.id.recycler_view);
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        simpleTextAdapter = new SimpleTextAdapter(mProvinceBeans);
+        simpleTextAdapter = new SimpleTextAdapter(provinceBaseBeans);
+        tvPop = findViewById(R.id.retry_select);
+        tvPop.setOnClickListener(this);
         simpleTextAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                BaseAddressBean baseAddressBean = (BaseAddressBean) adapter.getData().get(position);
-
-                if (selectSuccess) {
-                    showToast("选择结束");
-                    return;
-                }
-
-                switch (baseAddressBean.getType()) {
+                AddressBean baseAddressBean = (AddressBean) adapter.getData().get(position);
+                switch (selectAddressType) {
                     case 0:
-                        if (selectAddressType == 0) {
-                            selectAddressType = 1;
-                            proviceBaseBeans = adapter.getData();
-                        }
-                        province = baseAddressBean.getBaseCode();
-                        tvUserAddress.setText("");
+                        LogTool.printD("click province: %s", baseAddressBean.getName());
+                        cityBaseBeans = baseAddressBean.getAreas();
+                        province = baseAddressBean.getName();
+                        provinceId = baseAddressBean.getId();
+                        adapter.setNewData(cityBaseBeans);
+                        selectAddressType = 1;
+                        tvPop.setText("点击重新选择");
+
                         break;
                     case 1:
-                        if (selectAddressType == 1) {
-                            selectAddressType = 2;
-                            cityBaseBeans = adapter.getData();
-                        }
-                        city = baseAddressBean.getBaseCode();
+                        areaBaseBeans = baseAddressBean.getAreas();
+                        selectAddressType = 2;
+                        city = baseAddressBean.getName();
+                        cityId = baseAddressBean.getId();
+                        adapter.setNewData(areaBaseBeans);
                         break;
                     case 2:
-                        if (selectAddressType == 2) {
-                            areaBaseBeans = adapter.getData();
-                        }
-                        selectSuccess = true;
-                        distance = baseAddressBean.getBaseCode();
+                        distance = baseAddressBean.getName();
+                        distanceId = baseAddressBean.getId();
                         break;
                     default:
                 }
 
-
-                tvUserAddress.setText(String.format("%s%s",
-                        tvUserAddress.getText().toString().trim(), baseAddressBean.getBaseName()));
-
-
-                if (baseAddressBean.getBaseAddressBeans() != null && baseAddressBean.getBaseAddressBeans().size() > 0) {
-                    adapter.setNewData(baseAddressBean.getBaseAddressBeans());
-                    adapter.notifyDataSetChanged();
-                }
+                tvUserAddress.setText(province + city + distance);
             }
         });
 
@@ -139,15 +127,15 @@ public class UserAddressActivity extends BaseActivity {
 
         if (StringUtils.isEmpty(province) || StringUtils.isEmpty(city) || StringUtils.isEmpty(distance)
                 || StringUtils.isEmpty(etUserAddressDetail.getText().toString())) {
-            showToast("请填写相应信息");
+            showToast("请正确选择地区和填写地址");
             return;
         }
 
         JSONObject object = new JSONObject();
         object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        object.put("province", province);
-        object.put("city", city);
-        object.put("district", distance);
+        object.put("province", provinceId);
+        object.put("city", cityId);
+        object.put("district", distanceId);
         object.put("address", etUserAddressDetail.getText().toString());
 
         RequestBody requestBody =
@@ -175,5 +163,16 @@ public class UserAddressActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v == tvPop) {
+            simpleTextAdapter.setNewData(provinceBaseBeans);
+            selectAddressType = 0;
+            tvPop.setText("请选择");
+            tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
+        }
     }
 }
