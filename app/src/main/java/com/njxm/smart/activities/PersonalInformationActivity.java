@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
@@ -91,7 +92,10 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
         tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
 
-        Glide.with(this).load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON)).into(ivUserHead);
+        Glide.with(this)
+                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON))
+                .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
+                .into(ivUserHead);
     }
 
     @Override

@@ -103,16 +103,7 @@ public class SettingsActivity extends BaseActivity {
             @Override
             public void onSuccess(int requestId, boolean success, int code, String data) {
                 if (success) {
-                    invoke(new Runnable() {
-                        @Override
-                        public void run() {
-                            showToast("登出成功");
-                            SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
-                            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
+                    showToast("登出成功");
                 }
             }
 

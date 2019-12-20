@@ -226,7 +226,11 @@ public final class HttpUtils {
                     data = "{}";
                 }
                 httpCallBack.onSuccess(requestId, true, 200, data);
-            } else if (code == 401) {
+            } else if (code == 401 || code == 999) {
+                SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
+                Intent intent = new Intent(SmartCloudApplication.getApplication(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                SmartCloudApplication.getApplication().startActivity(intent);
                 httpCallBack.onSuccess(requestId, true, 401, "");
             } else {
                 httpCallBack.onFailed(resultObj.getString("message"));

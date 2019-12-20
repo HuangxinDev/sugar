@@ -260,17 +260,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (code == 401 || code == 999) {
-            // TODO 验证过期,需要退回登录页
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        }
     }
 
     @Override
