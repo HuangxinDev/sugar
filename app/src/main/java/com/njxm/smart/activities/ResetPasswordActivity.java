@@ -216,7 +216,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
     }
 
     private void clickBack() {
-        if (root_two.getVisibility() == View.VISIBLE) {
+        if (root_two.getVisibility() == View.VISIBLE && isForgetPwd) {
             mNewPwd1.clearText();
             mNewPwd2.clearText();
             setVisible(root_one, View.VISIBLE);
