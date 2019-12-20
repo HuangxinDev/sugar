@@ -45,12 +45,6 @@ public class WebViewActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onClickLeftBtn() {
-        super.onClickLeftBtn();
-        finish();
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
     private void setWebViewSettings(WebView paramWebView) {
         if (paramWebView == null) {

@@ -98,7 +98,6 @@ public class SuggestionsActivity extends BaseActivity {
 
     @Override
     public void onClickLeftBtn() {
-        super.onClickLeftBtn();
         if (mSuggestion == Suggestion.NONE || mSuggestion == Suggestion.COMMIT) {
             finish();
         } else if (mSuggestion == Suggestion.EDIT) {

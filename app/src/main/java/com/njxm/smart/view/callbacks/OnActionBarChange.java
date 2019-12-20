@@ -31,7 +31,7 @@ public interface OnActionBarChange {
     void setImageResource(AppCompatImageButton view, int resourceId);
 
     /**
-     * 点击左侧按钮
+     * 点击左侧按钮:默认效果为退出页面
      */
     void onClickLeftBtn();
 

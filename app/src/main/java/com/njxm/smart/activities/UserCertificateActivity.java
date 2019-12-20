@@ -164,8 +164,6 @@ public class UserCertificateActivity extends BaseActivity {
 
     @Override
     public void onClickLeftBtn() {
-        super.onClickLeftBtn();
-
         if (certificateState == 0 || certificateState == 1) {
             finish();
             return;

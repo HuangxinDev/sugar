@@ -9,10 +9,10 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@id/action_bar_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
+        android:layout_width="@dimen/dp_44"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@mipmap/arrow_back_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

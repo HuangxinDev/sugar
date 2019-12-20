@@ -22,10 +22,4 @@ public class ForgetPasswordActivity extends BaseActivity {
         showTitle(false, null);
         showLeftBtn(true, R.mipmap.arrow_back_blue);
     }
-
-    @Override
-    public void onClickLeftBtn() {
-        super.onClickLeftBtn();
-        finish();
-    }
 }

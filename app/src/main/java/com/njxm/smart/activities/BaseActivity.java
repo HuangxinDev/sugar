@@ -72,11 +72,21 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         mActionBarRightBtn = findViewById(R.id.action_bar_right);
         mActionBarTitle = findViewById(R.id.action_bar_title);
         if (mActionBarBackBtn != null) {
-            mActionBarBackBtn.setOnClickListener(this);
+            mActionBarBackBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickLeftBtn();
+                }
+            });
         }
 
         if (mActionBarRightBtn != null) {
-            mActionBarRightBtn.setOnClickListener(this);
+            mActionBarRightBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickRightBtn();
+                }
+            });
         }
     }
 

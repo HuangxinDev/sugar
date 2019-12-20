@@ -76,6 +76,8 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
     @Override
     public void onClick(View v) {
         super.onClick(v);
+
+
         int index = 0;
 
         if (mUrls.size() < 4) {
@@ -96,6 +98,7 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
             index = 3;
             title = "新功能介绍";
         }
+
         Intent intent = new Intent(this, WebViewActivity.class);
         intent.putExtra("title_name", title);
         if (loadUrl && mUrls.get(index) != null && mUrls.get(index).getUrl() != null) {
@@ -107,12 +110,6 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
         }
         intent.putExtra("loadUrl", loadUrl);
         startActivity(intent);
-    }
-
-    @Override
-    public void onClickLeftBtn() {
-        super.onClickLeftBtn();
-        finish();
     }
 
     @Override
@@ -142,16 +139,6 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
 
         public String getUrl() {
             return url;
-        }
-    }
-
-    public static void main(String[] args) {
-        String json = "[{\"key\":\"服务协议\",\"url\":\"https://www.baidu.com/\"},{\"key\":\"版本信息\",\"url\":\"https://www.baidu.com/\"},{\"key\":\"隐私政策\",\"url\":\"https://www.baidu.com/\"},{\"key\":\"新功能介绍\",\"url\":\"https://www.baidu.com/\"}]";
-
-        List<UrlBean> beans = JSONObject.parseArray(json, UrlBean.class);
-
-        for (int i = 0; i < beans.size(); i++) {
-            System.out.println(beans.get(i).getUrl());
         }
     }
 }

@@ -212,7 +212,6 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
 
     @Override
     public void onClickLeftBtn() {
-        super.onClickLeftBtn();
         clickBack();
     }
 

@@ -60,10 +60,9 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         Intent intent = null;
         if (mExitLoginBtn == v) {
-
-
             AlertDialogUtils.getInstance().showConfirmDialog(this, "确定退出？", "取消", "确定", new AlertDialogUtils.OnButtonClickListener() {
                 @Override
                 public void onPositiveButtonClick(AlertDialog dialog) {
@@ -90,12 +89,6 @@ public class SettingsActivity extends BaseActivity {
         if (intent != null) {
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void onClickLeftBtn() {
-        super.onClickLeftBtn();
-        finish();
     }
 
     public void logOut() {

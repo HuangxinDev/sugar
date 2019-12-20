@@ -114,6 +114,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         if (v == mLoginBtn) {
             boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
             String username = mLoginAccountEditText.getText().trim();
