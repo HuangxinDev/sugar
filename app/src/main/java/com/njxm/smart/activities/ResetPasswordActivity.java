@@ -74,12 +74,12 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
         View divider = findViewById(R.id.divider1);
         View title = findViewById(R.id.title);
 
-        if (action.equals("1")) {
+        isForgetPwd = action.equals("1");
+
+        if (isForgetPwd) {
             setVisible(mActionBarTitle, View.GONE);
             setVisible(divider, View.GONE);
-            isForgetPwd = true;
         } else {
-            isForgetPwd = false;
             setActionBarTitle("重置密码");
             setVisible(mActionBarRightBtn, View.GONE);
             setVisible(title, View.GONE);

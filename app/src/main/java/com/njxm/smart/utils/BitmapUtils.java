@@ -51,4 +51,22 @@ public final class BitmapUtils {
 
         return null;
     }
+
+    /**
+     * 压缩保存图片
+     *
+     * @param bitmap    待压缩图片
+     * @param imageFile 文件
+     */
+    public static void saveBitmap(Bitmap bitmap, File imageFile) {
+        try {
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 10, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

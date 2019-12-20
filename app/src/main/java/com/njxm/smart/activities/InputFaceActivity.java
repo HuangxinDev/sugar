@@ -13,13 +13,15 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
 
@@ -56,37 +58,11 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
         ivPhoto.setOnClickListener(this);
 
         final String faceUrl = SPUtils.getStringValue(KeyConstant.KEY_USER_FACE_URL);
-        if (StringUtils.isEmpty(faceUrl)) {
-            ivPhoto.setImageDrawable(null);
-        } else {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = Glide.with(InputFaceActivity.this).asBitmap()
-                                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + faceUrl)
-                                .submit(ResolutionUtil.dp2Px(109), ResolutionUtil.dp2Px(109))
-                                .get();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    final Bitmap finalBitmap = bitmap;
-                    invoke(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (finalBitmap != null) {
-                                ivPhoto.setImageBitmap(finalBitmap);
-                            }
-                        }
-                    });
-                }
-            }).start();
-        }
+        Glide.with(this)
+                .asBitmap()
+                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + faceUrl)
+                .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.realname_face_detect))
+                .into(ivPhoto);
     }
 
     private File photoFile;
@@ -101,24 +77,27 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
                     try {
 
                         final Bitmap drawable =
-                                Glide.with(InputFaceActivity.this).asBitmap().load(photoFile).submit(ResolutionUtil.dp2Px(109), ResolutionUtil.dp2Px(109)).get();
-
+                                Glide.with(InputFaceActivity.this)
+                                        .asBitmap().load(photoFile)
+                                        .submit(ResolutionUtil.dp2Px(172), ResolutionUtil.dp2Px(109))
+                                        .get();
                         invoke(new Runnable() {
                             @Override
                             public void run() {
-                                ivPhoto.setImageBitmap(drawable);
+                                Glide.with(InputFaceActivity.this)
+                                        .load(drawable)
+                                        .apply(new RequestOptions().centerCrop())
+                                        .into(ivPhoto);
                             }
                         });
 
+                        BitmapUtils.saveBitmap(drawable, photoFile);
                         uploadInputFace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }).start();
-
         }
     }
 
@@ -159,8 +138,7 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
 
     public void takePhoto(int requestId) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        UUID uuid = UUID.randomUUID();
-        photoFile = new File(getFilesDir(), uuid + ".jpg");
+        photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +

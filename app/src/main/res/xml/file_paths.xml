@@ -8,4 +8,8 @@
     <files-path
         name="file"
         path="." />
+
+    <cache-path
+        name="cache_file"
+        path="Android/data/com.njxm.smart/" />
 </paths>

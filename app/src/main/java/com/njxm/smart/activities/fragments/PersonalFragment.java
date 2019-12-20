@@ -8,6 +8,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
@@ -192,6 +194,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 if (getActivity() != null && StringUtils.isNotEmpty(bean.getIcon())) {
                     Glide.with(getActivity())
                             .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                            .apply(new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.mipmap.mine_icon_user_head))
                             .into(ivUserHead);
                 }
             }

@@ -119,11 +119,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Override
     public void onClick(View v) {
-        if (v == mActionBarBackBtn) {
-            onClickLeftBtn();
-        } else if (v == mActionBarRightBtn) {
-            onClickRightBtn();
-        }
     }
 
     /**
