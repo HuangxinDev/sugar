@@ -34,6 +34,11 @@ import java.io.File;
 import java.util.Locale;
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
+
 /**
  * 基类，提供共用方法和回调
  */
@@ -44,8 +49,16 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     protected static Handler mHandler = new Handler();
 
+    @Nullable
+    @BindView(R.id.action_bar_left)
     protected AppCompatImageView mActionBarBackBtn;
+
+    @Nullable
+    @BindView(R.id.action_bar_title)
     protected AppCompatTextView mActionBarTitle;
+
+    @Nullable
+    @BindView(R.id.action_bar_right)
     protected AppCompatTextView mActionBarRightBtn;
 
     protected BaseActivity() {
@@ -59,34 +72,13 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
         PermissionManager.requestPermission(this, 100, PermissionManager.sRequestPermissions);
         setContentView(setContentLayoutId());
+        ButterKnife.bind(this);
 //        getWindow().setStatusBarColor(setStatusBarColor());
 //        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         View ll = findViewById(R.id.ll_root);
         if (ll != null) {
             ll.setPadding(0, getStatusBarHeight(this), 0, 0);
-        }
-
-        mActionBarBackBtn = findViewById(R.id.action_bar_left);
-        mActionBarRightBtn = findViewById(R.id.action_bar_right);
-        mActionBarTitle = findViewById(R.id.action_bar_title);
-        if (mActionBarBackBtn != null) {
-            mActionBarBackBtn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickLeftBtn();
-                }
-            });
-        }
-
-        if (mActionBarRightBtn != null) {
-            mActionBarRightBtn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickRightBtn();
-                }
-            });
         }
     }
 
@@ -122,19 +114,29 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     }
 
     /**
-     * 默认返回键-点击返回
+     * ActionBar 左侧点击事件 - 默认返回键-点击返回
      */
-    @Override
+    @Optional
+    @OnClick(R.id.action_bar_left)
     public void onClickLeftBtn() {
-        finish();
+        onBackPressed();
     }
 
-    @Override
+    /**
+     * ActionBar 右侧按钮点击事件
+     */
+    @Optional
+    @OnClick(R.id.action_bar_right)
     public void onClickRightBtn() {
 
     }
 
-    @Override
+    /**
+     * 设置ActionBar标题
+     *
+     * @param title 标题
+     */
+    @Optional
     public void setActionBarTitle(String title) {
         if (mActionBarTitle != null) {
             mActionBarTitle.setText(title);

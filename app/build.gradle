@@ -18,8 +18,12 @@ android {
 
         resValue("string", "app_version", "当前版本" + versionName)
     }
-}
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
 
 dependencies {
     implementation fileTree(dir: "libs", includes: ['*.jar'])
@@ -44,6 +48,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     implementation 'com.alibaba:fastjson:1.2.62'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor'com.jakewharton:butterknife-compiler:10.1.0'
     // 图片框架
 
     // 内存泄露框架

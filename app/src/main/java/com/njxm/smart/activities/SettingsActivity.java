@@ -16,6 +16,8 @@ import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import okhttp3.Request;
 
 /**
@@ -30,67 +32,82 @@ public class SettingsActivity extends BaseActivity {
         return R.layout.my_setting;
     }
 
-    private AppCompatTextView mExitLoginBtn;
+    @BindView(R.id.login_exit)
+    protected AppCompatTextView mExitLoginBtn;
 
-    private View mResetPwdBtn;
-    private View mUpdateTelBtn;
-    private View mCheckUpdateBtn;
-    private View mCleanCacheBtn;
+    @BindView(R.id.settings_reset_pwd)
+    protected View mResetPwdBtn;
+
+    @BindView(R.id.settings_update_phone)
+    protected View mUpdateTelBtn;
+
+    @BindView(R.id.settings_check_update)
+    protected View mCheckUpdateBtn;
+
+    @BindView(R.id.settings_clean_cache)
+    protected View mCleanCacheBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mExitLoginBtn = findViewById(R.id.login_exit);
-        mExitLoginBtn.setOnClickListener(this);
         setActionBarTitle("设置");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
-
-        mResetPwdBtn = findViewById(R.id.settings_reset_pwd);
-        mUpdateTelBtn = findViewById(R.id.settings_update_phone);
-        mCheckUpdateBtn = findViewById(R.id.settings_check_update);
-        mCleanCacheBtn = findViewById(R.id.settings_clean_cache);
-
-        mResetPwdBtn.setOnClickListener(this);
-        mUpdateTelBtn.setOnClickListener(this);
-        mCleanCacheBtn.setOnClickListener(this);
-        mCheckUpdateBtn.setOnClickListener(this);
-
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        Intent intent = null;
-        if (mExitLoginBtn == v) {
-            AlertDialogUtils.getInstance().showConfirmDialog(this, "确定退出？", "取消", "确定", new AlertDialogUtils.OnButtonClickListener() {
-                @Override
-                public void onPositiveButtonClick(AlertDialog dialog) {
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onNegativeButtonClick(AlertDialog dialog) {
-                    dialog.dismiss();
-                    logOut();
-                }
-            });
-        } else if (v == mResetPwdBtn) {
-            intent = new Intent(this, ResetPasswordActivity.class);
-            intent.putExtra("action", "2");
-        } else if (v == mUpdateTelBtn) {
-            intent = new Intent(this, UpdateTelPhoneActivity.class);
-        } else if (v == mCheckUpdateBtn) {
-            showToast("当前已是最新版本");
-        } else if (v == mCleanCacheBtn) {
-            showToast("清除缓存完成");
-        }
-
-        if (intent != null) {
-            startActivity(intent);
-        }
+    /**
+     * 清除缓存文件
+     */
+    @OnClick(R.id.settings_clean_cache)
+    protected void cleanCache() {
+        showToast("清除缓存完成");
     }
 
+    /**
+     * 检查版本更新
+     */
+    @OnClick(R.id.settings_check_update)
+    protected void checkUpdate() {
+        showToast("当前已是最新版本");
+    }
+
+    /**
+     * 重置密码
+     */
+    @OnClick(R.id.settings_reset_pwd)
+    protected void resetPwd() {
+        Intent intent = new Intent(this, ResetPasswordActivity.class);
+        intent.putExtra("action", "2");
+        startActivity(intent);
+    }
+
+    /**
+     * 更换手机
+     */
+    @OnClick(R.id.settings_update_phone)
+    protected void updateTelPhone() {
+        Intent intent = new Intent(this, UpdateTelPhoneActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.login_exit)
+    protected void clickLogoutItem() {
+        AlertDialogUtils.getInstance().showConfirmDialog(this, "确定退出？", "取消", "确定", new AlertDialogUtils.OnButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(AlertDialog dialog) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onNegativeButtonClick(AlertDialog dialog) {
+                dialog.dismiss();
+                logOut();
+            }
+        });
+    }
+
+    /**
+     * 登出操作
+     */
     public void logOut() {
         Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT)
                 .addHeader("Platform", "APP")
