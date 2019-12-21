@@ -11,6 +11,7 @@
     <ImageView
         android:id="@+id/top_bg"
         android:layout_width="match_parent"
+        android:scaleType="fitXY"
         android:layout_height="wrap_content"
         android:src="@mipmap/header_background_blue"
         app:layout_constraintTop_toTopOf="parent" />

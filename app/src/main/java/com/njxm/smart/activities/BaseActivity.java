@@ -26,6 +26,7 @@ import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.StatusBarUtil;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
@@ -75,11 +76,12 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         ButterKnife.bind(this);
 //        getWindow().setStatusBarColor(setStatusBarColor());
 //        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         View ll = findViewById(R.id.ll_root);
         if (ll != null) {
             ll.setPadding(0, getStatusBarHeight(this), 0, 0);
         }
+        StatusBarUtil.setImmersiveStatusBar(this, true);
     }
 
     /**
