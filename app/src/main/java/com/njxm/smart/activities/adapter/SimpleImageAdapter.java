@@ -1,48 +1,67 @@
 package com.njxm.smart.activities.adapter;
 
-import android.graphics.drawable.Drawable;
-import android.view.View;
+import android.app.Activity;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ns.demo.R;
 
 import java.util.List;
 
-public class SimpleImageAdapter extends BaseQuickAdapter<Drawable, BaseViewHolder> {
+public class SimpleImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
 
-    public SimpleImageAdapter(int layoutResId, @Nullable List<Drawable> data) {
+    private boolean isShowDelete = false;
+
+    private Activity activity;
+
+    private RequestOptions requestOptions;
+
+    public SimpleImageAdapter(int layoutResId, @Nullable List<String> data) {
         super(layoutResId, data);
+        init();
     }
 
-    public SimpleImageAdapter(@Nullable List<Drawable> data) {
+    public SimpleImageAdapter(Activity activity, @Nullable List<String> data) {
         this(R.layout.item_simple_image_layout, data);
+        this.activity = activity;
+        init();
     }
 
-    public SimpleImageAdapter() {
+    public SimpleImageAdapter(Activity activity) {
         this(R.layout.item_simple_image_layout, null);
+        this.activity = activity;
+        init();
     }
 
+    private void init() {
+        requestOptions = new RequestOptions().centerCrop();
+    }
 
 
     @Override
-    protected void convert(final BaseViewHolder helper, final Drawable item) {
-        helper.setImageDrawable(R.id.item_image, item);
-
-        if (helper.getAdapterPosition() == getData().size() - 1) {
-            helper.setVisible(R.id.item_cancel, false);
-        } else {
-            helper.setVisible(R.id.item_cancel, true);
-            helper.setOnClickListener(R.id.item_cancel, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getData().remove(item);
-                    notifyDataSetChanged();
-                }
-            });
+    protected void convert(final BaseViewHolder helper, final String item) {
+        Glide.with(activity)
+                .load(item)
+                .apply(requestOptions)
+                .into((ImageView) helper.getView(R.id.item_image));
+        helper.setVisible(R.id.item_cancel,
+                isShowDelete && (helper.getAdapterPosition() != getData().size() - 1));
+        if (isShowDelete) {
+            helper.setNestView(R.id.item_cancel);
         }
+    }
+
+    public boolean isShowDelete() {
+        return isShowDelete;
+    }
+
+    public void setShowDelete(boolean showDelete) {
+        isShowDelete = showDelete;
     }
 }

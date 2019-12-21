@@ -11,8 +11,7 @@
         android:id="@+id/item_image"
         android:layout_width="103dp"
         android:layout_height="103dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/personals_item_user_head" />
+        android:src="@mipmap/camera_photo" />
 
     <ImageView
         android:id="@+id/item_cancel"

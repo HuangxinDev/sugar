@@ -83,6 +83,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/upload_time"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_53"
