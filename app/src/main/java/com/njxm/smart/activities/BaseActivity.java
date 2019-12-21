@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -22,14 +23,21 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
 
 import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StatusBarUtil;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.Locale;
@@ -74,6 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         PermissionManager.requestPermission(this, 100, PermissionManager.sRequestPermissions);
         setContentView(setContentLayoutId());
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 //        getWindow().setStatusBarColor(setStatusBarColor());
 //        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -81,7 +90,20 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         if (ll != null) {
             ll.setPadding(0, getStatusBarHeight(this), 0, 0);
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View contentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+            if (contentView != null) {
+                contentView.setFitsSystemWindows(true);
+            }
+        }
         StatusBarUtil.setImmersiveStatusBar(this, true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -274,5 +296,19 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
                 showToast(errMsg);
             }
         });
+    }
+
+    /**
+     * 登出服务
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void logOut(LogoutEvent event) {
+        if (this instanceof LoginActivity) {
+            return;
+        }
+        SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

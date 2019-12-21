@@ -5,10 +5,13 @@ import android.content.Intent;
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.SmartCloudApplication;
 import com.njxm.smart.activities.LoginActivity;
+import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -155,12 +158,11 @@ public final class HttpUtils {
      * 获取body里面放json的Request
      */
     public static Request getJsonRequest(String url, HashMap<String, String> jsonMap) {
-        if (jsonMap == null || jsonMap.size() == 0) {
-            throw new IllegalArgumentException("非法参数");
-        }
         JSONObject object = new JSONObject();
-        for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
-            object.put(entry.getKey(), entry.getValue());
+        if (jsonMap != null && jsonMap.size() > 0) {
+            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+                object.put(entry.getKey(), entry.getValue());
+            }
         }
         RequestBody requestBody = FormBody.create(MediaType.parse(MimeType.JSON),
                 object.toJSONString());
@@ -227,11 +229,7 @@ public final class HttpUtils {
                 }
                 httpCallBack.onSuccess(requestId, true, 200, data);
             } else if (code == 401 || code == 999) {
-                SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
-                Intent intent = new Intent(SmartCloudApplication.getApplication(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                SmartCloudApplication.getApplication().startActivity(intent);
-                httpCallBack.onSuccess(requestId, true, 401, "");
+                EventBus.getDefault().post(new LogoutEvent());
             } else {
                 httpCallBack.onFailed(resultObj.getString("message"));
             }

@@ -42,8 +42,8 @@ public class MyCerticateListAdapter extends BaseQuickAdapter<UserCertificateActi
         if (StringUtils.isNotEmpty(item.certificateName)) {
             helper.setText(R.id.certificate_name, item.certificateName);
         }
-        if (StringUtils.isNotEmpty(item.status)) {
-            helper.setText(R.id.certificate_update_state, item.status);
-        }
+        helper.setText(R.id.certificate_update_state, item.status == 0 ? "未审核" : (item.status == 1 ?
+                "审核通过" :
+                "审核不通过"));
     }
 }

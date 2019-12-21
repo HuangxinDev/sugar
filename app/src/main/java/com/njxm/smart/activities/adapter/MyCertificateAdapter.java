@@ -1,7 +1,6 @@
 package com.njxm.smart.activities.adapter;
 
 import android.app.Activity;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -41,13 +40,10 @@ public class MyCertificateAdapter extends BaseQuickAdapter<UserCertificateActivi
                     .into((ImageView) helper.getView(R.id.certificate_image_show));
         }
 
-        helper.getView(R.id.certificate_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mData.add(new UserCertificateActivity.CertificateItem());
-                notifyDataSetChanged();
-            }
-        });
+        // 注册Item click事件
+        helper.setNestView(R.id.certificate_add);
+        helper.setNestView(R.id.certificate_image_show);
+
 
         helper.setVisible(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
     }

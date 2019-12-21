@@ -82,6 +82,7 @@
                 style="@style/BaseTextViewStyle.White"
                 android:layout_width="@dimen/dp_275"
                 android:layout_height="@dimen/dp_42"
+                android:visibility="gone"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/background_btn_flavor_1"

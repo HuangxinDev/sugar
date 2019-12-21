@@ -98,6 +98,7 @@
             android:screenOrientation="portrait" />
         <activity android:name="com.njxm.smart.activities.UserEmergencyContactActivity" />
         <activity android:name="com.njxm.smart.activities.UserCertificateActivity" />
+        <activity android:name="com.njxm.smart.activities.CertificateTypeActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

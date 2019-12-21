@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
@@ -15,6 +16,8 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -121,6 +124,7 @@ public class SettingsActivity extends BaseActivity {
             public void onSuccess(int requestId, boolean success, int code, String data) {
                 if (success) {
                     showToast("登出成功");
+                    EventBus.getDefault().post(new LogoutEvent());
                 }
             }
 

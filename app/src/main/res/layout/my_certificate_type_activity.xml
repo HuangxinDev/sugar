@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/dp_16"
+    android:paddingEnd="@dimen/dp_16">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/divider_color_ffdedede"
+        app:layout_constraintTop_toBottomOf="@id/action_bar" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_1"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/search_bar_bg"
+        app:layout_constraintTop_toBottomOf="@id/action_bar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/search_certificate"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_53"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@null"
+        android:gravity="center"
+        android:text="搜索"
+        app:layout_constraintBottom_toBottomOf="@id/search_bar"
+        app:layout_constraintRight_toRightOf="@id/search_bar"
+        app:layout_constraintTop_toTopOf="@id/search_bar" />
+
+    <!--证书导航-->
+    <HorizontalScrollView
+        android:id="@+id/certificate_type_nav"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        app:layout_constraintTop_toBottomOf="@id/search_bar">
+
+        <LinearLayout
+            android:id="@+id/navi_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/allType"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="全部种类" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        app:layout_constraintTop_toBottomOf="@id/certificate_type_nav" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
