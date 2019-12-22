@@ -81,5 +81,14 @@
         <item name="android:textSize">@dimen/sp_11</item>
     </style>
 
+    <!-- 类似于登录按钮的所有按钮风格 -->
+    <style name="TV" parent="BaseTextViewStyle.White">
+        <item name="android:layout_width">@dimen/dp_275</item>
+        <item name="android:layout_height">@dimen/dp_42</item>
+        <item name="android:background">@drawable/background_btn_flavor_1</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
 
 </resources>

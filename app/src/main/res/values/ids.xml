@@ -136,6 +136,7 @@
     <item name="action_bar_right_text" type="id" />
 
     <!--日常巡检页面-->
+    <item name="task_name" type="id" />
     <item name="task_content" type="id" />
     <item name="task_state" type="id" />
     <item name="task_dao" type="id" />

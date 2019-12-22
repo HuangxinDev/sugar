@@ -185,6 +185,7 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
     private void invalidateLayoutState(int mMedicalState) {
         mLastMedicalState = this.mMedicalState;
         this.mMedicalState = mMedicalState;
+
         mMedicalVoidLayout.setVisibility(mMedicalState == MEDICAL_VOID ? View.VISIBLE : View.GONE);
         mMedicalCheckWaitLayout.setVisibility(mMedicalState == MEDICAL_CHECK_WAIT ? View.VISIBLE : View.GONE);
         mMedicalCheckRetryLayout.setVisibility(mMedicalState == MEDICAL_CHECK_FAILED ? View.VISIBLE : View.GONE);

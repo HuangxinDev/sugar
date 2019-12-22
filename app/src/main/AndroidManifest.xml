@@ -93,6 +93,9 @@
         <activity
             android:name="com.njxm.smart.activities.DailyCheckActivity"
             android:launchMode="singleTask" />
+        <activity
+            android:name="com.njxm.smart.activities.DailyCheckDetailActivity"
+            android:launchMode="singleTask" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

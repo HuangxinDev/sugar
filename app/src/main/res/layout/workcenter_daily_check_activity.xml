@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/background_white"
     android:orientation="vertical">
 
     <include
@@ -16,7 +17,40 @@
         android:background="@color/divider_color_ffdedede"
         app:layout_constraintTop_toBottomOf="@id/action_bar" />
 
+    <RelativeLayout
+        android:id="@+id/default_1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_1"
+        android:background="@color/background_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action_bar"
+        app:layout_constraintVertical_weight="1">
+
+        <ImageView
+            android:id="@id/seat1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="165dp"
+            android:src="@mipmap/void_suggestion" />
+
+        <TextView
+            style="@style/BaseTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seat1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_13"
+            android:lineSpacingExtra="@dimen/dp_4"
+            android:text="没有巡检记录\n安全人人抓  幸福千万家"
+            android:textColor="#ffb0b0b0"
+            android:textSize="@dimen/sp_11" />
+
+    </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="gone"
         android:id="@id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

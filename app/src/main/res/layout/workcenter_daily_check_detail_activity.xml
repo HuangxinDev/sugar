@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/head_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/personals_item_user_head" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_below="@id/head_1"
+                android:text="任务详情" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/head_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/personals_item_user_head" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_below="@id/head_2"
+                android:text="巡检记录" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_gray"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="项目"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1111" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="标段"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@mipmap/arrow_detail" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分部分项"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@mipmap/arrow_detail" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="巡检区域"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@mipmap/arrow_detail" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始时间"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1111" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="结束时间"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1111" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="间隔时长"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1111" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="间隙类型"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/task_name"
+                    style="@style/BaseTextViewStyle.Black.14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1111" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="计划标题"
+                    android:textSize="@dimen/sp_14" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@null"
+                    android:gravity="start|top"
+                    android:hint="巡检内容 150/150"
+                    android:textSize="@dimen/sp_14" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_53"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/background_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BaseTextViewStyle.Gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="巡检人"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@id/task_name"
+                    android:layout_width="@dimen/dp_53"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:background="@null"
+                    android:src="@mipmap/icon_add" />
+
+                <!--放巡检人的头像列表-->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </HorizontalScrollView>
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/TV"
+                android:layout_marginTop="74dp"
+                android:layout_marginBottom="48dp"
+                android:text="确定" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

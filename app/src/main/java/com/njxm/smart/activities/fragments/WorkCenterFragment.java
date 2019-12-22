@@ -47,6 +47,7 @@ public class WorkCenterFragment extends BaseFragment {
             public void onClick(View v) {
 //                startActivity(new Intent(getActivity(), SuggestionsActivity.class));
                 startActivity(new Intent(getActivity(), DailyCheckActivity.class));
+//                startActivity(new Intent(getActivity(), DailyCheckDetailActivity.class));
             }
         });
 
