@@ -133,6 +133,7 @@
     <item name="certificate_add" type="id" />
     <item name="certificate_image_show" type="id" />
     <item name="adapter_layout" type="id" />
+    <item name="action_bar_right_text" type="id" />
 
 
 </resources>

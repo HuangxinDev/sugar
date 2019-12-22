@@ -147,8 +147,10 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                final String delFilePath = mDatas.get(position);
                 mDatas.remove(position);
                 adapter.setNewData(mDatas);
+                new File(delFilePath).delete();
             }
         });
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -267,11 +269,15 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
 
     private void uploadMedicalReports() {
 
+
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
 
         for (String filePath : mDatas) {
+            if (filePath.endsWith("camera_default.png")) {
+                continue;
+            }
             File file = new File(filePath);
             builder.addFormDataPart("files", file.getName(),
                     RequestBody.create(MediaType.parse("image/png"), file));

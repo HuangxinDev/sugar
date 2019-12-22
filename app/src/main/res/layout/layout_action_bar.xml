@@ -7,11 +7,11 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@id/action_bar_left"
         android:layout_width="@dimen/dp_44"
         android:layout_height="match_parent"
-        android:scaleType="center"
+        android:background="@null"
         android:src="@mipmap/arrow_back_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -30,17 +30,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@id/action_bar_right"
         style="@style/BaseTextViewStyle.Blue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_width="@dimen/dp_44"
+        android:layout_height="match_parent"
+        android:background="@null"
         android:textSize="@dimen/sp_13"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@id/action_bar_right_text"
+        style="@style/BaseTextViewStyle.Blue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:minWidth="@dimen/dp_44"
+        android:text=""
+        android:visibility="gone"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

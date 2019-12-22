@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
 
@@ -60,7 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Nullable
     @BindView(R.id.action_bar_left)
-    protected AppCompatImageView mActionBarBackBtn;
+    protected AppCompatImageButton mActionBarBackBtn;
 
     @Nullable
     @BindView(R.id.action_bar_title)
@@ -68,7 +67,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Nullable
     @BindView(R.id.action_bar_right)
-    protected AppCompatTextView mActionBarRightBtn;
+    protected AppCompatImageButton mActionBarRightBtn;
+
+    @Nullable
+    @BindView(R.id.action_bar_right_text)
+    protected AppCompatTextView tvActionBarRightText;
 
     protected BaseActivity() {
         TAG = this.getClass().getSimpleName();
@@ -150,7 +153,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      * ActionBar 右侧按钮点击事件
      */
     @Optional
-    @OnClick(R.id.action_bar_right)
+    @OnClick({R.id.action_bar_right, R.id.action_bar_right_text})
     public void onClickRightBtn() {
 
     }
@@ -198,14 +201,22 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     public void showRightBtn(boolean show, int resourcesId) {
         if (mActionBarRightBtn != null) {
             mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
-            mActionBarRightBtn.setBackgroundResource(resourcesId);
+            mActionBarRightBtn.setImageResource(resourcesId);
+        }
+
+        if (show && tvActionBarRightText != null) {
+            tvActionBarRightText.setVisibility(View.GONE);
         }
     }
 
     public void showRightBtn(boolean show, String text) {
-        if (mActionBarRightBtn != null) {
-            mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
-            mActionBarRightBtn.setText(text);
+        if (tvActionBarRightText != null) {
+            tvActionBarRightText.setVisibility(show ? View.VISIBLE : View.GONE);
+            tvActionBarRightText.setText(text);
+        }
+
+        if (show && mActionBarRightBtn != null) {
+            mActionBarRightBtn.setVisibility(View.GONE);
         }
     }
 
