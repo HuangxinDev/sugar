@@ -16,7 +16,6 @@ import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
-import com.njxm.smart.utils.LogTool;
 
 // 类似于android support v4包下的Fragment
 
@@ -39,11 +38,10 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable, Htt
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LogTool.printD("%s exec onCreateView", getClass().getSimpleName());
         if (mContentView != null) {
             return mContentView;
         }
-        mContentView = inflater.inflate(setLayoutResourceID(), null);
+        mContentView = inflater.inflate(setLayoutResourceID(), container, false);
         mContext = getContext();
         init();
         setUpView();

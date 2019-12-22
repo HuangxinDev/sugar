@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/item_image"
+        android:id="@id/item_image"
         android:layout_width="103dp"
         android:layout_height="103dp"
         android:src="@mipmap/camera_photo" />
