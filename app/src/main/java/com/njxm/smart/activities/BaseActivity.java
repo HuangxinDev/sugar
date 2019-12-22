@@ -2,6 +2,7 @@ package com.njxm.smart.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,6 +80,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        // 禁止屏幕旋转,固定屏幕方向
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
 //        StatusBarUtil.setStatusBarColor(this, R.color.text_color_gray);
 

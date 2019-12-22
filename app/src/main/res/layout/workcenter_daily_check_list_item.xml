@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_white"
+    android:minHeight="181dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@id/seat1"
+        style="@style/BaseTextViewStyle.Blue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:drawableEnd="@mipmap/arrow_detail"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        android:text="任务详情"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/divider_color_ffdedede"
+        app:layout_constraintTop_toBottomOf="@id/seat1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@id/task_content"
+        style="@style/BaseTextViewStyle.Black.14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_18"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:maxLines="2"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+    <View
+        android:id="@id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginTop="20dp"
+        android:background="@color/divider_color_ffdedede"
+        app:layout_constraintTop_toBottomOf="@id/task_content" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@id/task_state"
+        style="@style/BaseTextViewStyle.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@drawable/daily_check_state_bg"
+        android:gravity="center_horizontal"
+        android:text="未开始"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintBottom_toTopOf="@id/divider3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/task_dao"
+        app:layout_constraintTop_toTopOf="@id/divider2" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@id/task_dao"
+        style="@style/BaseTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@drawable/daily_check_state_bg"
+        android:text="删除"
+        android:textColor="#ffb0b0b0"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintLeft_toRightOf="@id/task_state"
+        app:layout_constraintTop_toTopOf="@id/task_state" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@id/task_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:text="2019-10-30  10:30"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/task_state" />
+
+    <View
+        android:id="@id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/divider_color_ffdedede"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

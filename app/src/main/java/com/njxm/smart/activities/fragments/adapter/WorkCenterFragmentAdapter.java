@@ -3,12 +3,13 @@ package com.njxm.smart.activities.fragments.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.ns.demo.R;
@@ -16,21 +17,22 @@ import com.ns.demo.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkCenterFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class WorkCenterFragmentAdapter extends BaseQuickAdapter<WorkCenterFragment.WorkCenterData, BaseViewHolder> {
 
     private static final int TYPE_TITLE = 1;
     private static final int TYPE_CONTENT = 2;
 
-    private List<T> mData;
+    private List<WorkCenterFragment.WorkCenterData> mData;
 
-    public WorkCenterFragmentAdapter(List<T> mData) {
-        this.mData = mData == null ? new ArrayList<T>() : mData;
+    public WorkCenterFragmentAdapter(List<WorkCenterFragment.WorkCenterData> mData) {
+        super(mData);
+        this.mData = mData == null ? new ArrayList<>() : mData;
     }
 
 
-    @NonNull
+    @Nullable
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view;
         switch (viewType) {
@@ -41,23 +43,14 @@ public class WorkCenterFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 view = inflater.inflate(R.layout.item_workcenter, parent, false);
                 break;
             default:
-                return null;
+                return super.onCreateViewHolder(parent, viewType);
         }
         return new BaseViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == TYPE_TITLE) {
-            ((TextView) holder.itemView.findViewById(R.id.title)).setText(((WorkCenterFragment.WorkCenterData) mData.get(position)).getTitle());
-        } else {
-            ((TextView) holder.itemView.findViewById(R.id.item_text)).setText(((WorkCenterFragment.WorkCenterData) mData.get(position)).getIconText());
-        }
-    }
-
-    @Override
     public int getItemViewType(int position) {
-        WorkCenterFragment.WorkCenterData item = (WorkCenterFragment.WorkCenterData) mData.get(position);
+        WorkCenterFragment.WorkCenterData item = mData.get(position);
         if (item == null) {
             return super.getItemViewType(position);
         }
@@ -75,18 +68,28 @@ public class WorkCenterFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-
         GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
+        if (manager == null) {
+            super.onAttachedToRecyclerView(recyclerView);
+            return;
+        }
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (((WorkCenterFragment.WorkCenterData) mData.get(position)).isTilteOrNot()) {
+                if (mData.get(position).isTilteOrNot()) {
                     return 4;
                 }
                 return 1;
             }
         });
+    }
 
-        super.onAttachedToRecyclerView(recyclerView);
+    @Override
+    protected void convert(BaseViewHolder helper, WorkCenterFragment.WorkCenterData item) {
+        if (getItemViewType(helper.getAdapterPosition()) == TYPE_TITLE) {
+            helper.setText(R.id.title, item.getTitle());
+        } else {
+            helper.setText(R.id.item_text, item.getIconText());
+        }
     }
 }
