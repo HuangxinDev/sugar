@@ -22,8 +22,11 @@ public class DailyCheckAdapter extends BaseQuickAdapter<DailyCheckTaskBean, Base
     @Override
     protected void convert(BaseViewHolder helper, DailyCheckTaskBean item) {
         helper.setText(R.id.task_content, item.getTaskContent());
-        helper.setText(R.id.task_state, item.getTaskState() == 0 ? "未开始" : (item.getTaskState() ==
-                1 ? "进行中" : "完成"));
+
+        int state = item.getTaskState();
+        helper.setBackgroundRes(R.id.task_state, state == 0 ? R.drawable.color_orange_state :
+                (state == 1 ? R.drawable.color_green_state : R.drawable.color_blue_state));
+        helper.setText(R.id.task_state, state == 0 ? "未开始" : state == 1 ? "进行中" : "完成");
         helper.setText(R.id.task_time, item.getCreateTime());
         helper.setVisible(R.id.divider3, helper.getAdapterPosition() != mData.size() - 1);
     }

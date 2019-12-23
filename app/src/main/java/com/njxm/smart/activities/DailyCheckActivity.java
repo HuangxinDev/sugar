@@ -2,6 +2,7 @@ package com.njxm.smart.activities;
 
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -42,6 +43,8 @@ public class DailyCheckActivity extends BaseActivity {
 
     private List<DailyCheckTaskBean> mData = new ArrayList<>();
 
+    private DailyCheckAdapter mDailyCheckAdapter;
+
 
 
     @Override
@@ -55,18 +58,36 @@ public class DailyCheckActivity extends BaseActivity {
         showLeftBtn(true, R.mipmap.arrow_back_blue);
         setActionBarTitle("日常巡检");
         showRightBtn(true, R.mipmap.new_add);
-        mData = getData();
-        DailyCheckAdapter mDailyCheckAdapter = new DailyCheckAdapter(mData);
+
+
+        mDailyCheckAdapter = new DailyCheckAdapter(mData);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mDailyCheckAdapter);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mData = getData();
+                SystemClock.sleep(2000);
+                updateView();
+            }
+        }).start();
 
         updateView();
     }
 
     private void updateView() {
-        boolean isNoData = mData.size() == 0;
-        rlVoidData.setVisibility(isNoData ? View.VISIBLE : View.GONE);
-        mRecyclerView.setVisibility(isNoData ? View.GONE : View.VISIBLE);
+        invoke(new Runnable() {
+            @Override
+            public void run() {
+                boolean hasData = mData.size() > 0;
+                rlVoidData.setVisibility(hasData ? View.GONE : View.VISIBLE);
+                mRecyclerView.setVisibility(hasData ? View.VISIBLE : View.GONE);
+                if (hasData) {
+                    mDailyCheckAdapter.setNewData(mData);
+                }
+            }
+        });
     }
 
 

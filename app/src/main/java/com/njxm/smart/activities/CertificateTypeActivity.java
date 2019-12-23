@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,7 +55,7 @@ public class CertificateTypeActivity extends BaseActivity {
     protected TextView tvAllType;
 
     @BindView(R.id.search_certificate)
-    protected TextView tvSearchCertificate;
+    protected AppCompatImageButton ibSearchCertificate;
 
     @BindView(R.id.search_bar)
     protected AppCompatEditText etSearchContent;
