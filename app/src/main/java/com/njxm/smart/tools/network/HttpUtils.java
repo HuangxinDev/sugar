@@ -1,10 +1,6 @@
 package com.njxm.smart.tools.network;
 
-import android.content.Intent;
-
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.SmartCloudApplication;
-import com.njxm.smart.activities.LoginActivity;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
@@ -196,10 +192,6 @@ public final class HttpUtils {
             LogTool.printE("url: %s, exception: %s", call.request().url(), e.getMessage());
             if (httpCallBack != null) {
                 httpCallBack.onFailed("网络异常,稍后再试");
-                SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
-                Intent intent = new Intent(SmartCloudApplication.getApplication(),
-                        LoginActivity.class);
-                SmartCloudApplication.getApplication().startActivity(intent);
             }
         }
 

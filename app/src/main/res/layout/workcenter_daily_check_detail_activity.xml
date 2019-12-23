@@ -10,6 +10,11 @@
         android:id="@id/action_bar"
         layout="@layout/layout_action_bar" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/divider_color_ffdedede" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -33,7 +38,6 @@
                 android:layout_marginTop="@dimen/dp_6"
                 android:layout_below="@id/head_1"
                 android:text="任务详情" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -41,7 +45,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center">
-
             <ImageView
                 android:id="@+id/head_2"
                 android:layout_width="wrap_content"
@@ -54,26 +57,24 @@
                 android:layout_marginTop="@dimen/dp_6"
                 android:layout_below="@id/head_2"
                 android:text="巡检记录" />
-
         </RelativeLayout>
-
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/divider_color_ffdedede" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_gray"
             android:orientation="vertical">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -94,11 +95,14 @@
                     android:text="1111" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -119,12 +123,13 @@
                     android:background="@mipmap/arrow_detail" />
             </RelativeLayout>
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -145,12 +150,13 @@
                     android:background="@mipmap/arrow_detail" />
             </RelativeLayout>
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -171,12 +177,13 @@
                     android:background="@mipmap/arrow_detail" />
             </RelativeLayout>
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -197,12 +204,13 @@
                     android:text="1111" />
             </RelativeLayout>
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -223,12 +231,16 @@
                     android:text="1111" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
+
+
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -249,12 +261,16 @@
                     android:text="1111" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
+
+
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -275,11 +291,14 @@
                     android:text="1111" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/background_white"
+
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -294,12 +313,15 @@
                     android:textSize="@dimen/sp_14" />
             </RelativeLayout>
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:layout_marginTop="@dimen/dp_1"
-                android:background="@color/background_white"
+
+
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -316,11 +338,15 @@
                     android:textSize="@dimen/sp_14" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_53"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/background_white"
+
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16">
@@ -352,11 +378,22 @@
                 </HorizontalScrollView>
             </RelativeLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="@style/TV"
-                android:layout_marginTop="74dp"
-                android:layout_marginBottom="48dp"
-                android:text="确定" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/divider_color_ffdedede" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/background_gray">
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TV"
+                    android:layout_marginTop="74dp"
+                    android:layout_marginBottom="48dp"
+                    android:text="确定" />
+            </FrameLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
