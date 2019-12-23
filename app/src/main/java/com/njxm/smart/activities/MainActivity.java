@@ -3,6 +3,8 @@ package com.njxm.smart.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,12 +22,14 @@ import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.view.ButtonBarItem;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ns.demo.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 主页
@@ -46,12 +50,29 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     // FragmentAdapter 数据
     private List<Fragment> fragments = new ArrayList<>();
 
-    private String[] mFragmentTabs = {"考勤", "工作中心", "消息", "我的"};
+    @BindView(R.id.attendance_icon)
+    protected ImageButton ibAttendanceBtn;
 
-    private ButtonBarItem mAttendanceBtn;
-    private ButtonBarItem mWorkCenterBtn;
-    private ButtonBarItem mMessagesBtn;
-    private ButtonBarItem mPersonalBtn;
+    @BindView(R.id.attendance_text)
+    protected TextView tvAttendanceBtn;
+
+    @BindView(R.id.workcenter_icon)
+    protected ImageButton ibWorkcenterBtn;
+
+    @BindView(R.id.workcenter_text)
+    protected TextView tvWorkcenterBtn;
+
+    @BindView(R.id.message_icon)
+    protected ImageButton ibMessageBtn;
+
+    @BindView(R.id.message_text)
+    protected TextView tvMessageBtn;
+
+    @BindView(R.id.my_icon)
+    protected ImageButton ibMyBtn;
+
+    @BindView(R.id.my_text)
+    protected TextView tvMyBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,21 +94,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mFragmentAdapter.setFragmentDatas(fragments);
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.setCurrentItem(mCurrentPosition);
-
-        mAttendanceBtn = findViewById(R.id.attendance_btn);
-        mAttendanceBtn.setActivated(true);
-        mAttendanceBtn.setOnClickListener(this);
-        mWorkCenterBtn = findViewById(R.id.workcenter_btn);
-        mWorkCenterBtn.setOnClickListener(this);
-        mWorkCenterBtn.setActivated(false);
-        mMessagesBtn = findViewById(R.id.messages_btn);
-        mMessagesBtn.setOnClickListener(this);
-        mMessagesBtn.setActivated(false);
-        mPersonalBtn = findViewById(R.id.personal_btn);
-        mPersonalBtn.setOnClickListener(this);
-        mPersonalBtn.setActivated(false);
         setViewPage(0);
-
         HttpUtils.getInstance().postDataWithParams(-1, HttpUrlGlobal.HTTP_COMMON_CITY_URL, null,
                 this);
     }
@@ -126,33 +133,43 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        switch (v.getId()) {
-            case R.id.attendance_btn:
-                setViewPage(0);
-                break;
-            case R.id.workcenter_btn:
-                setViewPage(1);
-                break;
-            case R.id.messages_btn:
-                setViewPage(2);
-                break;
-            case R.id.personal_btn:
-                setViewPage(3);
-                break;
-        }
+    @OnClick({R.id.attendance_btn, R.id.attendance_icon, R.id.attendance_text})
+    protected void clickAttendanceBtn() {
+        setViewPage(0);
     }
 
+    @OnClick({R.id.workcenter_btn, R.id.workcenter_icon, R.id.workcenter_text})
+    protected void clickWorkCenterBtn() {
+        setViewPage(1);
+    }
+
+    @OnClick({R.id.messages_btn, R.id.message_icon, R.id.message_text})
+    protected void clickMessageBtn() {
+        setViewPage(2);
+    }
+
+    @OnClick({R.id.my_btn, R.id.my_icon, R.id.my_text})
+    protected void clickMyBtn() {
+        setViewPage(3);
+    }
+
+
+    /**
+     * 设置View的属性状态
+     *
+     * @param position
+     */
     private void setViewPage(int position) {
         mViewPager.setCurrentItem(position);
-        mAttendanceBtn.setActivated(position == 0);
-        mWorkCenterBtn.setActivated(position == 1);
-        mMessagesBtn.setActivated(position == 2);
-        mPersonalBtn.setActivated(position == 3);
+        ibAttendanceBtn.setEnabled(position != 0);
+        tvAttendanceBtn.setEnabled(position != 0);
+        ibWorkcenterBtn.setEnabled(position != 1);
+        tvWorkcenterBtn.setEnabled(position != 1);
+        ibMessageBtn.setEnabled(position != 2);
+        tvMessageBtn.setEnabled(position != 2);
+        ibMyBtn.setEnabled(position != 3);
+        tvMyBtn.setEnabled(position != 3);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
