@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray">
+    android:background="@color/background_white">
 
     <ImageView
         android:id="@+id/header_background"
@@ -13,13 +13,13 @@
         android:src="@mipmap/header_background_blue"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/personal_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@mipmap/header_background_white"
+        android:src ="@mipmap/header_background_white"
         app:layout_constraintBottom_toBottomOf="@id/header_background" />
 
 
@@ -97,7 +97,6 @@
             android:id="@id/my_real_item"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_53"
-            android:background="@color/background_white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp_16"
             android:paddingRight="@dimen/dp_16">

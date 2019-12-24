@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.DailyCheckActivity;
 import com.njxm.smart.activities.DailyCheckDetailActivity;
+import com.njxm.smart.activities.SearchActivity;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.TestAdapter;
 import com.ns.demo.R;
@@ -65,6 +66,9 @@ public class WorkCenterFragment extends BaseFragment {
                         break;
                     case "日常巡检详情":
                         startActivity(new Intent(getActivity(), DailyCheckDetailActivity.class));
+                        break;
+                    case "查找联系人":
+                        startActivity(new Intent(getActivity(), SearchActivity.class));
                         break;
                 }
             }
@@ -135,7 +139,7 @@ public class WorkCenterFragment extends BaseFragment {
         titles.add(new WorkCenterData("安全"));
         titles.add(new WorkCenterData(-1, "日常巡检"));
         titles.add(new WorkCenterData(-1, "日常巡检详情"));
-        titles.add(new WorkCenterData(-1, "安全3"));
+        titles.add(new WorkCenterData(-1, "查找联系人"));
         titles.add(new WorkCenterData(-1, "安全3"));
         titles.add(new WorkCenterData(-1, "安全3"));
         titles.add(new WorkCenterData(-1, "安全3"));

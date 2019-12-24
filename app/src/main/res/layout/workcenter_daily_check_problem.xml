@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <View style="@style/DividerStyle" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            style="@style/BaseTextViewStyle.Gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="项目"
+            android:textSize="14sp" />
+
+        <TextView
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="xxx" />
+    </RelativeLayout>
+
+    <View style="@style/DividerStyle" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            style="@style/BaseTextViewStyle.Gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="标段"
+            android:textSize="14sp" />
+
+        <TextView
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="ssss" />
+    </RelativeLayout>
+
+    <View style="@style/DividerStyle" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            style="@style/BaseTextViewStyle.Gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="分部分项"
+            android:textSize="14sp" />
+
+        <TextView
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="ssssssss" />
+    </RelativeLayout>
+
+    <View style="@style/DividerStyle" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            style="@style/BaseTextViewStyle.Gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="巡检区域"
+            android:textSize="14sp" />
+
+        <TextView
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="wwwww" />
+    </RelativeLayout>
+
+    <View
+        style="@style/DividerStyle"
+        android:layout_height="@dimen/dp_10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_53"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            style="@style/BaseTextViewStyle.Gray"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="巡检结果"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="有问题" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_42"
+            android:text="无问题" />
+
+
+        <TextView
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:text="xxx"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View
+        style="@style/DividerStyle"
+        android:layout_height="@dimen/dp_10" />
+
+
+</LinearLayout>

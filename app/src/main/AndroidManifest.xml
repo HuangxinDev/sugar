@@ -97,6 +97,10 @@
             android:name="com.njxm.smart.activities.DailyCheckDetailActivity"
             android:launchMode="singleTask" />
 
+        <activity
+            android:name="com.njxm.smart.activities.SearchActivity"
+            android:launchMode="singleTask" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"

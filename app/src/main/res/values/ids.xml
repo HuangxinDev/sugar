@@ -143,6 +143,11 @@
     <item name="task_time" type="id" />
     <item name="item_image" type="id" />
     <item name="item_text" type="id" />
+    <item name="new_add" type="id" />
+    <item name="search_edit" type="id" />
+    <item name="job" type="id" />
+    <item name="select_state" type="id" />
+    <item name="job_state" type="id" />
 
 
 </resources>

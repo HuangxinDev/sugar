@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/dp_15"
+    android:paddingEnd="@dimen/dp_15">
+
+    <ImageView
+        android:id="@id/user_head"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:src="@mipmap/mine_icon_user_head"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@id/job"
+        style="@style/BaseTextViewStyle.Gray.11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:text="普工"
+        app:layout_constraintBottom_toBottomOf="@id/user_head"
+        app:layout_constraintLeft_toRightOf="@id/user_head" />
+
+    <TextView
+        android:id="@id/user_name"
+        style="@style/BaseTextViewStyle.Black.14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_9"
+        android:text="郝建国"
+        app:layout_constraintBottom_toTopOf="@id/job"
+        app:layout_constraintLeft_toLeftOf="@id/job" />
+
+    <ImageButton
+        android:id="@id/job_state"
+        android:layout_width="@dimen/dp_19"
+        android:layout_height="@dimen/dp_19"
+        android:layout_marginStart="@dimen/dp_10"
+        android:background="@null"
+        android:src="@mipmap/icon_add"
+        app:layout_constraintBottom_toBottomOf="@id/job"
+        app:layout_constraintLeft_toRightOf="@id/job" />
+
+    <ImageButton
+        android:id="@id/select_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@mipmap/ic_select"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

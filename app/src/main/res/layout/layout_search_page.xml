@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <View style="@style/DividerStyle" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_13">
+
+        <EditText
+            android:id="@id/search_edit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_42"
+            android:background="@drawable/search_bar_bg"
+            android:hint="搜索"
+            android:paddingStart="@dimen/dp_38"
+            tools:ignore="RtlSymmetry" />
+
+        <ImageButton
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:background="@null"
+            android:src="@mipmap/certificate_search" />
+    </RelativeLayout>
+
+    <View style="@style/DividerStyle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/background_gray">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="90dp"
+            android:text="没有记录"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -90,5 +90,12 @@
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
+    <!--分割线-->
+    <style name="DividerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_1</item>
+        <item name="android:background">@color/divider_color_ffdedede</item>
+    </style>
+
 
 </resources>
