@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -92,19 +91,21 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         EventBus.getDefault().register(this);
 //        getWindow().setStatusBarColor(setStatusBarColor());
 //        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         View ll = findViewById(R.id.ll_root);
-        if (ll != null) {
-            ll.setPadding(0, getStatusBarHeight(this), 0, 0);
-        }
+//        if (ll != null) {
+//            ll.setPadding(0, getStatusBarHeight(this), 0, 0);
+//        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            View contentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-            if (contentView != null) {
-                contentView.setFitsSystemWindows(true);
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            View contentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+//            if (contentView != null) {
+//                contentView.setFitsSystemWindows(true);
+//            }
+//        }
         StatusBarUtil.setImmersiveStatusBar(this, true);
+        StatusBarUtil.setStatusBar(this, false, false);
     }
 
     @Override
