@@ -214,24 +214,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * @param pwdLogin 密码登录
      */
     private void switchLoginWay(boolean pwdLogin) {
+        mPasswordLoginBtn.setEnabled(!pwdLogin);
+        mQuickLoginBtn.setEnabled(pwdLogin);
+        mPasswordLoginDivider.setVisibility(pwdLogin ? View.VISIBLE : View.INVISIBLE);
+        mQuickLoginDivider.setVisibility(pwdLogin ? View.INVISIBLE : View.VISIBLE);
+        mLoginPwdEditText.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
+        mLoginNumberEditText.setVisibility(pwdLogin ? View.GONE : View.VISIBLE);
+        mForgetPwdBtn.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
         if (pwdLogin) {
-            mPasswordLoginBtn.setEnabled(false);
-            mQuickLoginBtn.setEnabled(true);
-            mPasswordLoginDivider.setVisibility(View.VISIBLE);
-            mQuickLoginDivider.setVisibility(View.INVISIBLE);
-            mLoginPwdEditText.setVisibility(View.VISIBLE);
-            mLoginNumberEditText.setVisibility(View.GONE);
             mLoginNumberEditText.clearText();
-            mForgetPwdBtn.setVisibility(View.VISIBLE);
         } else {
-            mPasswordLoginBtn.setEnabled(true);
-            mQuickLoginBtn.setEnabled(false);
-            mQuickLoginDivider.setVisibility(View.VISIBLE);
-            mPasswordLoginDivider.setVisibility(View.INVISIBLE);
-            mLoginPwdEditText.setVisibility(View.GONE);
-            mLoginNumberEditText.setVisibility(View.VISIBLE);
             mLoginPwdEditText.clearText();
-            mForgetPwdBtn.setVisibility(View.GONE);
         }
         HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null, this);
         mLoginQrEditText.clearText();
