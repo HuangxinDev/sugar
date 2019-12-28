@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,7 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
 
         int n = ta.getIndexCount();
 
-        int inputType = ta.getInt(R.styleable.AppEditText_inputType, -1);
+        int inputType = ta.getInt(R.styleable.AppEditText_inputType, InputType.TYPE_CLASS_TEXT);
         boolean toRightOfEdit = false;
         String editText = null;
         String rightText = ta.getString(R.styleable.AppEditText_rightText);

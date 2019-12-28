@@ -224,7 +224,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mForgetPwdBtn.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
         mLoginAccountEditText.getEditText().setHint(pwdLogin ? "输入用户名" : "请输入手机号或者身份证号");
         mLoginAccountEditText.getEditText().setInputType(pwdLogin ?
-                InputType.TYPE_TEXT_VARIATION_NORMAL: InputType.TYPE_CLASS_PHONE);
+                InputType.TYPE_CLASS_TEXT : InputType.TYPE_CLASS_PHONE);
         mLoginAccountEditText.clearText();
         if (pwdLogin) {
             mLoginNumberEditText.clearText();
