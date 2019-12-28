@@ -309,7 +309,7 @@ public class UserCertificateActivity extends BaseActivity {
         }
 
         Request request = new Request.Builder()
-                .url("http://119.3.136.127:7776/api/sys/userCertificate/insertCertificate")
+                .url(HttpUrlGlobal.URL_UPLOAD_CERTIFICATE_LIST)
                 .headers(HttpUtils.getPostHeaders())
                 .post(builder.build())
                 .build();

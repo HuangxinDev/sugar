@@ -19,6 +19,11 @@
         android:theme="@style/LaunchTheme"
         android:usesCleartextTraffic="true">
 
+        <!--百度SDK-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="vcUOBFK6QDsW9Yq4hfbnjd3KZiZp2Qea" />
+
         <activity
             android:name="com.njxm.smart.activities.HomeActivity"
             android:launchMode="singleTask">

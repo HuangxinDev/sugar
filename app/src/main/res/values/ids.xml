@@ -148,6 +148,7 @@
     <item name="job" type="id" />
     <item name="select_state" type="id" />
     <item name="job_state" type="id" />
+    <item name="webview_kit" type="id" />
 
 
 </resources>

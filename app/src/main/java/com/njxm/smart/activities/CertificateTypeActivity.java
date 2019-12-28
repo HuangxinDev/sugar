@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
+import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.CertificateParentBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ns.demo.R;
@@ -86,13 +87,13 @@ public class CertificateTypeActivity extends BaseActivity {
             }
         });
         HttpUtils.getInstance().postData(100,
-                HttpUtils.getJsonRequest("http://119.3.136.127:7776/api/sys/userCertificate/findTypePage", null), this);
+                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST, null), this);
     }
 
     @OnClick(R.id.allType)
     protected void requestAllType() {
         HttpUtils.getInstance().postData(100,
-                HttpUtils.getJsonRequest("http://119.3.136.127:7776/api/sys/userCertificate/findTypePage", null), this);
+                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST, null), this);
         removeViewAfterClickView(tvAllType);
     }
 
@@ -176,8 +177,7 @@ public class CertificateTypeActivity extends BaseActivity {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sctName", etSearchContent.getText().toString());
         HttpUtils.getInstance().postData(100,
-                HttpUtils.getJsonRequest("http://119.3.136.127:7776/api/sys/userCertificate" +
-                        "/findTypePage", hashMap), this);
+                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST, hashMap), this);
     }
 
 

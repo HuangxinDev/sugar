@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.TextView;
 
@@ -136,8 +137,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 urlParams.put("code", password);
             }
 
-            if (StringUtils.isEmpty(username) || !username.matches("1[0-9]{10}")) {
-                showToast("手机号不符");
+            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
+                showToast("账户不符和条件");
                 return;
             }
 
@@ -221,6 +222,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mLoginPwdEditText.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
         mLoginNumberEditText.setVisibility(pwdLogin ? View.GONE : View.VISIBLE);
         mForgetPwdBtn.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
+        mLoginAccountEditText.getEditText().setHint(pwdLogin ? "输入用户名" : "请输入手机号或者身份证号");
+        mLoginAccountEditText.getEditText().setInputType(pwdLogin ?
+                InputType.TYPE_TEXT_VARIATION_NORMAL: InputType.TYPE_CLASS_PHONE);
+        mLoginAccountEditText.clearText();
         if (pwdLogin) {
             mLoginNumberEditText.clearText();
         } else {
@@ -250,6 +255,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 });
             }
         } else if (requestId == HttpUtils.REQUEST_LOGIN) {
+
+            SPUtils.putValue("login_message", data);
             SPUtils.putValue(KeyConstant.KEY_USER_ID, dataObject.getString(KeyConstant.KEY_USER_ID));
             SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, dataObject.getString(KeyConstant.KEY_USER_TOKEN));
             SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, dataObject.getString(KeyConstant.KEY_USER_ACCOUNT));

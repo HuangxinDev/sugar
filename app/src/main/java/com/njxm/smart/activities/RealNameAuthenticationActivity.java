@@ -125,7 +125,7 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
                         sparseArray.get(2)))
                 .build();
 
-        Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/personVerify")
+        Request request = new Request.Builder().url(HttpUrlGlobal.URL_USER_REAL_Authentication)
                 .header("Platform", "APP")
                 .header("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE)
                 .header("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))

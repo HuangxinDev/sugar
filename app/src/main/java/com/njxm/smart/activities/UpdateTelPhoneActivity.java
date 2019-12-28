@@ -289,8 +289,13 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
 
     public SpannableString getPhonePop() {
         String string = "* 更换手机号后，下次登录可使用新手机号登录\n当前手机号";
+        String telPhone = SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE);
+        if (StringUtils.isEmpty(telPhone) || !telPhone.matches("1[0-9]{10}")) {
+            return new SpannableString("手机号不存在");
+        }
+
         String phone =
-                new StringBuffer(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE)).replace(3, 7, "****").toString();
+                new StringBuffer(telPhone).replace(3, 7, "****").toString();
 
         int len1 = string.length();
         int len2 = len1 + phone.length();

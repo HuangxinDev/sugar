@@ -19,6 +19,31 @@ android {
         resValue("string", "app_version", "当前版本" + versionName)
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("../android/debug.keystore")
+            storePassword "123456"
+            keyAlias "alias"
+            keyPassword "123456"
+        }
+
+        release {
+
+        }
+    }
+
+    flavorDimensions("dev")
+    productFlavors {
+
+        dev {
+            dimension "dev"
+        }
+
+        publish {
+            dimension "dev"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -54,6 +79,9 @@ dependencies {
     // 图片框架
 
     // 内存泄露框架
+
+
+    implementation 'com.github.wendux:DSBridge-Android:3.0-SNAPSHOT'
 }
 repositories {
     mavenCentral()

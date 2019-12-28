@@ -1,9 +1,0 @@
-登录接口
-Request request =
-        new Request.Builder().url("http://119.3.136.127:7777/auth/mobile/login?mobile" +
-                "=13951320937&code=807427").header("Platform", "APP")
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .build();
-
-图形验证码接口
-Request request = new Request.Builder().url("http://119.3.136.127:7777/auth/kaptcha/get").build();

@@ -141,7 +141,7 @@ public class UserAddressActivity extends BaseActivity {
         RequestBody requestBody =
                 FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE), object.toJSONString());
 
-        Request request = new Request.Builder().url("http://119.3.136.127:7776/api/sys/user/updateAddress")
+        Request request = new Request.Builder().url(HttpUrlGlobal.URL_UPLOAD_USER_ADDRESS)
                 .addHeader("Platform", "APP")
                 .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
                 .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
