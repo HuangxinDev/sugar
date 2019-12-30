@@ -197,33 +197,31 @@ public final class HttpUtils {
 
         @Override
         public void onResponse(Call call, Response response) throws IOException {
-            String result = response.body().string();
-            JSONObject resultObj = JSONObject.parseObject(result);
-            boolean success = resultObj.getBoolean("success");
-
-            if (httpCallBack == null) {
-                return;
-            }
-
-            int code = 0;
             try {
+                String result = response.body().string();
+                JSONObject resultObj = JSONObject.parseObject(result);
+                boolean success = resultObj.getBoolean("success");
+
+                if (httpCallBack == null) {
+                    return;
+                }
+                int code = 0;
                 code = resultObj.getInteger("code");
+                LogTool.printD("url: %s, code: %s, content: %s", call.request().url(), code,
+                        resultObj.getString((code == 200) ? "data" : "message"));
+                if (success && code == 200) {
+                    String data = resultObj.getString("data");
+                    if (data.equals("[]") || data.equals("null")) {
+                        data = "{}";
+                    }
+                    httpCallBack.onSuccess(requestId, true, 200, data);
+                } else if (code == 401 || code == 999) {
+                    EventBus.getDefault().post(new LogoutEvent());
+                } else {
+                    httpCallBack.onFailed(resultObj.getString("message"));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-            LogTool.printD("url: %s, code: %s, content: %s", call.request().url(), code,
-                    resultObj.getString((code == 200) ? "data" : "message"));
-
-            if (success && code == 200) {
-                String data = resultObj.getString("data");
-                if (data.equals("[]") || data.equals("null")) {
-                    data = "{}";
-                }
-                httpCallBack.onSuccess(requestId, true, 200, data);
-            } else if (code == 401 || code == 999) {
-                EventBus.getDefault().post(new LogoutEvent());
-            } else {
-                httpCallBack.onFailed(resultObj.getString("message"));
             }
         }
     }

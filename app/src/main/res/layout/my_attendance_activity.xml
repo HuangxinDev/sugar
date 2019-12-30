@@ -6,9 +6,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <wendu.dsbridge.DWebView xmlns:android="http://schemas.android.com/apk/res/android"
+    <wendu.dsbridge.DWebView
         android:id="@id/webview_kit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="match_parent" />
 </LinearLayout>
+
+
+    <!--<wendu.dsbridge.DWebView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:id="@id/webview_kit"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->

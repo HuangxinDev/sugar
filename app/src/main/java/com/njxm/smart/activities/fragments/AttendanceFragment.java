@@ -1,18 +1,35 @@
 package com.njxm.smart.activities.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.bumptech.glide.Glide;
 import com.njxm.smart.GlobalConst;
 import com.njxm.smart.SmartCloudApplication;
 import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.js.JsApi;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.LogTool;
+import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
+
+import java.io.File;
+import java.util.UUID;
 
 import wendu.dsbridge.DWebView;
 
@@ -21,9 +38,7 @@ import wendu.dsbridge.DWebView;
  */
 public class AttendanceFragment extends BaseFragment {
 
-
     private DWebView mWebView;
-    private LinearLayout llRootView;
     private JsApi mJsApi;
 
     @Override
@@ -34,9 +49,28 @@ public class AttendanceFragment extends BaseFragment {
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     @Override
     protected void setUpView() {
-        llRootView = getContentView().findViewById(R.id.ll_root);
+        LinearLayout llRootView = getContentView().findViewById(R.id.ll_root);
         mWebView = getContentView().findViewById(R.id.webview_kit);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        DWebView.setWebContentsDebuggingEnabled(true);
+//        WebSettings webSettings = mWebView.getSettings();
+//        webSettings.setJavaScriptEnabled(true);
+
+//        webSettings.setDisplayZoomControls(false);
+//        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        mWebView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//                LogTool.printE("WebView request failed : %s", url);
+//            }
+//
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                super.onPageStarted(view, url, favicon);
+//                LogTool.printD("WebView request start url : %s", url);
+//            }
+//        });
 
         if (getActivity() instanceof BaseActivity) {
             llRootView.setPadding(0,
@@ -47,17 +81,82 @@ public class AttendanceFragment extends BaseFragment {
     @Override
     protected void setUpData() {
         mJsApi = new JsApi(getActivity(), mWebView);
-        mWebView.addJavascriptObject(mJsApi, null);
+
+        mJsApi.setTakePhoto(new JsApi.OnTakePhoto() {
+            @Override
+            public void requestImage() {
+                takePhoto(999);
+            }
+        });
+
         mWebView.loadUrl("http://" + GlobalConst.URL_BIZ_PREFIX + "/#/attendance/sign");
+
         initLocationOption();
+    }
+
+    private File photoFile;
+
+    public void takePhoto(int requestId) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri = FileProvider.getUriForFile(SmartCloudApplication.getApplication(),
+                    BuildConfig.APPLICATION_ID +
+                            ".fileProvider", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        } else {
+            Uri uri = Uri.fromFile(photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        }
+        getActivity().startActivityForResult(intent, requestId);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 999 && resultCode == Activity.RESULT_OK) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (getActivity() == null) {
+                        return;
+                    }
+                    try {
+                        Bitmap bitmap =
+                                Glide.with(getActivity()).asBitmap().load(photoFile).submit(200,
+                                        200).get();
+                        mJsApi.uploadImage(BitmapUtils.bitmap2Bytes(bitmap));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        invoke(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "图片处理异常", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }).start();
+        }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+//        mWebView.addJavascriptObject(mJsApi, "jsintenface");
+        if (!isLintener) {
+            mWebView.addJavascriptObject(mJsApi, null);
+            isLintener = true;
+        }
     }
 
-    private void initLocationOption() {
+    private boolean isLintener = false;
+
+    public static void initLocationOption() {
         LocationClient locationClient = new LocationClient(SmartCloudApplication.getApplication());
         LocationClientOption locationOption = new LocationClientOption();
         //注册监听函数
@@ -98,7 +197,22 @@ public class AttendanceFragment extends BaseFragment {
         locationClient.start();
     }
 
-    private class MyLocationListener extends BDAbstractLocationListener {
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (isLintener) {
+            mWebView.removeJavascriptObject(null);
+            isLintener = false;
+        }
+    }
+
+    private static class MyLocationListener extends BDAbstractLocationListener {
 
         @Override
         public void onReceiveLocation(BDLocation location) {

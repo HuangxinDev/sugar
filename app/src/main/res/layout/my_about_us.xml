@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
+    android:background="@color/background_white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -11,12 +11,12 @@
         android:id="@id/action_bar"
         layout="@layout/layout_action_bar" />
 
+    <View style="@style/DividerStyle" />
 
     <LinearLayout
         android:id="@+id/app_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -58,11 +58,14 @@
             app:layout_constraintTop_toBottomOf="@id/app_name" />
     </LinearLayout>
 
+    <View
+        style="@style/DividerStyle"
+        android:layout_height="@dimen/dp_10" />
+
     <RelativeLayout
         android:id="@id/about_us_service"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_10"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -81,11 +84,12 @@
             android:src="@mipmap/arrow_detail" />
     </RelativeLayout>
 
+    <View style="@style/DividerStyle" />
+
     <RelativeLayout
         android:id="@id/about_us_version"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -105,12 +109,12 @@
 
     </RelativeLayout>
 
+    <View style="@style/DividerStyle" />
 
     <RelativeLayout
         android:id="@id/about_us_secret"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -131,11 +135,14 @@
     </RelativeLayout>
 
 
+    <View
+        style="@style/DividerStyle"
+        android:layout_height="@dimen/dp_10" />
+
     <RelativeLayout
         android:id="@id/about_us_feature"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_10"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -152,6 +159,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:src="@mipmap/arrow_detail" />
-
     </RelativeLayout>
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/background_gray" />
 </LinearLayout>

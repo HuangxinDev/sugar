@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
+    android:background="@color/background_white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -10,11 +10,12 @@
         android:id="@id/action_bar"
         layout="@layout/layout_action_bar" />
 
+    <View style="@style/DividerStyle" />
+
     <RelativeLayout
         android:id="@id/settings_reset_pwd"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -33,11 +34,12 @@
             android:src="@mipmap/arrow_detail" />
     </RelativeLayout>
 
+    <View style="@style/DividerStyle" />
+
     <RelativeLayout
         android:id="@id/settings_update_phone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -56,12 +58,11 @@
             android:src="@mipmap/arrow_detail" />
     </RelativeLayout>
 
-
+    <View style="@style/DividerStyle" />
     <LinearLayout
         android:id="@id/settings_check_update"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -89,12 +90,11 @@
             android:src="@mipmap/arrow_detail" />
     </LinearLayout>
 
-
+    <View style="@style/DividerStyle" />
     <RelativeLayout
         android:id="@id/settings_clean_cache"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_1"
         android:background="@color/background_white"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
@@ -113,13 +113,23 @@
             android:src="@mipmap/arrow_detail" />
     </RelativeLayout>
 
+    <View
+        style="@style/DividerStyle"
+        android:layout_height="@dimen/dp_10" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@id/login_exit"
         style="@style/BaseTextViewStyle.Black.14"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="@dimen/dp_10"
         android:background="@color/background_white"
         android:text="退出登录" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/background_gray" />
+
 
 </LinearLayout>

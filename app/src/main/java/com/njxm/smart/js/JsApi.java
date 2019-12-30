@@ -2,16 +2,15 @@ package com.njxm.smart.js;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.webkit.JavascriptInterface;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
-import com.ns.demo.R;
 
 import java.util.Calendar;
 
@@ -24,6 +23,16 @@ public class JsApi {
     private Activity activity;
 
     private DWebView mDWebView;
+
+    public interface OnTakePhoto {
+        void requestImage();
+    }
+
+    private OnTakePhoto onTakePhoto;
+
+    public void setTakePhoto(OnTakePhoto takePhoto) {
+        this.onTakePhoto = takePhoto;
+    }
 
     public JsApi(Activity activity, DWebView webView) {
         this.activity = activity;
@@ -50,6 +59,7 @@ public class JsApi {
      */
     @JavascriptInterface
     public void checkTimestamp(Object time) {
+
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTimeInMillis(Long.parseLong((String) time));
@@ -80,7 +90,9 @@ public class JsApi {
 
     @JavascriptInterface
     public void checkImage(Object object) {
-        uploadImage(object);
+        if (onTakePhoto != null) {
+            onTakePhoto.requestImage();
+        }
     }
 
     @JavascriptInterface
@@ -92,8 +104,17 @@ public class JsApi {
         mDWebView.callHandler("h5DatePicker", new Object[]{time});
     }
 
-    private void uploadImage(Object object) {
-        Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.ic_launcher);
-        mDWebView.callHandler("h5Photos", new Object[]{BitmapUtils.bitmap2Bytes(bitmap)});
+    public void uploadImage(byte[] bytes) {
+        String bitmapStr = Base64.encodeToString(bytes, Base64.DEFAULT);
+        mDWebView.callHandler("h5Photos", new Object[]{bitmapStr});
+        if (activity instanceof BaseActivity) {
+            ((BaseActivity) activity).invoke(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, "图片大小: " + bitmapStr.length(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 }
