@@ -17,6 +17,12 @@ import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.ButterKnife;
+
 // 类似于android support v4包下的Fragment
 
 /**
@@ -42,6 +48,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable, Htt
             return mContentView;
         }
         mContentView = inflater.inflate(setLayoutResourceID(), container, false);
+        ButterKnife.bind(this, mContentView);
         mContext = getContext();
         init();
         setUpView();
@@ -86,6 +93,18 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable, Htt
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     public void invoke(Runnable runnable) {
         if (AppUtils.isMainThread()) {
             runnable.run();
@@ -106,5 +125,10 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable, Htt
         if (getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).onFailed(errMsg);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(String msg) {
+
     }
 }

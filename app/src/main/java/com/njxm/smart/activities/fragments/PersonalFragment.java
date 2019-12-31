@@ -16,6 +16,7 @@ import com.njxm.smart.activities.PersonalInformationActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.activities.UserCertificateActivity;
+import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
@@ -25,6 +26,10 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -87,10 +92,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         requestUserBaseNews();
-        requestUserDetailNews();
+//        requestUserDetailNews();
+        EventBus.getDefault().post(new RequestEvent());
     }
 
-    private void requestUserDetailNews() {
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    private void requestUserDetailNews(RequestEvent event) {
         JSONObject object1 = new JSONObject();
         object1.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         RequestBody formBody1 = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
@@ -173,7 +180,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             SPUtils.putValue(KeyConstant.KEY_USER_HEAD_ICON, bean.getIcon());
             SPUtils.putValue(KeyConstant.KEY_USER_FACE_URL, bean.getFaceUrl());
         }
-        initData(bean);
+        EventBus.getDefault().post(bean);
     }
 
     @Override
@@ -181,24 +188,21 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     private void initData(final UserBean bean) {
-        invoke(new Runnable() {
-            public void run() {
-                mUserNewsBtn.setText(bean.getUserName());
-                int medicalStatus =
-                        Integer.parseInt(SPUtils.getValue(KeyConstant.KEY_MEDICAL_STATUS, "0"));
+        mUserNewsBtn.setText(bean.getUserName());
+        int medicalStatus =
+                Integer.parseInt(SPUtils.getValue(KeyConstant.KEY_MEDICAL_STATUS, "0"));
 
-                mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
-                        View.VISIBLE : View.GONE);
+        mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
+                View.VISIBLE : View.GONE);
 
-                if (getActivity() != null && StringUtils.isNotEmpty(bean.getIcon())) {
-                    Glide.with(getActivity())
-                            .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
-                            .apply(new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.mipmap.mine_icon_user_head))
-                            .into(ivUserHead);
-                }
-            }
-        });
+        if (getActivity() != null && StringUtils.isNotEmpty(bean.getIcon())) {
+            Glide.with(getActivity())
+                    .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                    .apply(new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.mipmap.mine_icon_user_head))
+                    .into(ivUserHead);
+        }
     }
 
 }

@@ -31,6 +31,7 @@ import com.ns.demo.R;
 import java.io.File;
 import java.util.UUID;
 
+import butterknife.BindView;
 import wendu.dsbridge.DWebView;
 
 /**
@@ -38,7 +39,9 @@ import wendu.dsbridge.DWebView;
  */
 public class AttendanceFragment extends BaseFragment {
 
-    private DWebView mWebView;
+    @BindView(R.id.webview_kit)
+    protected DWebView mWebView;
+
     private JsApi mJsApi;
 
     @Override
@@ -50,7 +53,7 @@ public class AttendanceFragment extends BaseFragment {
     @Override
     protected void setUpView() {
         LinearLayout llRootView = getContentView().findViewById(R.id.ll_root);
-        mWebView = getContentView().findViewById(R.id.webview_kit);
+//        mWebView = getContentView().findViewById(R.id.webview_kit);
         mWebView.getSettings().setJavaScriptEnabled(true);
         DWebView.setWebContentsDebuggingEnabled(true);
 //        WebSettings webSettings = mWebView.getSettings();
@@ -89,7 +92,7 @@ public class AttendanceFragment extends BaseFragment {
             }
         });
 
-        mWebView.loadUrl("http://" + GlobalConst.URL_BIZ_PREFIX + "/#/attendance/sign");
+        mWebView.loadUrl("http://" + GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
 
         initLocationOption();
     }

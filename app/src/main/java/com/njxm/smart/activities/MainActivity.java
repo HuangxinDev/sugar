@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.fragments.AttendanceFragment;
 import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
@@ -34,6 +35,7 @@ import butterknife.OnClick;
 /**
  * 主页
  */
+@Route(path = "/app/main")
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     // ViewPager
@@ -188,7 +190,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        setViewPage(0);
+//        setViewPage(0);
+        setViewPage(intent.getIntExtra("index", 3));
     }
 
 }

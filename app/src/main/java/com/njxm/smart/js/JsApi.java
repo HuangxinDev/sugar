@@ -95,13 +95,8 @@ public class JsApi {
         }
     }
 
-    @JavascriptInterface
-    public String testAsyn(Object msg) {
-        return "dhsdjaj";
-    }
-
     private void uploadTime(String time) {
-        mDWebView.callHandler("h5DatePicker", new Object[]{time});
+        mDWebView.callHandler("h5DateTimePicker", new Object[]{time});
     }
 
     public void uploadImage(byte[] bytes) {

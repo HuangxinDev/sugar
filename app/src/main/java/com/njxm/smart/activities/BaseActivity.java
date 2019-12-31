@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider;
 
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.tools.network.HttpCallBack;
@@ -88,7 +89,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         PermissionManager.requestPermission(this, 100, PermissionManager.sRequestPermissions);
         setContentView(setContentLayoutId());
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
 //        getWindow().setStatusBarColor(setStatusBarColor());
 //        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -109,9 +109,27 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showToast(ToastEvent event) {
+        Toast toast = Toast.makeText(BaseActivity.this, event.toastMsg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
     /**
@@ -244,17 +262,13 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      * @param objects
      */
     protected void showToast(String format, Object... objects) {
+
+
         final String toastMsg = (format == null) ? "null" :
                 ((objects != null && objects.length != 0) ?
                         String.format(Locale.US, format, objects) : format);
-        invoke(new Runnable() {
-            @Override
-            public void run() {
-                Toast toast = Toast.makeText(BaseActivity.this, toastMsg, Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            }
-        });
+
+        EventBus.getDefault().post(new ToastEvent(toastMsg));
     }
 
     @Override

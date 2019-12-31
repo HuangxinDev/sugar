@@ -133,7 +133,8 @@ public final class HttpUrlGlobal {
      * 上传证书
      */
     public static final String URL_UPLOAD_CERTIFICATE_LIST =
-            URL_PROTOCOL + GlobalConst.URL_BIZ_PREFIX + "api/sys/userCertificate/insertCertificate";
+            URL_PROTOCOL + GlobalConst.URL_BIZ_PREFIX + "/api/sys/userCertificate" +
+                    "/insertCertificate";
 
 
     /**

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
@@ -19,6 +20,8 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -166,16 +169,12 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     public void onSuccess(int requestId, final boolean success, int code, final String data) {
         super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_USER_HEAD) {
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    if (success) {
-                        showToast("头像上传成功");
-                    } else {
-                        showToast(data);
-                    }
-                }
-            });
+            if (success) {
+                showToast("头像上传成功");
+                EventBus.getDefault().post(new RequestEvent());
+            } else {
+                showToast(data);
+            }
         }
     }
 

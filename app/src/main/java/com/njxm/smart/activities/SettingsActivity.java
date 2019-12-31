@@ -124,6 +124,7 @@ public class SettingsActivity extends BaseActivity {
             public void onSuccess(int requestId, boolean success, int code, String data) {
                 if (success) {
                     showToast("登出成功");
+
                     EventBus.getDefault().post(new LogoutEvent());
                 }
             }

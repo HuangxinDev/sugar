@@ -2,6 +2,9 @@ package com.njxm.smart.tools.network;
 
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.LogTool;
@@ -76,6 +79,25 @@ public final class HttpUtils {
      */
     public OkHttpClient getOkHttpClient() {
         return sOkHttpClient;
+    }
+
+
+    public void request(RequestEvent requestEvent) {
+        Request request = new Request.Builder()
+                .url(requestEvent.url)
+                .headers(getPostHeaders())
+                .build();
+        sOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+            }
+        });
     }
 
 
@@ -190,9 +212,7 @@ public final class HttpUtils {
         @Override
         public void onFailure(Call call, IOException e) {
             LogTool.printE("url: %s, exception: %s", call.request().url(), e.getMessage());
-            if (httpCallBack != null) {
-                httpCallBack.onFailed("网络异常,稍后再试");
-            }
+            EventBus.getDefault().post(new ToastEvent("网络异常,稍后再试"));
         }
 
         @Override
@@ -205,6 +225,7 @@ public final class HttpUtils {
                 if (httpCallBack == null) {
                     return;
                 }
+
                 int code = 0;
                 code = resultObj.getInteger("code");
                 LogTool.printD("url: %s, code: %s, content: %s", call.request().url(), code,
@@ -214,6 +235,7 @@ public final class HttpUtils {
                     if (data.equals("[]") || data.equals("null")) {
                         data = "{}";
                     }
+                    EventBus.getDefault().post(new ResponseEvent(success, code, data));
                     httpCallBack.onSuccess(requestId, true, 200, data);
                 } else if (code == 401 || code == 999) {
                     EventBus.getDefault().post(new LogoutEvent());
@@ -222,6 +244,7 @@ public final class HttpUtils {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                EventBus.getDefault().post(new ToastEvent("数据解析异常"));
             }
         }
     }

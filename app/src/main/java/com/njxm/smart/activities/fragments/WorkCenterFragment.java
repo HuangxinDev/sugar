@@ -2,22 +2,38 @@ package com.njxm.smart.activities.fragments;
 
 import android.content.Intent;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.activities.DailyCheckActivity;
 import com.njxm.smart.activities.DailyCheckDetailActivity;
 import com.njxm.smart.activities.SearchActivity;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.TestAdapter;
+import com.njxm.smart.model.jsonbean.WorkCenterItemBean;
+import com.njxm.smart.tools.network.HttpUtils;
 import com.ns.demo.R;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * 工作中心Fragment
@@ -25,8 +41,15 @@ import java.util.List;
 public class WorkCenterFragment extends BaseFragment {
 
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view)
+    protected RecyclerView mRecyclerView;
+
+    @BindView(R.id.suggestion_box)
+    protected AppCompatTextView mSuggestionBox;
+
     private TestAdapter mAdapter;
+
+    private List<WorkCenterItemBean> mWorkCenterItemBeans;
 
     @Override
     protected int setLayoutResourceID() {
@@ -36,175 +59,92 @@ public class WorkCenterFragment extends BaseFragment {
     @Override
     protected void init() {
         super.init();
-        mRecyclerView = getContentView().findViewById(R.id.recycler_view);
-    }
 
-    @Override
-    protected void setUpView() {
-        AppCompatTextView appCompatTextView = getContentView().findViewById(R.id.suggestion_box);
-        appCompatTextView.setOnClickListener(new OnClickListener() {
+        OkHttpClient client = HttpUtils.getInstance().getOkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://119.3.136.127:7776/api/sys/user/findResourceList")
+                .headers(HttpUtils.getPostHeaders())
+                .post(new FormBody.Builder().build())
+                .build();
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SuggestionsActivity.class));
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                JSONObject object = JSON.parseObject(response.body().string());
+                mWorkCenterItemBeans = JSONObject.parseArray(object.getString("data"), WorkCenterItemBean.class);
+                for (int i = mWorkCenterItemBeans.size() - 1; i >= 0; i--) {
+                    if (mWorkCenterItemBeans.get(i).getChildren() != null) {
+                        mWorkCenterItemBeans.addAll(i + 1,
+                                mWorkCenterItemBeans.get(i).getChildren());
+                    }
+                }
+                EventBus.getDefault().post(mWorkCenterItemBeans);
+//                refreshUI(mWorkCenterItemBeans);
             }
         });
 
     }
 
     @Override
+    protected void setUpView() {
+    }
+
+    @Override
     protected void setUpData() {
-        mAdapter = new TestAdapter(getDatas());
+        mAdapter = new TestAdapter(getActivity(), null);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4,
                 GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            WorkCenterData workCenterData = ((WorkCenterData) adapter.getItem(position));
-            if (workCenterData.getItemType() == WorkCenterData.ITEM_TYPE_CONTENT) {
-                switch (workCenterData.getIconText()) {
-                    case "日常巡检":
-                        startActivity(new Intent(getActivity(), DailyCheckActivity.class));
-                        break;
-                    case "日常巡检详情":
-                        startActivity(new Intent(getActivity(), DailyCheckDetailActivity.class));
-                        break;
-                    case "查找联系人":
-                        startActivity(new Intent(getActivity(), SearchActivity.class));
-                        break;
-                }
+            if (adapter.getItemViewType(position) == WorkCenterItemBean.ITEM_TITLE_TYPE) {
+                throw new NullPointerException("异常指针");
             }
+            WorkCenterItemBean workCenterData = (WorkCenterItemBean) adapter.getItem(position);
+            switch (workCenterData.getName()) {
+                case "日常巡检":
+
+                    startActivity(new Intent(getActivity(), DailyCheckActivity.class));
+                    break;
+                case "日常巡检详情":
+                    startActivity(new Intent(getActivity(), DailyCheckDetailActivity.class));
+                    break;
+                case "查找联系人":
+                    startActivity(new Intent(getActivity(), SearchActivity.class));
+                    break;
+                case "考勤":
+                    ARouter.getInstance().build("/app/main").withInt("index", 0).navigation();
+                    break;
+            }
+
+
 
         });
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public static class WorkCenterData implements MultiItemEntity {
+    @OnClick({R.id.suggestion_box})
+    protected void onClickEvent(View view) {
+        switch (view.getId()) {
+            case R.id.suggestion_box:
+                startActivity(new Intent(getActivity(), SuggestionsActivity.class));
+                break;
+            default:
 
-        public static final int ITEM_TYPE_TITLE = 100;
-        public static final int ITEM_TYPE_CONTENT = 101;
-
-        private int itemType;
-
-        private String title;
-        private int iconRes = 0;
-        private String iconText;
-
-        /**
-         * 设置ITEM_TYPE_TITLE类型数据
-         *
-         * @param title 大标题名字
-         */
-        public WorkCenterData(String title) {
-            this.itemType = ITEM_TYPE_TITLE;
-            this.title = title;
-        }
-
-        /**
-         * 设置子标题
-         *
-         * @param iconRes
-         * @param iconText
-         */
-        public WorkCenterData(int iconRes, String iconText) {
-            this.itemType = ITEM_TYPE_CONTENT;
-            this.iconRes = iconRes;
-            this.iconText = iconText;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public int getIconRes() {
-            return iconRes;
-        }
-
-        public String getIconText() {
-            return iconText;
-        }
-
-        @Override
-        public int getItemType() {
-            return itemType;
         }
     }
 
-    private List<WorkCenterData> getDatas() {
-        List<WorkCenterData> titles = new ArrayList<>();
-        titles.add(new WorkCenterData("内外勤管理"));
-        titles.add(new WorkCenterData(-1, "考勤1"));
-        titles.add(new WorkCenterData(-1, "考勤2"));
-        titles.add(new WorkCenterData(-1, "考勤3"));
-        titles.add(new WorkCenterData(-1, "考勤4"));
-        titles.add(new WorkCenterData(-1, "考勤5"));
-        titles.add(new WorkCenterData("安全"));
-        titles.add(new WorkCenterData(-1, "日常巡检"));
-        titles.add(new WorkCenterData(-1, "日常巡检详情"));
-        titles.add(new WorkCenterData(-1, "查找联系人"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全3"));
-        titles.add(new WorkCenterData(-1, "安全4"));
-        titles.add(new WorkCenterData(-1, "安全5"));
-        titles.add(new WorkCenterData("质量"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量1"));
-        titles.add(new WorkCenterData(-1, "质量2"));
-        return titles;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshUI(List<WorkCenterItemBean> datas) {
+//        invoke(new Runnable() {
+//            @Override
+//            public void run() {
+        mAdapter.setNewData(datas);
+//            }
+//        });
+
     }
 }
