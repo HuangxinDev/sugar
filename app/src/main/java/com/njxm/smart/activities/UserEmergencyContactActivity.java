@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -18,6 +20,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+@Route(path = GlobalRouter.USER_EMERGENCY_CONTACT)
 public class UserEmergencyContactActivity extends BaseActivity {
 
     private AppCompatEditText etUserName;

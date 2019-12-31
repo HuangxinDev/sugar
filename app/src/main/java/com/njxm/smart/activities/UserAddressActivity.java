@@ -10,9 +10,11 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleTextAdapter;
+import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.AddressBean;
@@ -31,6 +33,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+@Route(path = GlobalRouter.USER_ADDRESS)
 public class UserAddressActivity extends BaseActivity {
 
     private AppCompatTextView tvUserAddress;

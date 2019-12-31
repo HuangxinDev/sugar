@@ -6,11 +6,11 @@ public class UserBean {
     String infoUrl;
 
     String address;
-    String city;
+    String city = "";
     String cityCode;
     String contact;
     String contactPhone;
-    String district;
+    String district = "";
     String districtCode;
     String education;
     String educationType;
@@ -19,11 +19,18 @@ public class UserBean {
     String icon;
     String id;
     String phone;
-    String province;
+    String province = "";
     String provinceCode;
     String realStatus; //实名制状态0未实名制 1实名制
     String userName;
     String medicalStatus; //体检报告状态 0否 1未审批 2已上传 3审批未通过
+
+    String companyName;
+
+    String deptName;
+
+    String teamName;
+
 
     public String getAllAddress() {
         return province + city + district;
@@ -191,6 +198,30 @@ public class UserBean {
 
     public void setMedicalStatus(String medicalStatus) {
         this.medicalStatus = medicalStatus;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
 

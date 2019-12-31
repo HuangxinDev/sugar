@@ -7,10 +7,13 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
+@Route(path = GlobalRouter.USER_PHONE)
 public class UserPhoneActivity extends BaseActivity {
 
     private TextView tvUserPhone;

@@ -9,11 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -21,8 +23,11 @@ import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
-import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -33,22 +38,56 @@ import okhttp3.RequestBody;
  */
 public class PersonalInformationActivity extends BaseActivity implements HttpCallBack {
 
-    private View mUserBaseNews;
-    private ImageView mUserNewsImage;
-    private View mUserBaseDetailNews;
+    @BindView(R.id.news_user_base_new)
+    protected View mUserBaseNews;
 
-    private CircleImageView ivUserHead;
-    private TextView tvUserName;
-    private TextView tvUserPhone;
-    private TextView tvUserAddress;
-    private TextView tvUserEducation;
-    private TextView tvUsereEmergencyContact;
+    @BindView(R.id.news_user_base_new_detail)
+    protected ImageView mUserNewsImage;
 
-    private LinearLayout llUserPhone;
-    private LinearLayout llUserInputFace;
-    private LinearLayout llUserEducation;
-    private LinearLayout llUserAddress;
-    private LinearLayout llUserEmergencyContact;
+    @BindView(R.id.news_user_base_new_sub)
+    protected View mUserBaseDetailNews;
+
+    @BindView(R.id.news_user_head)
+    protected CircleImageView ivUserHead;
+
+    @BindView(R.id.news_user_name)
+    protected TextView tvUserName;
+
+    @BindView(R.id.news_user_phone)
+    protected TextView tvUserPhone;
+
+    @BindView(R.id.news_user_address)
+    protected TextView tvUserAddress;
+
+    @BindView(R.id.news_user_education)
+    protected TextView tvUserEducation;
+
+    @BindView(R.id.news_user_emergency_contact)
+    protected TextView tvUsereEmergencyContact;
+
+    @BindView(R.id.news_user_phone_ll)
+    protected LinearLayout llUserPhone;
+
+    @BindView(R.id.news_user_input_face_ll)
+    protected LinearLayout llUserInputFace;
+
+    @BindView(R.id.news_user_education_item)
+    protected LinearLayout llUserEducation;
+
+    @BindView(R.id.news_user_address_item)
+    protected LinearLayout llUserAddress;
+
+    @BindView(R.id.news_user_emergency_contact_item)
+    protected LinearLayout llUserEmergencyContact;
+
+    @BindView(R.id.user_company_name)
+    protected TextView tvUserCompanyName;
+
+    @BindView(R.id.user_department_name)
+    protected TextView tvUserDepartmentName;
+
+    @BindView(R.id.user_team_name)
+    protected TextView tvUserTeamName;
 
     private boolean showDetails = false;
 
@@ -66,69 +105,51 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         setActionBarTitle("个人信息");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
-        mUserBaseNews = findViewById(R.id.news_user_base_new);
-        mUserNewsImage = findViewById(R.id.news_user_base_new_detail);
-        mUserBaseDetailNews = findViewById(R.id.news_user_base_new_sub);
-        mUserBaseNews.setOnClickListener(this);
-
-        llUserPhone = findViewById(R.id.news_user_phone_ll);
-        llUserPhone.setOnClickListener(this);
-        llUserInputFace = findViewById(R.id.news_user_input_face_ll);
-        llUserInputFace.setOnClickListener(this);
-        llUserEducation = findViewById(R.id.news_user_education_item);
-        llUserEducation.setOnClickListener(this);
-        llUserAddress = findViewById(R.id.news_user_address_item);
-        llUserAddress.setOnClickListener(this);
-        llUserEmergencyContact = findViewById(R.id.news_user_emergency_contact_item);
-        llUserEmergencyContact.setOnClickListener(this);
-
-        ivUserHead = findViewById(R.id.news_user_head);
-        tvUserName = findViewById(R.id.news_user_name);
-        tvUserPhone = findViewById(R.id.news_user_phone);
-        tvUserAddress = findViewById(R.id.news_user_address);
-        tvUserEducation = findViewById(R.id.news_user_education);
-        tvUsereEmergencyContact = findViewById(R.id.news_user_emergency_contact);
-
-        ivUserHead.setOnClickListener(this);
-
-        tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
-
-        tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
-
-        Glide.with(this)
-                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON))
-                .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
-                .into(ivUserHead);
+//        tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
+//        tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
+//        Glide.with(this)
+//                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON))
+//                .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
+//                .into(ivUserHead);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tvUsereEmergencyContact.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
-        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
-        final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
-        tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
+//        tvUsereEmergencyContact.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
+//        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
+//        final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
+//        tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v == mUserBaseNews) {
-            showDetails = !showDetails;
-            mUserBaseDetailNews.setVisibility(showDetails ? View.VISIBLE : View.GONE);
-            mUserNewsImage.setImageResource(showDetails ? R.mipmap.arrow_down : R.mipmap.arrow_detail);
-        } else if (v == llUserPhone) {
-            startActivity(new Intent(this, UserPhoneActivity.class));
-        } else if (v == llUserInputFace) {
-            startActivity(new Intent(this, InputFaceActivity.class));
-        } else if (v == llUserEducation) {
-            startActivity(new Intent(this, UserEducationActivity.class));
-        } else if (v == llUserEmergencyContact) {
-            startActivity(new Intent(this, UserEmergencyContactActivity.class));
-        } else if (v == ivUserHead) {
-            takePhoto(1);
-        } else if (v == llUserAddress) {
-            startActivity(new Intent(this, UserAddressActivity.class));
+    @OnClick({R.id.news_user_base_new, R.id.news_user_phone_ll, R.id.news_user_input_face_ll,
+            R.id.news_user_education_item, R.id.news_user_address_item,
+            R.id.news_user_emergency_contact_item, R.id.news_user_head})
+    protected void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.news_user_head:
+                takePhoto(1);
+                break;
+            case R.id.news_user_base_new:
+                showDetails = !showDetails;
+                mUserBaseDetailNews.setVisibility(showDetails ? View.VISIBLE : View.GONE);
+                mUserNewsImage.setImageResource(showDetails ? R.mipmap.arrow_down : R.mipmap.arrow_detail);
+                break;
+            case R.id.news_user_phone_ll:
+                ARouter.getInstance().build(GlobalRouter.USER_PHONE).navigation();
+                break;
+            case R.id.news_user_address_item:
+                ARouter.getInstance().build(GlobalRouter.USER_ADDRESS).navigation();
+                break;
+            case R.id.news_user_input_face_ll:
+                ARouter.getInstance().build(GlobalRouter.USER_INPUT_FACE).navigation();
+                break;
+            case R.id.news_user_education_item:
+                ARouter.getInstance().build(GlobalRouter.USER_CETIFICATION).navigation();
+                break;
+            case R.id.news_user_emergency_contact_item:
+                ARouter.getInstance().build(GlobalRouter.USER_EMERGENCY_CONTACT).navigation();
+                break;
         }
     }
 
@@ -171,7 +192,6 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         if (requestId == REQUEST_USER_HEAD) {
             if (success) {
                 showToast("头像上传成功");
-                EventBus.getDefault().post(new RequestEvent());
             } else {
                 showToast(data);
             }
@@ -181,5 +201,21 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     @Override
     public void onFailed(String errMsg) {
 
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void refreshUI(UserBean bean) {
+        tvUserName.setText(bean.getUserName());
+        tvUserCompanyName.setText(bean.getCompanyName());
+        tvUserDepartmentName.setText(bean.getDeptName());
+        tvUserTeamName.setText(bean.getTeamName());
+        tvUserPhone.setText(bean.getPhone());
+        tvUserAddress.setText(bean.getAllAddress());
+        tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
+        Glide.with(this)
+                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
+                .into(ivUserHead);
+        tvUsereEmergencyContact.setText(bean.getContactPhone());
     }
 }

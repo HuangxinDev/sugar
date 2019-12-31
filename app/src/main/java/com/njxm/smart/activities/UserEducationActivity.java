@@ -7,9 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.EduTypeAdapter;
+import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
@@ -29,6 +31,7 @@ import okhttp3.RequestBody;
 /**
  * 学历页面
  */
+@Route(path = GlobalRouter.USER_CETIFICATION)
 public class UserEducationActivity extends BaseActivity {
 
     private List<EduTypeBean> typeBeans = new ArrayList<>();

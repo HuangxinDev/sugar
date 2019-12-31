@@ -98,7 +98,7 @@ public final class HttpUrlGlobal {
     /**
      * 个人信息-用户头像图片地址前缀
      */
-    public static final String HTTP_MY_USER_HEAD_URL_PREFIX = URL_PROTOCOL + GlobalConst.URL_BIZ_PREFIX + "/business_modules_api_app/proxy/show/";
+    public static final String HTTP_MY_USER_HEAD_URL_PREFIX = URL_PROTOCOL + "119.3.136.127:8080" + "/business_modules_api_app/proxy/show/";
 
     /**
      * 个人信息-省市区数据

@@ -19,12 +19,15 @@ import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
+import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,6 +180,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onResume() {
         super.onResume();
+
+        EventBus.getDefault().post(new RequestEvent(RequestEvent.UPLOAD_FILE));
     }
 
     @Override

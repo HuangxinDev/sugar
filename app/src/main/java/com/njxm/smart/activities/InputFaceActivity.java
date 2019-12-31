@@ -12,8 +12,10 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
@@ -34,6 +36,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+@Route(path = GlobalRouter.USER_INPUT_FACE)
 public class InputFaceActivity extends BaseActivity implements HttpCallBack {
 
 

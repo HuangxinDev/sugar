@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.MedicalReportActivity;
@@ -23,7 +22,6 @@ import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
@@ -93,11 +91,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.onResume();
         requestUserBaseNews();
 //        requestUserDetailNews();
-        EventBus.getDefault().post(new RequestEvent());
+
+        EventBus.getDefault().post(new RequestEvent(RequestEvent.REQUEST_PARAMS));
     }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    private void requestUserDetailNews(RequestEvent event) {
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void requestUserDetailNews(RequestEvent event) {
         JSONObject object1 = new JSONObject();
         object1.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
         RequestBody formBody1 = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
@@ -180,7 +179,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             SPUtils.putValue(KeyConstant.KEY_USER_HEAD_ICON, bean.getIcon());
             SPUtils.putValue(KeyConstant.KEY_USER_FACE_URL, bean.getFaceUrl());
         }
-        EventBus.getDefault().post(bean);
+        EventBus.getDefault().postSticky(bean);
     }
 
     @Override
@@ -189,7 +188,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    private void initData(final UserBean bean) {
+    public void initData(final UserBean bean) {
         mUserNewsBtn.setText(bean.getUserName());
         int medicalStatus =
                 Integer.parseInt(SPUtils.getValue(KeyConstant.KEY_MEDICAL_STATUS, "0"));
@@ -197,12 +196,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
                 View.VISIBLE : View.GONE);
 
-        if (getActivity() != null && StringUtils.isNotEmpty(bean.getIcon())) {
-            Glide.with(getActivity())
-                    .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
-                    .apply(new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.mipmap.mine_icon_user_head))
-                    .into(ivUserHead);
-        }
+        Glide.with(getActivity())
+                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.mine_icon_user_head))
+                .into(ivUserHead);
     }
 
 }
