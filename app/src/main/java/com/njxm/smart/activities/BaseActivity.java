@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider;
 
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.PermissionManager;
@@ -326,6 +327,10 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
                 showToast(errMsg);
             }
         });
+    }
+
+    @Subscribe
+    public void onResponse(ResponseEvent event) {
     }
 
     /**

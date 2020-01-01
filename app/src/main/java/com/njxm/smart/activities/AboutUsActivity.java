@@ -1,6 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,22 +7,29 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.JsonUtils;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import okhttp3.Request;
 
 /**
  * 关于我们
  */
-public class AboutUsActivity extends BaseActivity implements HttpCallBack {
+public class AboutUsActivity extends BaseActivity {
 
     private static final int REQUEST_WEBVIEW_URL = 316;
 
@@ -34,19 +40,23 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
     private AppCompatTextView mAppVersion;
 
     // 服务协议
-    private View mAppServiceBtn;
+    @BindView(R.id.about_us_service)
+    protected View mAppServiceBtn;
     // 版权信息
-    private View mAppCopyRightBtn;
+    @BindView(R.id.about_us_version)
+    protected View mAppCopyRightBtn;
     // 隐私政策
-    private View mAppPrivacyBtn;
+    @BindView(R.id.about_us_secret)
+    protected View mAppPrivacyBtn;
     // 新功能介绍
-    private View mAppFeaturesBtn;
+    @BindView(R.id.about_us_feature)
+    protected View mAppFeaturesBtn;
 
     private boolean loadUrl = false;
 
-    private static final String[] HTMLS = {"service.html", "service.html", "privacy.html", "features.html"};
+    private static final String[] HTMLS = {"service.www", "service.www", "privacy.www", "features.www"};
 
-    private List<UrlBean> mUrls = new ArrayList<>();
+    private final List<UrlBean> mUrls = new ArrayList<>();
 
     @Override
     protected int setContentLayoutId() {
@@ -59,72 +69,75 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
         setActionBarTitle("关于我们");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
-        mAppServiceBtn = findViewById(R.id.about_us_service);
-        mAppPrivacyBtn = findViewById(R.id.about_us_secret);
-        mAppCopyRightBtn = findViewById(R.id.about_us_version);
-        mAppFeaturesBtn = findViewById(R.id.about_us_feature);
-
-        mAppServiceBtn.setOnClickListener(this);
-        mAppPrivacyBtn.setOnClickListener(this);
-        mAppCopyRightBtn.setOnClickListener(this);
-        mAppFeaturesBtn.setOnClickListener(this);
+        HttpUtils.getInstance().request(RequestEvent.newBuilder()
+                .url(HttpUrlGlobal.HTTP_ABOUT_US)
+                .method("GET")
+                .build());
 
         Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_ABOUT_US).build();
-        HttpUtils.getInstance().postData(REQUEST_WEBVIEW_URL, request, this);
+
+        HttpUtils.getInstance().postData(0, request, null);
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-
-        int index = 0;
+    @OnClick({R.id.about_us_feature, R.id.about_us_secret, R.id.about_us_service, R.id.about_us_version})
+    public void onViewClicked(View view) {
 
         if (mUrls.size() < 4) {
-            loadUrl = false; // 加载本地资源
+            mUrls.clear();
+            mUrls.addAll(getLocalBean());
         }
 
-        String title = "";
-        if (v == mAppServiceBtn) {
-            index = 0;
-            title = "服务协议";
-        } else if (mAppCopyRightBtn == v) {
-            index = 1;
-            title = "版权信息";
-        } else if (mAppPrivacyBtn == v) {
-            index = 2;
-            title = "隐私政策";
-        } else if (v == mAppFeaturesBtn) {
-            index = 3;
-            title = "新功能介绍";
-        }
+        UrlBean urlBean = null;
 
-        Intent intent = new Intent(this, WebViewActivity.class);
-        intent.putExtra("title_name", title);
-        if (loadUrl && mUrls.get(index) != null && mUrls.get(index).getUrl() != null) {
-            loadUrl = true;
-            intent.putExtra("resUrl", mUrls.get(index).url);
+        switch (view.getId()) {
+            case R.id.about_us_feature:
+                urlBean = getRequestUrlBean("新功能介绍");
+                break;
+            case R.id.about_us_secret:
+                urlBean = getRequestUrlBean("隐私政策");
+                break;
+            case R.id.about_us_version:
+                urlBean = getRequestUrlBean("版本信息");
+                break;
+            case R.id.about_us_service:
+                urlBean = getRequestUrlBean("服务协议");
+                break;
+        }
+        if (urlBean != null) {
+            ARouter.getInstance().build("/app/about_us")
+                    .withString("title_name", urlBean.getName())
+                    .withString("resUrl", urlBean.getUrl())
+                    .navigation();
         } else {
-            loadUrl = false;
-            intent.putExtra("resUrl", HTMLS[index]);
-        }
-        intent.putExtra("loadUrl", loadUrl);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
-        if (success && code == 200) {
-            loadUrl = true;
-
-            List<UrlBean> urlBeans = JSONObject.parseArray(data, UrlBean.class);
-            mUrls.addAll(urlBeans);
+            EventBus.getDefault().post(new ToastEvent("没有找到相应h5页面"));
         }
     }
 
+    public UrlBean getRequestUrlBean(String name) {
+        for (UrlBean bean : mUrls) {
+            if (bean.getName().equals(name)) {
+                return bean;
+            }
+        }
+        return null;
+    }
+
     @Override
-    public void onFailed(String errMsg) {
+    public void onResponse(ResponseEvent event) {
+        super.onResponse(event);
+        if (mUrls.size() > 0) {
+            mUrls.clear();
+        }
+        mUrls.addAll(JsonUtils.getJsonArray(event.getData(), UrlBean.class));
+    }
+
+    public List<UrlBean> getLocalBean() {
+        List<UrlBean> urlBeans = new ArrayList<>();
+        urlBeans.add(new UrlBean("服务协议", "file:///android_asset/www/service.html"));
+        urlBeans.add(new UrlBean("新功能介绍", "file:///android_asset/www/features.html"));
+        urlBeans.add(new UrlBean("隐私政策", "file:///android_asset/www/privacy.html"));
+        urlBeans.add(new UrlBean("版本信息", "file:///android_asset/www/service.html"));
+        return urlBeans;
     }
 
     private static class UrlBean {
@@ -132,6 +145,14 @@ public class AboutUsActivity extends BaseActivity implements HttpCallBack {
         public String name;
 
         public String url;
+
+        public UrlBean() {
+        }
+
+        public UrlBean(String name, String url) {
+            this.name = name;
+            this.url = url;
+        }
 
         public String getName() {
             return name;

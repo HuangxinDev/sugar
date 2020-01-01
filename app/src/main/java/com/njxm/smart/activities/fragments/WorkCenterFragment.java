@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.TestAdapter;
-import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.model.jsonbean.WorkCenterItemBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -25,17 +25,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * 工作中心Fragment
@@ -62,38 +55,21 @@ public class WorkCenterFragment extends BaseFragment {
     protected void init() {
         super.init();
 
-        OkHttpClient client = HttpUtils.getInstance().getOkHttpClient();
-        Request request = new Request.Builder()
-                .url("http://119.3.136.127:7776/api/sys/user/findResourceList")
-                .headers(HttpUtils.getPostHeaders())
-                .post(new FormBody.Builder().build())
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
 
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url("http://119.3.136" +
+                ".127:7776/api/sys/user/findResourceList").build());
+    }
+
+    @Subscribe
+    public void reponse(ResponseEvent event) {
+        mWorkCenterItemBeans = JSONObject.parseArray(event.getData(), WorkCenterItemBean.class);
+        for (int i = mWorkCenterItemBeans.size() - 1; i >= 0; i--) {
+            if (mWorkCenterItemBeans.get(i).getChildren() != null) {
+                mWorkCenterItemBeans.addAll(i + 1,
+                        mWorkCenterItemBeans.get(i).getChildren());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                JSONObject object = JSON.parseObject(response.body().string());
-
-                if (object.getInteger("code") == 401 || object.getInteger("code") == 999) {
-                    EventBus.getDefault().post(new LogoutEvent());
-                    return;
-                }
-
-                mWorkCenterItemBeans = JSONObject.parseArray(object.getString("data"), WorkCenterItemBean.class);
-                for (int i = mWorkCenterItemBeans.size() - 1; i >= 0; i--) {
-                    if (mWorkCenterItemBeans.get(i).getChildren() != null) {
-                        mWorkCenterItemBeans.addAll(i + 1,
-                                mWorkCenterItemBeans.get(i).getChildren());
-                    }
-                }
-                EventBus.getDefault().post(mWorkCenterItemBeans);
-            }
-        });
-
+        }
+        EventBus.getDefault().post(mWorkCenterItemBeans);
     }
 
     @Override

@@ -246,32 +246,6 @@
                         android:text="普工" />
 
                 </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_53"
-                    android:layout_marginTop="@dimen/dp_1"
-                    android:background="@color/background_white"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/dp_16"
-                    android:paddingEnd="@dimen/dp_39">
-
-                    <TextView
-                        style="@style/BaseTextViewStyle.Gray"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="人员编号"
-                        android:textColor="@color/color_gray_7c7c7c"
-                        android:textSize="@dimen/sp_14" />
-
-                    <TextView
-                        android:id="@id/user_job_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="xc123455" />
-                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
@@ -26,6 +27,9 @@ import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.UUID;
@@ -161,5 +165,12 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
         if (requestId == REQUEST_INPUT_FACE) {
             showToast("录入成功");
         }
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void refreshUI(UserBean bean) {
+        Glide.with(this).load(bean.getFaceUrl())
+                .apply(new RequestOptions().placeholder(R.mipmap.realname_face_detect).centerCrop())
+                .into(ivPhoto);
     }
 }

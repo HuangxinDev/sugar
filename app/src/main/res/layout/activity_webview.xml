@@ -13,10 +13,12 @@
 
     <View style="@style/DividerStyle" />
 
-    <WebView
+    <wendu.dsbridge.DWebView
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/dp_16"
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_1"
+        android:paddingRight="@dimen/dp_16"
         android:scrollbars="none" />
 </LinearLayout>

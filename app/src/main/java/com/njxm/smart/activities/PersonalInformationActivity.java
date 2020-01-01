@@ -14,11 +14,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
@@ -91,6 +93,9 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     @BindView(R.id.user_team_name)
     protected TextView tvUserTeamName;
 
+    @BindView(R.id.user_post_name)
+    protected TextView tvUserJobName;
+
     private boolean showDetails = false;
 
     private static final int REQUEST_USER_HEAD = 412;
@@ -106,24 +111,29 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         super.onCreate(savedInstanceState);
         setActionBarTitle("个人信息");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
+    }
 
-//        tvUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USERNAME));
-//        tvUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
-//        Glide.with(this)
-//                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + SPUtils.getStringValue(KeyConstant.KEY_USER_HEAD_ICON))
-//                .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
-//                .into(ivUserHead);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RequestEvent requestEvent = RequestEvent.newBuilder()
+                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
+                .requestId(100)
+                .build();
+        HttpUtils.getInstance().request(requestEvent);
+    }
+
+
+    @Override
+    public void onResponse(ResponseEvent event) {
+        super.onResponse(event);
+        EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        tvUsereEmergencyContact.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
-//        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
-//        final String eduStatus = SPUtils.getStringValue(KeyConstant.KEY_USER_EDUCATION_STATUS);
-//        tvUserEducation.setText(StringUtils.isEmpty(eduStatus) ? "未上传" : eduStatus);
-
-        EventBus.getDefault().post(new RequestEvent(RequestEvent.REQUEST_PARAMS));
     }
 
     @OnClick({R.id.news_user_base_new, R.id.news_user_phone_ll, R.id.news_user_input_face_ll,
@@ -165,7 +175,6 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
                 @Override
                 public void run() {
                     if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
-                        Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead);
                         uploadHeadFile();
                     }
                 }
@@ -196,6 +205,12 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         if (requestId == REQUEST_USER_HEAD) {
             if (success) {
                 showToast("头像上传成功");
+                invoke(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead);
+                    }
+                });
             } else {
                 showToast(data);
             }
@@ -216,6 +231,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         tvUserPhone.setText(bean.getPhone());
         tvUserAddress.setText(bean.getAllAddress());
         tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
+        tvUserJobName.setText(bean.getWorkType());
         Glide.with(this)
                 .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
                 .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))

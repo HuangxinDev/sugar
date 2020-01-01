@@ -31,6 +31,8 @@ public class UserBean {
 
     String teamName;
 
+    String workType;
+
 
     public String getAllAddress() {
         return province + city + district;
@@ -222,6 +224,14 @@ public class UserBean {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(String worktype) {
+        this.workType = worktype;
     }
 }
 

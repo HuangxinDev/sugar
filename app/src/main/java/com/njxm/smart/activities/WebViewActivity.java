@@ -8,18 +8,22 @@ import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 
-import com.njxm.smart.utils.LogTool;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ns.demo.R;
+
+import butterknife.BindView;
+import wendu.dsbridge.DWebView;
 
 /**
  * WebView 加载 webView 页面
  */
+@Route(path = "/app/about_us")
 public class WebViewActivity extends BaseActivity {
 
-    private WebView mWebView;
+    @BindView(R.id.webview)
+    protected DWebView mWebView;
 
     @Override
-
     protected int setContentLayoutId() {
         return R.layout.activity_webview;
     }
@@ -28,20 +32,13 @@ public class WebViewActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mWebView = findViewById(R.id.webview);
         setWebViewSettings(mWebView);
-
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
         Intent intent = getIntent();
         if (intent != null) {
             showTitle(true, intent.getStringExtra("title_name"));
-            if (intent.getBooleanExtra("loadUrl", false)) {
-                LogTool.printD("url: %s", intent.getStringExtra("resUrl"));
-                mWebView.loadUrl(intent.getStringExtra("resUrl"));
-            } else {
-                mWebView.loadUrl("file:///android_asset/html/" + intent.getStringExtra("resUrl"));
-            }
+            mWebView.loadUrl(intent.getStringExtra("resUrl"));
         }
     }
 

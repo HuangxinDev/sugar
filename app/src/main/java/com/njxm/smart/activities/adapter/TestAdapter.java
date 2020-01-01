@@ -13,7 +13,6 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.WorkCenterItemBean;
-import com.njxm.smart.utils.LogTool;
 import com.ns.demo.R;
 
 import java.util.List;
@@ -47,7 +46,6 @@ public class TestAdapter extends BaseMultiItemQuickAdapter<WorkCenterItemBean, B
                 break;
             case WorkCenterItemBean.ITEM_CONTENT_TYPE:
                 helper.setText(R.id.item_text, item.getName());
-                LogTool.printD("Sugar icon url: %s", item.getIcon());
                 Glide.with(context).load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + item.getIcon())
                         .apply(new RequestOptions().placeholder(R.mipmap.mine_icon_real_name_auth))
                         .into((ImageView) helper.getView(R.id.item_image));

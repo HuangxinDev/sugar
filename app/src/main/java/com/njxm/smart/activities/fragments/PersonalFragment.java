@@ -6,7 +6,6 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.activities.AboutUsActivity;
@@ -16,12 +15,15 @@ import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.activities.UserCertificateActivity;
 import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.JsonUtils;
+import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
@@ -29,16 +31,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-
 /**
  * "我的" Fragment
  */
-public class PersonalFragment extends BaseFragment implements View.OnClickListener,
-        HttpCallBack {
+public class PersonalFragment extends BaseFragment implements View.OnClickListener {
 
 
     private static final int REQUEST_USER_INFO_BASE = 344;
@@ -84,49 +80,37 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mCertItem.setOnClickListener(this);
         mAboutUsItem.setOnClickListener(this);
         mSettingItem.setOnClickListener(this);
+
+        requestUserBaseNews();
+
+        RequestEvent requestEvent = RequestEvent.newBuilder()
+                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
+                .requestId(100)
+                .build();
+        HttpUtils.getInstance().request(requestEvent);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        requestUserBaseNews();
-//        requestUserDetailNews();
-
-        EventBus.getDefault().post(new RequestEvent(RequestEvent.REQUEST_PARAMS));
     }
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void requestUserDetailNews(RequestEvent event) {
-        JSONObject object1 = new JSONObject();
-        object1.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        RequestBody formBody1 = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
-                object1.toJSONString());
-
-        Request request1 = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .post(formBody1)
-                .build();
-
-        HttpUtils.getInstance().postData(REQUEST_USER_INFO_DETAIL, request1, this);
+    @Subscribe
+    public void okhttpCallBack(ResponseEvent event) {
+        LogTool.printD("Sugar3", event.getData());
+        if (event.getRequestId() == 100) {
+            EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
+        }
     }
 
     private void requestUserBaseNews() {
-        JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        RequestBody formBody = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
-                object.toString());
-        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_USER_INIT_NEWS)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .post(formBody)
+        RequestEvent event = RequestEvent.newBuilder()
+                .url(HttpUrlGlobal.HTTP_MY_USER_INIT_NEWS)
+                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .requestId(101)
                 .build();
-
-        HttpUtils.getInstance().postData(REQUEST_USER_INFO_BASE, request, this);
+        HttpUtils.getInstance().request(event);
     }
 
     @Override
@@ -160,34 +144,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (!success) {
-            return;
-        }
-        final UserBean bean = JSONObject.parseObject(data, UserBean.class);
-        if (requestId == REQUEST_USER_INFO_BASE) {
-            SPUtils.putValue(KeyConstant.KEY_USERNAME, bean.getUserName());
-            SPUtils.putValue(KeyConstant.KEY_MEDICAL_STATUS, bean.getMedicalStatus());
-        } else if (requestId == REQUEST_USER_INFO_DETAIL) {
-            SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, bean.getPhone());
-            SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, bean.getAllAddress());
-            SPUtils.putValue(KeyConstant.KEY_USER_DETAIL_ADDRESS, bean.getAddress());
-            SPUtils.putValue(KeyConstant.KEY_USER_EDUCATION_STATUS, bean.getEducation());
-            SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, bean.getContact());
-            SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, bean.getContactPhone());
-            SPUtils.putValue(KeyConstant.KEY_USER_HEAD_ICON, bean.getIcon());
-            SPUtils.putValue(KeyConstant.KEY_USER_FACE_URL, bean.getFaceUrl());
-        }
-        EventBus.getDefault().postSticky(bean);
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void initData(final UserBean bean) {
         mUserNewsBtn.setText(bean.getUserName());
         int medicalStatus =
@@ -196,10 +153,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
                 View.VISIBLE : View.GONE);
 
-        Glide.with(getActivity())
-                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
-                .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.mine_icon_user_head))
-                .into(ivUserHead);
+        if (StringUtils.isNotEmpty(bean.getIcon())) {
+            Glide.with(getActivity())
+                    .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                    .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.mine_icon_user_head))
+                    .into(ivUserHead);
+        }
     }
 
 }

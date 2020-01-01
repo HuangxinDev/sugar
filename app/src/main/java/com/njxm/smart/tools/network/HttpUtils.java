@@ -1,5 +1,7 @@
 package com.njxm.smart.tools.network;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
@@ -7,8 +9,10 @@ import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -23,12 +27,14 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.Util;
+import okio.BufferedSink;
 
 public final class HttpUtils {
 
@@ -83,19 +89,72 @@ public final class HttpUtils {
 
 
     public void request(RequestEvent requestEvent) {
-        Request request = new Request.Builder()
-                .url(requestEvent.url)
-                .headers(getPostHeaders())
-                .build();
+        RequestBody body;
+
+        Request.Builder builder = getRequestBuilder(requestEvent.url);
+
+        if (requestEvent.headers.size() > 0) {
+            for (Map.Entry<String, String> entry : requestEvent.headers.entrySet()) {
+                builder.addHeader(entry.getKey(), entry.getValue());
+            }
+        }
+
+        if (requestEvent.getRequestType() == RequestEvent.UPLOAD_FILE) {
+            body = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .build();
+        } else {
+            if (StringUtils.isNotEmpty(requestEvent.bodyJson)) {
+                body = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
+                        requestEvent.bodyJson);
+            } else {
+                body = new RequestBody() {
+                    @Override
+                    public MediaType contentType() {
+                        return MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE);
+                    }
+
+                    @Override
+                    public void writeTo(BufferedSink sink) throws IOException {
+
+                    }
+                };
+            }
+        }
+
+        Request request;
+        if (requestEvent.requestMethod.equals("GET")) {
+            request = builder
+                    .build();
+        } else {
+            request = builder.post(body).build();
+        }
+
+
         sOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ResponseEvent responseEvent = new ResponseEvent(false, 404, "网络异常", "null");
+                EventBus.getDefault().post(responseEvent);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
+                try {
+                    ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
+                            ResponseEvent.class);
+                    responseEvent.setRequestId(requestEvent.getRequestId());
+                    int code = responseEvent.getCode();
+                    if (code == 401 || code == 999) {
+                        // 身份信息过期,需要重新登录
+                        EventBus.getDefault().post(new LogoutEvent());
+                        EventBus.getDefault().post(new ToastEvent("身份信息过期,需要重新登录"));
+                        return;
+                    }
+                    EventBus.getDefault().post(responseEvent);
+                } catch (IOException e) {
+                    LogTool.printE(Log.getStackTraceString(e));
+                }
             }
         });
     }
@@ -139,6 +198,22 @@ public final class HttpUtils {
         Headers.Builder builder = new Headers.Builder();
         builder.add("Content-Type", "application/x-www-form-urlencoded");
         return builder.build();
+    }
+
+    /**
+     * 获取默认Header信息
+     *
+     * @param url 请求url
+     * @return 带默认头的Builder
+     */
+    public static Request.Builder getRequestBuilder(String url) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(url)
+                .addHeader("Platform", "APP")
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
+                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
+        return builder;
     }
 
     public static Headers getPostHeaders() {
@@ -235,7 +310,6 @@ public final class HttpUtils {
                     if (data.equals("[]") || data.equals("null")) {
                         data = "{}";
                     }
-                    EventBus.getDefault().post(new ResponseEvent(success, code, data));
                     httpCallBack.onSuccess(requestId, true, 200, data);
                 } else if (code == 401 || code == 999) {
                     EventBus.getDefault().post(new LogoutEvent());
@@ -248,6 +322,7 @@ public final class HttpUtils {
             }
         }
     }
+
 
     public static final class MimeType {
         public static final String JSON = "application/json";
