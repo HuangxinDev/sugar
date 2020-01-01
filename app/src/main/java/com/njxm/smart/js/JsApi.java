@@ -85,7 +85,12 @@ public class JsApi {
         JSONObject object = new JSONObject();
         object.put("code", "200");
         object.put("data", SPUtils.getStringValue("login_message"));
-        return object.toJSONString();
+
+        LogTool.printD("Sugar2", object.toString());
+
+        String str = object.toJSONString();
+
+        return str;
     }
 
     @JavascriptInterface
@@ -96,7 +101,7 @@ public class JsApi {
     }
 
     private void uploadTime(String time) {
-        mDWebView.callHandler("h5DateTimePicker", new Object[]{time});
+        mDWebView.callHandler("h5DatePicker", new Object[]{time});
     }
 
     public void uploadImage(byte[] bytes) {

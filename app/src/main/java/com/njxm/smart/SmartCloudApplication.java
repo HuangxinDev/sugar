@@ -9,7 +9,6 @@ import androidx.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
-import com.ns.demo.BuildConfig;
 import com.tencent.bugly.crashreport.CrashReport;
 
 public class SmartCloudApplication extends Application {
@@ -37,10 +36,10 @@ public class SmartCloudApplication extends Application {
             }
         });
 
-        if (BuildConfig.DEBUG) {
-            ARouter.openLog();
-            ARouter.openDebug();
-        }
+//        if (BuildConfig.DEBUG) {
+//            ARouter.openLog();
+//            ARouter.openDebug();
+//        }
         ARouter.init(smartCloudApplication);
     }
 

@@ -55,7 +55,7 @@ public class AttendanceFragment extends BaseFragment {
         LinearLayout llRootView = getContentView().findViewById(R.id.ll_root);
 //        mWebView = getContentView().findViewById(R.id.webview_kit);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        DWebView.setWebContentsDebuggingEnabled(true);
+//        DWebView.setWebContentsDebuggingEnabled(true);
 //        WebSettings webSettings = mWebView.getSettings();
 //        webSettings.setJavaScriptEnabled(true);
 
@@ -95,6 +95,13 @@ public class AttendanceFragment extends BaseFragment {
         mWebView.loadUrl("http://" + GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
 
         initLocationOption();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mWebView.addJavascriptObject(mJsApi, null);
+
     }
 
     private File photoFile;
@@ -151,10 +158,6 @@ public class AttendanceFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 //        mWebView.addJavascriptObject(mJsApi, "jsintenface");
-        if (!isLintener) {
-            mWebView.addJavascriptObject(mJsApi, null);
-            isLintener = true;
-        }
     }
 
     private boolean isLintener = false;
@@ -208,11 +211,8 @@ public class AttendanceFragment extends BaseFragment {
 
     @Override
     public void onStop() {
+        mWebView.removeJavascriptObject(null);
         super.onStop();
-        if (isLintener) {
-            mWebView.removeJavascriptObject(null);
-            isLintener = false;
-        }
     }
 
     private static class MyLocationListener extends BDAbstractLocationListener {

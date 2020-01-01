@@ -7,16 +7,18 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.Postcard;
+import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.activities.DailyCheckActivity;
-import com.njxm.smart.activities.DailyCheckDetailActivity;
-import com.njxm.smart.activities.SearchActivity;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.TestAdapter;
+import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.model.jsonbean.WorkCenterItemBean;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,6 +77,12 @@ public class WorkCenterFragment extends BaseFragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 JSONObject object = JSON.parseObject(response.body().string());
+
+                if (object.getInteger("code") == 401 || object.getInteger("code") == 999) {
+                    EventBus.getDefault().post(new LogoutEvent());
+                    return;
+                }
+
                 mWorkCenterItemBeans = JSONObject.parseArray(object.getString("data"), WorkCenterItemBean.class);
                 for (int i = mWorkCenterItemBeans.size() - 1; i >= 0; i--) {
                     if (mWorkCenterItemBeans.get(i).getChildren() != null) {
@@ -83,7 +91,6 @@ public class WorkCenterFragment extends BaseFragment {
                     }
                 }
                 EventBus.getDefault().post(mWorkCenterItemBeans);
-//                refreshUI(mWorkCenterItemBeans);
             }
         });
 
@@ -101,27 +108,32 @@ public class WorkCenterFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == WorkCenterItemBean.ITEM_TITLE_TYPE) {
-                throw new NullPointerException("异常指针");
+                return;
             }
+
             WorkCenterItemBean workCenterData = (WorkCenterItemBean) adapter.getItem(position);
-            switch (workCenterData.getName()) {
-                case "日常巡检":
 
-                    startActivity(new Intent(getActivity(), DailyCheckActivity.class));
-                    break;
-                case "日常巡检详情":
-                    startActivity(new Intent(getActivity(), DailyCheckDetailActivity.class));
-                    break;
-                case "查找联系人":
-                    startActivity(new Intent(getActivity(), SearchActivity.class));
-                    break;
-                case "考勤":
-                    ARouter.getInstance().build("/app/main").withInt("index", 0).navigation();
-                    break;
+            if (workCenterData == null || StringUtils.isEmpty(workCenterData.getUrl())) {
+                return;
             }
 
+            if (workCenterData.getUrl().startsWith("http")) {
+                ARouter.getInstance().build("/app/webview").withString("loadUrl",
+                        workCenterData.getUrl()).navigation();
+            } else {
+                ARouter.getInstance().build(workCenterData.getUrl()).navigation(getActivity(), new NavCallback() {
+                    @Override
+                    public void onArrival(Postcard postcard) {
 
+                    }
 
+                    @Override
+                    public void onLost(Postcard postcard) {
+                        super.onLost(postcard);
+                        EventBus.getDefault().post(new ToastEvent("正在开发,敬请期待"));
+                    }
+                });
+            }
         });
         mRecyclerView.setAdapter(mAdapter);
     }

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.adapter.DailyCheckAdapter;
 import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
 import com.ns.demo.R;
@@ -26,6 +27,7 @@ import butterknife.BindView;
  * 无: 显示默认
  * 有: 展示数据，（高管并显示右侧状态栏按钮，可以创建巡检项目）
  */
+@Route(path = "/app/safety/inspect")
 public class DailyCheckActivity extends BaseActivity {
 
     /**

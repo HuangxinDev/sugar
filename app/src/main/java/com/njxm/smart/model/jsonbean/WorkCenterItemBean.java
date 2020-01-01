@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.utils.StringUtils;
 
 import java.util.List;
 
@@ -98,7 +99,13 @@ public class WorkCenterItemBean implements MultiItemEntity {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        if (StringUtils.isNotEmpty(url) && !url.startsWith("http")) {
+            // 处理路由配置
+            this.url = "/" + url.replaceAll(":", "/");
+        } else {
+            this.url = url;
+        }
+
     }
 
     public int getSr_level() {

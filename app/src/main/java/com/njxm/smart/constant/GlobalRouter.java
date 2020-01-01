@@ -1,9 +1,18 @@
 package com.njxm.smart.constant;
 
+import java.util.HashMap;
+
 /**
  * 全局路由地址
  */
 public class GlobalRouter {
+
+    private static final HashMap<String, String> ROUTER_MAP = new HashMap<>();
+
+    static {
+        ROUTER_MAP.put("app:safety:inspect", "");
+    }
+
     /**
      * 用户手机页面
      */
