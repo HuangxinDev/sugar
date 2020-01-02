@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.activities.AboutUsActivity;
 import com.njxm.smart.activities.MedicalReportActivity;
 import com.njxm.smart.activities.PersonalInformationActivity;
+import com.njxm.smart.activities.QRUserActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.activities.UserCertificateActivity;
@@ -27,14 +28,13 @@ import com.ns.demo.R;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.OnClick;
+
 /**
  * "我的" Fragment
  */
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
 
-
-    private static final int REQUEST_USER_INFO_BASE = 344;
-    private static final int REQUEST_USER_INFO_DETAIL = 545;
 
     // 个人信息页面按钮
     private AppCompatTextView mUserNewsBtn;
@@ -52,6 +52,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     private LinearLayout llRealNamePop; // 实名认证提示
     private LinearLayout llMedicalPop; // 体检报告提示
+
 
     @Override
     protected int setLayoutResourceID() {
@@ -88,6 +89,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
                 .build();
         HttpUtils.getInstance().request(requestEvent);
+    }
+
+    @OnClick(R.id.qr_btn)
+    protected void onViewClicked() {
+        startActivity(new Intent(getActivity(), QRUserActivity.class));
     }
 
     @Override

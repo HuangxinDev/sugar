@@ -25,6 +25,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
@@ -164,7 +165,17 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
         });
         mRecyclerView.setAdapter(adapter);
 
-        mMedicalState = Integer.parseInt(SPUtils.getStringValue(KeyConstant.KEY_MEDICAL_STATUS));
+
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void refreshUI(UserBean bean) {
+        try {
+            mMedicalState = Integer.parseInt(bean.getMedicalStatus());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+
+        }
         invalidateLayoutState(mMedicalState);
         if (mMedicalState == MEDICAL_CHECK_SUCCESS) {
             updateImages();

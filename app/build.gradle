@@ -95,6 +95,9 @@ dependencies {
     implementation 'com.alibaba:arouter-api:1.4.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    // zxing 生成二维码
+    implementation 'com.google.zxing:core:3.3.0'
 }
 repositories {
     mavenCentral()

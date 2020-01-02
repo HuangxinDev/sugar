@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.AppTextWatcher;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -26,6 +27,9 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -99,7 +103,6 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
         mVerifySuccess.setEnabled(false);
         tvPhonePop = findViewById(R.id.phone_pop);
         tvPhonePop.setPadding(0, ResolutionUtil.dp2Px(35), 0, 0);
-        tvPhonePop.setText(getPhonePop());
 
         mBindPhoneEdit.getEditText().addTextChangedListener(new AppTextWatcher() {
             @Override
@@ -287,15 +290,13 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
         }
     }
 
-    public SpannableString getPhonePop() {
+    public SpannableString getPhonePop(String telPhone) {
         String string = "* 更换手机号后，下次登录可使用新手机号登录\n当前手机号";
-        String telPhone = SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE);
         if (StringUtils.isEmpty(telPhone) || !telPhone.matches("1[0-9]{10}")) {
             return new SpannableString("手机号不存在");
         }
 
-        String phone =
-                new StringBuffer(telPhone).replace(3, 7, "****").toString();
+        String phone = new StringBuffer(telPhone).replace(3, 7, "****").toString();
 
         int len1 = string.length();
         int len2 = len1 + phone.length();
@@ -320,5 +321,10 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
         spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.color_black_252525)), newPhone.indexOf("\n"),
                 newPhone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void updateUI(UserBean bean) {
+        tvPhonePop.setText(getPhonePop(bean.getPhone()));
     }
 }

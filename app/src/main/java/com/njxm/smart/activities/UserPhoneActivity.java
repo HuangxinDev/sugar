@@ -9,15 +9,20 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.constant.GlobalRouter;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 @Route(path = GlobalRouter.USER_PHONE)
 public class UserPhoneActivity extends BaseActivity {
 
-    private TextView tvUserPhone;
-    private TextView tvUpdatePhoneBtn;
+    @BindView(R.id.news_user_phone)
+    protected TextView tvUserPhone;
 
     @Override
     protected int setContentLayoutId() {
@@ -30,22 +35,22 @@ public class UserPhoneActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setActionBarTitle("手机");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
-
-        tvUserPhone = findViewById(R.id.news_user_phone);
-        tvUpdatePhoneBtn = findViewById(R.id.settings_update_phone);
-
-
-        StringBuilder builder = new StringBuilder(11);
-        builder.append(SPUtils.getStringValue(KeyConstant.KEY_USER_TEL_PHONE));
-        tvUserPhone.setText(builder.replace(3, 7, "****").toString());
-        tvUpdatePhoneBtn.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v == tvUpdatePhoneBtn) {
-            startActivity(new Intent(this, UpdateTelPhoneActivity.class));
+
+    @OnClick(R.id.settings_update_phone)
+    public void onViewClicked(View v) {
+        startActivity(new Intent(this, UpdateTelPhoneActivity.class));
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void refreshUI(UserBean bean) {
+        try {
+            StringBuilder builder = new StringBuilder(11);
+            builder.append(bean.getPhone());
+            tvUserPhone.setText(builder.replace(3, 7, "****").toString());
+        } catch (Exception e) {
+            tvUserPhone.setText("手机号未获取到");
         }
     }
 }

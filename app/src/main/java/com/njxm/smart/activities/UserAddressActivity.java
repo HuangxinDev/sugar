@@ -18,12 +18,16 @@ import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.AddressBean;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,10 +80,8 @@ public class UserAddressActivity extends BaseActivity {
         showRightBtn(true, "保存");
 
         tvUserAddress = findViewById(R.id.user_address_area);
-        tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
         tvUserAddress.setOnClickListener(this);
         etUserAddressDetail = findViewById(R.id.user_address_details);
-        etUserAddressDetail.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_DETAIL_ADDRESS));
         provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
 
         RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
@@ -176,5 +178,11 @@ public class UserAddressActivity extends BaseActivity {
             tvPop.setText("请选择");
             tvUserAddress.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_ADDRESS));
         }
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void updateUserAddress(UserBean bean) {
+        tvUserAddress.setText(bean.getAllAddress());
+        etUserAddressDetail.setText(bean.getAddress());
     }
 }

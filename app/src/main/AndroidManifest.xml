@@ -118,6 +118,8 @@
             android:name="com.njxm.smart.activities.SearchActivity"
             android:launchMode="singleTask" />
 
+        <activity android:name="com.njxm.smart.activities.QRUserActivity" />
+
         <activity android:name="com.njxm.smart.activities.DWebViewActivity" />
 
         <provider
