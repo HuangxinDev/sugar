@@ -18,10 +18,12 @@ import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
+import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ns.demo.R;
 
@@ -79,7 +81,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewPager = findViewById(R.id.view_pager);
-//        mViewPager.setNeedScroll(true);
         mFragmentManager = getSupportFragmentManager();
 
         AttendanceFragment attendanceFragment = new AttendanceFragment();
@@ -96,9 +97,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.setCurrentItem(mCurrentPosition);
         setViewPage(0);
-        HttpUtils.getInstance().postDataWithParams(-1, HttpUrlGlobal.HTTP_COMMON_CITY_URL, null,
-                this);
 
+        if (StringUtils.isEmpty(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST))
+                || SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST).equals("[]")) {
+            HttpUtils.getInstance()
+                    .request(RequestEvent.newBuilder()
+                            .url(HttpUrlGlobal.HTTP_COMMON_CITY_URL).build());
+        }
         AttendanceFragment.initLocationOption();
     }
 
@@ -114,7 +119,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int position) {
-//        mViewPager.setCurrentItem(position);
         showFragment(position);
     }
 
@@ -128,7 +132,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             transaction.show(fragments.get(mCurrentPosition));
         }
         transaction.commitAllowingStateLoss();
-
     }
 
     @Override
@@ -136,26 +139,35 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    @OnClick({R.id.attendance_btn, R.id.attendance_icon, R.id.attendance_text})
-    protected void clickAttendanceBtn() {
-        setViewPage(0);
-    }
+    @OnClick({R.id.attendance_btn, R.id.attendance_icon, R.id.attendance_text,
+            R.id.workcenter_btn, R.id.workcenter_icon, R.id.workcenter_text,
+            R.id.messages_btn, R.id.message_icon, R.id.message_text,
+            R.id.my_btn, R.id.my_icon, R.id.my_text})
+    protected void onTabClicked(View view) {
+        switch (view.getId()) {
+            case R.id.attendance_btn:
+            case R.id.attendance_icon:
+            case R.id.attendance_text:
+                setViewPage(0);
+                break;
+            case R.id.workcenter_btn:
+            case R.id.workcenter_icon:
+            case R.id.workcenter_text:
+                setViewPage(1);
+                break;
+            case R.id.messages_btn:
+            case R.id.message_icon:
+            case R.id.message_text:
+                setViewPage(2);
+                break;
+            case R.id.my_btn:
+            case R.id.my_icon:
+            case R.id.my_text:
+                setViewPage(3);
+                break;
+        }
 
-    @OnClick({R.id.workcenter_btn, R.id.workcenter_icon, R.id.workcenter_text})
-    protected void clickWorkCenterBtn() {
-        setViewPage(1);
     }
-
-    @OnClick({R.id.messages_btn, R.id.message_icon, R.id.message_text})
-    protected void clickMessageBtn() {
-        setViewPage(2);
-    }
-
-    @OnClick({R.id.my_btn, R.id.my_icon, R.id.my_text})
-    protected void clickMyBtn() {
-        setViewPage(3);
-    }
-
 
     /**
      * 设置View的属性状态
@@ -177,14 +189,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
-        if (requestId == -1 && code == 200) {
-            SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, data);
-        }
     }
 
     @Override

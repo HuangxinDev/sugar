@@ -13,12 +13,12 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.MyCerticateListAdapter;
 import com.njxm.smart.activities.adapter.MyCertificateAdapter;
+import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
@@ -33,7 +33,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -47,7 +46,6 @@ import okhttp3.RequestBody;
 public class UserCertificateActivity extends BaseActivity {
 
 
-    private static final int GET_CERTIFICATE_LIST = 686;
     private static final int REQUEST_UPLOAD_CERTIFICATION = 109;
 
     public static class CertificateItem {
@@ -126,10 +124,7 @@ public class UserCertificateActivity extends BaseActivity {
         showLeftBtn(true, R.mipmap.arrow_back_blue);
         showRightBtn(true, R.mipmap.new_add);
 
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        HttpUtils.getInstance().postData(GET_CERTIFICATE_LIST,
-                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST, hashMap), this);
+        refreshCertificateList();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         myCertificateAdapter = new MyCertificateAdapter(this);
@@ -147,20 +142,20 @@ public class UserCertificateActivity extends BaseActivity {
             }
         });
 
-
-//        myCertificateAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                showToast("parent item : %s" , view instanceof ImageView);
-//            }
-//        });
-
         myCerticateListAdapter = new MyCerticateListAdapter(this, mCertificateListItems);
         recyclerView.setLayoutManager(layoutManager);
 
-//        rlDefault.setVisibility(View.VISIBLE);
-//        recyclerView.setVisibility(View.GONE);
         tvUploadBtn.setOnClickListener(this);
+    }
+
+    /**
+     * 请求证书数据列表
+     */
+    private void refreshCertificateList() {
+        HttpUtils.getInstance().request(RequestEvent.newBuilder()
+                .url(HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST)
+                .addBodyJson("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .build());
     }
 
     private void init(int certificateState) {
@@ -226,31 +221,27 @@ public class UserCertificateActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 请求后数据，刷新新数据
+     * @param listItems 请求回来的数据列表
+     */
+    @Subscribe
+    public void onGetCertificateList(List<CertificateListItem> listItems) {
+        if (listItems == null || listItems.size() <= 0) {
+            init(0);
+        } else {
+            mCertificateListItems = listItems;
+            myCerticateListAdapter.setNewData(mCertificateListItems);
+            init(1);
+        }
+    }
+
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
         super.onSuccess(requestId, success, code, data);
-        if (requestId == GET_CERTIFICATE_LIST) {
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    if (success) {
-                        if (data.equals("{}")) { // 空列表
-                            init(0);
-                        } else {
-                            mCertificateListItems = JSONObject.parseArray(data, CertificateListItem.class);
-                            myCerticateListAdapter.setNewData(mCertificateListItems);
-                            init(1);
-                        }
-                    }
-                }
-            });
-
-        } else if (requestId == REQUEST_UPLOAD_CERTIFICATION) {
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-            HttpUtils.getInstance().postData(GET_CERTIFICATE_LIST,
-                    HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST, hashMap), this);
+        if (requestId == REQUEST_UPLOAD_CERTIFICATION) {
+            refreshCertificateList();
         }
     }
 
@@ -283,7 +274,11 @@ public class UserCertificateActivity extends BaseActivity {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    /**
+     * 刷新数据证书类型选择
+     * @param event
+     */
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void updateList(SelectCertificateEvent event) {
         if (clickPosition == -1 || event == null) {
             return;

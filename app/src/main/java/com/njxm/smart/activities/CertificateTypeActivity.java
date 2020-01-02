@@ -80,7 +80,7 @@ public class CertificateTypeActivity extends BaseActivity {
                             CertificateTypeActivity.this);
                     llBarContainer.addView(createTextView(bean.getSctName(), Integer.parseInt(bean.getId())));
                 } else {
-                    EventBus.getDefault().post(new SelectCertificateEvent(bean.getSctName(),
+                    EventBus.getDefault().postSticky(new SelectCertificateEvent(bean.getSctName(),
                             bean.getId()));
                     finish();
                 }

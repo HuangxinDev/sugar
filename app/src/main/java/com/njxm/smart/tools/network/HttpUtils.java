@@ -134,8 +134,7 @@ public final class HttpUtils {
         sOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                ResponseEvent responseEvent = new ResponseEvent(false, 404, "网络异常", "null");
-                EventBus.getDefault().post(responseEvent);
+                EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
             }
 
             @Override

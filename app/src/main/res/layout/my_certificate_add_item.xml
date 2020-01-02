@@ -28,7 +28,8 @@
             android:gravity="end"
             android:paddingStart="@dimen/dp_16"
             android:paddingEnd="@dimen/dp_16"
-            android:text="一级造价工程师" />
+            android:text=""
+            android:contentDescription="证书种类"/>
 
         <ImageView
             android:id="@id/certificate_add"

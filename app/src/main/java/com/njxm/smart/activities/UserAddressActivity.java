@@ -80,8 +80,7 @@ public class UserAddressActivity extends BaseActivity {
         tvUserAddress.setOnClickListener(this);
         etUserAddressDetail = findViewById(R.id.user_address_details);
         etUserAddressDetail.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_DETAIL_ADDRESS));
-        provinceBaseBeans =
-                JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
+        provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
 
         RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

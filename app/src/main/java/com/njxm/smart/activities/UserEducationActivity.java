@@ -77,7 +77,7 @@ public class UserEducationActivity extends BaseActivity {
     }
 
 
-    @Subscribe
+    @Subscribe(sticky = true)
     public void refreshEduState(List<EduTypeBean> beans) {
         typeBeans = beans;
         adapter.setNewData(typeBeans);

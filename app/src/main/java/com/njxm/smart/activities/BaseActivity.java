@@ -335,6 +335,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Subscribe(sticky = true)
     public void onResponse(ResponseEvent event) {
+
         switch (event.getUrl()) {
             case HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS:
                 EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
@@ -345,6 +346,15 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
             case HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT:
                 showToast("登出成功");
                 EventBus.getDefault().post(new LogoutEvent());
+                break;
+            case HttpUrlGlobal.HTTP_COMMON_CITY_URL:
+                if (event.isSuccess()) {
+                    SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, event.getData());
+                }
+                break;
+            case HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST:
+                EventBus.getDefault().postSticky(JsonUtils.getJsonArray(event.getData(),
+                        UserCertificateActivity.CertificateListItem.class));
                 break;
             default:
                 EventBus.getDefault().post(new ToastEvent("未处理Url"));
