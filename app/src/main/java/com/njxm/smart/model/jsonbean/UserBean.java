@@ -145,7 +145,7 @@ public class UserBean {
     }
 
     public void setIcon(String icon) {
-        this.icon = icon;
+        this.icon = HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + icon;
     }
 
     public String getId() {

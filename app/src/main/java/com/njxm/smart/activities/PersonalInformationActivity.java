@@ -225,7 +225,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
         tvUserJobName.setText(bean.getWorkType());
         Glide.with(this)
-                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                .load(bean.getIcon())
                 .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
                 .into(ivUserHead);
         tvUsereEmergencyContact.setText(bean.getContactPhone());

@@ -151,7 +151,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
         if (StringUtils.isNotEmpty(bean.getIcon())) {
             Glide.with(getActivity())
-                    .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
+                    .load(bean.getIcon())
                     .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.mine_icon_user_head).override(100, 100))
                     .into(ivUserHead);
         }

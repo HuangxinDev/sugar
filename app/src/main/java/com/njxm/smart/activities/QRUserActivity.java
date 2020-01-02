@@ -58,7 +58,7 @@ public class QRUserActivity extends BaseActivity {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void updateUserInfo(UserBean bean) {
         Glide.with(this)
-                .load(bean.getFaceUrl())
+                .load(bean.getIcon())
                 .apply(new RequestOptions().placeholder(R.mipmap.mine_icon_user_head))
                 .into(ivUserHead);
         tvUserName.setText(bean.getUserName());
