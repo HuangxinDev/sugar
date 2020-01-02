@@ -1,6 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -164,6 +163,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
      * @param position
      */
     private void setViewPage(int position) {
+        mCurrentPosition = position;
         mViewPager.setCurrentItem(position);
         ibAttendanceBtn.setEnabled(position != 0);
         tvAttendanceBtn.setEnabled(position != 0);
@@ -188,10 +188,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-//        setViewPage(0);
-        setViewPage(intent.getIntExtra("index", 3));
+    public void onBackPressed() {
+        if (mCurrentPosition == 0) {
+            super.onBackPressed();
+        } else {
+            setViewPage(0);
+        }
     }
-
 }
