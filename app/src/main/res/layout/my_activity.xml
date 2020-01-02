@@ -258,13 +258,14 @@
                 android:src="@mipmap/arrow_detail" />
         </RelativeLayout>
 
-        <View style="@style/DividerStyle" />
+        <View
+            style="@style/DividerStyle"
+            android:layout_height="@dimen/dp_10" />
 
         <RelativeLayout
             android:id="@id/my_about_us_item"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_53"
-            android:layout_marginTop="@dimen/dp_10"
             android:background="@color/background_white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp_16"
