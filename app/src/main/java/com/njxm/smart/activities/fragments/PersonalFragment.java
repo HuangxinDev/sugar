@@ -15,19 +15,15 @@ import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.activities.UserCertificateActivity;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.JsonUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -82,11 +78,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mSettingItem.setOnClickListener(this);
 
         requestUserBaseNews();
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         RequestEvent requestEvent = RequestEvent.newBuilder()
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
-                .requestId(100)
                 .build();
         HttpUtils.getInstance().request(requestEvent);
     }
@@ -96,19 +95,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.onResume();
     }
 
-    @Subscribe
-    public void okhttpCallBack(ResponseEvent event) {
-        LogTool.printD("Sugar3", event.getData());
-        if (event.getRequestId() == 100) {
-            EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
-        }
-    }
-
     private void requestUserBaseNews() {
         RequestEvent event = RequestEvent.newBuilder()
                 .url(HttpUrlGlobal.HTTP_MY_USER_INIT_NEWS)
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .requestId(101)
                 .build();
         HttpUtils.getInstance().request(event);
     }
@@ -145,7 +135,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void initData(final UserBean bean) {
+    public void initData(UserBean bean) {
         mUserNewsBtn.setText(bean.getUserName());
         int medicalStatus =
                 Integer.parseInt(SPUtils.getValue(KeyConstant.KEY_MEDICAL_STATUS, "0"));
@@ -156,7 +146,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         if (StringUtils.isNotEmpty(bean.getIcon())) {
             Glide.with(getActivity())
                     .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + bean.getIcon())
-                    .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.mine_icon_user_head))
+                    .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.mine_icon_user_head).override(100, 100))
                     .into(ivUserHead);
         }
     }

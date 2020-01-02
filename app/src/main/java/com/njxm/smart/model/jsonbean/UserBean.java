@@ -1,5 +1,7 @@
 package com.njxm.smart.model.jsonbean;
 
+import com.njxm.smart.global.HttpUrlGlobal;
+
 public class UserBean {
 
     String allAddress; //全部地址
@@ -135,7 +137,7 @@ public class UserBean {
     }
 
     public void setFaceUrl(String faceUrl) {
-        this.faceUrl = faceUrl;
+        this.faceUrl = HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + faceUrl;
     }
 
     public String getIcon() {

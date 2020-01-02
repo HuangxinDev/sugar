@@ -14,19 +14,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -100,6 +97,8 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
     private static final int REQUEST_USER_HEAD = 412;
 
+    private UserBean mNewestUserBean;
+
 
     @Override
     protected int setContentLayoutId() {
@@ -119,16 +118,8 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         RequestEvent requestEvent = RequestEvent.newBuilder()
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
-                .requestId(100)
                 .build();
         HttpUtils.getInstance().request(requestEvent);
-    }
-
-
-    @Override
-    public void onResponse(ResponseEvent event) {
-        super.onResponse(event);
-        EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
     }
 
     @Override
@@ -224,6 +215,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {
+        mNewestUserBean = bean;
         tvUserName.setText(bean.getUserName());
         tvUserCompanyName.setText(bean.getCompanyName());
         tvUserDepartmentName.setText(bean.getDeptName());

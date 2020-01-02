@@ -26,8 +26,6 @@ public class RequestEvent {
      */
     private int type;
 
-    private int requestId;
-
     public String url;
 
     public String requestMethod = "POST"; // 默认为POST
@@ -42,22 +40,12 @@ public class RequestEvent {
 
     public RequestEvent(@RequestType int type, int requestId) {
         this.type = type;
-        this.requestId = requestId;
-    }
-
-    public int getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(int requestId) {
-        this.requestId = requestId;
     }
 
     private RequestEvent(Builder builder) {
         this.url = builder.url;
         this.headers = builder.headers;
         this.params = builder.params;
-        this.requestId = builder.requestId;
         this.type = REQUEST_PARAMS;
         this.newBuilder = builder.newBuilder;
         if (StringUtils.isNotEmpty(builder.method)) {
@@ -100,11 +88,6 @@ public class RequestEvent {
          */
         public Builder method(String method) {
             this.method = method.toUpperCase();
-            return this;
-        }
-
-        public Builder requestId(int requestId) {
-            this.requestId = requestId;
             return this;
         }
 

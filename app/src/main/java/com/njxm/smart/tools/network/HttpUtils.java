@@ -143,7 +143,7 @@ public final class HttpUtils {
                 try {
                     ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
                             ResponseEvent.class);
-                    responseEvent.setRequestId(requestEvent.getRequestId());
+                    responseEvent.setUrl(requestEvent.url);
                     int code = responseEvent.getCode();
                     if (code == 401 || code == 999) {
                         // 身份信息过期,需要重新登录

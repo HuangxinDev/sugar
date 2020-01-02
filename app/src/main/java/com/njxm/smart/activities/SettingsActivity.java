@@ -8,20 +8,14 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
-import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.Request;
 
 /**
  * 设置页面 主页我的-设置
@@ -102,8 +96,10 @@ public class SettingsActivity extends BaseActivity {
 
             @Override
             public void onNegativeButtonClick(AlertDialog dialog) {
+                HttpUtils.getInstance().request(RequestEvent.newBuilder()
+                        .url(HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT)
+                        .build());
                 dialog.dismiss();
-                logOut();
             }
         });
     }
@@ -112,27 +108,6 @@ public class SettingsActivity extends BaseActivity {
      * 登出操作
      */
     public void logOut() {
-        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .build();
 
-        HttpUtils.getInstance().postData(0, request, new HttpCallBack() {
-            @Override
-            public void onSuccess(int requestId, boolean success, int code, String data) {
-                if (success) {
-                    showToast("登出成功");
-
-                    EventBus.getDefault().post(new LogoutEvent());
-                }
-            }
-
-            @Override
-            public void onFailed(String errMsg) {
-
-            }
-        });
     }
 }

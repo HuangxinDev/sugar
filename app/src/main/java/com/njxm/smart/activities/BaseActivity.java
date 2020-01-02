@@ -25,10 +25,14 @@ import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.EduTypeBean;
+import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
+import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StatusBarUtil;
@@ -329,8 +333,22 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         });
     }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     public void onResponse(ResponseEvent event) {
+        switch (event.getUrl()) {
+            case HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS:
+                EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
+                break;
+            case HttpUrlGlobal.URL_EDUCATION_LIST:
+                EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(), EduTypeBean.class));
+                break;
+            case HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT:
+                showToast("登出成功");
+                EventBus.getDefault().post(new LogoutEvent());
+                break;
+            default:
+                EventBus.getDefault().post(new ToastEvent("未处理Url"));
+        }
     }
 
     /**
@@ -343,6 +361,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
         SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }

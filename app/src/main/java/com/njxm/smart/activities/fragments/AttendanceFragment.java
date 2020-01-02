@@ -101,7 +101,6 @@ public class AttendanceFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         mWebView.addJavascriptObject(mJsApi, null);
-
     }
 
     private File photoFile;

@@ -5,6 +5,8 @@ package com.njxm.smart.eventbus;
  */
 public class ResponseEvent {
 
+    public String url;
+
     private boolean success;
 
     private int code;
@@ -14,6 +16,15 @@ public class ResponseEvent {
     private String data;
 
     private int requestId;
+
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public int getRequestId() {
         return requestId;
