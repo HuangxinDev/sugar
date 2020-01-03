@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3F98FA"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/action_bar"
+        layout="@layout/layout_action_bar" />
+
+    <ImageView
+        android:layout_width="141dp"
+        android:layout_height="141dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="44dp"
+        android:src="@mipmap/safe_exam_100" />
+
+    <TextView
+        style="@style/BaseTextViewStyle.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_13"
+        android:fontFamily="@font/fzzj_whjztjw"
+        android:text="安全教育考试"
+        android:textSize="32sp" />
+
+    <TextView
+        style="@style/BaseTextViewStyle.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_18"
+        android:text="黄金有价人无价   施工安全靠大家"
+        android:textSize="12sp" />
+
+    <TextView
+        style="@style/BaseTextViewStyle.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:text="时间30分钟"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginTop="14dp"
+        android:text="◆ 总分100分，85分及以上合格\n◆ 首次进场参与考试后可考勤打卡"
+        android:textColor="#ff9acaff"
+        android:textSize="12sp" />
+
+    <TextView
+        style="@style/BaseTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_39"
+        android:text="考试 6 次       合格 3 次"
+        android:textColor="#ff9acaff" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:src="@mipmap/icon_safe_eliminate" />
+
+    <TextView
+        android:id="@id/start_exam"
+        style="@style/TVBtn"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/btn_white_style"
+        android:text="开始考试"
+        android:textColor="@color/color_blue_007aff" />
+
+</LinearLayout>

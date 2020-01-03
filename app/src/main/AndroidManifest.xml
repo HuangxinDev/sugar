@@ -122,6 +122,8 @@
 
         <activity android:name="com.njxm.smart.activities.DWebViewActivity" />
 
+        <activity android:name="com.njxm.smart.activities.SafeExamActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
