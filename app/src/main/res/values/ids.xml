@@ -152,6 +152,8 @@
 
     <item name="qr_btn" type="id" />
     <item name="start_exam" type="id" />
+    <item name="subject" type="id" />
+    <item name="exam_content" type="id" />
 
 
 </resources>

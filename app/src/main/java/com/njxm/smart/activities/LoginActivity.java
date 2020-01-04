@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
@@ -99,8 +101,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mLoginQrEditText.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                        LoginActivity.this);
+//                HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
+//                        LoginActivity.this);
+                getQRCode();
             }
         });
     }
@@ -234,8 +237,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else {
             mLoginPwdEditText.clearText();
         }
-        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null, this);
+
+        getQRCode();
+//        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null, this);
         mLoginQrEditText.clearText();
+    }
+
+    private void getQRCode() {
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(HttpUrlGlobal.HTTP_QR_URL).build());
+    }
+
+    @Override
+    public void onResponse(ResponseEvent event) {
+        if (event.getUrl().equals(HttpUrlGlobal.HTTP_QR_URL)) {
+            JSONObject dataObject = JSONObject.parseObject(event.getData());
+            final String bitmapStr = dataObject.getString("kaptcha");
+            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
+            invoke(new Runnable() {
+                @Override
+                public void run() {
+                    mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr)));
+                }
+            });
+        } else {
+            super.onResponse(event);
+        }
     }
 
     @Override
@@ -245,22 +271,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             return;
         }
 
-        JSONObject dataObject = JSONObject.parseObject(data);
-        if (requestId == HttpUtils.REQUEST_QR) {
-            if (success) {
-                final String bitmapStr = dataObject.getString("kaptcha");
-                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
-                invoke(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr)));
-                    }
-                });
-            }
-        } else if (requestId == HttpUtils.REQUEST_LOGIN) {
-
+        if (requestId == HttpUtils.REQUEST_LOGIN) {
+            JSONObject dataObject = JSONObject.parseObject(data);
             SPUtils.putValue("login_message", data);
-            SPUtils.putValue(KeyConstant.KEY_USER_ID, dataObject.getString(KeyConstant.KEY_USER_ID));
+            SPUtils.putValue(KeyConstant.KEY_USER_ID,
+                    dataObject.getString(KeyConstant.KEY_USER_ID));
             SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, dataObject.getString(KeyConstant.KEY_USER_TOKEN));
             SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, dataObject.getString(KeyConstant.KEY_USER_ACCOUNT));
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

@@ -92,7 +92,7 @@ public class AttendanceFragment extends BaseFragment {
             }
         });
 
-        mWebView.loadUrl("http://" + GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
+        mWebView.loadUrl(GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
 
         initLocationOption();
     }

@@ -124,6 +124,12 @@
 
         <activity android:name="com.njxm.smart.activities.SafeExamActivity" />
 
+        <activity android:name="com.njxm.smart.activities.SafeExamRecordActivity" />
+
+        <activity android:name="com.njxm.smart.activities.SafeExamAnswerActivity" />
+
+        <activity android:name="com.njxm.smart.activities.SafeExamPlanActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"

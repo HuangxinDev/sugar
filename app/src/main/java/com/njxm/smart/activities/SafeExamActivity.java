@@ -1,21 +1,17 @@
 package com.njxm.smart.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.njxm.smart.eventbus.ToastEvent;
 import com.ns.demo.R;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-@Route(path = "/app/safety/examination")
 public class SafeExamActivity extends BaseActivity {
 
     @BindView(R.id.action_bar)
@@ -38,6 +34,6 @@ public class SafeExamActivity extends BaseActivity {
 
     @OnClick(R.id.start_exam)
     protected void startExam() {
-        EventBus.getDefault().post(new ToastEvent("开始考试"));
+        startActivity(new Intent(this, SafeExamAnswerActivity.class));
     }
 }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="单选" />
+
+    <TextView
+        android:id="@id/subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="题目" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16">
+
+        <RadioButton
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:button="@drawable/radio_button_single_selection"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="ABCD" />
+
+        <RadioButton
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:button="@drawable/radio_button_single_selection"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="ABCD" />
+
+        <RadioButton
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:button="@drawable/radio_button_single_selection"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="ABCD" />
+
+        <RadioButton
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:button="@drawable/radio_button_single_selection"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="ABCD" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16">
+
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/radio_button_single_selection"
+            android:text="多选A" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/radio_button_single_selection"
+            android:text="多选B" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/radio_button_single_selection"
+            android:text="多选C" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/radio_button_single_selection"
+            android:text="多选D" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16">
+
+        <RadioButton
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:button="@drawable/radio_button_single_selection"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="正确" />
+
+        <RadioButton
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:button="@drawable/radio_button_single_selection"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="错误" />
+    </RadioGroup>
+
+</LinearLayout>
