@@ -154,6 +154,8 @@
     <item name="start_exam" type="id" />
     <item name="subject" type="id" />
     <item name="exam_content" type="id" />
+    <item name="my_exam" type="id" />
+    <item name="my_team_member_exam" type="id" />
 
 
 </resources>

@@ -36,4 +36,10 @@ public class SafeExamActivity extends BaseActivity {
     protected void startExam() {
         startActivity(new Intent(this, SafeExamAnswerActivity.class));
     }
+
+    @Override
+    public void onClickRightBtn() {
+        super.onClickRightBtn();
+        startActivity(new Intent(this, SafeExamRecordActivity.class));
+    }
 }
