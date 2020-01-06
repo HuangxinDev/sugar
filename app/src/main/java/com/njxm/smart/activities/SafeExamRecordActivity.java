@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -77,11 +78,29 @@ public class SafeExamRecordActivity extends BaseActivity {
         mAdapter = new MutiAdapter(mData2);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
+        onViewClicked(tvMyExam);
     }
+
+    @BindView(R.id.my_exam)
+    protected TextView tvMyExam;
+
+    @BindView(R.id.my_team_member_exam)
+    protected TextView tvMyMemberExam;
 
     @OnClick({R.id.my_exam, R.id.my_team_member_exam})
     public void onViewClicked(View view) {
         mAdapter.setNewData(view.getId() == R.id.my_exam ? mData2 : mData1);
+
+        switch (view.getId()) {
+            case R.id.my_exam:
+                tvMyExam.setEnabled(false);
+                tvMyMemberExam.setEnabled(true);
+                break;
+            case R.id.my_team_member_exam:
+                tvMyExam.setEnabled(true);
+                tvMyMemberExam.setEnabled(false);
+                break;
+        }
     }
 
     public List<ViewData> listData(int type) {
@@ -128,12 +147,12 @@ public class SafeExamRecordActivity extends BaseActivity {
         public MutiAdapter(List<ViewData> data) {
             super(data);
             addItemType(TYPE_CONTACTS, R.layout.item_contacts_layout);
-            addItemType(TYPE_EXAM_RECORD, R.layout.safe_exam_list_item);
+            addItemType(TYPE_EXAM_RECORD, R.layout.item_exam_record_list);
         }
 
         @Override
         protected void convert(BaseViewHolder helper, ViewData item) {
-
+            helper.setGone(R.id.divider1, helper.getAdapterPosition() == mData.size() - 1);
         }
     }
 }

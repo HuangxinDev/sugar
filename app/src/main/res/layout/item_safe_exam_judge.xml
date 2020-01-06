@@ -6,104 +6,33 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@id/title_type"
+        style="@style/BaseTextViewStyle.Blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="单选" />
+        android:text="单选题"
+        android:textSize="14sp" />
 
     <TextView
-        android:id="@id/subject"
-        android:layout_width="wrap_content"
+        android:id="@id/title"
+        style="@style/BaseTextViewStyle.Black.14"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="题目" />
+        android:layout_marginTop="@dimen/dp_28"
+        android:gravity="center_vertical"
+        android:text="拆除（       ）模板时，为避免突然整体塌落，必要时应先设立临时支撑，然后进行拆卸。" />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_16"
-        android:paddingRight="@dimen/dp_16">
+        android:id="@id/select_group"
+        android:layout_marginTop="27dp">
 
         <RadioButton
             style="@style/BaseTextViewStyle.Black.14"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_56"
-            android:button="@drawable/radio_button_single_selection"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:text="ABCD" />
-
-        <RadioButton
-            style="@style/BaseTextViewStyle.Black.14"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56"
-            android:button="@drawable/radio_button_single_selection"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:text="ABCD" />
-
-        <RadioButton
-            style="@style/BaseTextViewStyle.Black.14"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56"
-            android:button="@drawable/radio_button_single_selection"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:text="ABCD" />
-
-        <RadioButton
-            style="@style/BaseTextViewStyle.Black.14"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56"
-            android:button="@drawable/radio_button_single_selection"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:text="ABCD" />
-
-    </RadioGroup>
-
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_16"
-        android:paddingRight="@dimen/dp_16">
-
-
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@drawable/radio_button_single_selection"
-            android:text="多选A" />
-
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@drawable/radio_button_single_selection"
-            android:text="多选B" />
-
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@drawable/radio_button_single_selection"
-            android:text="多选C" />
-
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@drawable/radio_button_single_selection"
-            android:text="多选D" />
-
-    </RadioGroup>
-
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_16"
-        android:paddingRight="@dimen/dp_16">
-
-        <RadioButton
-            style="@style/BaseTextViewStyle.Black.14"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56"
-            android:button="@drawable/radio_button_single_selection"
+            android:button="@drawable/drawable_judge"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:text="正确" />
@@ -112,7 +41,7 @@
             style="@style/BaseTextViewStyle.Black.14"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_56"
-            android:button="@drawable/radio_button_single_selection"
+            android:button="@drawable/drawable_judge"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:text="错误" />

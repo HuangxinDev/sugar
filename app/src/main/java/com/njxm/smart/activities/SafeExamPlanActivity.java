@@ -35,6 +35,7 @@ public class SafeExamPlanActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setActionBarTitle("考试计划");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         SafeExamPlanAdapter adapter = new SafeExamPlanAdapter(R.layout.safe_exam_list_item, getData());
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {

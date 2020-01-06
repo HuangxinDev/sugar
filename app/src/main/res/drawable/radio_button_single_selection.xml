@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/exam_no_selection" android:state_checked="false" />
-    <item android:drawable="@mipmap/icon_single_selection" android:state_checked="true" />
-</selector>

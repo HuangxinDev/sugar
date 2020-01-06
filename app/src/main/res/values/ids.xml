@@ -156,6 +156,9 @@
     <item name="exam_content" type="id" />
     <item name="my_exam" type="id" />
     <item name="my_team_member_exam" type="id" />
+    <item name="title_type" type="id" />
+    <item name="cancel" type="id" />
+    <item name="select_group" type="id" />
 
 
 </resources>
