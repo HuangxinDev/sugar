@@ -82,8 +82,6 @@ public class UserAddressActivity extends BaseActivity {
         tvUserAddress = findViewById(R.id.user_address_area);
         tvUserAddress.setOnClickListener(this);
         etUserAddressDetail = findViewById(R.id.user_address_details);
-        provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
-
         RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         simpleTextAdapter = new SimpleTextAdapter(provinceBaseBeans);
@@ -123,6 +121,14 @@ public class UserAddressActivity extends BaseActivity {
         });
 
         mRecyclerView.setAdapter(simpleTextAdapter);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
+                simpleTextAdapter.setNewData(provinceBaseBeans);
+            }
+        }).start();
     }
 
     @Override

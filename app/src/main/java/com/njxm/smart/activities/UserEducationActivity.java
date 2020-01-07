@@ -20,6 +20,7 @@ import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,8 @@ public class UserEducationActivity extends BaseActivity {
     private int lastSelected = 0;
     private int selectedId = 0;
 
+    private String mUserEdu;
+
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
 
@@ -51,6 +54,10 @@ public class UserEducationActivity extends BaseActivity {
         showLeftBtn(true, R.mipmap.arrow_back_blue);
         setActionBarTitle("学历");
 
+        if (getIntent() != null) {
+            mUserEdu = getIntent().getStringExtra("params");
+        }
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new EduTypeAdapter(typeBeans);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -58,6 +65,9 @@ public class UserEducationActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 lastSelected = selectedId;
                 selectedId = position;
+                if (lastSelected == selectedId) {
+                    return;
+                }
                 try {
                     typeBeans.get(selectedId).setSelected(true);
                     typeBeans.get(lastSelected).setSelected(false);
@@ -77,9 +87,16 @@ public class UserEducationActivity extends BaseActivity {
     }
 
 
-    @Subscribe(sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshEduState(List<EduTypeBean> beans) {
         typeBeans = beans;
+        for (EduTypeBean bean : typeBeans) {
+            if (bean.getSdName().equals(mUserEdu)) {
+                bean.setSelected(true);
+                selectedId = lastSelected = typeBeans.indexOf(bean);
+                break;
+            }
+        }
         adapter.setNewData(typeBeans);
     }
 

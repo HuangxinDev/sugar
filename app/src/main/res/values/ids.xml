@@ -159,6 +159,8 @@
     <item name="title_type" type="id" />
     <item name="cancel" type="id" />
     <item name="select_group" type="id" />
+    <item name="list_state" type="id" />
+    <item name="list_icon_state" type="id" />
 
 
 </resources>

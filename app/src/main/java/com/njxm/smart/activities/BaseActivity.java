@@ -357,7 +357,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
                         UserCertificateActivity.CertificateListItem.class));
                 break;
             default:
-                EventBus.getDefault().post(new ToastEvent("未处理Url"));
+//                EventBus.getDefault().post(new ToastEvent("未处理Url"));
         }
     }
 

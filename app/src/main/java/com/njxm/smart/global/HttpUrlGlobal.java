@@ -4,6 +4,8 @@ import com.njxm.smart.GlobalConst;
 
 public final class HttpUrlGlobal {
 
+    public static final String URL_WORKCENTER_ITEMS = GlobalConst.URL_BIZ_PREFIX + "/api/sys/user/findResourceList";
+
     /**
      * 图形验证码接口
      */

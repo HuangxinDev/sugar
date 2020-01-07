@@ -150,7 +150,8 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
                 ARouter.getInstance().build(GlobalRouter.USER_INPUT_FACE).navigation();
                 break;
             case R.id.news_user_education_item:
-                ARouter.getInstance().build(GlobalRouter.USER_CETIFICATION).navigation();
+                ARouter.getInstance().build(GlobalRouter.USER_CETIFICATION).withString("params",
+                        tvUserEducation.getText().toString()).navigation();
                 break;
             case R.id.news_user_emergency_contact_item:
                 ARouter.getInstance().build(GlobalRouter.USER_EMERGENCY_CONTACT).navigation();
@@ -221,7 +222,7 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
         tvUserDepartmentName.setText(bean.getDeptName());
         tvUserTeamName.setText(bean.getTeamName());
         tvUserPhone.setText(bean.getPhone());
-        tvUserAddress.setText(bean.getAllAddress());
+        tvUserAddress.setText(StringUtils.isEmpty(bean.getAllAddress()) ? "请补充地址" : bean.getAddress());
         tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
         tvUserJobName.setText(bean.getWorkType());
         Glide.with(this)

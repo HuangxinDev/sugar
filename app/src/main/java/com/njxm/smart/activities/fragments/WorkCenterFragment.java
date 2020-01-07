@@ -10,14 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.fastjson.JSONObject;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.SuggestionsActivity;
-import com.njxm.smart.activities.adapter.TestAdapter;
+import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.model.jsonbean.WorkCenterItemBean;
+import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.model.jsonbean.WorkCenterSubBean;
+import com.njxm.smart.model.jsonbean.WorkCenterTitleBean;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.R;
 
@@ -25,6 +28,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,9 +46,9 @@ public class WorkCenterFragment extends BaseFragment {
     @BindView(R.id.suggestion_box)
     protected AppCompatTextView mSuggestionBox;
 
-    private TestAdapter mAdapter;
+    private WorkCenterItemAdapter mAdapter;
 
-    private List<WorkCenterItemBean> mWorkCenterItemBeans;
+    private final List<MultiItemEntity> mData = new ArrayList<>();
 
     @Override
     protected int setLayoutResourceID() {
@@ -54,22 +58,21 @@ public class WorkCenterFragment extends BaseFragment {
     @Override
     protected void init() {
         super.init();
-
-
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url("http://119.3.136" +
-                ".127:7776/api/sys/user/findResourceList").build());
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(HttpUrlGlobal.URL_WORKCENTER_ITEMS).build());
     }
 
     @Subscribe
     public void reponse(ResponseEvent event) {
-        mWorkCenterItemBeans = JSONObject.parseArray(event.getData(), WorkCenterItemBean.class);
-        for (int i = mWorkCenterItemBeans.size() - 1; i >= 0; i--) {
-            if (mWorkCenterItemBeans.get(i).getChildren() != null) {
-                mWorkCenterItemBeans.addAll(i + 1,
-                        mWorkCenterItemBeans.get(i).getChildren());
+        List<WorkCenterTitleBean> mWorkCenterItemBeans = JsonUtils.getJsonArray(event.getData(), WorkCenterTitleBean.class);
+        List<MultiItemEntity> data = new ArrayList<>();
+        for (WorkCenterTitleBean bean : mWorkCenterItemBeans) {
+            for (WorkCenterSubBean subBean : bean.getChildren()) {
+                bean.addSubItem(subBean);
+
             }
+            data.add(bean);
         }
-        EventBus.getDefault().post(mWorkCenterItemBeans);
+        EventBus.getDefault().post(data);
     }
 
     @Override
@@ -78,16 +81,16 @@ public class WorkCenterFragment extends BaseFragment {
 
     @Override
     protected void setUpData() {
-        mAdapter = new TestAdapter(getActivity(), null);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4,
-                GridLayoutManager.VERTICAL, false);
+        mAdapter = new WorkCenterItemAdapter(getActivity(), mData);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (adapter.getItemViewType(position) == WorkCenterItemBean.ITEM_TITLE_TYPE) {
+            if (adapter.getItemViewType(position) == WorkCenterItemAdapter.ITEM_TITLE_TYPE) {
                 return;
             }
 
-            WorkCenterItemBean workCenterData = (WorkCenterItemBean) adapter.getItem(position);
+            WorkCenterSubBean workCenterData = (WorkCenterSubBean) adapter.getItem(position);
 
             if (workCenterData == null || StringUtils.isEmpty(workCenterData.getUrl())) {
                 return;
@@ -112,6 +115,7 @@ public class WorkCenterFragment extends BaseFragment {
             }
         });
         mRecyclerView.setAdapter(mAdapter);
+//        mAdapter.expandAll(0, true);
     }
 
     @OnClick({R.id.suggestion_box})
@@ -126,11 +130,12 @@ public class WorkCenterFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshUI(List<WorkCenterItemBean> datas) {
+    public void refreshUI(List<MultiItemEntity> datas) {
 //        invoke(new Runnable() {
 //            @Override
 //            public void run() {
         mAdapter.setNewData(datas);
+        mAdapter.expandAll(0, true);
 //            }
 //        });
 
