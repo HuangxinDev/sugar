@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_white"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background_white">
 
     <TextView
         android:id="@id/title_type"
         style="@style/BaseTextViewStyle.Blue"
         android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
         android:text="单选题"
         android:textSize="14sp" />
@@ -19,12 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_28"
+        app:layout_constraintTop_toBottomOf="@id/title_type"
         android:gravity="center_vertical"
         android:text="拆除（       ）模板时，为避免突然整体塌落，必要时应先设立临时支撑，然后进行拆卸。" />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
         android:id="@id/select_group"
         android:layout_marginTop="27dp">
 
@@ -47,4 +51,14 @@
             android:text="错误" />
     </RadioGroup>
 
-</LinearLayout>
+    <TextView
+        android:id="@id/next_step"
+        style="@style/TVBtn"
+        android:layout_marginBottom="47dp"
+        android:background="@drawable/background_btn_flavor_1"
+        android:text="下一题"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

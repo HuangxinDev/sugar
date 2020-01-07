@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_action_bar" />
+
+    <TextView
+        style="@style/BaseTextViewStyle.Gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/fzzj_whjztjw"
+        android:text="不合格"
+        android:textSize="32sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        android:gravity="center"
+        android:text="继续努力\n学习安全知识  谨记施工安全"
+        android:textColor="#ff383838"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:src="@mipmap/safe_exam_failed" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_53"
+        android:gravity="center"
+        android:text="共20题，答对15道，答错5道\n
+未达到合格线，不能进场工作"
+        android:textColor="#ff383838"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_42">
+
+        <TextView
+            style="@style/BaseTextViewStyle.Blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_39"
+            android:paddingTop="14dp"
+            android:paddingRight="@dimen/dp_39"
+            android:paddingBottom="14dp"
+            android:text="学完再考"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            style="@style/TVBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_26"
+            android:paddingLeft="@dimen/dp_39"
+            android:paddingTop="14dp"
+            android:paddingRight="@dimen/dp_39"
+            android:paddingBottom="14dp"
+            android:text="重新考试"
+            android:textSize="@dimen/sp_15" />
+    </LinearLayout>
+
+</LinearLayout>
