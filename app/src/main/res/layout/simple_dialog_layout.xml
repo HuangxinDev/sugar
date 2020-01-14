@@ -1,55 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="255dp"
     android:layout_height="147dp"
     android:layout_gravity="center"
-    android:background="@color/background_white"
-    android:orientation="vertical">
+    android:background="@drawable/dialog_bg">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dialog_content"
+        style="@style/BaseTextViewStyle.Black.14"
         android:layout_width="match_parent"
         android:layout_height="105dp"
         android:gravity="center"
-        android:text="内容" />
+        android:text="内容"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@id/divider1"
+        style="@style/DividerStyle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/color_gray_96a1ad" />
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/dialog_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dialog_yes"
+        style="@style/BaseTextViewStyle.Blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/divider2"
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintVertical_weight="1" />
+
+    <View
+        android:id="@id/divider2"
+        style="@style/DividerStyle"
+        android:layout_width="1dp"
         android:layout_height="41dp"
-        android:background="@color/color_gray_96a1ad"
-        android:gravity="center"
-        android:orientation="horizontal">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/dialog_yes"
+        app:layout_constraintRight_toLeftOf="@id/dialog_no"
+        app:layout_constraintTop_toBottomOf="@id/divider1" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/dialog_yes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/background_white"
-            android:gravity="center"
-            android:text="确定" />
-
-        <View
-            android:id="@id/divider1"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/color_gray_96a1ad" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/dialog_no"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/background_white"
-            android:gravity="center"
-            android:text="取消" />
-
-    </LinearLayout>
-
-
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dialog_no"
+        style="@style/BaseTextViewStyle.Blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/divider2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintVertical_weight="1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

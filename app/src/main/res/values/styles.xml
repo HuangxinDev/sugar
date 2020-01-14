@@ -9,6 +9,16 @@
     <!--    闪屏主题-->
     <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@mipmap/app_background_lunch_screen</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:launchMode">singleTask</item>
+    </style>
+
+    <style name="ActivityStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:launchMode">singleTask</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
     </style>
 
     <style name="XmlBackground">

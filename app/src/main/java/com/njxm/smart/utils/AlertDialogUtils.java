@@ -2,6 +2,7 @@ package com.njxm.smart.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
@@ -67,6 +68,8 @@ public class AlertDialogUtils {
     }
 
 
+    private boolean isShow = false;
+
     /**
      * 带有确认取消按钮的自定义dialog
      *
@@ -75,21 +78,23 @@ public class AlertDialogUtils {
      */
     public void showConfirmDialog(Context context, String message, String yesText,
                                          String noText, final OnButtonClickListener clickListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
 
-        View view = View.inflate(context, R.layout.simple_dialog_layout, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.simple_dialog_layout, null);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context).setView(view).create();
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
         AppCompatTextView tvMsg = view.findViewById(R.id.dialog_content);
-        AppCompatTextView tvCancel = view.findViewById(R.id.dialog_no);
         AppCompatTextView tvConfirm = view.findViewById(R.id.dialog_yes);
-        View divider = view.findViewById(R.id.divider1);
+        AppCompatTextView tvCancel = view.findViewById(R.id.dialog_no);
+        View divider = view.findViewById(R.id.divider2);
         tvMsg.setText(message);
         tvCancel.setText(noText);
         tvConfirm.setText(yesText);
 
-        divider.setVisibility((StringUtils.isNotEmpty(yesText) && StringUtils.isNotEmpty(noText)) ?
-                View.VISIBLE : View.GONE);
+        divider.setVisibility((StringUtils.isNotEmpty(yesText) && StringUtils.isNotEmpty(noText)) ? View.VISIBLE : View.GONE);
         tvConfirm.setVisibility(StringUtils.isEmpty(yesText) ? View.GONE : View.VISIBLE);
         tvCancel.setVisibility(StringUtils.isEmpty(noText) ? View.GONE : View.VISIBLE);
 
@@ -97,24 +102,27 @@ public class AlertDialogUtils {
             @Override
             public void onClick(View v) {
                 if (clickListener != null) {
-                    clickListener.onNegativeButtonClick(alertDialog);
+                    clickListener.onNegativeButtonClick(dialog);
                 } else {
-                    alertDialog.dismiss();
+                    dialog.dismiss();
                 }
+                isShow = false;
             }
         });
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (clickListener != null) {
-                    clickListener.onPositiveButtonClick(alertDialog);
+                    clickListener.onPositiveButtonClick(dialog);
                 } else {
-                    alertDialog.dismiss();
+                    dialog.dismiss();
                 }
+                isShow = false;
             }
         });
 
-        alertDialog.getWindow().setContentView(view);
+        dialog.show();
+        isShow = true;
     }
 
 

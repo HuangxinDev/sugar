@@ -68,7 +68,6 @@ public class WorkCenterFragment extends BaseFragment {
         for (WorkCenterTitleBean bean : mWorkCenterItemBeans) {
             for (WorkCenterSubBean subBean : bean.getChildren()) {
                 bean.addSubItem(subBean);
-
             }
             data.add(bean);
         }
@@ -131,13 +130,10 @@ public class WorkCenterFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUI(List<MultiItemEntity> datas) {
-//        invoke(new Runnable() {
-//            @Override
-//            public void run() {
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
         mAdapter.setNewData(datas);
         mAdapter.expandAll(0, true);
-//            }
-//        });
-
     }
 }

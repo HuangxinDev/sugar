@@ -3,9 +3,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_12"
+    android:layout_marginTop="@dimen/dp_18"
     android:gravity="center_vertical">
 
-    <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
         style="@style/BaseTextViewStyle.Black.17"
         android:layout_width="0dp"
@@ -14,10 +16,7 @@
         android:layout_weight="1"
         android:contentDescription="标题"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingTop="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
-        android:paddingBottom="12dp" />
+        android:paddingTop="@dimen/dp_16" />
 
     <TextView
         android:id="@id/list_state"
@@ -30,8 +29,6 @@
         android:id="@id/list_icon_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_16"
         android:background="@null" />
-
 </LinearLayout>
 

@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ns.demo">
 
     <!--网络权限-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!--存储权限-->
@@ -16,7 +16,12 @@
     <!--相机权限-->
     <uses-permission android:name="android.permission.CAMERA" />
 
-
+    <supports-screens
+        android:anyDensity="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:resizeable="true" />
 
     <application
         android:name="com.njxm.smart.SmartCloudApplication"
@@ -24,6 +29,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/LaunchTheme"
+        android:allowBackup="false"
+        android:supportsRtl="false"
+        tools:replace="android:allowBackup,android:supportsRtl"
         android:usesCleartextTraffic="true">
 
         <!--百度SDK-->
@@ -38,6 +46,7 @@
 
         <activity
             android:name="com.njxm.smart.activities.HomeActivity"
+            android:theme="@style/ActivityStyle"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -120,6 +129,7 @@
 
         <activity
             android:name="com.njxm.smart.activities.SafeExamResultActivity"
+            android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask" />
 
         <activity android:name="com.njxm.smart.activities.QRUserActivity" />
@@ -128,7 +138,9 @@
 
         <activity android:name="com.njxm.smart.activities.SafeExamActivity" />
 
-        <activity android:name="com.njxm.smart.activities.SafeExamRecordActivity" />
+        <activity
+            android:name="com.njxm.smart.activities.SafeExamRecordActivity"
+            android:theme="@style/ActivityStyle" />
 
         <activity android:name="com.njxm.smart.activities.SafeExamAnswerActivity" />
 

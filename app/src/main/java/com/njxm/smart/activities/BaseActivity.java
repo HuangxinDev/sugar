@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -374,5 +375,35 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * 快速点击两次屏蔽第二次点击事件，避免出现同一页面.
+     *
+     * @param ev
+     * @return true:结束 false:继续传递
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private long lastClickTime = 0;
+
+    /**
+     * 300ms内是否重复点击
+     *
+     * @return true:是
+     */
+    private boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeDiff = time - lastClickTime;
+        lastClickTime = time;
+        return timeDiff <= 300;
     }
 }
