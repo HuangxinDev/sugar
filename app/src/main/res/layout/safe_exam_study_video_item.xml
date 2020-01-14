@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/dp_15"
+    android:background="@color/background_white">
+
+    <ImageView
+        android:id="@id/item_image"
+        android:layout_width="108dp"
+        android:layout_height="@dimen/dp_60"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/realname_face_detect"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/BaseTextViewStyle.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="3dp"
+        android:shadowColor="#1a1e1e1e"
+        android:text="12:30:12"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintBottom_toBottomOf="@id/item_image"
+        app:layout_constraintEnd_toEndOf="@id/item_image" />
+
+    <TextView
+        android:id="@id/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_1"
+        android:text="安全教育学习xxxxx"
+        app:layout_constraintLeft_toRightOf="@id/item_image"
+        app:layout_constraintTop_toTopOf="@id/item_image" />
+
+    <TextView
+        style="@style/BaseTextViewStyle.Gray.11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_13"
+        android:text="152M"
+        android:textColor="#ffb0b0b0"
+        app:layout_constraintLeft_toLeftOf="@id/item_title"
+        app:layout_constraintTop_toBottomOf="@id/item_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -12,39 +13,54 @@
 
     <View style="@style/DividerStyle" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="74dp">
+        android:layout_height="85dp">
 
         <TextView
             android:id="@id/my_exam"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/BaseTextViewStyle"
+            android:layout_height="74dp"
+            android:lineSpacingExtra="@dimen/dp_12"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/my_team_member_exam"
+            app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"
             android:textColor="@drawable/login_text_color_selector"
             android:text="我的考试" />
 
+
         <TextView
             android:id="@id/my_team_member_exam"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/BaseTextViewStyle"
+            android:layout_height="74dp"
             android:textColor="@drawable/login_text_color_selector"
+            android:lineSpacingExtra="@dimen/dp_12"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintLeft_toRightOf="@id/my_exam"
+            app:layout_constraintRight_toRightOf="parent"
             android:gravity="center"
             android:text="组员考试" />
 
+        <View
+            android:id="@id/indicator"
+            android:layout_width="72dp"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/color_blue_007aff"
+            app:layout_constraintLeft_toLeftOf="@id/my_exam"
+            app:layout_constraintRight_toRightOf="@id/my_exam"
+            app:layout_constraintTop_toBottomOf="@id/my_exam" />
 
-    </LinearLayout>
+        <View
+            style="@style/DividerStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_10"
+            app:layout_constraintTop_toBottomOf="@id/indicator" />
 
-<!--    <View-->
-<!--        android:layout_width="@dimen/dp_72"-->
-<!--        android:layout_height="@dimen/dp_1"-->
-<!--        android:background="#FF007AFF"/>-->
-
-    <View
-        style="@style/DividerStyle"
-        android:layout_height="@dimen/dp_10" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@id/recycler_view"

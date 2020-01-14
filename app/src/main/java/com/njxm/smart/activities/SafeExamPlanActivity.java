@@ -2,7 +2,6 @@ package com.njxm.smart.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.tools.network.HttpUtils;
 import com.ns.demo.R;
 
 import java.util.ArrayList;
@@ -41,10 +42,22 @@ public class SafeExamPlanActivity extends BaseActivity {
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(SafeExamPlanActivity.this, SafeExamActivity.class));
+                switch (view.getId()) {
+                    case R.id.start_exam:
+                        startActivity(new Intent(SafeExamPlanActivity.this, SafeExamActivity.class));
+                        break;
+                    case R.id.exam_study:
+                        startActivity(new Intent(SafeExamPlanActivity.this, SafeExamStudyActivity.class));
+                        break;
+                }
             }
         });
         mRecyclerView.setAdapter(adapter);
+
+        HttpUtils.getInstance().request(new RequestEvent.Builder().url("http://119.3.136" +
+                ".127:7776/api/safety/educationPlan/findPageByOrg").addBodyJson("sepoOrgId",
+                "b83f455303a5fce45a402d2ab8bf2c4c").addBodyJson("permissionId",
+                "a8da5dd8b935eb444dc25d87a34e2287").build());
     }
 
     public List<String> getData() {
@@ -73,10 +86,17 @@ public class SafeExamPlanActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, String item) {
             helper.setNestView(R.id.start_exam);
+            helper.setNestView(R.id.exam_study);
             helper.setGone(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
             TextView textView = helper.getView(R.id.exam_content);
             textView.setText(item);
-            textView.setGravity(textView.getLineCount() > 1 ? Gravity.LEFT : Gravity.RIGHT);
+//            textView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                @Override
+//                public boolean onPreDraw() {
+//                    textView.setGravity(textView.getLineCount() > 0 ? Gravity.START : Gravity.END);
+//                    return false;
+//                }
+//            });
         }
     }
 }

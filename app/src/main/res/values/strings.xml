@@ -16,4 +16,6 @@
     <string name="hint_user_login_code_pop">请输入验证码</string>
     <string name="reset_pwd">重置密码</string>
     <string name="update_tel_phone">更换手机</string>
+
+    <string name="safe_exam_show">共%1d题，答对%2d题，答错%3d题</string>
 </resources>

@@ -133,6 +133,7 @@
         <activity android:name="com.njxm.smart.activities.SafeExamAnswerActivity" />
 
         <activity android:name="com.njxm.smart.activities.SafeExamPlanActivity" />
+        <activity android:name="com.njxm.smart.activities.SafeExamStudyActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

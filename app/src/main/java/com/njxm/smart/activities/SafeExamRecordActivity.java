@@ -1,9 +1,10 @@
 package com.njxm.smart.activities;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.njxm.smart.utils.CharUtils;
 import com.ns.demo.R;
 
 import java.util.ArrayList;
@@ -31,6 +33,10 @@ public class SafeExamRecordActivity extends BaseActivity {
     protected int setContentLayoutId() {
         return R.layout.safe_exam_record_activity;
     }
+
+    // 指示条
+    @BindView(R.id.indicator)
+    protected View mIndicator;
 
     TranslateAnimation animation;
 
@@ -51,34 +57,66 @@ public class SafeExamRecordActivity extends BaseActivity {
         mData1.addAll(listData(MutiAdapter.TYPE_CONTACTS));
         mData2.addAll(listData(MutiAdapter.TYPE_EXAM_RECORD));
 
-        animation = new TranslateAnimation(Animation.ABSOLUTE, 0f,
-                Animation.ABSOLUTE, 200f, Animation.ABSOLUTE, 0f, Animation.ABSOLUTE, 0f);
-        animation.setDuration(500);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        animation.setInterpolator(new AccelerateInterpolator());
-        animation.setRepeatCount(0);
-        animation.setRepeatMode(Animation.RESTART);
-        animation.setFillAfter(true);
         mAdapter = new MutiAdapter(mData2);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
-        onViewClicked(tvMyExam);
+
+        initIndicator(tvMyExam);
+    }
+
+    public void initIndicator(View clickView) {
+        float startX = mIndicator.getLeft();
+        float toX = clickView.getLeft() + (clickView.getWidth() - mIndicator.getWidth()) / 2.0f;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mIndicator, "translationX", toX - startX);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                SpannableStringBuilder text = new SpannableStringBuilder();
+                if (clickView == tvMyExam) {
+                    text.append(CharUtils.color(getColor(R.color.color_blue_007aff), "我的考试"))
+                    .append("\n")
+                    .append(CharUtils.font(16,
+                            CharUtils.bold(CharUtils.color(getColor(R.color.color_blue_007aff),
+                                    mData1.size() + ""))));
+                    tvMyExam.setText(text);
+                    text.clear();
+                    text.append(CharUtils.color(getColor(R.color.color_gray_96a1ad), "组员考试"))
+                            .append("\n")
+                            .append(CharUtils.font(16,
+                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_black_252525), mData2.size() + ""))));
+                    tvMyMemberExam.setText(text);
+                } else {
+                    text.append(CharUtils.color(getColor(R.color.color_gray_96a1ad), "我的考试"))
+                            .append("\n")
+                            .append(CharUtils.font(16,
+                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_black_252525), mData1.size() + ""))));
+                    tvMyExam.setText(text);
+                    text.clear();
+                    text.append(CharUtils.color(getColor(R.color.color_blue_007aff), "组员考试"))
+                            .append("\n")
+                            .append(CharUtils.font(16,
+                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_blue_007aff), mData2.size() + ""))));
+                    tvMyMemberExam.setText(text);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
+
     }
 
     @BindView(R.id.my_exam)
@@ -90,17 +128,7 @@ public class SafeExamRecordActivity extends BaseActivity {
     @OnClick({R.id.my_exam, R.id.my_team_member_exam})
     public void onViewClicked(View view) {
         mAdapter.setNewData(view.getId() == R.id.my_exam ? mData2 : mData1);
-
-        switch (view.getId()) {
-            case R.id.my_exam:
-                tvMyExam.setEnabled(false);
-                tvMyMemberExam.setEnabled(true);
-                break;
-            case R.id.my_team_member_exam:
-                tvMyExam.setEnabled(true);
-                tvMyMemberExam.setEnabled(false);
-                break;
-        }
+        initIndicator(view);
     }
 
     public List<ViewData> listData(int type) {
@@ -148,11 +176,12 @@ public class SafeExamRecordActivity extends BaseActivity {
             super(data);
             addItemType(TYPE_CONTACTS, R.layout.item_contacts_layout);
             addItemType(TYPE_EXAM_RECORD, R.layout.item_exam_record_list);
+
         }
 
         @Override
         protected void convert(BaseViewHolder helper, ViewData item) {
-            helper.setGone(R.id.divider1, helper.getAdapterPosition() == mData.size() - 1);
+            helper.setGone(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
         }
     }
 }

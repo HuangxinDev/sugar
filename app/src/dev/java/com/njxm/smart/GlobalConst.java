@@ -12,7 +12,7 @@ public class GlobalConst {
     /**
      * H5 端口号
      */
-    public static final String H5_PORT = "8080;
+    public static final String H5_PORT = "8080";
 
     /**
      * 业务端口号
