@@ -57,26 +57,23 @@
         android:paddingTop="20dp"
         android:orientation="horizontal"
         android:paddingBottom="20dp">
+
         <TextView
             android:id="@id/seat1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_marginStart="@dimen/dp_16"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="考试内容" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
             android:id="@id/exam_content"
             android:layout_width="wrap_content"
-            android:layout_marginEnd="@dimen/dp_16"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:layout_marginStart="@dimen/dp_26"
-            android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajhhhhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_marginEnd="@dimen/dp_16"
+            android:maxWidth="248dp"
+            android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+
     </LinearLayout>
 
     <View style="@style/DividerStyle" />

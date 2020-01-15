@@ -3,7 +3,6 @@ package com.njxm.smart.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,7 +63,7 @@ public class SafeExamPlanActivity extends BaseActivity {
         List<String> strings = new ArrayList<>();
         strings.add("aaa");
         strings.add("aaa");
-        strings.add("安全教育特种工人教育安全教育特种工人 教育安全教育特种工人教育安全教育特种 工人教育安全教育特种工人教育安全教育特种工人 教育安全教育特种工人教育安全教育特种 工人教育");
+        strings.add("安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育");
         strings.add("安全教");
         return strings;
     }
@@ -87,16 +86,8 @@ public class SafeExamPlanActivity extends BaseActivity {
         protected void convert(BaseViewHolder helper, String item) {
             helper.setNestView(R.id.start_exam);
             helper.setNestView(R.id.exam_study);
+            helper.setText(R.id.exam_content, item);
             helper.setGone(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
-            TextView textView = helper.getView(R.id.exam_content);
-            textView.setText(item);
-//            textView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//                @Override
-//                public boolean onPreDraw() {
-//                    textView.setGravity(textView.getLineCount() > 0 ? Gravity.START : Gravity.END);
-//                    return false;
-//                }
-//            });
         }
     }
 }
