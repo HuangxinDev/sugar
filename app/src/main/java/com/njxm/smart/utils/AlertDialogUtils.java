@@ -94,7 +94,7 @@ public class AlertDialogUtils {
         tvCancel.setText(noText);
         tvConfirm.setText(yesText);
 
-        divider.setVisibility((StringUtils.isNotEmpty(yesText) && StringUtils.isNotEmpty(noText)) ? View.VISIBLE : View.GONE);
+        divider.setVisibility((StringUtils.isNotEmpty(yesText) && StringUtils.isNotEmpty(noText)) ? View.VISIBLE : View.INVISIBLE);
         tvConfirm.setVisibility(StringUtils.isEmpty(yesText) ? View.GONE : View.VISIBLE);
         tvCancel.setVisibility(StringUtils.isEmpty(noText) ? View.GONE : View.VISIBLE);
 
