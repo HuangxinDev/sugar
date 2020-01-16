@@ -328,7 +328,6 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_UPLOAD_MEDICAL) {
             showToast("上传成功");
             finish();

@@ -104,7 +104,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     .request(RequestEvent.newBuilder()
                             .url(HttpUrlGlobal.HTTP_COMMON_CITY_URL).build());
         }
-        AttendanceFragment.initLocationOption();
     }
 
     @Override

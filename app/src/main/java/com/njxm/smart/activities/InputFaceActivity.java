@@ -160,11 +160,15 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
 
     @Override
     public void onSuccess(final int requestId, final boolean success, int code, final String data) {
-        super.onSuccess(requestId, success, code, data);
         photoFile.delete();
         if (requestId == REQUEST_INPUT_FACE) {
             showToast("录入成功");
         }
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
+
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

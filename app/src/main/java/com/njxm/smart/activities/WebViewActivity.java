@@ -41,7 +41,7 @@ public class WebViewActivity extends BaseActivity {
             showTitle(true, intent.getStringExtra("title_name"));
             mWebView.loadUrl(intent.getStringExtra("resUrl"));
         }
-        mWebView.addJavascriptObject(new JsApi(this, mWebView), null);
+        mWebView.addJavascriptObject(new JsApi(this, mWebView, null), null);
     }
 
     @SuppressLint("SetJavaScriptEnabled")

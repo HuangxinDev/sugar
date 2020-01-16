@@ -39,6 +39,15 @@ android {
         }
     }
 
+    buildTypes {
+        release {
+            minifyEnabled = true
+            shrinkResources true
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
     flavorDimensions("dev")
     productFlavors {
 
@@ -91,8 +100,7 @@ dependencies {
 
     implementation 'com.github.wendux:DSBridge-Android:3.0-SNAPSHOT'
 
-    // 路由配置
-    implementation 'com.alibaba:arouter-api:1.4.0'
+
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
     implementation 'androidx.multidex:multidex:2.0.1'
 
@@ -101,6 +109,10 @@ dependencies {
     // zxing 生成二维码
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.google.android.material:material:1.2.0-alpha03'
+
+
+    // ARouter路由配置
+    implementation 'com.alibaba:arouter-api:1.4.0'
 }
 repositories {
     mavenCentral()

@@ -193,7 +193,6 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
 
     @Override
     public void onSuccess(int requestId, final boolean success, int code, final String data) {
-        super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_USER_HEAD) {
             if (success) {
                 showToast("头像上传成功");

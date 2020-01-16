@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.AppTextWatcher;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.ResolutionUtil;
@@ -31,19 +31,10 @@ import com.ns.demo.R;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-
-public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack {
-    private static final int REQUEST_UPDATE_PHONE = 100;
-    private static final int REQUEST_UPDATE_QRCODE = 570;
-    private static final int REQUEST_SMS = 507;
+public class UpdateTelPhoneActivity extends BaseActivity {
 
     @Override
     protected int setContentLayoutId() {
@@ -111,14 +102,13 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
             }
         });
 
-        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                UpdateTelPhoneActivity.this);
+
+        requestQrCode();
 
         mQRCode.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                        UpdateTelPhoneActivity.this);
+                requestQrCode();
             }
         });
 
@@ -162,10 +152,21 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
                     }
                 }, 0, 1000);
                 if (count == 60) {
-                    getSMS();
+                    HttpUtils.getInstance().request(new RequestEvent.Builder().url(HttpUrlGlobal.HTTP_SMS_URL)
+                            .addBodyJson("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
+                            .addBodyJson("mobile", mBindPhoneEdit.getText().trim())
+                            .addBodyJson("code", mQRCode.getText().trim())
+                            .build());
                 }
             }
         });
+    }
+
+    /**
+     * 获取二维码
+     */
+    private void requestQrCode() {
+        HttpUtils.getInstance().request(new RequestEvent.Builder().url(HttpUrlGlobal.HTTP_QR_URL).build());
     }
 
     @Override
@@ -181,8 +182,7 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
                         mVerifyPhoneLayout.setVisibility(View.VISIBLE);
                         mConfirmBtn.setEnabled(StringUtils.isNotEmpty(mQRCode.getText()) || StringUtils.isNotEmpty(mNewPhoneNumberCode.getText()));
                         tvPhonePop.setVisibility(View.GONE);
-                        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                                UpdateTelPhoneActivity.this);
+                        requestQrCode();
                     } else {
                         showToast("手机号格式不正确");
                     }
@@ -232,62 +232,37 @@ public class UpdateTelPhoneActivity extends BaseActivity implements HttpCallBack
     }
 
     private void updateTelPhone() {
-        JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        object.put("mobile", mBindPhoneEdit.getText().trim());
-        object.put("code", mNewPhoneNumberCode.getText().trim());
-        RequestBody requestBody =
-                FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE), object.toString());
-        Request request = new Request.Builder().url(HttpUrlGlobal.URL_SETTINGS_UPDATE_TEL_PHONE)
-                .headers(HttpUtils.getPostHeaders())
-                .post(requestBody)
+
+        RequestEvent requestEvent = new RequestEvent.Builder()
+                .url(HttpUrlGlobal.URL_SETTINGS_UPDATE_TEL_PHONE)
+                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .addBodyJson("mobile", mBindPhoneEdit.getText().trim())
+                .addBodyJson("code", mNewPhoneNumberCode.getText().trim())
                 .build();
-
-        HttpUtils.getInstance().postData(REQUEST_UPDATE_PHONE, request, this);
+        HttpUtils.getInstance().request(requestEvent);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    public void getSMS() {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
-        params.put("code", mQRCode.getText().trim());
-        params.put("mobile", mBindPhoneEdit.getText().trim());
-        HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
-                HttpUrlGlobal.HTTP_SMS_URL, params, null);
-    }
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
-        if (requestId == HttpUtils.REQUEST_QR) {
-            JSONObject jsonObject = JSON.parseObject(data);
-            final String bitmapStr = jsonObject.getString("kaptcha");
-            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, jsonObject.getString("kaptchaToken"));
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    mQRCode.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(),
-                            BitmapUtils.stringToBitmap(bitmapStr)));
-                }
-            });
-        } else if (REQUEST_UPDATE_PHONE == requestId) {
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, mBindPhoneEdit.getText());
-                    mVerifySuccess.setEnabled(true);
-                    mConfirmBtn.setVisibility(View.GONE);
-                    tvPhonePop.setPadding(0, ResolutionUtil.dp2Px(126), 0, 0);
-                    tvPhonePop.setVisibility(View.VISIBLE);
-                    tvPhonePop.setText(getNewPhone());
-                    mVerifyPhoneLayout.setVisibility(View.GONE);
-                }
-            });
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponse(ResponseEvent event) {
+        if (event.getUrl().equals(HttpUrlGlobal.URL_SETTINGS_UPDATE_TEL_PHONE) && event.isSuccess()) {
+            SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, mBindPhoneEdit.getText());
+            mVerifySuccess.setEnabled(true);
+            mConfirmBtn.setVisibility(View.GONE);
+            tvPhonePop.setPadding(0, ResolutionUtil.dp2Px(126), 0, 0);
+            tvPhonePop.setVisibility(View.VISIBLE);
+            tvPhonePop.setText(getNewPhone());
+            mVerifyPhoneLayout.setVisibility(View.GONE);
+        } else {
+            super.onResponse(event);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void uploadQrCode(QRCodeBean bean) {
+        mQRCode.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(),
+                BitmapUtils.stringToBitmap(bean.getImage())));
+        SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, bean.getImageToken());
     }
 
     public SpannableString getPhonePop(String telPhone) {

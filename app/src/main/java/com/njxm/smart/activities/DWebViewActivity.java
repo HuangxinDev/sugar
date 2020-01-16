@@ -5,7 +5,9 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ns.demo.R;
 
 import butterknife.BindView;
@@ -20,6 +22,8 @@ public class DWebViewActivity extends BaseActivity {
     @BindView(R.id.ll_root)
     protected LinearLayout llRoot;
 
+    @Autowired
+    public String loadUrl;
 
     @Override
     protected int setContentLayoutId() {
@@ -29,9 +33,10 @@ public class DWebViewActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ARouter.getInstance().inject(this);
 
         llRoot.setPadding(0, getStatusBarHeight(this), 0, 0);
 
-        mDWebView.loadUrl(getIntent().getStringExtra("loadUrl"));
+        mDWebView.loadUrl(getIntent().getStringExtra("url"));
     }
 }

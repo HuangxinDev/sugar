@@ -209,7 +209,6 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, final String data) {
-        super.onSuccess(requestId, success, code, data);
         if (!success) {
             invoke(new Runnable() {
                 @Override
@@ -218,5 +217,10 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
                 }
             });
         }
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
+
     }
 }

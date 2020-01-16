@@ -20,6 +20,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.CertificateParentBean;
+import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ns.demo.R;
 
@@ -35,7 +36,7 @@ import butterknife.OnClick;
 /**
  * 证书种类Activity
  */
-public class CertificateTypeActivity extends BaseActivity {
+public class CertificateTypeActivity extends BaseActivity implements HttpCallBack {
     @Override
     protected int setContentLayoutId() {
         return R.layout.my_certificate_type_activity;
@@ -100,7 +101,6 @@ public class CertificateTypeActivity extends BaseActivity {
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
         if (requestId == 100) {
             JSONObject jsonObject = JSONObject.parseObject(data);
             mDatas = JSONObject.parseArray(jsonObject.getString("data"),
@@ -119,7 +119,6 @@ public class CertificateTypeActivity extends BaseActivity {
 
     @Override
     public void onFailed(String errMsg) {
-        super.onFailed(errMsg);
     }
 
     private static class SimpleAdapter extends BaseQuickAdapter<CertificateParentBean, BaseViewHolder> {

@@ -28,9 +28,9 @@ import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
+import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.PermissionManager;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
@@ -57,7 +57,7 @@ import butterknife.Optional;
  * 基类，提供共用方法和回调
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange,
-        OnClickListener, HttpCallBack, BaseRunnable {
+        OnClickListener, BaseRunnable {
 
     protected final String TAG;
 
@@ -316,20 +316,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         startActivityForResult(intent, requestId);
-    }
 
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-    }
-
-    @Override
-    public void onFailed(final String errMsg) {
-        invoke(new Runnable() {
-            @Override
-            public void run() {
-                showToast(errMsg);
-            }
-        });
     }
 
     @Subscribe(sticky = true)
@@ -355,6 +342,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
                 EventBus.getDefault().postSticky(JsonUtils.getJsonArray(event.getData(),
                         UserCertificateActivity.CertificateListItem.class));
                 break;
+            case HttpUrlGlobal.HTTP_QR_URL:
+                EventBus.getDefault().post(JsonUtils.getJsonObject(event.getData(), QRCodeBean.class));
+                break;
             default:
 //                EventBus.getDefault().post(new ToastEvent("未处理Url"));
         }
@@ -373,6 +363,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void doOtherThing(Runnable runnable) {
+        runnable.run();
     }
 
     /**

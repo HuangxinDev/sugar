@@ -266,7 +266,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
         if (StringUtils.isEmpty(data)) {
             return;
         }

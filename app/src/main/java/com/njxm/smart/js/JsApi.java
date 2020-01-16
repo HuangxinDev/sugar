@@ -1,18 +1,16 @@
 package com.njxm.smart.js;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
-import android.widget.DatePicker;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.activities.BaseActivity;
+import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.service.LocationService;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 
-import java.util.Calendar;
+import org.greenrobot.eventbus.EventBus;
 
 import wendu.dsbridge.DWebView;
 
@@ -29,14 +27,16 @@ public class JsApi {
     }
 
     private OnTakePhoto onTakePhoto;
+    private LocationService mLocationService;
 
     public void setTakePhoto(OnTakePhoto takePhoto) {
         this.onTakePhoto = takePhoto;
     }
 
-    public JsApi(Activity activity, DWebView webView) {
+    public JsApi(Activity activity, DWebView webView, LocationService locationService) {
         this.activity = activity;
         this.mDWebView = webView;
+        this.mLocationService = locationService;
     }
 
     /**
@@ -45,40 +45,14 @@ public class JsApi {
      * @return
      */
     @JavascriptInterface
-    public String checkLocation(Object paramObject) {
-        JSONObject object = new JSONObject();
-        object.put("x", "116.39564504");
-        object.put("y", "39.92998578");
-        return object.toJSONString();
-    }
-
-    /**
-     * 返回当前时间
-     *
-     * @return
-     */
-    @JavascriptInterface
-    public void checkTimestamp(Object time) {
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(Long.parseLong((String) time));
-
-        LogTool.printD("JsApi", "invoke checkTimestamp");
-
-        DatePickerDialog dialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, dayOfMonth);
-                calendar.getTimeInMillis();
-                uploadTime(String.valueOf(calendar.getTimeInMillis()));
+    public void checkLocation(Object paramObject) {
+        if (mLocationService != null) {
+            if (!mLocationService.isStart()) {
+                mLocationService.start();
             }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-
-        dialog.show();
+            mLocationService.requestLocation();
+        }
     }
-
 
     @JavascriptInterface
     public String checkUserInfo(Object paramString) {
@@ -100,21 +74,16 @@ public class JsApi {
         }
     }
 
-    private void uploadTime(String time) {
-        mDWebView.callHandler("h5DatePicker", new Object[]{time});
-    }
-
     public void uploadImage(byte[] bytes) {
         String bitmapStr = Base64.encodeToString(bytes, Base64.DEFAULT);
         mDWebView.callHandler("h5Photos", new Object[]{bitmapStr});
-        if (activity instanceof BaseActivity) {
-            ((BaseActivity) activity).invoke(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(activity, "图片大小: " + bitmapStr.length(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+        EventBus.getDefault().post(new ToastEvent("图片大小: " + bitmapStr.length()));
+    }
 
+    public void uploadLocation(String json) {
+        mDWebView.callHandler("h5Location", new Object[]{json});
+        if (mLocationService != null && mLocationService.isStart()) {
+            mLocationService.stop();
+        }
     }
 }

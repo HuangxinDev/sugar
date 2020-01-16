@@ -22,6 +22,7 @@ import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.ResolutionUtil;
@@ -43,7 +44,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class UserCertificateActivity extends BaseActivity {
+public class UserCertificateActivity extends BaseActivity implements HttpCallBack {
 
 
     private static final int REQUEST_UPLOAD_CERTIFICATION = 109;
@@ -239,10 +240,14 @@ public class UserCertificateActivity extends BaseActivity {
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
         if (requestId == REQUEST_UPLOAD_CERTIFICATION) {
             refreshCertificateList();
         }
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
+
     }
 
     @Override

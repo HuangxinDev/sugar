@@ -257,7 +257,6 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
 
     @Override
     public void onSuccess(int requestId, boolean success, int code, String data) {
-        super.onSuccess(requestId, success, code, data);
         if (requestId == HttpUtils.REQUEST_QR) {
             if (success) {
                 JSONObject dataObject = JSONObject.parseObject(data);
@@ -272,6 +271,11 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
                 finish();
             }
         }
+
+    }
+
+    @Override
+    public void onFailed(String errMsg) {
 
     }
 
