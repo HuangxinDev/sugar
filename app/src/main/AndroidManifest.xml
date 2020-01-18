@@ -136,7 +136,7 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name="com.njxm.smart.activities.DailyCheckActivity"
+            android:name="com.njxm.smart.activities.SafeInspectActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
@@ -188,6 +188,24 @@
             android:name="com.njxm.smart.activities.SafeExamStudyActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.SafeInspectTaskActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.SafeInspectTaskDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.njxm.smart.activities.SafeInspectRecordActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityStyle" />
+        <activity
+            android:name="com.njxm.smart.activities.SafeInspectReformActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityStyle" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

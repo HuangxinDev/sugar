@@ -14,7 +14,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/color_gray_96a1ad" />
+        android:background="@color/color_96A1AD" />
 
     <RelativeLayout
         android:id="@id/default_layout"

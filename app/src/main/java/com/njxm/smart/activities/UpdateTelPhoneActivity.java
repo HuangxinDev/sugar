@@ -280,7 +280,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new AbsoluteSizeSpan(17, true), string.indexOf("\n"),
                 len2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.color_black_252525)), len1, len2,
+        spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.color_252525)), len1, len2,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
@@ -293,7 +293,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new AbsoluteSizeSpan(19, true), newPhone.indexOf("\n"),
                 newPhone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.color_black_252525)), newPhone.indexOf("\n"),
+        spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.color_252525)), newPhone.indexOf("\n"),
                 newPhone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }

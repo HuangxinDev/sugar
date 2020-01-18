@@ -18,4 +18,26 @@
     <string name="update_tel_phone">更换手机</string>
 
     <string name="safe_exam_show">共%1d题，答对%2d题，答错%3d题</string>
+    <string name="inspect_description">巡检描述</string>
+    <string name="inspect_result">巡检结果</string>
+    <string name="inspect_time">巡检时间</string>
+    <string name="inspect_area">巡检区域</string>
+    <string name="has_problem">有问题</string>
+    <string name="no_problem">没问题</string>
+
+    <string name="reform_record">整改记录</string>
+    <string name="reform_result">整改结果</string>
+    <string name="reform_limit">整改期限</string>
+    <string name="reform_owner">整改负责人</string>
+
+    <string name="issue_type">问题类型</string>
+    <string name="in_area">所在地区</string>
+
+
+    <string name="project">项目</string>
+    <string name="biao_duan">标段</string>
+    <string name="fen_bu_fen_xiang">分部分项</string>
+    <string name="look_details">查看详情</string>
+
+
 </resources>

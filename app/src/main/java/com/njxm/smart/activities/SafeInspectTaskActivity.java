@@ -1,17 +1,18 @@
 package com.njxm.smart.activities;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import com.ns.demo.R;
 
-/**
- * 默认
- */
-public class DailyCheckDetailActivity extends BaseActivity {
+import butterknife.BindView;
 
-    private boolean isEdit = false;
+public class SafeInspectTaskActivity extends BaseActivity {
+
+    @BindView(R.id.nav_tab)
+    protected View mNavTab;
 
     @Override
     protected int setContentLayoutId() {
@@ -21,15 +22,8 @@ public class DailyCheckDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setActionBarTitle("创建巡检任务");
         showLeftBtn(true, R.mipmap.arrow_back_blue);
-        setActionBarTitle("巡检详情");
-    }
-
-    /**
-     * 设置控件属性
-     * @param tvId
-     * @param resId
-     */
-    public void setText(int tvId, int resId) {
+        mNavTab.setVisibility(View.GONE);
     }
 }

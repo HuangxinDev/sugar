@@ -71,6 +71,6 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/btn_white_style"
         android:text="开始考试"
-        android:textColor="@color/color_blue_007aff" />
+        android:textColor="@color/color_007AFF" />
 
 </LinearLayout>

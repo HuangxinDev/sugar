@@ -16,11 +16,13 @@
         android:background="@color/divider_color_ffdedede" />
 
     <LinearLayout
+        android:id="@id/nav_tab"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:gravity="center_vertical">
 
         <RelativeLayout
+            android:id="@id/tab1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -30,17 +32,21 @@
                 android:id="@+id/head_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/safe_check_task_res" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_6"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/selector_007aff_96a1ad"
                 android:layout_below="@id/head_1"
                 android:text="任务详情" />
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@id/tab2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -49,6 +55,7 @@
                 android:id="@+id/head_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/safe_check_record_res" />
 
             <TextView
@@ -56,6 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_6"
                 android:layout_below="@id/head_2"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/selector_007aff_96a1ad"
                 android:text="巡检记录" />
         </RelativeLayout>
     </LinearLayout>
@@ -66,6 +75,7 @@
         android:background="@color/divider_color_ffdedede" />
 
     <ScrollView
+        android:id="@id/tab1_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -386,14 +396,27 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:paddingTop="74dp"
                 android:layout_weight="1"
+                android:paddingBottom="48dp"
                 android:background="@color/background_gray">
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@id/confirm"
                     style="@style/TVBtn"
-                    android:layout_marginTop="74dp"
-                    android:layout_marginBottom="48dp"
                     android:text="确定" />
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/divider_gray" />
 </LinearLayout>

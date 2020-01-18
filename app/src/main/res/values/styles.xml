@@ -8,17 +8,14 @@
 
     <!--    闪屏主题-->
     <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/app_background_lunch_screen</item>
+<!--        <item name="android:windowBackground">@mipmap/app_background_lunch_screen</item>-->
+        <item name="android:windowBackground">@color/background_white</item>
         <item name="android:screenOrientation">portrait</item>
         <item name="android:launchMode">singleTask</item>
     </style>
 
-    <style name="ActivityStyle" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowAllowEnterTransitionOverlap">false</item>
-        <item name="android:screenOrientation">portrait</item>
-        <item name="android:launchMode">singleTask</item>
-        <item name="android:windowEnableSplitTouch">false</item>
-        <item name="android:splitMotionEvents">false</item>
+    <style name="ActivityStyle" parent="LaunchTheme">
+        <item name="android:windowBackground">@color/background_white</item>
     </style>
 
     <style name="XmlBackground">
@@ -41,7 +38,7 @@
     </style>
 
     <style name="BaseTextViewStyle.Black">
-        <item name="android:textColor">@color/color_black_252525</item>
+        <item name="android:textColor">@color/color_252525</item>
     </style>
 
     <style name="BaseTextViewStyle.Black.11">
@@ -57,8 +54,8 @@
     </style>
 
     <style name="BaseTextViewStyle.Black.26">
-        <item name="android:textColorHint">@color/color_gray_96a1ad</item>
-        <item name="android:textColor">@color/color_black_252525</item>
+        <item name="android:textColorHint">@color/color_96A1AD</item>
+        <item name="android:textColor">@color/color_252525</item>
         <item name="android:textSize">@dimen/sp_26</item>
     </style>
 
@@ -72,7 +69,7 @@
 
     <style name="BaseTextViewStyle.Blue">
         <item name="android:textSize">@dimen/sp_14</item>
-        <item name="android:textColor">@color/color_blue_007aff</item>
+        <item name="android:textColor">@color/color_007AFF</item>
     </style>
 
     <style name="BaseTextViewStyle.White">
@@ -84,7 +81,7 @@
     </style>
 
     <style name="BaseTextViewStyle.Gray">
-        <item name="android:textColor">@color/color_gray_96a1ad</item>
+        <item name="android:textColor">@color/color_96A1AD</item>
     </style>
 
     <style name="BaseTextViewStyle.Gray.11">

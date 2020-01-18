@@ -1,6 +1,7 @@
 package com.njxm.smart.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.njxm.smart.activities.adapter.DailyCheckAdapter;
 import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
 import com.ns.demo.R;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +31,7 @@ import butterknife.BindView;
  * 有: 展示数据，（高管并显示右侧状态栏按钮，可以创建巡检项目）
  */
 @Route(path = "/app/safety/inspect")
-public class DailyCheckActivity extends BaseActivity {
+public class SafeInspectActivity extends BaseActivity {
 
     /**
      * 展示巡检数据列表
@@ -63,6 +66,10 @@ public class DailyCheckActivity extends BaseActivity {
 
 
         mDailyCheckAdapter = new DailyCheckAdapter(mData);
+        mDailyCheckAdapter.setOnItemClickListener((adapter, view, position) -> {
+            EventBus.getDefault().postSticky((adapter.getItem(position)));
+            startActivity(new Intent(this, SafeInspectTaskDetailActivity.class));
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mDailyCheckAdapter);
 
@@ -76,6 +83,12 @@ public class DailyCheckActivity extends BaseActivity {
         }).start();
 
         updateView();
+    }
+
+    @Override
+    public void onClickRightBtn() {
+        super.onClickRightBtn();
+        startActivity(new Intent(this, SafeInspectTaskActivity.class));
     }
 
     private void updateView() {

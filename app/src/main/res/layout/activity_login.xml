@@ -116,7 +116,7 @@
             app:inputType="number"
             app:leftIcon="@mipmap/edt_icon_pwd_verify"
             app:rightText="@string/text_get_code"
-            app:rightTextColor="@color/color_blue_007aff"
+            app:rightTextColor="@color/color_007AFF"
             app:right_type="text" />
 
         <com.njxm.smart.view.AppEditText
@@ -145,7 +145,7 @@
             android:layout_marginTop="@dimen/dp_28"
             android:layout_marginEnd="@dimen/dp_61"
             android:text="忘记密码"
-            android:textColor="@color/color_blue_007aff" />
+            android:textColor="@color/color_007AFF" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

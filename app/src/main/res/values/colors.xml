@@ -3,16 +3,14 @@
     <!--    字体颜色-->
     <color name="text_color_white">#ffffffff</color>
 
-    <color name="color_gray_96a1ad">#ff96a1ad</color>
+    <color name="color_96A1AD">#ff96a1ad</color>
     <color name="color_gray_b0b0b0">#ffb0b0b0</color>
     <color name="color_gray_7c7c7c">#ff7c7c7c</color>
 
-    <color name="color_blue_007aff">#ff007aff</color>
-
-
-    <color name="color_black_252525">#ff252525</color>
+    <color name="color_007AFF">#ff007aff</color>
+    <color name="color_ff6600">#ffff6600</color>
+    <color name="color_252525">#ff252525</color>
     <color name="color_black_383838">#ff383838</color>
-
 
     <!--    背景颜色-->
     <color name="background_white">#FFFFFFFF</color>

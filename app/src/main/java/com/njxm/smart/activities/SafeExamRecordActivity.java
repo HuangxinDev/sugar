@@ -78,29 +78,29 @@ public class SafeExamRecordActivity extends BaseActivity {
             public void onAnimationEnd(Animator animation) {
                 SpannableStringBuilder text = new SpannableStringBuilder();
                 if (clickView == tvMyExam) {
-                    text.append(CharUtils.color(getColor(R.color.color_blue_007aff), "我的考试"))
+                    text.append(CharUtils.color(getColor(R.color.color_007AFF), "我的考试"))
                     .append("\n")
                     .append(CharUtils.font(16,
-                            CharUtils.bold(CharUtils.color(getColor(R.color.color_blue_007aff),
+                            CharUtils.bold(CharUtils.color(getColor(R.color.color_007AFF),
                                     mData1.size() + ""))));
                     tvMyExam.setText(text);
                     text.clear();
-                    text.append(CharUtils.color(getColor(R.color.color_gray_96a1ad), "组员考试"))
+                    text.append(CharUtils.color(getColor(R.color.color_96A1AD), "组员考试"))
                             .append("\n")
                             .append(CharUtils.font(16,
-                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_black_252525), mData2.size() + ""))));
+                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_252525), mData2.size() + ""))));
                     tvMyMemberExam.setText(text);
                 } else {
-                    text.append(CharUtils.color(getColor(R.color.color_gray_96a1ad), "我的考试"))
+                    text.append(CharUtils.color(getColor(R.color.color_96A1AD), "我的考试"))
                             .append("\n")
                             .append(CharUtils.font(16,
-                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_black_252525), mData1.size() + ""))));
+                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_252525), mData1.size() + ""))));
                     tvMyExam.setText(text);
                     text.clear();
-                    text.append(CharUtils.color(getColor(R.color.color_blue_007aff), "组员考试"))
+                    text.append(CharUtils.color(getColor(R.color.color_007AFF), "组员考试"))
                             .append("\n")
                             .append(CharUtils.font(16,
-                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_blue_007aff), mData2.size() + ""))));
+                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_007AFF), mData2.size() + ""))));
                     tvMyMemberExam.setText(text);
                 }
             }

@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/main_bar"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/color_gray_96a1ad" />
+        android:background="@color/color_96A1AD" />
 
     <LinearLayout
         android:id="@+id/main_bar"
