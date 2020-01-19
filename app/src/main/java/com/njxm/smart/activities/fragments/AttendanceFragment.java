@@ -7,6 +7,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
+import android.view.Window;
+import android.webkit.GeolocationPermissions;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -20,7 +29,7 @@ import com.njxm.smart.GlobalConst;
 import com.njxm.smart.SmartCloudApplication;
 import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.js.JsApi;
+import com.njxm.smart.js.CheckJsApi;
 import com.njxm.smart.service.LocationService;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
@@ -43,7 +52,7 @@ public class AttendanceFragment extends BaseFragment {
     @BindView(R.id.webview_kit)
     protected DWebView mWebView;
 
-    private JsApi mJsApi;
+    private CheckJsApi mJsApi;
 
     private LocationService mLocationService;
 
@@ -52,46 +61,96 @@ public class AttendanceFragment extends BaseFragment {
         return R.layout.my_attendance_activity;
     }
 
-    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
+    private BDAbstractLocationListener mBdAbstractLocationListener = new BDAbstractLocationListener() {
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            JSONObject object = new JSONObject();
+            object.put("x", bdLocation.getLongitude());
+            object.put("y", bdLocation.getLatitude());
+            object.put("address", bdLocation.getAddrStr());
+            Log.d("BDLocation", "upload data: " + object.toJSONString());
+//            EventBus.getDefault().post(new ToastEvent(object.toJSONString()));
+            mWebView.callHandler("h5Location", new Object[]{object.toJSONString()});
+        }
+    };
+
+    private CheckJsApi.OnCheckJsApiListener mJsListener = new CheckJsApi.OnCheckJsApiListener() {
+        @Override
+        public void requestImage() {
+            takePhoto(999);
+        }
+
+        @Override
+        public void requestLocation() {
+            if (mLocationService != null) {
+                mLocationService.start();
+            }
+        }
+    };
+
+    @SuppressLint("SetJavaScriptEnabled")
+    @Override
+    protected void init() {
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+        });
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                return true;
+            }
+
+            @Override
+            public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+                return true;
+            }
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+                super.onGeolocationPermissionsShowPrompt(origin, callback);
+            }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (getActivity() != null) {
+                    getActivity().getWindow().setFeatureInt(Window.FEATURE_PROGRESS, newProgress * 100);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+            }
+        });
+
+        mJsApi = new CheckJsApi();
+        mJsApi.setCheckJsApiListener(mJsListener);
+        mWebView.loadUrl(GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
+    }
+
     @Override
     protected void setUpView() {
         LinearLayout llRootView = getContentView().findViewById(R.id.ll_root);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mLocationService = new LocationService(getActivity());
-        mLocationService.enableAssistanLocation(mWebView);
-        mLocationService.registerListener(new BDAbstractLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                JSONObject object = new JSONObject();
-                object.put("x", bdLocation.getLongitude());
-                object.put("y", bdLocation.getLatitude());
-                object.put("address", bdLocation.getAddrStr());
-                mJsApi.uploadLocation(object.toJSONString());
-            }
-        });
         if (getActivity() instanceof BaseActivity) {
-            llRootView.setPadding(0,
-                    ((BaseActivity) getActivity()).getStatusBarHeight(getActivity()), 0, 0);
+            llRootView.setPadding(0, ((BaseActivity) getActivity()).getStatusBarHeight(getActivity()), 0, 0);
         }
     }
 
     @Override
     protected void setUpData() {
-        mJsApi = new JsApi(getActivity(), mWebView, mLocationService);
-        mWebView.addJavascriptObject(mJsApi, null);
-        mJsApi.setTakePhoto(new JsApi.OnTakePhoto() {
-            @Override
-            public void requestImage() {
-                takePhoto(999);
-            }
-        });
 
-        mWebView.loadUrl(GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     private File photoFile;
@@ -116,6 +175,16 @@ public class AttendanceFragment extends BaseFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mWebView.addJavascriptObject(mJsApi, null);
+
+        mLocationService = ((SmartCloudApplication) getActivity().getApplication()).locationService;
+        mLocationService.registerListener(mBdAbstractLocationListener);
+        mLocationService.enableAssistanLocation(mWebView);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 999 && resultCode == Activity.RESULT_OK) {
@@ -127,7 +196,9 @@ public class AttendanceFragment extends BaseFragment {
                     }
                     try {
                         Bitmap bitmap = Glide.with(getActivity()).asBitmap().load(photoFile).submit(200, 200).get();
-                        mJsApi.uploadImage(BitmapUtils.bitmap2Bytes(bitmap));
+                        String bitmapStr = Base64.encodeToString(BitmapUtils.bitmap2Bytes(bitmap), Base64.DEFAULT);
+                        mWebView.callHandler("h5Photos", new Object[]{bitmapStr});
+                        EventBus.getDefault().post(new ToastEvent("图片大小: " + bitmapStr.length()));
                     } catch (Exception e) {
                         e.printStackTrace();
                         EventBus.getDefault().post(new ToastEvent("图片处理异常"));
@@ -151,7 +222,9 @@ public class AttendanceFragment extends BaseFragment {
 
     @Override
     public void onStop() {
-//        mWebView.removeJavascriptObject(null);
+        mLocationService.unregisterListener(mBdAbstractLocationListener);
+        mLocationService.stop();
+        mWebView.removeJavascriptObject(null);
         super.onStop();
     }
 }

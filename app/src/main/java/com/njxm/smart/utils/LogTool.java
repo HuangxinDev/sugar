@@ -2,6 +2,8 @@ package com.njxm.smart.utils;
 
 import android.util.Log;
 
+import com.ns.demo.BuildConfig;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
@@ -20,9 +22,8 @@ public final class LogTool {
     /**
      * 是否允许打印日志
      */
-    public static void enableDebug(boolean isDebug) {
-        DEBUG = isDebug;
-        if (DEBUG) {
+    public static void enableDebug() {
+        if (BuildConfig.DEBUG) {
             printW("[%s] %s", TAG, "项目DEBUG模式开关已打开, 发版请将其关闭");
         }
     }
@@ -35,7 +36,7 @@ public final class LogTool {
      * @param objects 可伸缩变量
      */
     private static boolean print(int level, String format, Object... objects) {
-        if (!DEBUG) {
+        if (!BuildConfig.DEBUG) {
             return false;
         }
 
@@ -80,6 +81,10 @@ public final class LogTool {
      */
     public static boolean printI(String format, Object... objects) {
         return print(0, format, objects);
+    }
+
+    public static boolean printD(String tag, String format, Object... objects) {
+        return print(0, "[ %s ] %s ", tag, format, objects);
     }
 
     /**

@@ -9,7 +9,6 @@ import android.webkit.WebView;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.njxm.smart.js.JsApi;
 import com.ns.demo.R;
 
 import butterknife.BindView;
@@ -41,7 +40,6 @@ public class WebViewActivity extends BaseActivity {
             showTitle(true, intent.getStringExtra("title_name"));
             mWebView.loadUrl(intent.getStringExtra("resUrl"));
         }
-        mWebView.addJavascriptObject(new JsApi(this, mWebView, null), null);
     }
 
     @SuppressLint("SetJavaScriptEnabled")

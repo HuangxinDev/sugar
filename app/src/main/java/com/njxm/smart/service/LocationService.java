@@ -1,6 +1,7 @@
 package com.njxm.smart.service;
 
 import android.content.Context;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -17,7 +18,7 @@ public class LocationService {
     private static LocationClient client = null;
     private static LocationClientOption mOption;
     private static LocationClientOption  DIYoption;
-    private Object objLock;
+    private final Object objLock = new Object();
 
     /***
      * 初始化 LocationClient
@@ -25,7 +26,6 @@ public class LocationService {
      * @param locationContext
      */
     public LocationService(Context locationContext) {
-        objLock = new Object();
         synchronized (objLock) {
             if (client == null) {
                 client = new LocationClient(locationContext);
@@ -61,8 +61,7 @@ public class LocationService {
      */
     public String getSDKVersion() {
         if (client != null) {
-            String version = client.getVersion();
-            return version;
+            return client.getVersion();
         }
         return null;
     }
@@ -109,7 +108,7 @@ public class LocationService {
      *
      * @return DefaultLocationClientOption  默认O设置
      */
-    public LocationClientOption getDefaultLocationClientOption() {
+    private LocationClientOption getDefaultLocationClientOption() {
         if (mOption == null) {
             mOption = new LocationClientOption();
             mOption.setLocationMode(LocationMode.Hight_Accuracy); // 可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
@@ -150,6 +149,7 @@ public class LocationService {
 
     public void requestLocation() {
         if (client != null) {
+            Log.d("BDLocation", "BDLocation invoke JPI");
             client.requestLocation();
         }
     }
