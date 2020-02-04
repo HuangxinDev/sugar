@@ -18,10 +18,8 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
@@ -31,21 +29,18 @@ import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
  * 实名认证页面
  */
-public class RealNameAuthenticationActivity extends BaseActivity implements HttpCallBack {
+public class RealNameAuthenticationActivity extends BaseActivity {
 
     private ImageView ivCard1;
     private ImageView ivCard2;
@@ -116,27 +111,18 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
         }
 
         MediaType imageType = MediaType.parse("image/jpg");
-
-        RequestBody body = new MultipartBody.Builder()
-                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addFormDataPart("name", etCardName.getText().toString().trim())
-                .addFormDataPart("idCardNum", etCardId.getText().toString().trim())
-                .addFormDataPart("frontFile", "1zm.jpg", RequestBody.create(imageType,
-                        BitmapUtils.compressFile(sparseArray.get(0))))
-                .addFormDataPart("backFile", "2fm.jpg", RequestBody.create(imageType,
-                        BitmapUtils.compressFile(sparseArray.get(1))))
-                .addFormDataPart("faceFile", "11.jpg", RequestBody.create(imageType,
-                        BitmapUtils.compressFile(sparseArray.get(2))))
-                .build();
-
-        RequestEvent requestEvent = new RequestEvent.Builder().url(HttpUrlGlobal.URL_USER_REAL_Authentication)
-                        .addHeader("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE).build();
-        HttpUtils.getInstance().request(requestEvent);
-
-        Request request = HttpUtils.getRequestBuilder(HttpUrlGlobal.URL_USER_REAL_Authentication)
-                .header("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE)
-                .post(body).build();
-        HttpUtils.getInstance().postData(REQUEST_UPLOAD_BITMAP, request, this);
+        HttpUtils.getInstance().doPostFile(new RequestEvent.Builder()
+                .url(HttpUrlGlobal.URL_USER_REAL_Authentication)
+                .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
+                .addPart(MultipartBody.Part.createFormData("name", etCardName.getText().toString().trim()))
+                .addPart(MultipartBody.Part.createFormData("idCardNum", etCardId.getText().toString().trim()))
+                .addPart(MultipartBody.Part.createFormData("frontFile", "1zm.jpg", RequestBody.create(imageType, BitmapUtils.compressFile(sparseArray.get(0)))))
+                .addPart(MultipartBody.Part.createFormData("backFile", "2fm.jpg", RequestBody.create(imageType,
+                        BitmapUtils.compressFile(sparseArray.get(1)))))
+                .addPart(MultipartBody.Part.createFormData("faceFile", "11.jpg", RequestBody.create(imageType,
+                        BitmapUtils.compressFile(sparseArray.get(2)))))
+                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE)
+                .build());
     }
 
     public void start(int requestId, String fileName) {
@@ -210,20 +196,4 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
         super.onBackPressed();
     }
 
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, final String data) {
-        if (!success) {
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    showToast(data);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-        EventBus.getDefault().post(new ToastEvent(errMsg));
-    }
 }

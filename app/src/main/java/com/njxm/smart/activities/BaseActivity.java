@@ -345,10 +345,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
                     SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, event.getData());
                 }
                 break;
-            case HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST:
-                EventBus.getDefault().postSticky(JsonUtils.getJsonArray(event.getData(),
-                        UserCertificateActivity.CertificateListItem.class));
-                break;
             case HttpUrlGlobal.HTTP_QR_URL:
                 EventBus.getDefault().post(JsonUtils.getJsonObject(event.getData(), QRCodeBean.class));
                 break;

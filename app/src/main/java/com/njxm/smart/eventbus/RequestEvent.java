@@ -5,8 +5,12 @@ import androidx.annotation.IntDef;
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import okhttp3.MultipartBody;
 
 /**
  *
@@ -34,6 +38,8 @@ public class RequestEvent {
 
     public HashMap<String, String> params;
 
+    public List<MultipartBody.Part> parts;
+
     public String bodyJson;
 
     public boolean newBuilder = false;
@@ -48,6 +54,7 @@ public class RequestEvent {
         this.params = builder.params;
         this.type = REQUEST_PARAMS;
         this.newBuilder = builder.newBuilder;
+        this.parts = builder.parts;
         if (StringUtils.isNotEmpty(builder.method)) {
             this.requestMethod = builder.method;
         }
@@ -75,6 +82,7 @@ public class RequestEvent {
         private HashMap<String, String> headers = new HashMap<>();
         private HashMap<String, String> params = new HashMap<>();
         private HashMap<String, String> bodyJsonMap = new HashMap<>();
+        private List<MultipartBody.Part> parts = new ArrayList<>();
         protected boolean newBuilder = false;
         private String method;
 
@@ -115,6 +123,14 @@ public class RequestEvent {
             bodyJsonMap.put(key, value);
             return this;
         }
+
+        public Builder addPart(MultipartBody.Part part) {
+            if (part != null) {
+                parts.add(part);
+            }
+            return this;
+        }
+
 
         public RequestEvent build() {
             return new RequestEvent(this);

@@ -14,16 +14,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ns.demo.R;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -31,13 +33,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
  * 个人信息页面（由主页 我的-姓名跳转）
  */
-public class PersonalInformationActivity extends BaseActivity implements HttpCallBack {
+public class PersonalInformationActivity extends BaseActivity {
 
     @BindView(R.id.news_user_base_new)
     protected View mUserBaseNews;
@@ -175,42 +176,27 @@ public class PersonalInformationActivity extends BaseActivity implements HttpCal
     }
 
     private void uploadHeadFile() {
-        MultipartBody builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addFormDataPart("file", photoFile.getName(),
-                        RequestBody.create(MediaType.parse("image/png"), photoFile))
-                .build();
-
-        Request request = new Request.Builder()
+        HttpUtils.getInstance().doPostFile(new RequestEvent.Builder()
                 .url(HttpUrlGlobal.HTTP_MY_USER_HEAD)
-                .headers(HttpUtils.getPostHeaders())
-                .post(builder)
-                .build();
-
-        HttpUtils.getInstance().postData(REQUEST_USER_HEAD, request, this);
+                .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
+                .addPart(MultipartBody.Part.createFormData("file", photoFile.getName(),
+                        RequestBody.create(MediaType.parse("image/png"), photoFile)))
+                .build());
     }
 
     @Override
-    public void onSuccess(int requestId, final boolean success, int code, final String data) {
-        if (requestId == REQUEST_USER_HEAD) {
-            if (success) {
-                showToast("头像上传成功");
+    public void onResponse(ResponseEvent event) {
+        if (event.getUrl().equals(HttpUrlGlobal.HTTP_MY_USER_HEAD)) {
+            if (event.isSuccess()) {
+                EventBus.getDefault().post(new ToastEvent("头像上传成功"));
                 invoke(new Runnable() {
                     @Override
                     public void run() {
                         Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead);
                     }
                 });
-            } else {
-                showToast(data);
             }
         }
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

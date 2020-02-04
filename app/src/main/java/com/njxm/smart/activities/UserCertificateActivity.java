@@ -19,16 +19,18 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.MyCerticateListAdapter;
 import com.njxm.smart.activities.adapter.MyCertificateAdapter;
 import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ns.demo.R;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -41,13 +43,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class UserCertificateActivity extends BaseActivity implements HttpCallBack {
-
-
-    private static final int REQUEST_UPLOAD_CERTIFICATION = 109;
+public class UserCertificateActivity extends BaseActivity {
 
     public static class CertificateItem {
         public String id;
@@ -228,7 +226,7 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
      * 请求后数据，刷新新数据
      * @param listItems 请求回来的数据列表
      */
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetCertificateList(List<CertificateListItem> listItems) {
         if (listItems == null || listItems.size() <= 0) {
             init(0);
@@ -239,18 +237,6 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
         }
     }
 
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (requestId == REQUEST_UPLOAD_CERTIFICATION) {
-            refreshCertificateList();
-        }
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -298,22 +284,31 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
 
     @OnClick(R.id.commit_btn)
     protected void uploadCertificate() {
-        MultipartBody.Builder builder = new MultipartBody.Builder();
-        builder.setType(MultipartBody.FORM);
-        builder.addFormDataPart("sucUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
+        RequestEvent.Builder requestBuilder = new RequestEvent.Builder()
+                .url(HttpUrlGlobal.URL_UPLOAD_CERTIFICATE_LIST)
+                .addPart(MultipartBody.Part.createFormData("sucUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
         for (CertificateItem item : mCertificateItems) {
             if (item.file == null) {
                 continue;
             }
-            builder.addFormDataPart("files", item.id + ".jpg", RequestBody.create(MediaType.parse("image/png"), item.file));
+            requestBuilder.addPart(MultipartBody.Part.createFormData("files", item.id + ".jpg", RequestBody.create(MediaType.parse("image/png"), item.file)));
         }
 
-        Request request = new Request.Builder()
-                .url(HttpUrlGlobal.URL_UPLOAD_CERTIFICATE_LIST)
-                .headers(HttpUtils.getPostHeaders())
-                .post(builder.build())
-                .build();
+        HttpUtils.getInstance().doPostFile(requestBuilder.build());
+    }
 
-        HttpUtils.getInstance().postData(REQUEST_UPLOAD_CERTIFICATION, request, this);
+    @Override
+    public void onResponse(ResponseEvent event) {
+
+        switch (event.getUrl()) {
+            case HttpUrlGlobal.URL_UPLOAD_CERTIFICATE_LIST:
+                refreshCertificateList();
+                break;
+            case HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST:
+                EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(),
+                        CertificateListItem.class));
+                break;
+            default:
+        }
     }
 }

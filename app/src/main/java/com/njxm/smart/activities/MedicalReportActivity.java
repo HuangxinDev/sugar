@@ -25,10 +25,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
@@ -50,11 +50,10 @@ import java.util.concurrent.ExecutionException;
 import butterknife.BindView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
 
-public class MedicalReportActivity extends BaseActivity implements HttpCallBack {
+public class MedicalReportActivity extends BaseActivity {
 
 
     private SimpleImageAdapter adapter;
@@ -165,8 +164,6 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
             }
         });
         mRecyclerView.setAdapter(adapter);
-
-
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -201,6 +198,10 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
                 EventBus.getDefault().post(bean);
                 break;
             case HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE:
+                if (event.isSuccess()) {
+                    EventBus.getDefault().post(new ToastEvent("上传成功"));
+                    finish();
+                }
                 break;
             default:
                 super.onResponse(event);
@@ -295,32 +296,20 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
 
     private void uploadMedicalReports() {
 
-
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
+        RequestEvent.Builder requestBuilder = new RequestEvent.Builder()
+                .url(HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE)
+                .addPart(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
 
         for (String filePath : mDatas) {
             if (filePath.endsWith("camera_default.png")) {
                 continue;
             }
             File file = new File(filePath);
-            builder.addFormDataPart("files", file.getName(),
-                    RequestBody.create(MediaType.parse("image/png"), file));
+            requestBuilder.addPart(MultipartBody.Part.createFormData("files", file.getName(),
+                    RequestBody.create(MediaType.parse("image/png"), file)));
         }
 
-        RequestBody requestBody = builder.build();
-
-        Request request = new Request.Builder()
-                .url(HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .post(requestBody)
-                .build();
-
-        HttpUtils.getInstance().postData(REQUEST_UPLOAD_MEDICAL, request, this);
+        HttpUtils.getInstance().doPostFile(requestBuilder.build());
     }
 
     private File photoFile;
@@ -338,19 +327,6 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         startActivityForResult(intent, requestId);
-    }
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (requestId == REQUEST_UPLOAD_MEDICAL) {
-            showToast("上传成功");
-            finish();
-        }
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-        showToast(errMsg);
     }
 
     public static class MedicalBean {

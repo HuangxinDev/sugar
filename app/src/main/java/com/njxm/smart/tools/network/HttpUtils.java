@@ -2,7 +2,6 @@ package com.njxm.smart.tools.network;
 
 import android.util.Log;
 
-import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
@@ -17,15 +16,14 @@ import com.njxm.smart.utils.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
@@ -40,9 +38,6 @@ public final class HttpUtils {
     private static final Object sLock = new Object();
 
     private static OkHttpClient sOkHttpClient;
-
-    // SMS接口
-    public static final int REQUEST_SMS = 2;
 
     ///////////////////////////////////////////////////////////////////////////
     // 单例模式，避免创建多个HttpClient
@@ -79,6 +74,11 @@ public final class HttpUtils {
     }
 
 
+    /**
+     * 普通网络请求-请求数据
+     *
+     * @param requestEvent
+     */
     public void request(RequestEvent requestEvent) {
         RequestBody body;
         StringBuilder url = new StringBuilder(requestEvent.url);
@@ -120,37 +120,76 @@ public final class HttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
-                            ResponseEvent.class);
-                    responseEvent.setUrl(requestEvent.url);
-
-                    if (!responseEvent.isSuccess()) {
-                        EventBus.getDefault().post(new ToastEvent(responseEvent.getMessage()));
-                        return;
-                    }
-
-                    int code = responseEvent.getCode();
-                    if (code == 401 || code == 999) {
-                        // 身份信息过期,需要重新登录
-                        EventBus.getDefault().post(new LogoutEvent());
-                        EventBus.getDefault().post(new ToastEvent("身份信息过期,需要重新登录"));
-                        return;
-                    }
-                    EventBus.getDefault().post(responseEvent);
-                } catch (IOException e) {
-                    LogTool.printE(Log.getStackTraceString(e));
-                }
+                onSuccess(response, requestEvent);
             }
         });
     }
 
-    public static void doPostFile(RequestEvent requestEvent) {
+    /**
+     * 上传资源文件
+     *
+     * @param requestEvent
+     */
+    public void doPostFile(RequestEvent requestEvent) {
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
 
+        if (requestEvent.parts != null && requestEvent.parts.size() > 0) {
+            for (MultipartBody.Part part : requestEvent.parts) {
+                builder.addPart(part);
+            }
+        }
+
+        Request.Builder requestBuilder = getRequestBuilder(requestEvent.url);
+
+        if (requestEvent.headers != null && requestEvent.headers.size() > 0) {
+            for (Map.Entry<String, String> entry : requestEvent.headers.entrySet()) {
+                requestBuilder.addHeader(entry.getKey(), entry.getValue());
+            }
+        }
+        requestBuilder.post(builder.build());
+
+        sOkHttpClient.newCall(requestBuilder.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                onSuccess(response, requestEvent);
+            }
+        });
     }
 
-    public void postData(final int requestId, final Request request, final HttpCallBack callBack) {
-        sOkHttpClient.newCall(request).enqueue(new OKHttpCallback(requestId, callBack));
+    /**
+     * 网络请求成功回调
+     *
+     * @param response
+     * @param requestEvent
+     */
+    private void onSuccess(Response response, RequestEvent requestEvent) {
+        try {
+            ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
+                    ResponseEvent.class);
+            responseEvent.setUrl(requestEvent.url);
+
+            if (!responseEvent.isSuccess()) {
+                EventBus.getDefault().post(new ToastEvent(responseEvent.getMessage()));
+                return;
+            }
+
+            int code = responseEvent.getCode();
+            if (code == 401 || code == 999) {
+                // 身份信息过期,需要重新登录
+                EventBus.getDefault().post(new LogoutEvent());
+                EventBus.getDefault().post(new ToastEvent("身份信息过期,需要重新登录"));
+                return;
+            }
+            EventBus.getDefault().post(responseEvent);
+        } catch (IOException e) {
+            LogTool.printE(Log.getStackTraceString(e));
+        }
     }
 
     /**
@@ -159,7 +198,7 @@ public final class HttpUtils {
      * @param url 请求url
      * @return 带默认头的Builder
      */
-    public static Request.Builder getRequestBuilder(String url) {
+    private static Request.Builder getRequestBuilder(String url) {
         Request.Builder builder = new Request.Builder();
         builder.url(url)
                 .addHeader("Platform", "APP")
@@ -168,119 +207,4 @@ public final class HttpUtils {
                 .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
         return builder;
     }
-
-    public static Headers getPostHeaders() {
-        Headers.Builder builder = new Headers.Builder();
-        builder.add("Platform", "APP")
-                .add("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .add("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .add("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
-        return builder.build();
-    }
-
-    public void postDataWithBody(final int requestId, String url,
-                                 HashMap<String, String> paramMaps, final HttpCallBack callBack) {
-
-        JSONObject body = new JSONObject();
-        if (paramMaps != null && paramMaps.size() > 0) {
-            for (Map.Entry<String, String> entry : paramMaps.entrySet()) {
-                body.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
-                body.toString());
-
-        Request request = new Request.Builder().url(url)
-                .header("Content-Type", "application/json")
-                .post(requestBody)
-                .build();
-
-        sOkHttpClient.newCall(request).enqueue(new OKHttpCallback(callBack));
-
-    }
-
-    /**
-     * 获取body里面放json的Request
-     */
-    public static Request getJsonRequest(String url, HashMap<String, String> jsonMap) {
-        JSONObject object = new JSONObject();
-        if (jsonMap != null && jsonMap.size() > 0) {
-            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
-                object.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        RequestBody requestBody = FormBody.create(MediaType.parse(MimeType.JSON),
-                object.toJSONString());
-
-        return new Request.Builder()
-                .url(url)
-                .headers(getPostHeaders())
-                .post(requestBody)
-                .build();
-    }
-
-    /**
-     * 网络回调
-     */
-    private static class OKHttpCallback implements Callback {
-
-        private HttpCallBack httpCallBack;
-        private int requestId;
-
-        private OKHttpCallback(HttpCallBack httpCallBack) {
-            this.httpCallBack = httpCallBack;
-        }
-
-        private OKHttpCallback(int requestId, HttpCallBack httpCallBack) {
-            this.requestId = requestId;
-            this.httpCallBack = httpCallBack;
-        }
-
-        @Override
-        public void onFailure(Call call, IOException e) {
-            LogTool.printE("url: %s, exception: %s", call.request().url(), e.getMessage());
-            EventBus.getDefault().post(new ToastEvent("网络异常,稍后再试"));
-        }
-
-        @Override
-        public void onResponse(Call call, Response response) throws IOException {
-            try {
-                String result = response.body().string();
-                JSONObject resultObj = JSONObject.parseObject(result);
-                boolean success = resultObj.getBoolean("success");
-
-                if (httpCallBack == null) {
-                    return;
-                }
-
-                int code = 0;
-                code = resultObj.getInteger("code");
-                LogTool.printD("url: %s, code: %s, content: %s", call.request().url(), code,
-                        resultObj.getString((code == 200) ? "data" : "message"));
-                if (success && code == 200) {
-                    String data = resultObj.getString("data");
-                    if (data.equals("[]") || data.equals("null")) {
-                        data = "{}";
-                    }
-                    httpCallBack.onSuccess(requestId, true, 200, data);
-                } else if (code == 401 || code == 999) {
-                    EventBus.getDefault().post(new LogoutEvent());
-                } else {
-                    httpCallBack.onFailed(resultObj.getString("message"));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                EventBus.getDefault().post(new ToastEvent("数据解析异常"));
-            }
-        }
-    }
-
-
-    public static final class MimeType {
-        public static final String JSON = "application/json";
-        public static final String TEXT = "application/x-www-form-urlencoded";
-    }
-
 }
