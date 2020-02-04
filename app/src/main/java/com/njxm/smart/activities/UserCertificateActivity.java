@@ -161,6 +161,7 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
 
     private void init(int certificateState) {
         this.certificateState = certificateState;
+
         if (certificateState == 0) {
             llAdapterLayout.setVisibility(View.GONE);
             rlDefault.setVisibility(View.VISIBLE);
@@ -173,6 +174,7 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
             recyclerView.setAdapter(myCerticateListAdapter);
         } else if (certificateState == 2) {
             llAdapterLayout.setVisibility(View.VISIBLE);
+            rlDefault.setVisibility(View.GONE);
             tvCommitBtn.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
             mCertificateItems.clear();
@@ -296,7 +298,6 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
 
     @OnClick(R.id.commit_btn)
     protected void uploadCertificate() {
-
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         builder.addFormDataPart("sucUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
@@ -304,8 +305,7 @@ public class UserCertificateActivity extends BaseActivity implements HttpCallBac
             if (item.file == null) {
                 continue;
             }
-            builder.addFormDataPart("files", item.id + ".jpg", RequestBody.create(MediaType.parse("image/png"),
-                    item.file));
+            builder.addFormDataPart("files", item.id + ".jpg", RequestBody.create(MediaType.parse("image/png"), item.file));
         }
 
         Request request = new Request.Builder()

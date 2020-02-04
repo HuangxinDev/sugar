@@ -17,6 +17,8 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpCallBack;
@@ -28,6 +30,8 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ns.demo.BuildConfig;
 import com.ns.demo.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.UUID;
@@ -118,21 +122,20 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
                 .addFormDataPart("name", etCardName.getText().toString().trim())
                 .addFormDataPart("idCardNum", etCardId.getText().toString().trim())
                 .addFormDataPart("frontFile", "1zm.jpg", RequestBody.create(imageType,
-                        sparseArray.get(0)))
+                        BitmapUtils.compressFile(sparseArray.get(0))))
                 .addFormDataPart("backFile", "2fm.jpg", RequestBody.create(imageType,
-                        sparseArray.get(1)))
+                        BitmapUtils.compressFile(sparseArray.get(1))))
                 .addFormDataPart("faceFile", "11.jpg", RequestBody.create(imageType,
-                        sparseArray.get(2)))
+                        BitmapUtils.compressFile(sparseArray.get(2))))
                 .build();
 
-        Request request = new Request.Builder().url(HttpUrlGlobal.URL_USER_REAL_Authentication)
-                .header("Platform", "APP")
+        RequestEvent requestEvent = new RequestEvent.Builder().url(HttpUrlGlobal.URL_USER_REAL_Authentication)
+                        .addHeader("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE).build();
+        HttpUtils.getInstance().request(requestEvent);
+
+        Request request = HttpUtils.getRequestBuilder(HttpUrlGlobal.URL_USER_REAL_Authentication)
                 .header("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE)
-                .header("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .header("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .post(body)
-                .build();
-
+                .post(body).build();
         HttpUtils.getInstance().postData(REQUEST_UPLOAD_BITMAP, request, this);
     }
 
@@ -221,6 +224,6 @@ public class RealNameAuthenticationActivity extends BaseActivity implements Http
 
     @Override
     public void onFailed(String errMsg) {
-
+        EventBus.getDefault().post(new ToastEvent(errMsg));
     }
 }

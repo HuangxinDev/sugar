@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.njxm.smart.js.CheckJsApi;
 import com.ns.demo.R;
 
 import butterknife.BindView;
@@ -36,7 +37,7 @@ public class DWebViewActivity extends BaseActivity {
         ARouter.getInstance().inject(this);
 
         llRoot.setPadding(0, getStatusBarHeight(this), 0, 0);
-
-        mDWebView.loadUrl(getIntent().getStringExtra("url"));
+        mDWebView.addJavascriptObject(new CheckJsApi(), null);
+        mDWebView.loadUrl(getIntent().getStringExtra("loadUrl"));
     }
 }

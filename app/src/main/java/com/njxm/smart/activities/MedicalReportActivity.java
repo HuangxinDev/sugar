@@ -23,6 +23,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
@@ -41,7 +43,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -186,11 +187,24 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
      * 更新图片
      */
     private void updateImages() {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        HttpUtils.getInstance().postData(REQUEST_GET_MEDICAL_LIST,
-                HttpUtils.getJsonRequest(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE, hashMap),
-                this);
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE)
+                .addBodyJson("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .build());
+    }
+
+    @Override
+    public void onResponse(ResponseEvent event) {
+        switch (event.getUrl()) {
+            case HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE:
+                MedicalBean bean = JSONObject.parseObject(event.getData(), MedicalBean.class);
+                EventBus.getDefault().post(bean);
+                break;
+            case HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE:
+                break;
+            default:
+                super.onResponse(event);
+        }
     }
 
     private void invalidateLayoutState(int mMedicalState) {
@@ -331,9 +345,6 @@ public class MedicalReportActivity extends BaseActivity implements HttpCallBack 
         if (requestId == REQUEST_UPLOAD_MEDICAL) {
             showToast("上传成功");
             finish();
-        } else if (requestId == REQUEST_GET_MEDICAL_LIST) {
-            MedicalBean bean = JSONObject.parseObject(data, MedicalBean.class);
-            EventBus.getDefault().post(bean);
         }
     }
 

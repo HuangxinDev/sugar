@@ -63,15 +63,17 @@ public class WorkCenterFragment extends BaseFragment {
 
     @Subscribe
     public void reponse(ResponseEvent event) {
-        List<WorkCenterTitleBean> mWorkCenterItemBeans = JsonUtils.getJsonArray(event.getData(), WorkCenterTitleBean.class);
-        List<MultiItemEntity> data = new ArrayList<>();
-        for (WorkCenterTitleBean bean : mWorkCenterItemBeans) {
-            for (WorkCenterSubBean subBean : bean.getChildren()) {
-                bean.addSubItem(subBean);
+        if (event.getUrl().equals(HttpUrlGlobal.URL_WORKCENTER_ITEMS)) {
+            List<WorkCenterTitleBean> mWorkCenterItemBeans = JsonUtils.getJsonArray(event.getData(), WorkCenterTitleBean.class);
+            List<MultiItemEntity> data = new ArrayList<>();
+            for (WorkCenterTitleBean bean : mWorkCenterItemBeans) {
+                for (WorkCenterSubBean subBean : bean.getChildren()) {
+                    bean.addSubItem(subBean);
+                }
+                data.add(bean);
             }
-            data.add(bean);
+            refreshUI(data);
         }
-        EventBus.getDefault().post(data);
     }
 
     @Override

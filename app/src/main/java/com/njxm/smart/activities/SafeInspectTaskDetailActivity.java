@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.SafeInspectRecordBean;
+import com.njxm.smart.view.ItemView;
 import com.ns.demo.R;
 
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class SafeInspectTaskDetailActivity extends BaseActivity {
 
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
+
+    @BindView(R.id.inspect_contact)
+    protected ItemView mInspectContact;
 
     @Override
     protected int setContentLayoutId() {
@@ -78,6 +82,10 @@ public class SafeInspectTaskDetailActivity extends BaseActivity {
         enableChildView(rlInspectRecordTab, view == rlInspectRecordTab);
         mTab1Content.setVisibility(view == rlTaskDetailTab ? View.VISIBLE : View.GONE);
         mRecyclerView.setVisibility(view == rlInspectRecordTab ? View.VISIBLE : View.GONE);
+
+        if (view == rlTaskDetailTab) {
+            mInspectContact.showAdd(false);
+        }
     }
 
     public List<SafeInspectRecordBean> loadData() {

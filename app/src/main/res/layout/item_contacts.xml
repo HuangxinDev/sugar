@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.njxm.smart.view.CircleImageView
+        android:id="@id/item_head"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/mine_icon_user_head" />
+
+    <ImageButton
+        android:id="@id/item_delete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignEnd="@id/item_head"
+        android:background="@null"
+        android:src="@mipmap/cancel_1" />
+
+    <TextView
+        android:id="@id/item_name"
+        style="@style/BaseTextViewStyle.Black.14"
+        android:layout_alignStart="@id/item_head"
+        android:layout_alignEnd="@id/item_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_head"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="人民" />
+
+</RelativeLayout>

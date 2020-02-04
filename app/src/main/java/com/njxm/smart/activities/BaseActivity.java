@@ -329,7 +329,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Subscribe(sticky = true)
     public void onResponse(ResponseEvent event) {
-
         switch (event.getUrl()) {
             case HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS:
                 EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));

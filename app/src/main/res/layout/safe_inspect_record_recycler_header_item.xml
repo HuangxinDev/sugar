@@ -7,9 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
+        android:gravity="center_vertical">
 
         <TextView
             style="@style/BaseTextViewStyle.Gray"
@@ -36,8 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
+        
+       >
 
         <TextView
             style="@style/BaseTextViewStyle.Gray"
@@ -64,8 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
+        
+       >
 
         <TextView
             style="@style/BaseTextViewStyle.Gray"
@@ -92,8 +90,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
+        
+       >
 
         <TextView
             style="@style/BaseTextViewStyle.Gray"
@@ -122,8 +120,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_53"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
+        
+       >
 
         <TextView
             style="@style/BaseTextViewStyle.Gray"

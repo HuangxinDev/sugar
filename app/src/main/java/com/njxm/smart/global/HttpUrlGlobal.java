@@ -127,6 +127,9 @@ public final class HttpUrlGlobal {
     public static final String URL_GET_CERTIFICATE_MAIN_LIST =
              GlobalConst.URL_BIZ_PREFIX + "/api/sys/userCertificate/findTypePage";
 
+    public static final String URL_GET_CERTIFICATE_SUB_TYPE =
+            GlobalConst.URL_BIZ_PREFIX + "/api/sys/userCertificate/findTypeList";
+
     /**
      * 上传证书
      */

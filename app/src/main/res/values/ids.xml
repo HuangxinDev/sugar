@@ -179,6 +179,13 @@
     <item name="tab1_content" type="id" />
     <item name="content_description" type="id" />
     <item name="look_detail" type="id" />
+    <item name="item_head" type="id" />
+    <item name="item_name" type="id" />
+    <item name="item_add" type="id" />
+    <item name="horizontal_scrollview" type="id" />
+    <item name="contact_layouts" type="id" />
+    <item name="item_delete" type="id" />
+    <item name="inspect_contact" type="id" />
 
 
 </resources>

@@ -13,10 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.AppTextWatcher;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
@@ -26,11 +28,12 @@ import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ns.demo.R;
 
-import java.util.HashMap;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ResetPasswordActivity extends BaseActivity implements HttpCallBack {
+public class ResetPasswordActivity extends BaseActivity {
     @Override
     protected int setContentLayoutId() {
         return R.layout.activity_reset_password;
@@ -125,9 +128,29 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
         mNewPwd1.getEditText().addTextChangedListener(watcher);
         mNewPwd2.getEditText().addTextChangedListener(watcher);
 
+        getQRCode();
+    }
 
-        HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                this);
+    @Override
+    public void onResponse(ResponseEvent event) {
+        switch (event.getUrl()) {
+            case HttpUrlGlobal.HTTP_QR_URL:
+                JSONObject dataObject = JSONObject.parseObject(event.getData());
+                mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
+                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
+                break;
+            case HttpUrlGlobal.HTTP_RESET_PWD_URL:
+            case HttpUrlGlobal.URL_SETTINGS_RESET_PWD:
+                // 密码修改成功
+                EventBus.getDefault().post(new ToastEvent("密码修改成功"));
+                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                finish();
+                break;
+
+            default:
+                super.onResponse(event);
+        }
+
     }
 
     private int count = 60;
@@ -172,42 +195,31 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
                 }
             }, 0, 1000);
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
-            params.put("code", mAccountQR.getText().trim());
-            params.put("mobile", mAccountEdit.getText().trim());
-
-            HttpUtils.getInstance().postDataWithBody(HttpUtils.REQUEST_SMS,
-                    HttpUrlGlobal.HTTP_SMS_URL, params, null);
+            HttpUtils.getInstance().request(new RequestEvent.Builder()
+                    .url(HttpUrlGlobal.HTTP_SMS_URL)
+                    .addBodyJson("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
+                    .addBodyJson("code", mAccountQR.getText().trim())
+                    .addBodyJson("mobile", mAccountEdit.getText().trim()).build());
         } else if (v == mConfirmBtn) {
-
             if (!TextUtils.equals(mNewPwd1.getText(), mNewPwd2.getText())) {
                 showDialog();
                 return;
             }
-            HashMap<String, String> params = new HashMap<>();
-            String url;
+
+            RequestEvent.Builder requestBuilder = new RequestEvent.Builder();
             if (isForgetPwd) {
-                params.put("mobile", mAccountEdit.getText().trim());
-                params.put("code", mAccountNumber.getText().trim());
-                url = HttpUrlGlobal.HTTP_RESET_PWD_URL;
+                requestBuilder.url(HttpUrlGlobal.HTTP_RESET_PWD_URL)
+                        .addBodyJson("mobile", mAccountEdit.getText().trim())
+                        .addBodyJson("code", mAccountNumber.getText().trim());
             } else {
-                url = HttpUrlGlobal.URL_SETTINGS_RESET_PWD;
-                params.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
+                requestBuilder.url(HttpUrlGlobal.URL_SETTINGS_RESET_PWD)
+                        .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
             }
-            params.put("password", mNewPwd2.getText().trim());
-
-            HttpUtils.getInstance().postData(-1, HttpUtils.getJsonRequest(url, params), this);
+            requestBuilder.addBodyJson("password", mNewPwd2.getText().trim());
+            HttpUtils.getInstance().request(requestBuilder.build());
         } else if (v == mAccountQR.getRightTextView()) {
-            HttpUtils.getInstance().postDataWithParams(HttpUtils.REQUEST_QR, HttpUrlGlobal.HTTP_QR_URL, null,
-                    this);
+            getQRCode();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @Override
@@ -254,31 +266,6 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
         }
     };
 
-
-    @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (requestId == HttpUtils.REQUEST_QR) {
-            if (success) {
-                JSONObject dataObject = JSONObject.parseObject(data);
-                mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
-                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
-            }
-        } else if (requestId == -1) {
-            if (success && code == 200) {
-                // 密码修改成功
-                showToast("密码修改成功");
-                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
-                finish();
-            }
-        }
-
-    }
-
-    @Override
-    public void onFailed(String errMsg) {
-
-    }
-
     /**
      * 使用错误Dialog
      */
@@ -301,5 +288,9 @@ public class ResetPasswordActivity extends BaseActivity implements HttpCallBack 
             }
 
         });
+    }
+
+    private void getQRCode() {
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(HttpUrlGlobal.HTTP_QR_URL).build());
     }
 }

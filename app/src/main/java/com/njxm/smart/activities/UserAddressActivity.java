@@ -15,11 +15,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.constant.GlobalRouter;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.AddressBean;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
@@ -31,11 +32,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 @Route(path = GlobalRouter.USER_ADDRESS)
 public class UserAddressActivity extends BaseActivity {
@@ -141,38 +137,23 @@ public class UserAddressActivity extends BaseActivity {
             return;
         }
 
-        JSONObject object = new JSONObject();
-        object.put("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
-        object.put("province", provinceId);
-        object.put("city", cityId);
-        object.put("district", distanceId);
-        object.put("address", etUserAddressDetail.getText().toString());
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(HttpUrlGlobal.URL_UPLOAD_USER_ADDRESS)
+                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .addBodyJson("province", provinceId)
+                .addBodyJson("city", cityId)
+                .addBodyJson("district", distanceId)
+                .addBodyJson("address", etUserAddressDetail.getText().toString())
+                .build());
+    }
 
-        RequestBody requestBody =
-                FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE), object.toJSONString());
-
-        Request request = new Request.Builder().url(HttpUrlGlobal.URL_UPLOAD_USER_ADDRESS)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
-                .post(requestBody)
-                .build();
-
-        HttpUtils.getInstance().postData(-1, request, new HttpCallBack() {
-            @Override
-            public void onSuccess(int requestId, boolean success, int code, String data) {
-                LogTool.printD("上传成功，code: %s", code);
-                SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, tvUserAddress.getText().toString());
-                SPUtils.putValue(KeyConstant.KEY_USER_DETAIL_ADDRESS, etUserAddressDetail.getText().toString());
-                finish();
-            }
-
-            @Override
-            public void onFailed(String errMsg) {
-
-            }
-        });
+    @Override
+    public void onResponse(ResponseEvent event) {
+        if (event.getUrl().equals(HttpUrlGlobal.URL_UPLOAD_USER_ADDRESS)) {
+            SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, tvUserAddress.getText().toString());
+            SPUtils.putValue(KeyConstant.KEY_USER_DETAIL_ADDRESS, etUserAddressDetail.getText().toString());
+            finish();
+        }
     }
 
     @Override

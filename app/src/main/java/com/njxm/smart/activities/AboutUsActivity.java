@@ -8,11 +8,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.fastjson.annotation.JSONField;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.model.jsonbean.UrlBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.ns.demo.R;
@@ -24,7 +24,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.Request;
 
 /**
  * 关于我们
@@ -52,10 +51,6 @@ public class AboutUsActivity extends BaseActivity {
     @BindView(R.id.about_us_feature)
     protected View mAppFeaturesBtn;
 
-    private boolean loadUrl = false;
-
-    private static final String[] HTMLS = {"service.www", "service.www", "privacy.www", "features.www"};
-
     private final List<UrlBean> mUrls = new ArrayList<>();
 
     @Override
@@ -74,9 +69,9 @@ public class AboutUsActivity extends BaseActivity {
                 .method("GET")
                 .build());
 
-        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_ABOUT_US).build();
-
-        HttpUtils.getInstance().postData(0, request, null);
+//        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_ABOUT_US).build();
+//
+//        HttpUtils.getInstance().postData(0, request, null);
     }
 
     @OnClick({R.id.about_us_feature, R.id.about_us_secret, R.id.about_us_service, R.id.about_us_version})
@@ -124,11 +119,14 @@ public class AboutUsActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-        super.onResponse(event);
-        if (mUrls.size() > 0) {
-            mUrls.clear();
+        if (HttpUrlGlobal.HTTP_ABOUT_US.equals(event.getUrl())) {
+            if (mUrls.size() > 0) {
+                mUrls.clear();
+            }
+            mUrls.addAll(JsonUtils.getJsonArray(event.getData(), UrlBean.class));
+        } else {
+            super.onResponse(event);
         }
-        mUrls.addAll(JsonUtils.getJsonArray(event.getData(), UrlBean.class));
     }
 
     public List<UrlBean> getLocalBean() {
@@ -138,28 +136,5 @@ public class AboutUsActivity extends BaseActivity {
         urlBeans.add(new UrlBean("隐私政策", "file:///android_asset/www/privacy.html"));
         urlBeans.add(new UrlBean("版本信息", "file:///android_asset/www/service.html"));
         return urlBeans;
-    }
-
-    private static class UrlBean {
-        @JSONField(name = "key")
-        public String name;
-
-        public String url;
-
-        public UrlBean() {
-        }
-
-        public UrlBean(String name, String url) {
-            this.name = name;
-            this.url = url;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getUrl() {
-            return url;
-        }
     }
 }

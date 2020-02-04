@@ -66,7 +66,7 @@ public final class BitmapUtils {
      * @param bitmap    待压缩图片
      * @param imageFile 文件
      */
-    public static void saveBitmap(Bitmap bitmap, File imageFile) {
+    public static File saveBitmap(Bitmap bitmap, File imageFile) {
         try {
             FileOutputStream fos = new FileOutputStream(imageFile);
             bitmap.compress(Bitmap.CompressFormat.PNG, 10, fos);
@@ -75,6 +75,12 @@ public final class BitmapUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return imageFile;
+    }
+
+    public static File compressFile(File imageFile) {
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+        return saveBitmap(bitmap, imageFile);
     }
 
 

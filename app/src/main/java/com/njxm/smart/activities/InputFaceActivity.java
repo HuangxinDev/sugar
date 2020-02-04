@@ -116,8 +116,7 @@ public class InputFaceActivity extends BaseActivity implements HttpCallBack {
         RequestBody body = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addFormDataPart("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"),
-                        photoFile))
+                .addFormDataPart("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), photoFile))
                 .build();
 
         Request request = new Request.Builder()

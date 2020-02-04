@@ -17,10 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.CertificateParentBean;
-import com.njxm.smart.tools.network.HttpCallBack;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ns.demo.R;
 
@@ -36,7 +37,7 @@ import butterknife.OnClick;
 /**
  * 证书种类Activity
  */
-public class CertificateTypeActivity extends BaseActivity implements HttpCallBack {
+public class CertificateTypeActivity extends BaseActivity {
     @Override
     protected int setContentLayoutId() {
         return R.layout.my_certificate_type_activity;
@@ -75,38 +76,45 @@ public class CertificateTypeActivity extends BaseActivity implements HttpCallBac
                 CertificateParentBean bean = ((CertificateParentBean) adapter.getItem(position));
                 if (bean != null && bean.isChildExit()) {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("sctParentId", bean.getId());
-                    HttpUtils.getInstance().postData(200, HttpUtils.getJsonRequest("http://119.3" +
-                                    ".136.127:7776/api/sys/userCertificate/findTypeList", map),
-                            CertificateTypeActivity.this);
+
+                    RequestEvent requestEvent = new RequestEvent.Builder()
+                            .url(HttpUrlGlobal.URL_GET_CERTIFICATE_SUB_TYPE)
+                            .addBodyJson("sctParentId", bean.getId())
+                            .build();
+                    HttpUtils.getInstance().request(requestEvent);
                     llBarContainer.addView(createTextView(bean.getSctName(), Integer.parseInt(bean.getId())));
                 } else {
-                    EventBus.getDefault().postSticky(new SelectCertificateEvent(bean.getSctName(),
-                            bean.getId()));
+                    EventBus.getDefault().postSticky(new SelectCertificateEvent(bean.getSctName(), bean.getId()));
                     finish();
                 }
             }
         });
-        HttpUtils.getInstance().postData(100,
-                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST, null), this);
+
+        requestMainType();
     }
 
-    @OnClick(R.id.allType)
-    protected void requestAllType() {
-        HttpUtils.getInstance().postData(100,
-                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST, null), this);
-        removeViewAfterClickView(tvAllType);
+    private void requestMainType() {
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST)
+                .addBodyJson("", "")
+                .build());
     }
-
 
     @Override
-    public void onSuccess(int requestId, boolean success, int code, String data) {
-        if (requestId == 100) {
-            JSONObject jsonObject = JSONObject.parseObject(data);
-            mDatas = JSONObject.parseArray(jsonObject.getString("data"),
-                    CertificateParentBean.class);
-        } else if (requestId == 200) {
-            mDatas = JSONObject.parseArray(data, CertificateParentBean.class);
+    public void onResponse(ResponseEvent event) {
+        switch (event.getUrl()) {
+            case HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST:
+                JSONObject jsonObject = JSONObject.parseObject(event.getData());
+                mDatas = JSONObject.parseArray(jsonObject.getString("data"),
+                        CertificateParentBean.class);
+                break;
+
+            case HttpUrlGlobal.URL_GET_CERTIFICATE_SUB_TYPE:
+                mDatas = JSONObject.parseArray(event.getData(), CertificateParentBean.class);
+                break;
+
+            default:
+                super.onResponse(event);
         }
 
         invoke(new Runnable() {
@@ -117,8 +125,10 @@ public class CertificateTypeActivity extends BaseActivity implements HttpCallBac
         });
     }
 
-    @Override
-    public void onFailed(String errMsg) {
+    @OnClick(R.id.allType)
+    protected void requestAllType() {
+        requestMainType();
+        removeViewAfterClickView(tvAllType);
     }
 
     private static class SimpleAdapter extends BaseQuickAdapter<CertificateParentBean, BaseViewHolder> {
@@ -173,10 +183,10 @@ public class CertificateTypeActivity extends BaseActivity implements HttpCallBac
 //            return;
 //        }
         removeViewAfterClickView(tvAllType);
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("sctName", etSearchContent.getText().toString());
-        HttpUtils.getInstance().postData(100,
-                HttpUtils.getJsonRequest(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST, hashMap), this);
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST)
+                .addBodyJson("sctName", etSearchContent.getText().toString())
+                .build());
     }
 
 
