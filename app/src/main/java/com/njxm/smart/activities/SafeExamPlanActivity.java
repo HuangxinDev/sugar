@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;

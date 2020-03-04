@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 public class SafeExamStudyActivity extends BaseActivity {
     @Override

@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.IntDef;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

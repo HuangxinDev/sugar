@@ -23,7 +23,7 @@ import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.CertificateParentBean;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 

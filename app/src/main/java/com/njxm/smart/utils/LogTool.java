@@ -2,11 +2,11 @@ package com.njxm.smart.utils;
 
 import android.util.Log;
 
-import com.ns.demo.BuildConfig;
+import com.ntxm.smart.BuildConfig;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.Locale;
 
 /**
  * 日志打印工具

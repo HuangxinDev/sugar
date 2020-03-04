@@ -57,14 +57,14 @@ android {
         }
     }
 
-    flavorDimensions("dev")
+    flavorDimensions("env")
     productFlavors {
         dev {
-            dimension "dev"
+            dimension "env"
         }
 
         publish {
-            dimension "dev"
+            dimension "env"
         }
     }
 
@@ -113,7 +113,7 @@ dependencies {
 
     // zxing 生成二维码
     implementation 'com.google.zxing:core:3.3.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 
 
     // ARouter路由配置

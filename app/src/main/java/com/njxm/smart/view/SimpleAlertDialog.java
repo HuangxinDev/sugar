@@ -12,7 +12,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
 

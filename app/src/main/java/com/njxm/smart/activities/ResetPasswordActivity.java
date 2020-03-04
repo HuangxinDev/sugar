@@ -26,7 +26,7 @@ import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -15,7 +15,7 @@ import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.CircleImageView;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

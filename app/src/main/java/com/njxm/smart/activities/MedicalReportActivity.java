@@ -34,8 +34,8 @@ import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.ns.demo.BuildConfig;
-import com.ns.demo.R;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -100,9 +100,6 @@ public class MedicalReportActivity extends BaseActivity {
     // 重新申请
     @BindView(R.id.retry_upload_btn)
     protected TextView mRetryUploadBtn;
-
-    private static final int REQUEST_UPLOAD_MEDICAL = 100;
-    private static final int REQUEST_GET_MEDICAL_LIST = 783;
 
     @Override
     protected int setContentLayoutId() {
@@ -211,7 +208,6 @@ public class MedicalReportActivity extends BaseActivity {
     private void invalidateLayoutState(int mMedicalState) {
         mLastMedicalState = this.mMedicalState;
         this.mMedicalState = mMedicalState;
-
         mMedicalVoidLayout.setVisibility(mMedicalState == MEDICAL_VOID ? View.VISIBLE : View.GONE);
         mMedicalCheckWaitLayout.setVisibility(mMedicalState == MEDICAL_CHECK_WAIT ? View.VISIBLE : View.GONE);
         mMedicalCheckRetryLayout.setVisibility(mMedicalState == MEDICAL_CHECK_FAILED ? View.VISIBLE : View.GONE);
@@ -241,7 +237,7 @@ public class MedicalReportActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
+        if (requestCode == 100 && photoFile != null && photoFile.exists() && photoFile.length() > 0) {
 
             new Thread(new Runnable() {
                 @Override
@@ -255,7 +251,13 @@ public class MedicalReportActivity extends BaseActivity {
                                 .submit(ResolutionUtil.dp2Px(109), ResolutionUtil.dp2Px(109))
                                 .get();
                         BitmapUtils.saveBitmap(bitmap, photoFile);
-                        EventBus.getDefault().post(photoFile.getPath());
+                        invoke(new Runnable() {
+                            @Override
+                            public void run() {
+                                update(photoFile.getAbsolutePath());
+                            }
+                        });
+//                        EventBus.getDefault().post(photoFile.getPath());
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -295,7 +297,6 @@ public class MedicalReportActivity extends BaseActivity {
     }
 
     private void uploadMedicalReports() {
-
         RequestEvent.Builder requestBuilder = new RequestEvent.Builder()
                 .url(HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE)
                 .addPart(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));

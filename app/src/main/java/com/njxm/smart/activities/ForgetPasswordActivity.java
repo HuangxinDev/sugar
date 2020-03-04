@@ -4,7 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
+
 
 /**
  * 忘记密码

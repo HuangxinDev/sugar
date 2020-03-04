@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;

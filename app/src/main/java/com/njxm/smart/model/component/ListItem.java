@@ -1,6 +1,6 @@
 package com.njxm.smart.model.component;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.List;
 

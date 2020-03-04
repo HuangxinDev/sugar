@@ -17,7 +17,7 @@ import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

@@ -28,7 +28,7 @@ import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

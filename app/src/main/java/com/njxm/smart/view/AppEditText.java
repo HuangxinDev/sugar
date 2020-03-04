@@ -21,7 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.StringUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 
 /**

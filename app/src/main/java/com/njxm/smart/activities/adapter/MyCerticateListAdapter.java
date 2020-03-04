@@ -11,7 +11,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.activities.UserCertificateActivity;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.utils.StringUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.List;
 

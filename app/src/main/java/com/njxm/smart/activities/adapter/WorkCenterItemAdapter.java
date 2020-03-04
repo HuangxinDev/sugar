@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.WorkCenterSubBean;
 import com.njxm.smart.model.jsonbean.WorkCenterTitleBean;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.List;
 

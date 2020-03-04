@@ -15,7 +15,7 @@ import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.UrlBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.JsonUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 

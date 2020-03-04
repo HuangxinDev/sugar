@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -29,12 +30,12 @@ import com.njxm.smart.GlobalConst;
 import com.njxm.smart.SmartCloudApplication;
 import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.js.CheckJsApi;
 import com.njxm.smart.service.LocationService;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
-import com.ns.demo.BuildConfig;
-import com.ns.demo.R;
+import com.njxm.smart.utils.SPUtils;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,8 +53,6 @@ public class AttendanceFragment extends BaseFragment {
     @BindView(R.id.webview_kit)
     protected DWebView mWebView;
 
-    private CheckJsApi mJsApi;
-
     private LocationService mLocationService;
 
     @Override
@@ -69,22 +68,7 @@ public class AttendanceFragment extends BaseFragment {
             object.put("y", bdLocation.getLatitude());
             object.put("address", bdLocation.getAddrStr());
             Log.d("BDLocation", "upload data: " + object.toJSONString());
-//            EventBus.getDefault().post(new ToastEvent(object.toJSONString()));
             mWebView.callHandler("h5Location", new Object[]{object.toJSONString()});
-        }
-    };
-
-    private CheckJsApi.OnCheckJsApiListener mJsListener = new CheckJsApi.OnCheckJsApiListener() {
-        @Override
-        public void requestImage() {
-            takePhoto(999);
-        }
-
-        @Override
-        public void requestLocation() {
-            if (mLocationService != null) {
-                mLocationService.start();
-            }
         }
     };
 
@@ -134,9 +118,6 @@ public class AttendanceFragment extends BaseFragment {
                 super.onReceivedTitle(view, title);
             }
         });
-
-        mJsApi = new CheckJsApi();
-        mJsApi.setCheckJsApiListener(mJsListener);
         mWebView.loadUrl(GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
     }
 
@@ -177,8 +158,7 @@ public class AttendanceFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mWebView.addJavascriptObject(mJsApi, null);
-
+        mWebView.addJavascriptObject(this, null);
         mLocationService = ((SmartCloudApplication) getActivity().getApplication()).locationService;
         mLocationService.registerListener(mBdAbstractLocationListener);
         mLocationService.enableAssistanLocation(mWebView);
@@ -212,7 +192,6 @@ public class AttendanceFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        mWebView.addJavascriptObject(mJsApi, "jsintenface");
     }
 
     @Override
@@ -226,5 +205,41 @@ public class AttendanceFragment extends BaseFragment {
         mLocationService.stop();
         mWebView.removeJavascriptObject(null);
         super.onStop();
+    }
+
+    /**
+     * Js页面请求设备地址信息
+     *
+     * @param object
+     */
+    @JavascriptInterface
+    public void checkLocation(Object object) {
+        if (mLocationService != null) {
+            mLocationService.start();
+        }
+    }
+
+    /**
+     * Js页面获取用户个人信息
+     *
+     * @param object DWebView相应Js固定参数
+     * @return 个人信息
+     */
+    @JavascriptInterface
+    public String checkUserInfo(Object object) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", "200");
+        jsonObject.put("data", SPUtils.getStringValue("login_message"));
+        return jsonObject.toJSONString();
+    }
+
+    /**
+     * Js页面调用设备相机获取图片拍摄信息
+     *
+     * @param object
+     */
+    @JavascriptInterface
+    public void checkImage(Object object) {
+        takePhoto(999);
     }
 }

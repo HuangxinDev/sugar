@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 public class ButtonBarItem extends LinearLayout {
 

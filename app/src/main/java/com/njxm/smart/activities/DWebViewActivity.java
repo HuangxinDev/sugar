@@ -8,14 +8,14 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.njxm.smart.js.CheckJsApi;
-import com.ns.demo.R;
+import com.njxm.smart.js.JsUserInfoImp;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import wendu.dsbridge.DWebView;
 
 @Route(path = "/app/webview")
-public class DWebViewActivity extends BaseActivity {
+public class DWebViewActivity extends BaseActivity implements JsUserInfoImp {
 
     @BindView(R.id.webview_kit)
     protected DWebView mDWebView;
@@ -35,9 +35,13 @@ public class DWebViewActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
-
         llRoot.setPadding(0, getStatusBarHeight(this), 0, 0);
-        mDWebView.addJavascriptObject(new CheckJsApi(), null);
+        mDWebView.addJavascriptObject(this, null);
         mDWebView.loadUrl(getIntent().getStringExtra("loadUrl"));
+    }
+
+    @Override
+    public String checkUserInfo(Object object) {
+        return null;
     }
 }

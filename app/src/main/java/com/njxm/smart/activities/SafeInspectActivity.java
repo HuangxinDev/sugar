@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.adapter.DailyCheckAdapter;
 import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 

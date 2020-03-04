@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 public class ItemView extends LinearLayout {
 

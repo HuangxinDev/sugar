@@ -12,7 +12,7 @@ import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 

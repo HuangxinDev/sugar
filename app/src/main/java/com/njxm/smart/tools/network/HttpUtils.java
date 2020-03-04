@@ -147,6 +147,7 @@ public final class HttpUtils {
                 requestBuilder.addHeader(entry.getKey(), entry.getValue());
             }
         }
+
         requestBuilder.post(builder.build());
 
         sOkHttpClient.newCall(requestBuilder.build()).enqueue(new Callback() {

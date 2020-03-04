@@ -220,7 +220,7 @@ public class UserBean {
         this.deptName = deptName;
     }
 
-    public String getTeamName() {
+    public String getTeamName()  {
         return teamName;
     }
 

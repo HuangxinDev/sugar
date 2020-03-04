@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.njxm.smart.fragments.BaseFragmentAdapter;
 import com.njxm.smart.fragments.HomeFragment;
 import com.njxm.smart.view.DotsView;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;

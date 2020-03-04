@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.njxm.smart.utils.LogTool;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 public class DotsView extends LinearLayout {
 

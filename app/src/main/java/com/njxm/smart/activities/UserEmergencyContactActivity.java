@@ -13,7 +13,7 @@ import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 @Route(path = GlobalRouter.USER_EMERGENCY_CONTACT)
 public class UserEmergencyContactActivity extends BaseActivity {

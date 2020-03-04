@@ -1,6 +1,6 @@
 package com.njxm.smart.activities.fragments;
 
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 /**
  * 消息中心Fragment

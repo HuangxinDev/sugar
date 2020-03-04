@@ -37,8 +37,8 @@ import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StatusBarUtil;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
-import com.ns.demo.BuildConfig;
-import com.ns.demo.R;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

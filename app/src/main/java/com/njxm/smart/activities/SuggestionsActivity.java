@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.njxm.smart.activities.adapter.SuggestionDetailAdapter;
 import com.njxm.smart.divider.MyRecyclerViewItemDecoration;
 import com.njxm.smart.model.component.SuggestionDetailItem;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;

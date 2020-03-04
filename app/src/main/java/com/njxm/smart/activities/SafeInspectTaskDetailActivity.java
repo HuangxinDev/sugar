@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.SafeInspectRecordBean;
 import com.njxm.smart.view.ItemView;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@ import android.webkit.WebView;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import wendu.dsbridge.DWebView;

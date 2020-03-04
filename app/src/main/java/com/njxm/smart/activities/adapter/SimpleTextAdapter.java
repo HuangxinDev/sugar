@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.AddressBean;
-import com.ns.demo.R;
+import com.ntxm.smart.R;
 
 import java.util.List;
 
