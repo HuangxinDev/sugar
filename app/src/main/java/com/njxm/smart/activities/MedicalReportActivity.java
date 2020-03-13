@@ -23,10 +23,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -182,26 +182,26 @@ public class MedicalReportActivity extends BaseActivity {
      */
     private void updateImages() {
         HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE)
+                .url(UrlPath.PATH_MEDICAL_REPORT_PULL.getUrl())
                 .addBodyJson("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .build());
     }
 
     @Override
     public void onResponse(ResponseEvent event) {
-        switch (event.getUrl()) {
-            case HttpUrlGlobal.HTTP_MEDICAL_GET_IMAGE:
-                MedicalBean bean = JSONObject.parseObject(event.getData(), MedicalBean.class);
-                EventBus.getDefault().post(bean);
-                break;
-            case HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE:
-                if (event.isSuccess()) {
-                    EventBus.getDefault().post(new ToastEvent("上传成功"));
-                    finish();
-                }
-                break;
-            default:
-                super.onResponse(event);
+
+        final String url = event.getUrl();
+
+        if (url.equals(UrlPath.PATH_MEDICAL_REPORT_PULL.getUrl())) {
+            MedicalBean bean = JSONObject.parseObject(event.getData(), MedicalBean.class);
+            EventBus.getDefault().post(bean);
+        } else if (url.equals(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getUrl())) {
+            if (event.isSuccess()) {
+                EventBus.getDefault().post(new ToastEvent("上传成功"));
+                finish();
+            }
+        } else {
+            super.onResponse(event);
         }
     }
 
@@ -298,7 +298,7 @@ public class MedicalReportActivity extends BaseActivity {
 
     private void uploadMedicalReports() {
         RequestEvent.Builder requestBuilder = new RequestEvent.Builder()
-                .url(HttpUrlGlobal.HTTP_MEDICAL_COMMIT_UPDATE)
+                .url(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getUrl())
                 .addPart(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
 
         for (String filePath : mDatas) {
@@ -429,7 +429,7 @@ public class MedicalReportActivity extends BaseActivity {
 
         mDatas.clear();
         for (String path : bean.getPathList()) {
-            mDatas.add(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + path);
+            mDatas.add(UrlPath.PATH_PICTURE_PREFIX.getUrl() + path);
         }
 
         adapter.setShowDelete(false);

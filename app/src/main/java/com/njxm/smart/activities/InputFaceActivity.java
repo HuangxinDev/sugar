@@ -16,10 +16,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.constant.GlobalRouter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -69,7 +69,7 @@ public class InputFaceActivity extends BaseActivity {
         final String faceUrl = SPUtils.getStringValue(KeyConstant.KEY_USER_FACE_URL);
         Glide.with(this)
                 .asBitmap()
-                .load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + faceUrl)
+                .load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + faceUrl)
                 .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.realname_face_detect))
                 .into(ivPhoto);
     }
@@ -116,7 +116,7 @@ public class InputFaceActivity extends BaseActivity {
     public void uploadInputFace() {
 
         RequestEvent requestEvent = new RequestEvent.Builder()
-                .url(HttpUrlGlobal.HTTP_MY_USER_INPUT_FACE)
+                .url(UrlPath.PATH_USER_INPUT_FACE.getUrl())
                 .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
                 .addPart(MultipartBody.Part.createFormData("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), photoFile)))
                 .build();
@@ -168,7 +168,7 @@ public class InputFaceActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-        if (event.getUrl().equals(HttpUrlGlobal.HTTP_MY_USER_INPUT_FACE)) {
+        if (event.getUrl().equals(UrlPath.PATH_USER_INPUT_FACE.getUrl())) {
             EventBus.getDefault().post(new ToastEvent("录入成功"));
         }
     }

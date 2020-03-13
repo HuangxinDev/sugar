@@ -26,9 +26,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
-import com.njxm.smart.GlobalConst;
 import com.njxm.smart.SmartCloudApplication;
 import com.njxm.smart.activities.BaseActivity;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.service.LocationService;
 import com.njxm.smart.utils.BitmapUtils;
@@ -118,7 +118,7 @@ public class AttendanceFragment extends BaseFragment {
                 super.onReceivedTitle(view, title);
             }
         });
-        mWebView.loadUrl(GlobalConst.URL_H5_PREFIX + "/#/attendance/sign");
+        mWebView.loadUrl(UrlPath.PATH_MAIN_KAO_QIN.getUrl());
     }
 
     @Override

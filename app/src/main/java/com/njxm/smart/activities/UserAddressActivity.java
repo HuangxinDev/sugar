@@ -15,9 +15,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.constant.GlobalRouter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.AddressBean;
 import com.njxm.smart.model.jsonbean.UserBean;
@@ -138,7 +138,7 @@ public class UserAddressActivity extends BaseActivity {
         }
 
         HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.URL_UPLOAD_USER_ADDRESS)
+                .url(UrlPath.PATH_USER_ADDRESS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .addBodyJson("province", provinceId)
                 .addBodyJson("city", cityId)
@@ -149,7 +149,7 @@ public class UserAddressActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-        if (event.getUrl().equals(HttpUrlGlobal.URL_UPLOAD_USER_ADDRESS)) {
+        if (event.getUrl().equals(UrlPath.PATH_USER_ADDRESS_COMMIT.getUrl())) {
             SPUtils.putValue(KeyConstant.KEY_USER_ADDRESS, tvUserAddress.getText().toString());
             SPUtils.putValue(KeyConstant.KEY_USER_DETAIL_ADDRESS, etUserAddressDetail.getText().toString());
             finish();

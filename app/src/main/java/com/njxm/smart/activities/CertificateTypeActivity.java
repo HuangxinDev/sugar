@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.CertificateParentBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ntxm.smart.R;
@@ -78,7 +78,7 @@ public class CertificateTypeActivity extends BaseActivity {
                     HashMap<String, String> map = new HashMap<>();
 
                     RequestEvent requestEvent = new RequestEvent.Builder()
-                            .url(HttpUrlGlobal.URL_GET_CERTIFICATE_SUB_TYPE)
+                            .url(UrlPath.PATH_SUB_CERTIFICATE_TYPE_PULL.getUrl())
                             .addBodyJson("sctParentId", bean.getId())
                             .build();
                     HttpUtils.getInstance().request(requestEvent);
@@ -95,26 +95,24 @@ public class CertificateTypeActivity extends BaseActivity {
 
     private void requestMainType() {
         HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST)
+                .url(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())
                 .addBodyJson("", "")
                 .build());
     }
 
     @Override
     public void onResponse(ResponseEvent event) {
-        switch (event.getUrl()) {
-            case HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST:
-                JSONObject jsonObject = JSONObject.parseObject(event.getData());
-                mDatas = JSONObject.parseArray(jsonObject.getString("data"),
-                        CertificateParentBean.class);
-                break;
 
-            case HttpUrlGlobal.URL_GET_CERTIFICATE_SUB_TYPE:
-                mDatas = JSONObject.parseArray(event.getData(), CertificateParentBean.class);
-                break;
+        final String url = event.getUrl();
 
-            default:
-                super.onResponse(event);
+        if (url.equals(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())) {
+            JSONObject jsonObject = JSONObject.parseObject(event.getData());
+            mDatas = JSONObject.parseArray(jsonObject.getString("data"),
+                    CertificateParentBean.class);
+        } else if (url.equals(UrlPath.PATH_SUB_CERTIFICATE_TYPE_PULL.getUrl())) {
+            mDatas = JSONObject.parseArray(event.getData(), CertificateParentBean.class);
+        } else {
+            super.onResponse(event);
         }
 
         invoke(new Runnable() {
@@ -184,9 +182,10 @@ public class CertificateTypeActivity extends BaseActivity {
 //        }
         removeViewAfterClickView(tvAllType);
         HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.URL_GET_CERTIFICATE_MAIN_LIST)
+                .url(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())
                 .addBodyJson("sctName", etSearchContent.getText().toString())
                 .build());
+
     }
 
 

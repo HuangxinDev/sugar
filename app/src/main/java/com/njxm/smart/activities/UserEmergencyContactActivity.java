@@ -7,8 +7,8 @@ import androidx.appcompat.widget.AppCompatEditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.constant.GlobalRouter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -54,7 +54,7 @@ public class UserEmergencyContactActivity extends BaseActivity {
         }
 
         HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.HTTP_MY_USER_EMERGENCY_CONTACT)
+                .url(UrlPath.PATH_USER_EMERGENCY_PEOPLE_NEWS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .addBodyJson("contact", etUserName.getText().toString().trim())
                 .addBodyJson("contactPhone", etUserPhone.getText().toString().trim())

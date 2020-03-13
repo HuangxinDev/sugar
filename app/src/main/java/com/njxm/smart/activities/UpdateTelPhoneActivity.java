@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
@@ -152,7 +152,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
                     }
                 }, 0, 1000);
                 if (count == 60) {
-                    HttpUtils.getInstance().request(new RequestEvent.Builder().url(HttpUrlGlobal.HTTP_SMS_URL)
+                    HttpUtils.getInstance().request(new RequestEvent.Builder().url(UrlPath.PATH_SMS.getUrl())
                             .addBodyJson("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
                             .addBodyJson("mobile", mBindPhoneEdit.getText().trim())
                             .addBodyJson("code", mQRCode.getText().trim())
@@ -166,7 +166,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
      * 获取二维码
      */
     private void requestQrCode() {
-        HttpUtils.getInstance().request(new RequestEvent.Builder().url(HttpUrlGlobal.HTTP_QR_URL).build());
+        HttpUtils.getInstance().request(new RequestEvent.Builder().url(UrlPath.PATH_PICTURE_VERIFY.getUrl()).build());
     }
 
     @Override
@@ -234,7 +234,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
     private void updateTelPhone() {
 
         RequestEvent requestEvent = new RequestEvent.Builder()
-                .url(HttpUrlGlobal.URL_SETTINGS_UPDATE_TEL_PHONE)
+                .url(UrlPath.PATH_USER_PHONE_REPLACE.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .addBodyJson("mobile", mBindPhoneEdit.getText().trim())
                 .addBodyJson("code", mNewPhoneNumberCode.getText().trim())
@@ -245,7 +245,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
     @Override
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponse(ResponseEvent event) {
-        if (event.getUrl().equals(HttpUrlGlobal.URL_SETTINGS_UPDATE_TEL_PHONE) && event.isSuccess()) {
+        if (event.getUrl().equals(UrlPath.PATH_USER_PHONE_REPLACE.getUrl()) && event.isSuccess()) {
             SPUtils.putValue(KeyConstant.KEY_USER_TEL_PHONE, mBindPhoneEdit.getText());
             mVerifySuccess.setEnabled(true);
             mConfirmBtn.setVisibility(View.GONE);

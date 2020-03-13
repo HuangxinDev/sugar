@@ -11,8 +11,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.EduTypeAdapter;
 import com.njxm.smart.constant.GlobalRouter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -80,7 +80,7 @@ public class UserEducationActivity extends BaseActivity {
             }
         });
         mRecyclerView.setAdapter(adapter);
-        RequestEvent requestEvent = RequestEvent.newBuilder().url(HttpUrlGlobal.URL_EDUCATION_LIST)
+        RequestEvent requestEvent = RequestEvent.newBuilder().url(UrlPath.PATH_USER_EDU_PULL.getUrl())
                 .addBodyJson("code", "education_type")
                 .build();
         HttpUtils.getInstance().request(requestEvent);
@@ -106,7 +106,7 @@ public class UserEducationActivity extends BaseActivity {
         }
 
         RequestEvent requestEvent = RequestEvent.newBuilder()
-                .url(HttpUrlGlobal.HTTP_MY_USER_EDUCATION)
+                .url(UrlPath.PATH_USER_EDU_NEWS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .addBodyJson("education", typeBeans.get(selectedId).getValue())
                 .build();

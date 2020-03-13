@@ -13,10 +13,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.WorkCenterSubBean;
 import com.njxm.smart.model.jsonbean.WorkCenterTitleBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -58,12 +58,12 @@ public class WorkCenterFragment extends BaseFragment {
     @Override
     protected void init() {
         super.init();
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(HttpUrlGlobal.URL_WORKCENTER_ITEMS).build());
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_USER_FEATURE_ITEMS.getUrl()).build());
     }
 
     @Subscribe
     public void reponse(ResponseEvent event) {
-        if (event.getUrl().equals(HttpUrlGlobal.URL_WORKCENTER_ITEMS)) {
+        if (event.getUrl().equals(UrlPath.PATH_USER_FEATURE_ITEMS.getUrl())) {
             List<WorkCenterTitleBean> mWorkCenterItemBeans = JsonUtils.getJsonArray(event.getData(), WorkCenterTitleBean.class);
             List<MultiItemEntity> data = new ArrayList<>();
             for (WorkCenterTitleBean bean : mWorkCenterItemBeans) {

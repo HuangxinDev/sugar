@@ -8,8 +8,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.ntxm.smart.R;
@@ -97,7 +97,7 @@ public class SettingsActivity extends BaseActivity {
             @Override
             public void onNegativeButtonClick(AlertDialog dialog) {
                 HttpUtils.getInstance().request(RequestEvent.newBuilder()
-                        .url(HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT)
+                        .url(UrlPath.PATH_SYS_LOGOUT.getUrl())
                         .build());
                 dialog.dismiss();
             }

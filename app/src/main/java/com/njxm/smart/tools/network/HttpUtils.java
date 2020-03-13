@@ -6,7 +6,6 @@ import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
@@ -99,14 +98,14 @@ public final class HttpUtils {
         }
 
         if (StringUtils.isNotEmpty(requestEvent.bodyJson)) {
-            body = FormBody.create(MediaType.parse(HttpUrlGlobal.CONTENT_JSON_TYPE),
+            body = FormBody.create(MediaType.parse("application/json"),
                     requestEvent.bodyJson);
         } else {
             body = new FormBody.Builder().build();
         }
 
         Request request;
-        if (requestEvent.requestMethod.equals("GET")) {
+        if (requestEvent.httpMethod == HttpMethod.GET) {
             request = builder.build();
         } else {
             request = builder.post(body).build();
@@ -203,7 +202,7 @@ public final class HttpUtils {
         Request.Builder builder = new Request.Builder();
         builder.url(url)
                 .addHeader("Platform", "APP")
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_JSON_TYPE)
+                .addHeader("Content-Type", "application/json")
                 .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
                 .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
         return builder;

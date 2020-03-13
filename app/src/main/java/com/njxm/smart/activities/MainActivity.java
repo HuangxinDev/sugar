@@ -18,8 +18,8 @@ import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 || SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST).equals("[]")) {
             HttpUtils.getInstance()
                     .request(RequestEvent.newBuilder()
-                            .url(HttpUrlGlobal.HTTP_COMMON_CITY_URL).build());
+                            .url(UrlPath.PATH_PROVINCE_CITY_AREA.getUrl()).build());
         }
     }
 

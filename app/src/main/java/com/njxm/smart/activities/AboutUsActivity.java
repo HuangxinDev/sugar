@@ -8,11 +8,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.model.jsonbean.UrlBean;
+import com.njxm.smart.tools.network.HttpMethod;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.ntxm.smart.R;
@@ -65,8 +66,8 @@ public class AboutUsActivity extends BaseActivity {
         showLeftBtn(true, R.mipmap.arrow_back_blue);
 
         HttpUtils.getInstance().request(RequestEvent.newBuilder()
-                .url(HttpUrlGlobal.HTTP_ABOUT_US)
-                .method("GET")
+                .url(UrlPath.PATH_ABOUT_US.getUrl())
+                .method(HttpMethod.GET)
                 .build());
 
 //        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_ABOUT_US).build();
@@ -119,7 +120,7 @@ public class AboutUsActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-        if (HttpUrlGlobal.HTTP_ABOUT_US.equals(event.getUrl())) {
+        if (UrlPath.PATH_ABOUT_US.getUrl().equals(event.getUrl())) {
             if (mUrls.size() > 0) {
                 mUrls.clear();
             }

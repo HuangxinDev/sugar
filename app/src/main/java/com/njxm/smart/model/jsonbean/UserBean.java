@@ -1,6 +1,6 @@
 package com.njxm.smart.model.jsonbean;
 
-import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.constant.UrlPath;
 
 public class UserBean {
 
@@ -137,7 +137,7 @@ public class UserBean {
     }
 
     public void setFaceUrl(String faceUrl) {
-        this.faceUrl = HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + faceUrl;
+        this.faceUrl = UrlPath.PATH_PICTURE_PREFIX.getUrl() + faceUrl;
     }
 
     public String getIcon() {
@@ -145,7 +145,7 @@ public class UserBean {
     }
 
     public void setIcon(String icon) {
-        this.icon = HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + icon;
+        this.icon = UrlPath.PATH_PICTURE_PREFIX.getUrl() + icon;
     }
 
     public String getId() {

@@ -3,7 +3,7 @@ package com.njxm.smart.eventbus;
 import androidx.annotation.IntDef;
 
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.tools.network.HttpMethod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class RequestEvent {
 
     public String url;
 
-    public String requestMethod = "POST"; // 默认为POST
+    public HttpMethod httpMethod; // 默认为POST
 
     public HashMap<String, String> headers;
 
@@ -55,10 +55,7 @@ public class RequestEvent {
         this.type = REQUEST_PARAMS;
         this.newBuilder = builder.newBuilder;
         this.parts = builder.parts;
-        if (StringUtils.isNotEmpty(builder.method)) {
-            this.requestMethod = builder.method;
-        }
-
+        this.httpMethod = builder.method;
         if (builder.bodyJsonMap.size() > 0) {
             JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, String> bodyJson : builder.bodyJsonMap.entrySet()) {
@@ -84,7 +81,7 @@ public class RequestEvent {
         private HashMap<String, String> bodyJsonMap = new HashMap<>();
         private List<MultipartBody.Part> parts = new ArrayList<>();
         protected boolean newBuilder = false;
-        private String method;
+        private HttpMethod method = HttpMethod.POST;
 
         public int requestId;
 
@@ -94,8 +91,8 @@ public class RequestEvent {
          * @param method
          * @return
          */
-        public Builder method(String method) {
-            this.method = method.toUpperCase();
+        public Builder method(HttpMethod method) {
+            this.method = method;
             return this;
         }
 

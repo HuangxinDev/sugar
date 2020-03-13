@@ -12,10 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
@@ -119,14 +119,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             RequestEvent.Builder builder = new RequestEvent.Builder();
             if (!isQuickLogin) {
                 password = mLoginPwdEditText.getText().trim();
-                builder.url(HttpUrlGlobal.HTTP_USER_LOGIN_URL)
+                builder.url(UrlPath.PATH_PASSWORD_LOGIN.getUrl())
                         .addParam("username", username)
                         .addParam("password", password)
                         .addParam("code", qrCode)
                         .addParam(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
             } else {
                 password = mLoginNumberEditText.getText().trim();
-                builder.url(HttpUrlGlobal.HTTP_MOBILE_LOGIN_URL)
+                builder.url(UrlPath.PATH_SMS_PASSWORD_LOGIN.getUrl())
                         .addParam("mobile", username)
                         .addParam("code", password);
             }
@@ -171,7 +171,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 return;
             }
 
-            RequestEvent requestEvent = new RequestEvent.Builder().url(HttpUrlGlobal.HTTP_SMS_URL)
+            RequestEvent requestEvent = new RequestEvent.Builder().url(UrlPath.PATH_SMS.getUrl())
                     .addBodyJson(KeyConstant.KEY_QR_IMAGE_TOKEN,
                             SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
                     .addBodyJson("code", mLoginQrEditText.getText().trim())
@@ -228,36 +228,35 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void getQRCode() {
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(HttpUrlGlobal.HTTP_QR_URL).build());
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_PICTURE_VERIFY.getUrl()).build());
     }
 
     @Override
     public void onResponse(ResponseEvent event) {
-        switch (event.getUrl()) {
-            case HttpUrlGlobal.HTTP_QR_URL:
-                JSONObject dataObject = JSONObject.parseObject(event.getData());
-                final String bitmapStr = dataObject.getString("kaptcha");
-                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
-                invoke(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr)));
-                    }
-                });
-                break;
-            case HttpUrlGlobal.HTTP_MOBILE_LOGIN_URL:
-            case HttpUrlGlobal.HTTP_USER_LOGIN_URL:
-                JSONObject loginObj = JSONObject.parseObject(event.getData());
-                SPUtils.putValue(KeyConstant.KEY_USER_ID, loginObj.getString(KeyConstant.KEY_USER_ID));
-                SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, loginObj.getString(KeyConstant.KEY_USER_TOKEN));
-                SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, loginObj.getString(KeyConstant.KEY_USER_ACCOUNT));
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                SPUtils.putValue("login_message", event.getData());
-                break;
-            default:
-                super.onResponse(event);
+
+        final String url = event.getUrl();
+
+        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
+            JSONObject dataObject = JSONObject.parseObject(event.getData());
+            final String bitmapStr = dataObject.getString("kaptcha");
+            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
+            invoke(new Runnable() {
+                @Override
+                public void run() {
+                    mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr)));
+                }
+            });
+        } else if (url.equals(UrlPath.PATH_PASSWORD_LOGIN.getUrl()) || url.equals(UrlPath.PATH_SMS_PASSWORD_LOGIN.getUrl())) {
+            JSONObject loginObj = JSONObject.parseObject(event.getData());
+            SPUtils.putValue(KeyConstant.KEY_USER_ID, loginObj.getString(KeyConstant.KEY_USER_ID));
+            SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, loginObj.getString(KeyConstant.KEY_USER_TOKEN));
+            SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, loginObj.getString(KeyConstant.KEY_USER_ACCOUNT));
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            SPUtils.putValue("login_message", event.getData());
+        } else {
+            super.onResponse(event);
         }
     }
 

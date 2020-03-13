@@ -22,10 +22,10 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
 
 import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.model.jsonbean.QRCodeBean;
@@ -329,27 +329,20 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Subscribe(sticky = true)
     public void onResponse(ResponseEvent event) {
-        switch (event.getUrl()) {
-            case HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS:
-                EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
-                break;
-            case HttpUrlGlobal.URL_EDUCATION_LIST:
-                EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(), EduTypeBean.class));
-                break;
-            case HttpUrlGlobal.HTTP_MY_SETTING_LOGOUT:
-                showToast("登出成功");
-                EventBus.getDefault().post(new LogoutEvent());
-                break;
-            case HttpUrlGlobal.HTTP_COMMON_CITY_URL:
-                if (event.isSuccess()) {
-                    SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, event.getData());
-                }
-                break;
-            case HttpUrlGlobal.HTTP_QR_URL:
-                EventBus.getDefault().post(JsonUtils.getJsonObject(event.getData(), QRCodeBean.class));
-                break;
-            default:
-//                EventBus.getDefault().post(new ToastEvent("未处理Url"));
+        final String url = event.getUrl();
+        if (url.equals(UrlPath.PATH_USER_DETAILS_NEWS.getUrl())) {
+            EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
+        } else if (url.equals(UrlPath.PATH_USER_EDU_PULL.getUrl())) {
+            EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(), EduTypeBean.class));
+        } else if (url.equals(UrlPath.PATH_SYS_LOGOUT.getUrl())) {
+            showToast("登出成功");
+            EventBus.getDefault().post(new LogoutEvent());
+        } else if (url.equals(UrlPath.PATH_PROVINCE_CITY_AREA.getUrl())) {
+            if (event.isSuccess()) {
+                SPUtils.putValue(KeyConstant.KEY_COMMON_ADDRESS_LIST, event.getData());
+            }
+        } else if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
+            EventBus.getDefault().post(JsonUtils.getJsonObject(event.getData(), QRCodeBean.class));
         }
     }
 

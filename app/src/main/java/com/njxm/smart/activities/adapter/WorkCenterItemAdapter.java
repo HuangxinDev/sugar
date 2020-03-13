@@ -12,7 +12,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.model.jsonbean.WorkCenterSubBean;
 import com.njxm.smart.model.jsonbean.WorkCenterTitleBean;
 import com.ntxm.smart.R;
@@ -69,7 +69,7 @@ public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             case ITEM_CONTENT_TYPE:
                 final WorkCenterSubBean subBean = (WorkCenterSubBean) item;
                 helper.setText(R.id.item_text, subBean.getName());
-                Glide.with(context).load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + subBean.getIcon())
+                Glide.with(context).load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + subBean.getIcon())
                         .apply(new RequestOptions().placeholder(R.mipmap.mine_icon_real_name_auth))
                         .into((ImageView) helper.getView(R.id.item_image));
                 break;

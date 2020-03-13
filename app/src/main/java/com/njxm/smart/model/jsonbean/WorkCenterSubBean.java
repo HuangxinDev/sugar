@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
-import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.utils.StringUtils;
 
 public class WorkCenterSubBean implements MultiItemEntity {
@@ -52,7 +52,7 @@ public class WorkCenterSubBean implements MultiItemEntity {
     public void setIcon(String icon) {
         this.icon = icon;
         if (TextUtils.isEmpty(icon)) {
-            this.icon = HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + icon;
+            this.icon = UrlPath.PATH_PICTURE_PREFIX.getUrl() + icon;
         }
     }
 

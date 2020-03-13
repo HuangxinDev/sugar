@@ -13,10 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.AppTextWatcher;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -133,24 +133,21 @@ public class ResetPasswordActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-        switch (event.getUrl()) {
-            case HttpUrlGlobal.HTTP_QR_URL:
-                JSONObject dataObject = JSONObject.parseObject(event.getData());
-                mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
-                SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
-                break;
-            case HttpUrlGlobal.HTTP_RESET_PWD_URL:
-            case HttpUrlGlobal.URL_SETTINGS_RESET_PWD:
-                // 密码修改成功
-                EventBus.getDefault().post(new ToastEvent("密码修改成功"));
-                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
-                finish();
-                break;
 
-            default:
-                super.onResponse(event);
+        final String url = event.getUrl();
+
+        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
+            JSONObject dataObject = JSONObject.parseObject(event.getData());
+            mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
+            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
+        } else if (url.equals(UrlPath.PATH_MODIFY_PWD.getUrl()) || url.equals(UrlPath.PATH_RESET_PWD.getUrl())) {
+            // 密码修改成功
+            EventBus.getDefault().post(new ToastEvent("密码修改成功"));
+            startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+            finish();
+        } else {
+            super.onResponse(event);
         }
-
     }
 
     private int count = 60;
@@ -196,7 +193,7 @@ public class ResetPasswordActivity extends BaseActivity {
             }, 0, 1000);
 
             HttpUtils.getInstance().request(new RequestEvent.Builder()
-                    .url(HttpUrlGlobal.HTTP_SMS_URL)
+                    .url(UrlPath.PATH_SMS.getUrl())
                     .addBodyJson("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
                     .addBodyJson("code", mAccountQR.getText().trim())
                     .addBodyJson("mobile", mAccountEdit.getText().trim()).build());
@@ -208,11 +205,11 @@ public class ResetPasswordActivity extends BaseActivity {
 
             RequestEvent.Builder requestBuilder = new RequestEvent.Builder();
             if (isForgetPwd) {
-                requestBuilder.url(HttpUrlGlobal.HTTP_RESET_PWD_URL)
+                requestBuilder.url(UrlPath.PATH_MODIFY_PWD.getUrl())
                         .addBodyJson("mobile", mAccountEdit.getText().trim())
                         .addBodyJson("code", mAccountNumber.getText().trim());
             } else {
-                requestBuilder.url(HttpUrlGlobal.URL_SETTINGS_RESET_PWD)
+                requestBuilder.url(UrlPath.PATH_RESET_PWD.getUrl())
                         .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID));
             }
             requestBuilder.addBodyJson("password", mNewPwd2.getText().trim());
@@ -291,6 +288,6 @@ public class ResetPasswordActivity extends BaseActivity {
     }
 
     private void getQRCode() {
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(HttpUrlGlobal.HTTP_QR_URL).build());
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_PICTURE_VERIFY.getUrl()).build());
     }
 }

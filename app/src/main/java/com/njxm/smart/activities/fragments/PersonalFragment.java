@@ -15,8 +15,8 @@ import com.njxm.smart.activities.QRUserActivity;
 import com.njxm.smart.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.activities.SettingsActivity;
 import com.njxm.smart.activities.UserCertificateActivity;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -86,7 +86,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.onStart();
         RequestEvent requestEvent = RequestEvent.newBuilder()
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
+                .url(UrlPath.PATH_USER_DETAILS_NEWS.getUrl())
                 .build();
         HttpUtils.getInstance().request(requestEvent);
     }
@@ -103,7 +103,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     private void requestUserBaseNews() {
         RequestEvent event = RequestEvent.newBuilder()
-                .url(HttpUrlGlobal.HTTP_MY_USER_INIT_NEWS)
+                .url(UrlPath.PATH_USER_BASE_NEWS.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .build();
         HttpUtils.getInstance().request(event);

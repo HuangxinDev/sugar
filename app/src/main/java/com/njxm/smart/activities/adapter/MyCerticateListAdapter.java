@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.activities.UserCertificateActivity;
-import com.njxm.smart.global.HttpUrlGlobal;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
@@ -36,7 +36,7 @@ public class MyCerticateListAdapter extends BaseQuickAdapter<UserCertificateActi
     @Override
     protected void convert(BaseViewHolder helper, UserCertificateActivity.CertificateListItem item) {
 
-        Glide.with(activity).load(HttpUrlGlobal.HTTP_MY_USER_HEAD_URL_PREFIX + item.certificateImage)
+        Glide.with(activity).load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + item.certificateImage)
                 .into((ImageView) helper.getView(R.id.certificate_image_show));
 
         if (StringUtils.isNotEmpty(item.certificateName)) {

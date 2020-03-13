@@ -18,10 +18,10 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.MyCerticateListAdapter;
 import com.njxm.smart.activities.adapter.MyCertificateAdapter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
@@ -152,7 +152,7 @@ public class UserCertificateActivity extends BaseActivity {
      */
     private void refreshCertificateList() {
         HttpUtils.getInstance().request(RequestEvent.newBuilder()
-                .url(HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST)
+                .url(UrlPath.PATH_USER_CERTIFICATE_PULL.getUrl())
                 .addBodyJson("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
                 .build());
     }
@@ -285,7 +285,7 @@ public class UserCertificateActivity extends BaseActivity {
     @OnClick(R.id.commit_btn)
     protected void uploadCertificate() {
         RequestEvent.Builder requestBuilder = new RequestEvent.Builder()
-                .url(HttpUrlGlobal.URL_UPLOAD_CERTIFICATE_LIST)
+                .url(UrlPath.PATH_USER_CERTIFICATE_COMMIT.getUrl())
                 .addPart(MultipartBody.Part.createFormData("sucUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
         for (CertificateItem item : mCertificateItems) {
             if (item.file == null) {
@@ -299,16 +299,12 @@ public class UserCertificateActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-
-        switch (event.getUrl()) {
-            case HttpUrlGlobal.URL_UPLOAD_CERTIFICATE_LIST:
-                refreshCertificateList();
-                break;
-            case HttpUrlGlobal.URL_GET_USER_CERTIFICATE_LIST:
-                EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(),
-                        CertificateListItem.class));
-                break;
-            default:
+        final String url = event.getUrl();
+        if (url.equals(UrlPath.PATH_USER_CERTIFICATE_COMMIT.getUrl())) {
+            refreshCertificateList();
+        } else if (url.equals(UrlPath.PATH_USER_CERTIFICATE_PULL.getUrl())) {
+            EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(),
+                    CertificateListItem.class));
         }
     }
 }

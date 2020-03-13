@@ -13,10 +13,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.constant.GlobalRouter;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -118,7 +118,7 @@ public class PersonalInformationActivity extends BaseActivity {
         super.onStart();
         RequestEvent requestEvent = RequestEvent.newBuilder()
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .url(HttpUrlGlobal.HTTP_MY_USER_DETAIL_NEWS)
+                .url(UrlPath.PATH_USER_DETAILS_NEWS.getUrl())
                 .build();
         HttpUtils.getInstance().request(requestEvent);
     }
@@ -177,7 +177,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void uploadHeadFile() {
         HttpUtils.getInstance().doPostFile(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.HTTP_MY_USER_HEAD)
+                .url(UrlPath.PATH_USER_HEAD_COMMIT.getUrl())
                 .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
                 .addPart(MultipartBody.Part.createFormData("file", photoFile.getName(),
                         RequestBody.create(MediaType.parse("image/png"), photoFile)))
@@ -186,7 +186,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-        if (event.getUrl().equals(HttpUrlGlobal.HTTP_MY_USER_HEAD)) {
+        if (event.getUrl().equals(UrlPath.PATH_USER_HEAD_COMMIT.getUrl())) {
             if (event.isSuccess()) {
                 EventBus.getDefault().post(new ToastEvent("头像上传成功"));
                 invoke(new Runnable() {

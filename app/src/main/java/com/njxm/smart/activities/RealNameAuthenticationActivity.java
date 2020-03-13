@@ -17,8 +17,8 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.HttpUrlGlobal;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
@@ -112,7 +112,7 @@ public class RealNameAuthenticationActivity extends BaseActivity {
 
         MediaType imageType = MediaType.parse("image/jpg");
         HttpUtils.getInstance().doPostFile(new RequestEvent.Builder()
-                .url(HttpUrlGlobal.URL_USER_REAL_Authentication)
+                .url(UrlPath.PATH_USER_REAL_AUTH.getUrl())
                 .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
                 .addPart(MultipartBody.Part.createFormData("name", etCardName.getText().toString().trim()))
                 .addPart(MultipartBody.Part.createFormData("idCardNum", etCardId.getText().toString().trim()))
@@ -121,7 +121,7 @@ public class RealNameAuthenticationActivity extends BaseActivity {
                         BitmapUtils.compressFile(sparseArray.get(1)))))
                 .addPart(MultipartBody.Part.createFormData("faceFile", "11.jpg", RequestBody.create(imageType,
                         BitmapUtils.compressFile(sparseArray.get(2)))))
-                .addHeader("Content-Type", HttpUrlGlobal.CONTENT_TEXT_TYPE)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build());
     }
 
