@@ -1,5 +1,6 @@
 package com.njxm.smart.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
 
+import com.hxin.common.perrmission.PermissionRequestActivity;
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.LogoutEvent;
@@ -30,7 +32,6 @@ import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.PermissionManager;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
@@ -88,7 +89,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
         super.onCreate(savedInstanceState);
 //        StatusBarUtil.setStatusBarColor(this, R.color.text_color_gray);
-        PermissionManager.requestPermission(this, 100, PermissionManager.sRequestPermissions);
         // 禁止屏幕旋转,固定屏幕方向
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(setContentLayoutId());
@@ -311,6 +311,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     protected File photoFile;
 
     public void takePhoto(int requestId) {
+        PermissionRequestActivity.startPermissionRequest(this, new String[]{Manifest.permission.CAMERA}, 100, null);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         UUID uuid = UUID.randomUUID();
         photoFile = new File(getFilesDir(), uuid + ".jpg");

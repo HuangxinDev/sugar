@@ -208,7 +208,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityStyle" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"

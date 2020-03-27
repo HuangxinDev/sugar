@@ -1,5 +1,6 @@
 package com.njxm.smart.activities.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +27,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
+import com.hxin.common.perrmission.IPermission;
+import com.hxin.common.perrmission.PermissionRequestActivity;
 import com.njxm.smart.SmartCloudApplication;
 import com.njxm.smart.activities.BaseActivity;
 import com.njxm.smart.constant.UrlPath;
@@ -159,9 +162,6 @@ public class AttendanceFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         mWebView.addJavascriptObject(this, null);
-        mLocationService = ((SmartCloudApplication) getActivity().getApplication()).locationService;
-        mLocationService.registerListener(mBdAbstractLocationListener);
-        mLocationService.enableAssistanLocation(mWebView);
     }
 
     @Override
@@ -201,8 +201,10 @@ public class AttendanceFragment extends BaseFragment {
 
     @Override
     public void onStop() {
-        mLocationService.unregisterListener(mBdAbstractLocationListener);
-        mLocationService.stop();
+        if (mLocationService != null) {
+            mLocationService.unregisterListener(mBdAbstractLocationListener);
+            mLocationService.stop();
+        }
         mWebView.removeJavascriptObject(null);
         super.onStop();
     }
@@ -214,9 +216,29 @@ public class AttendanceFragment extends BaseFragment {
      */
     @JavascriptInterface
     public void checkLocation(Object object) {
-        if (mLocationService != null) {
-            mLocationService.start();
-        }
+
+        PermissionRequestActivity.startPermissionRequest(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101, new IPermission() {
+            @Override
+            public void onPermissionSuccess() {
+                mLocationService = ((SmartCloudApplication) getActivity().getApplication()).locationService;
+                mLocationService.registerListener(mBdAbstractLocationListener);
+                mLocationService.enableAssistanLocation(mWebView);
+
+                if (mLocationService != null) {
+                    mLocationService.start();
+                }
+            }
+
+            @Override
+            public void onPermissionCanceled() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
     }
 
     /**
@@ -240,6 +262,22 @@ public class AttendanceFragment extends BaseFragment {
      */
     @JavascriptInterface
     public void checkImage(Object object) {
-        takePhoto(999);
+
+        PermissionRequestActivity.startPermissionRequest(getActivity(), new String[]{Manifest.permission.CAMERA}, 101, new IPermission() {
+            @Override
+            public void onPermissionSuccess() {
+                takePhoto(999);
+            }
+
+            @Override
+            public void onPermissionCanceled() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
     }
 }
