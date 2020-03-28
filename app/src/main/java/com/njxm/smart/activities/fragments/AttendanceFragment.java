@@ -100,6 +100,11 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     private File photoFile;
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mWebView.addJavascriptObject(this, null);
