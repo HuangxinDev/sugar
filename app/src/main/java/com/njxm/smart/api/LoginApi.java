@@ -1,4 +1,4 @@
-package com.njxm.smart.intefaces;
+package com.njxm.smart.api;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

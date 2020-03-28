@@ -15,6 +15,7 @@ import com.njxm.smart.utils.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +30,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.Util;
+import retrofit2.Retrofit;
 
 public final class HttpUtils {
 
@@ -206,5 +208,34 @@ public final class HttpUtils {
                 .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
                 .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
         return builder;
+    }
+
+    /**
+     * 请求头信息
+     *
+     * @return 请求头Map
+     */
+    public static HashMap<String, String> getRequestHeaders() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Platform", "APP");
+        map.put("Content-Type", "application/json");
+        map.put("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT));
+        map.put("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
+        return map;
+    }
+
+    /**
+     * 获取Retrofit的指定Api
+     *
+     * @param tClass 网络请求的Api
+     * @param <T>    泛型
+     * @return 对应类型的网络请求Api
+     */
+    public <T> T getApi(Class<T> tClass) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://119.3.136.127:7776")
+                .client(sOkHttpClient)
+                .build();
+        return retrofit.create(tClass);
     }
 }

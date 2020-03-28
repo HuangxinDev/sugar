@@ -18,12 +18,6 @@ import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ntxm.smart.R;
 
@@ -98,12 +92,52 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mViewPager.setCurrentItem(mCurrentPosition);
         setViewPage(0);
 
-        if (StringUtils.isEmpty(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST))
-                || SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST).equals("[]")) {
-            HttpUtils.getInstance()
-                    .request(RequestEvent.newBuilder()
-                            .url(UrlPath.PATH_PROVINCE_CITY_AREA.getUrl()).build());
-        }
+//        if (StringUtils.isEmpty(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST))
+//                || SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST).equals("[]")) {
+//            HttpUtils.getInstance()
+//                    .request(RequestEvent.newBuilder()
+//                            .url(UrlPath.PATH_PROVINCE_CITY_AREA.getUrl()).build());
+//        }
+
+//        GetAreaApi getAreaApi = HttpUtils.getInstance().getApi(GetAreaApi.class);
+//        Call<ResponseBody> call = getAreaApi.getAreaData();
+//        Call<List<AddressBean>> call = getAreaApi.testArrayTest();
+//        Call<ResponseBody> call2 = getAreaApi.getAreaData();
+//        call.enqueue(new Callback<List<AddressBean>>() {
+//            @Override
+//            public void onResponse(Call<List<AddressBean>> call, Response<List<AddressBean>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    LogTool.printD("Sugar", "Address size: " + response.body().size());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<AddressBean>> call, Throwable t) {
+//                LogTool.printD("Sugar", "Get Area Failed: " + Log.getStackTraceString(t));
+//            }
+//        });
+
+//        call2.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                ResponseBody responseBody = response.body();
+//                if (responseBody != null) {
+//
+//                    try {
+//                        HttpBean bean = JSON.parseObject(responseBody.string(), HttpBean.class);
+//
+//                        LogTool.printD("Sugar", "Get Area Data: " + responseBody.string());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                LogTool.printE("Sugar", "Get Area Data: " + Log.getStackTraceString(t));
+//            }
+//        });
     }
 
     @Override
@@ -185,6 +219,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         ibMyBtn.setEnabled(position != 3);
         tvMyBtn.setEnabled(position != 3);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
