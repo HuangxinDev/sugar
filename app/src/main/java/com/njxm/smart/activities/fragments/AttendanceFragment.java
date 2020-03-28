@@ -9,12 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
-import android.view.Window;
-import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -36,6 +31,7 @@ import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.service.LocationService;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
+import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
@@ -51,7 +47,7 @@ import wendu.dsbridge.DWebView;
 /**
  * 考勤Fragment
  */
-public class AttendanceFragment extends BaseFragment {
+public class AttendanceFragment extends BaseFragment implements IPermission {
 
     @BindView(R.id.webview_kit)
     protected DWebView mWebView;
@@ -66,11 +62,17 @@ public class AttendanceFragment extends BaseFragment {
     private BDAbstractLocationListener mBdAbstractLocationListener = new BDAbstractLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
+
+            LogTool.printD(TAG, "==baidu location success==" + bdLocation.getAddrStr());
+
+            mLocationService.unregisterListener(this);
+            mLocationService.stop();
+
+
             JSONObject object = new JSONObject();
             object.put("x", bdLocation.getLongitude());
             object.put("y", bdLocation.getLatitude());
             object.put("address", bdLocation.getAddrStr());
-            Log.d("BDLocation", "upload data: " + object.toJSONString());
             mWebView.callHandler("h5Location", new Object[]{object.toJSONString()});
         }
     };
@@ -80,48 +82,6 @@ public class AttendanceFragment extends BaseFragment {
     protected void init() {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
-        });
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                return true;
-            }
-
-            @Override
-            public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-                return true;
-            }
-
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                callback.invoke(origin, true, false);
-                super.onGeolocationPermissionsShowPrompt(origin, callback);
-            }
-
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (getActivity() != null) {
-                    getActivity().getWindow().setFeatureInt(Window.FEATURE_PROGRESS, newProgress * 100);
-                }
-                super.onProgressChanged(view, newProgress);
-            }
-
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-        });
-        mWebView.loadUrl(UrlPath.PATH_MAIN_KAO_QIN.getUrl());
     }
 
     @Override
@@ -139,6 +99,49 @@ public class AttendanceFragment extends BaseFragment {
 
     private File photoFile;
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mWebView.addJavascriptObject(this, null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mLocationService.unregisterListener(mBdAbstractLocationListener);
+        mLocationService.stop();
+        mWebView.removeJavascriptObject(null);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    void onLazyLoad() {
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                LogTool.printD(TAG, "url load start");
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                LogTool.printD(TAG, "url load finshed");
+            }
+        });
+        mWebView.loadUrl(UrlPath.PATH_MAIN_KAO_QIN.getUrl());
+        mLocationService = ((SmartCloudApplication) SmartCloudApplication.getApplication()).locationService;
+    }
+
     private void takePhoto(int requestId) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
@@ -153,15 +156,8 @@ public class AttendanceFragment extends BaseFragment {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         if (getActivity() != null) {
-//            getActivity().startActivityForResult(intent, requestId);
             startActivityForResult(intent, requestId);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mWebView.addJavascriptObject(this, null);
     }
 
     @Override
@@ -186,27 +182,6 @@ public class AttendanceFragment extends BaseFragment {
                 }
             }).start();
         }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        if (mLocationService != null) {
-            mLocationService.unregisterListener(mBdAbstractLocationListener);
-            mLocationService.stop();
-        }
-        mWebView.removeJavascriptObject(null);
-        super.onStop();
     }
 
     /**
@@ -216,29 +191,8 @@ public class AttendanceFragment extends BaseFragment {
      */
     @JavascriptInterface
     public void checkLocation(Object object) {
-
-        PermissionRequestActivity.startPermissionRequest(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101, new IPermission() {
-            @Override
-            public void onPermissionSuccess() {
-                mLocationService = ((SmartCloudApplication) getActivity().getApplication()).locationService;
-                mLocationService.registerListener(mBdAbstractLocationListener);
-                mLocationService.enableAssistanLocation(mWebView);
-
-                if (mLocationService != null) {
-                    mLocationService.start();
-                }
-            }
-
-            @Override
-            public void onPermissionCanceled() {
-
-            }
-
-            @Override
-            public void onPermissionDenied() {
-
-            }
-        });
+        PermissionRequestActivity.startPermissionRequest(getActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101, this);
     }
 
     /**
@@ -249,6 +203,7 @@ public class AttendanceFragment extends BaseFragment {
      */
     @JavascriptInterface
     public String checkUserInfo(Object object) {
+        LogTool.printD(TAG, "==checkUserInfo()==");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", "200");
         jsonObject.put("data", SPUtils.getStringValue("login_message"));
@@ -262,22 +217,31 @@ public class AttendanceFragment extends BaseFragment {
      */
     @JavascriptInterface
     public void checkImage(Object object) {
+        LogTool.printD(TAG, "==checkImage()==");
+        PermissionRequestActivity.startPermissionRequest(getActivity(),
+                new String[]{Manifest.permission.CAMERA}, 100, this);
+    }
 
-        PermissionRequestActivity.startPermissionRequest(getActivity(), new String[]{Manifest.permission.CAMERA}, 101, new IPermission() {
-            @Override
-            public void onPermissionSuccess() {
-                takePhoto(999);
-            }
+    @Override
+    public void onPermissionSuccess(int requestCode) {
+        if (requestCode == 100) { // 相机
+            takePhoto(999);
+        } else if (requestCode == 101) {// 定位
+            mLocationService.registerListener(mBdAbstractLocationListener);
+            mLocationService.start();
+            mLocationService.requestLocation();
+        }
+    }
 
-            @Override
-            public void onPermissionCanceled() {
+    @Override
+    public void onPermissionCanceled(int requestCode) {
+        if (requestCode == 100) {
+            EventBus.getDefault().post(new ToastEvent("拒绝相机权限将无法完成考勤"));
+        }
+    }
 
-            }
+    @Override
+    public void onPermissionDenied(int requestCode) {
 
-            @Override
-            public void onPermissionDenied() {
-
-            }
-        });
     }
 }

@@ -119,7 +119,8 @@ dependencies {
     // ARouter路由配置
     implementation 'com.alibaba:arouter-api:1.5.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'androidx.viewpager2:viewpager2:1.0.0-rc01'
     implementation project(path: ':hxincommon')
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
 }

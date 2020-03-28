@@ -1,6 +1,5 @@
 package com.njxm.smart.activities.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.utils.AppUtils;
+import com.njxm.smart.utils.LogTool;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,15 +28,26 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseFragment extends Fragment implements BaseRunnable {
 
+    final String TAG;
+
     private View mContentView;
-    private Context mContext;
 
     private Handler mHandler;
+
+    /**
+     * 懒加载标志位, 当加载过了就不再加载了
+     */
+    private boolean isLazyLoad = true;
+
+    public BaseFragment() {
+        this.TAG = "BaseFragment-" + this.getClass().getSimpleName();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler = new Handler(Looper.getMainLooper());
+        LogTool.printD(TAG, "==onCreate==");
     }
 
     @Nullable
@@ -47,12 +58,26 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         }
         mContentView = inflater.inflate(setLayoutResourceID(), container, false);
         ButterKnife.bind(this, mContentView);
-        mContext = getContext();
         init();
         setUpView();
         setUpData();
         return mContentView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogTool.printD(TAG, "==onResume==");
+        if (isLazyLoad) {
+            onLazyLoad();
+            isLazyLoad = false;
+        }
+    }
+
+    /**
+     * 执行懒加载操作
+     */
+    abstract void onLazyLoad();
 
     /**
      * 此方法用于返回Fragment设置ContentView的布局文件资源ID
@@ -82,10 +107,6 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         return mContentView;
     }
 
-    public Context getContext() {
-        return mContext;
-    }
-
     protected Handler getMainHandler() {
         return mHandler;
     }
@@ -94,12 +115,26 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        LogTool.printD(TAG, "==onStart()==");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LogTool.printD(TAG, "==onPause()==");
     }
 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+        LogTool.printD(TAG, "==onStop()==");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LogTool.printD(TAG, "==onDestroy==");
     }
 
     @Override

@@ -9,33 +9,36 @@ import android.util.Log;
 public interface IPermission {
     IPermission NONE = new IPermission() {
         @Override
-        public void onPermissionSuccess() {
+        public void onPermissionSuccess(int requestCode) {
             Log.d("Hxin", "权限申请成功");
         }
 
         @Override
-        public void onPermissionCanceled() {
+        public void onPermissionCanceled(int requestCode) {
             Log.w("Hxin", "权限申请被取消");
         }
 
         @Override
-        public void onPermissionDenied() {
+        public void onPermissionDenied(int requestCode) {
             Log.e("Hxin", "权限申请被拒绝");
         }
     };
 
     /**
      * 权限申请成功
+     * @param requestCode
      */
-    void onPermissionSuccess();
+    void onPermissionSuccess(int requestCode);
 
     /**
      * 权限取消申请
+     * @param requestCode
      */
-    void onPermissionCanceled();
+    void onPermissionCanceled(int requestCode);
 
     /**
      * 权限申请被拒绝
+     * @param requestCode
      */
-    void onPermissionDenied();
+    void onPermissionDenied(int requestCode);
 }

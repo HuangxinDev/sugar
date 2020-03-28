@@ -101,6 +101,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.onResume();
     }
 
+    @Override
+    void onLazyLoad() {
+
+    }
+
     private void requestUserBaseNews() {
         RequestEvent event = RequestEvent.newBuilder()
                 .url(UrlPath.PATH_USER_BASE_NEWS.getUrl())

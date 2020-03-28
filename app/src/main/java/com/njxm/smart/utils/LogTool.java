@@ -44,16 +44,16 @@ public final class LogTool {
                 String.format(Locale.US, format, objects) : format);
 
         switch (level) {
-            case 0:
+            case Log.INFO:
                 Log.i(TAG, tempStr);
                 return true;
-            case 1:
+            case Log.DEBUG:
                 Log.d(TAG, tempStr);
                 return true;
-            case 2:
+            case Log.WARN:
                 Log.w(TAG, tempStr);
                 return true;
-            case 3:
+            case Log.ERROR:
                 Log.e(TAG, tempStr);
                 return true;
             default:
@@ -69,7 +69,7 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printD(String format, Object... objects) {
-        return print(1, format, objects);
+        return print(Log.DEBUG, format, objects);
     }
 
     /**
@@ -80,11 +80,11 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printI(String format, Object... objects) {
-        return print(0, format, objects);
+        return print(Log.INFO, format, objects);
     }
 
     public static boolean printD(String tag, String format, Object... objects) {
-        return print(0, "[ %s ] %s ", tag, format, objects);
+        return print(Log.DEBUG, "[ %s ] %s ", tag, format, objects);
     }
 
     /**
@@ -95,7 +95,7 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printW(String format, Object... objects) {
-        return print(2, format, objects);
+        return print(Log.WARN, format, objects);
     }
 
     /**
@@ -106,7 +106,7 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printE(String format, Object... objects) {
-        return print(3, format, objects);
+        return print(Log.ERROR, format, objects);
     }
 
 

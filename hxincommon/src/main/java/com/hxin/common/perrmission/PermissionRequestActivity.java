@@ -56,7 +56,7 @@ public class PermissionRequestActivity extends AppCompatActivity {
 
     private void requestPermission(String[] permissions, int code) {
         if (PermissionUtil.hasAllPermission(this, permissions)) {
-            sPermissionListener.onPermissionSuccess();
+            sPermissionListener.onPermissionSuccess(code);
             finish();
             overridePendingTransition(0, 0);
         } else {
@@ -68,13 +68,13 @@ public class PermissionRequestActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (PermissionUtil.verifyPermissions(grantResults)) {
             // 权限全部验证成功
-            sPermissionListener.onPermissionSuccess();
+            sPermissionListener.onPermissionSuccess(requestCode);
         } else {
             // 有权限没有授权
             if (PermissionUtil.shouldShowRequestPermissionPop(this, permissions)) {
-                sPermissionListener.onPermissionCanceled();
+                sPermissionListener.onPermissionCanceled(requestCode);
             } else {
-                sPermissionListener.onPermissionDenied();
+                sPermissionListener.onPermissionDenied(requestCode);
             }
         }
         finish();

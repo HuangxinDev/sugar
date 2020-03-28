@@ -51,6 +51,11 @@ public class WorkCenterFragment extends BaseFragment {
     private final List<MultiItemEntity> mData = new ArrayList<>();
 
     @Override
+    void onLazyLoad() {
+        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_USER_FEATURE_ITEMS.getUrl()).build());
+    }
+
+    @Override
     protected int setLayoutResourceID() {
         return R.layout.fragment_main_workcenter;
     }
@@ -58,7 +63,6 @@ public class WorkCenterFragment extends BaseFragment {
     @Override
     protected void init() {
         super.init();
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_USER_FEATURE_ITEMS.getUrl()).build());
     }
 
     @Subscribe
@@ -72,7 +76,7 @@ public class WorkCenterFragment extends BaseFragment {
                 }
                 data.add(bean);
             }
-            refreshUI(data);
+            EventBus.getDefault().post(data);
         }
     }
 
