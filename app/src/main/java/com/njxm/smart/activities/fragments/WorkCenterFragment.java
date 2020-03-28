@@ -10,29 +10,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.api.GetUserFuctionItemsApi;
+import com.njxm.smart.bean.PermissionBean;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.model.jsonbean.WorkCenterSubBean;
-import com.njxm.smart.model.jsonbean.WorkCenterTitleBean;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 工作中心Fragment
@@ -51,95 +53,88 @@ public class WorkCenterFragment extends BaseFragment {
     private final List<MultiItemEntity> mData = new ArrayList<>();
 
     @Override
-    void onLazyLoad() {
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_USER_FEATURE_ITEMS.getUrl()).build());
-    }
-
-    @Override
     protected int setLayoutResourceID() {
         return R.layout.fragment_main_workcenter;
     }
 
     @Override
-    protected void init() {
-        super.init();
-    }
-
-    @Subscribe
-    public void reponse(ResponseEvent event) {
-        if (event.getUrl().equals(UrlPath.PATH_USER_FEATURE_ITEMS.getUrl())) {
-            List<WorkCenterTitleBean> mWorkCenterItemBeans = JsonUtils.getJsonArray(event.getData(), WorkCenterTitleBean.class);
-            List<MultiItemEntity> data = new ArrayList<>();
-            for (WorkCenterTitleBean bean : mWorkCenterItemBeans) {
-                for (WorkCenterSubBean subBean : bean.getChildren()) {
-                    bean.addSubItem(subBean);
-                }
-                data.add(bean);
-            }
-            EventBus.getDefault().post(data);
-        }
-    }
-
-    @Override
-    protected void setUpView() {
-    }
-
-    @Override
-    protected void setUpData() {
+    void onLazyLoad() {
         mAdapter = new WorkCenterItemAdapter(getActivity(), mData);
-
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == WorkCenterItemAdapter.ITEM_TITLE_TYPE) {
                 return;
             }
-
-            WorkCenterSubBean workCenterData = (WorkCenterSubBean) adapter.getItem(position);
+            PermissionBean workCenterData = (PermissionBean) adapter.getItem(position);
 
             if (workCenterData == null || StringUtils.isEmpty(workCenterData.getUrl())) {
                 return;
             }
 
-            if (workCenterData.getUrl().startsWith("http")) {
-                ARouter.getInstance().build("/app/webview").withString("loadUrl",
-                        workCenterData.getUrl()).navigation();
-            } else {
-                ARouter.getInstance().build(workCenterData.getUrl()).navigation(getActivity(), new NavCallback() {
-                    @Override
-                    public void onArrival(Postcard postcard) {
+            String routerPath = workCenterData.getSrLinkType() == 0 ?
+                    "/" + workCenterData.getUrl().replace(":", "/") : "/app/webview";
+            ARouter.getInstance().build(routerPath)
+                    .withString("loadUrl", workCenterData.getUrl())
+                    .navigation(getActivity(), new NavCallback() {
+                        @Override
+                        public void onArrival(Postcard postcard) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onLost(Postcard postcard) {
-                        super.onLost(postcard);
-                        EventBus.getDefault().post(new ToastEvent("正在开发,敬请期待"));
-                    }
-                });
-            }
+                        @Override
+                        public void onLost(Postcard postcard) {
+                            super.onLost(postcard);
+                            EventBus.getDefault().post(new ToastEvent("正在开发,敬请期待"));
+                        }
+                    });
         });
         mRecyclerView.setAdapter(mAdapter);
-//        mAdapter.expandAll(0, true);
+
+        GetUserFuctionItemsApi api = HttpUtils.getInstance().getApi(GetUserFuctionItemsApi.class);
+        api.getData(HttpUtils.getRequestHeaders()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject object = new JSONObject(response.body().string());
+                        List<PermissionBean> permissionBeans = JSON.parseArray(object.getString("data"), PermissionBean.class);
+                        List<MultiItemEntity> data = new ArrayList<>();
+                        for (PermissionBean parent : permissionBeans) {
+                            List<PermissionBean> childrenBeans = parent.getChildren();
+                            if (childrenBeans != null) {
+                                for (PermissionBean child : childrenBeans) {
+                                    parent.addSubItem(child);
+                                }
+                            }
+                            data.add(parent);
+                        }
+                        invoke(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.setNewData(data);
+                                mAdapter.expandAll(0, true);
+                            }
+                        });
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @OnClick({R.id.suggestion_box})
-    protected void onClickEvent(View view) {
-        switch (view.getId()) {
-            case R.id.suggestion_box:
-                startActivity(new Intent(getActivity(), SuggestionsActivity.class));
-                break;
-            default:
-
+    void onClickEvent(View view) {
+        if (view.getId() == R.id.suggestion_box) {
+            startActivity(new Intent(getActivity(), SuggestionsActivity.class));
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshUI(List<MultiItemEntity> datas) {
-        if (datas == null || datas.size() == 0) {
-            return;
-        }
-        mAdapter.setNewData(datas);
-        mAdapter.expandAll(0, true);
-    }
 }

@@ -12,12 +12,7 @@ public class MessagesFragment extends BaseFragment {
     }
 
     @Override
-    protected void setUpView() {
-
-    }
-
-    @Override
-    protected void setUpData() {
+    void onLazyLoad() {
 
     }
 }

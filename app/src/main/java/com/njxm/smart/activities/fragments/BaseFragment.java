@@ -89,12 +89,16 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     /**
      * 一些View的相关操作
      */
-    protected abstract void setUpView();
+    protected void setUpView() {
+
+    }
 
     /**
      * 一些Data的相关操作
      */
-    protected abstract void setUpData();
+    protected void setUpData() {
+
+    }
 
     /**
      *
@@ -103,7 +107,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
 
     }
 
-    public View getContentView() {
+    View getContentView() {
         return mContentView;
     }
 
@@ -137,6 +141,11 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         LogTool.printD(TAG, "==onDestroy==");
     }
 
+    /**
+     * 在主线程中执行UI任务
+     *
+     * @param runnable
+     */
     @Override
     public void invoke(Runnable runnable) {
         if (AppUtils.isMainThread()) {
