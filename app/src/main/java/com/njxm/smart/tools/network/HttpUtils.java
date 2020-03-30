@@ -6,11 +6,9 @@ import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -183,23 +181,6 @@ public final class HttpUtils {
             LogTool.printE(Log.getStackTraceString(e));
         }
     }
-
-    /**
-     * 获取默认Header信息
-     *
-     * @param url 请求url
-     * @return 带默认头的Builder
-     */
-    private static Request.Builder getRequestBuilder(String url) {
-        Request.Builder builder = new Request.Builder();
-        builder.url(url)
-                .addHeader("Platform", "APP")
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT))
-                .addHeader("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
-        return builder;
-    }
-
 
     /**
      * 获取Retrofit的指定Api

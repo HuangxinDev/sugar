@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,16 +16,17 @@ import androidx.core.content.FileProvider;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.api.UploadInputFaceApi;
+import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
+import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
@@ -38,16 +40,20 @@ import java.io.File;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import butterknife.BindView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @Route(path = GlobalRouter.USER_INPUT_FACE)
 public class InputFaceActivity extends BaseActivity {
 
-
-    private static final int REQUEST_INPUT_FACE = 204;
     private static final int TAKE_PHOTO = 389;
+
+    @BindView(R.id.news_user_input_face)
     private ImageView ivPhoto;
 
     @Override
@@ -114,27 +120,30 @@ public class InputFaceActivity extends BaseActivity {
      * 上传录入人脸图像
      */
     public void uploadInputFace() {
+        UploadInputFaceApi api = HttpUtils.getInstance().getApi(UploadInputFaceApi.class);
+        api.uploadFacePhoto(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)),
+                MultipartBody.Part.createFormData("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), photoFile)))
+                .enqueue(new Callback<ServerResponseBean>() {
+                    @Override
+                    public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
 
-        RequestEvent requestEvent = new RequestEvent.Builder()
-                .url(UrlPath.PATH_USER_INPUT_FACE.getUrl())
-                .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
-                .addPart(MultipartBody.Part.createFormData("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), photoFile)))
-                .build();
+                        ServerResponseBean bean = response.body();
 
-//        RequestBody body = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-//                .addFormDataPart("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), photoFile))
-//                .build();
-//
-//        Request request = new Request.Builder()
-//                .url(HttpUrlGlobal.HTTP_MY_USER_INPUT_FACE)
-//                .headers(HttpUtils.getPostHeaders())
-//                .post(body)
-//                .build();
+                        if (bean == null) {
+                            LogTool.printE(TAG, "文件上传出现问题");
+                            return;
+                        }
 
-        HttpUtils.getInstance().doPostFile(requestEvent);
-//        HttpUtils.getInstance().postData(REQUEST_INPUT_FACE, request, this);
+                        String msg = bean.getCode() == 200 ? "录入成功" : bean.getMessage();
+
+                        EventBus.getDefault().post(new ToastEvent(msg));
+                    }
+
+                    @Override
+                    public void onFailure(Call<ServerResponseBean> call, Throwable t) {
+                        LogTool.printD(TAG, "上传失败: " + Log.getStackTraceString(t));
+                    }
+                });
     }
 
     @Override
@@ -151,6 +160,13 @@ public class InputFaceActivity extends BaseActivity {
         }
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void refreshUI(UserBean bean) {
+        Glide.with(this).load(bean.getFaceUrl())
+                .apply(new RequestOptions().placeholder(R.mipmap.realname_face_detect).centerCrop())
+                .into(ivPhoto);
+    }
+
     public void takePhoto(int requestId) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
@@ -164,19 +180,5 @@ public class InputFaceActivity extends BaseActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         startActivityForResult(intent, requestId);
-    }
-
-    @Override
-    public void onResponse(ResponseEvent event) {
-        if (event.getUrl().equals(UrlPath.PATH_USER_INPUT_FACE.getUrl())) {
-            EventBus.getDefault().post(new ToastEvent("录入成功"));
-        }
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void refreshUI(UserBean bean) {
-        Glide.with(this).load(bean.getFaceUrl())
-                .apply(new RequestOptions().placeholder(R.mipmap.realname_face_detect).centerCrop())
-                .into(ivPhoto);
     }
 }

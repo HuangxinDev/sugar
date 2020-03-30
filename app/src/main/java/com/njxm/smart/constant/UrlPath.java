@@ -12,7 +12,6 @@ public enum UrlPath {
     PATH_PASSWORD_LOGIN(1, "/auth/user/login"), // 用户名密码登录
     PATH_SYS_LOGOUT(1, "/auth/user/logout"), // 登出
     PATH_SMS_PASSWORD_LOGIN(1, "/auth/mobile/login"), // 动态短信验证码登录
-    PATH_USER_FEATURE_ITEMS(2, "/api/sys/user/findResourceList"), // 用户功能列表数据
     PATH_MODIFY_PWD(2, "/sys/user/updatePassByMobile"), // 修改密码
     PATH_RESET_PWD(2, "/api/sys/user/updatePass"), // 重置密码
     PATH_USER_PHONE_REPLACE(2, "/api/sys/user/updateMobile"), // 更换手机号
@@ -23,7 +22,6 @@ public enum UrlPath {
     PATH_USER_BASE_NEWS(2, "/api/sys/user/findUserForIndex"), // 用户基本信息
     PATH_USER_DETAILS_NEWS(2, "/api/sys/user/findById"), // 用户详细信息
     PATH_USER_HEAD_COMMIT(2, "/api/sys/user/updateIcon"), // 上传用户头像
-    PATH_USER_INPUT_FACE(2, "/api/sys/user/updateFace"), // 录入考勤人脸
     PATH_USER_EDU_NEWS_COMMIT(2, "/api/sys/user/updateEducation"), // 上传学历信息
     PATH_USER_EDU_PULL(2, "/api/sys/dict/findList"), // 拉取用户学历信息列表
     PATH_USER_CERTIFICATE_PULL(2, "/api/sys/userCertificate/findCertificateList"), // 拉取用户证书信息
