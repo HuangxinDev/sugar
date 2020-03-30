@@ -31,6 +31,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.Util;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class HttpUtils {
 
@@ -212,6 +213,7 @@ public final class HttpUtils {
                 .baseUrl("http://119.3.136.127:7776")
                 .client(getOkHttpClient())
                 .client(sOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(tClass);
     }

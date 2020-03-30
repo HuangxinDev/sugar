@@ -1,6 +1,10 @@
 package com.njxm.smart.api;
 
-import okhttp3.ResponseBody;
+import com.njxm.smart.bean.PermissionBean;
+import com.njxm.smart.bean.ServerResponseBean;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.POST;
 
@@ -11,5 +15,5 @@ import retrofit2.http.POST;
 public interface GetUserFuctionItemsApi {
 
     @POST("/api/sys/user/findResourceList")
-    Call<ResponseBody> getData();
+    Call<ServerResponseBean<List<PermissionBean>>> getFeatureItems();
 }

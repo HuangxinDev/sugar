@@ -1,6 +1,7 @@
 package com.njxm.smart.activities.fragments;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
@@ -10,28 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.SuggestionsActivity;
 import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
 import com.njxm.smart.api.GetUserFuctionItemsApi;
 import com.njxm.smart.bean.PermissionBean;
+import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,42 +89,35 @@ public class WorkCenterFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         GetUserFuctionItemsApi api = HttpUtils.getInstance().getApi(GetUserFuctionItemsApi.class);
-        api.getData().enqueue(new Callback<ResponseBody>() {
+        api.getFeatureItems().enqueue(new Callback<ServerResponseBean<List<PermissionBean>>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        JSONObject object = new JSONObject(response.body().string());
-                        List<PermissionBean> permissionBeans = JSON.parseArray(object.getString("data"), PermissionBean.class);
-                        List<MultiItemEntity> data = new ArrayList<>();
-                        for (PermissionBean parent : permissionBeans) {
-                            List<PermissionBean> childrenBeans = parent.getChildren();
-                            if (childrenBeans != null) {
-                                for (PermissionBean child : childrenBeans) {
-                                    parent.addSubItem(child);
-                                }
+            public void onResponse(Call<ServerResponseBean<List<PermissionBean>>> call, Response<ServerResponseBean<List<PermissionBean>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<MultiItemEntity> data = new ArrayList<>();
+                    for (PermissionBean parent : response.body().getData()) {
+                        List<PermissionBean> childrenBeans = parent.getChildren();
+                        if (childrenBeans != null) {
+                            for (PermissionBean child : childrenBeans) {
+                                parent.addSubItem(child);
                             }
-                            data.add(parent);
                         }
-                        invoke(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.setNewData(data);
-                                mAdapter.expandAll(0, true);
-                            }
-                        });
-                    } catch (IOException | JSONException e) {
-                        e.printStackTrace();
+                        data.add(parent);
                     }
+                    invoke(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.setNewData(data);
+                            mAdapter.expandAll(0, true);
+                        }
+                    });
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            public void onFailure(Call<ServerResponseBean<List<PermissionBean>>> call, Throwable t) {
+                Log.e(TAG, "request failed: " + Log.getStackTraceString(t));
             }
         });
-
     }
 
     @OnClick({R.id.suggestion_box})
