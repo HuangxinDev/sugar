@@ -92,7 +92,7 @@ public class WorkCenterFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         GetUserFuctionItemsApi api = HttpUtils.getInstance().getApi(GetUserFuctionItemsApi.class);
-        api.getData(HttpUtils.getRequestHeaders()).enqueue(new Callback<ResponseBody>() {
+        api.getData().enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

@@ -7,6 +7,7 @@ import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
@@ -15,7 +16,6 @@ import com.njxm.smart.utils.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -50,6 +50,7 @@ public final class HttpUtils {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .protocols(Util.immutableList(Protocol.HTTP_2, Protocol.HTTP_1_1))
+                .addInterceptor(new HeaderInterceptor())
                 .build();
     }
 
@@ -91,13 +92,6 @@ public final class HttpUtils {
             url.deleteCharAt(url.length() - 1);
         }
 
-        Request.Builder builder = getRequestBuilder(url.toString());
-
-        if (requestEvent.headers != null && requestEvent.headers.size() > 0) {
-            for (Map.Entry<String, String> entry : requestEvent.headers.entrySet()) {
-                builder.addHeader(entry.getKey(), entry.getValue());
-            }
-        }
 
         if (StringUtils.isNotEmpty(requestEvent.bodyJson)) {
             body = FormBody.create(MediaType.parse("application/json"),
@@ -106,11 +100,13 @@ public final class HttpUtils {
             body = new FormBody.Builder().build();
         }
 
-        Request request;
-        if (requestEvent.httpMethod == HttpMethod.GET) {
-            request = builder.build();
-        } else {
-            request = builder.post(body).build();
+        Request request = new Request.Builder()
+                .url(url.toString())
+                .build();
+
+
+        if (requestEvent.httpMethod == HttpMethod.POST) {
+            request = request.newBuilder().post(body).build();
         }
 
         sOkHttpClient.newCall(request).enqueue(new Callback() {
@@ -141,17 +137,10 @@ public final class HttpUtils {
             }
         }
 
-        Request.Builder requestBuilder = getRequestBuilder(requestEvent.url);
-
-        if (requestEvent.headers != null && requestEvent.headers.size() > 0) {
-            for (Map.Entry<String, String> entry : requestEvent.headers.entrySet()) {
-                requestBuilder.addHeader(entry.getKey(), entry.getValue());
-            }
-        }
-
-        requestBuilder.post(builder.build());
-
-        sOkHttpClient.newCall(requestBuilder.build()).enqueue(new Callback() {
+        Request request = new Request.Builder().url(requestEvent.url)
+                .post(builder.build())
+                .build();
+        sOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
@@ -210,19 +199,6 @@ public final class HttpUtils {
         return builder;
     }
 
-    /**
-     * 请求头信息
-     *
-     * @return 请求头Map
-     */
-    public static HashMap<String, String> getRequestHeaders() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Platform", "APP");
-        map.put("Content-Type", "application/json");
-        map.put("Account", SPUtils.getStringValue(KeyConstant.KEY_USER_ACCOUNT));
-        map.put("Authorization", "Bearer-" + SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
-        return map;
-    }
 
     /**
      * 获取Retrofit的指定Api
@@ -234,6 +210,7 @@ public final class HttpUtils {
     public <T> T getApi(Class<T> tClass) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://119.3.136.127:7776")
+                .client(getOkHttpClient())
                 .client(sOkHttpClient)
                 .build();
         return retrofit.create(tClass);

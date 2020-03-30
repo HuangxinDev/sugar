@@ -1,10 +1,7 @@
 package com.njxm.smart.api;
 
-import java.util.HashMap;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 
 /**
@@ -14,5 +11,5 @@ import retrofit2.http.POST;
 public interface GetUserFuctionItemsApi {
 
     @POST("/api/sys/user/findResourceList")
-    Call<ResponseBody> getData(@HeaderMap HashMap<String, String> headerMap);
+    Call<ResponseBody> getData();
 }

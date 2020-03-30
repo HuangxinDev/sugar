@@ -17,6 +17,7 @@ import com.njxm.smart.activities.fragments.AttendanceFragment;
 import com.njxm.smart.activities.fragments.MessagesFragment;
 import com.njxm.smart.activities.fragments.PersonalFragment;
 import com.njxm.smart.activities.fragments.WorkCenterFragment;
+import com.njxm.smart.activities.fragments.ZoomOutPageTransformer;
 import com.njxm.smart.activities.fragments.adapter.MainFragmentAdapter;
 import com.njxm.smart.view.NoScrollViewPager;
 import com.ntxm.smart.R;
@@ -34,7 +35,8 @@ import butterknife.OnClick;
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     // ViewPager
-    private NoScrollViewPager mViewPager;
+    @BindView(R.id.view_pager)
+    public NoScrollViewPager mViewPager;
 
     private int mCurrentPosition = 0;
 
@@ -74,7 +76,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewPager = findViewById(R.id.view_pager);
         mFragmentManager = getSupportFragmentManager();
 
         AttendanceFragment attendanceFragment = new AttendanceFragment();
@@ -89,6 +90,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mFragmentAdapter.setFragmentDatas(fragments);
         mViewPager.setAdapter(mFragmentAdapter);
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mViewPager.setCurrentItem(mCurrentPosition);
         setViewPage(0);
 
