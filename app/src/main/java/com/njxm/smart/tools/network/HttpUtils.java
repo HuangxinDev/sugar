@@ -70,7 +70,7 @@ public final class HttpUtils {
      *
      * @return OKHttpClient实例
      */
-    public OkHttpClient getOkHttpClient() {
+    private OkHttpClient getOkHttpClient() {
         return sOkHttpClient;
     }
 

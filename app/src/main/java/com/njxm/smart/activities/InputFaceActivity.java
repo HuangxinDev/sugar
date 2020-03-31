@@ -54,7 +54,7 @@ public class InputFaceActivity extends BaseActivity {
     private static final int TAKE_PHOTO = 389;
 
     @BindView(R.id.news_user_input_face)
-    private ImageView ivPhoto;
+    protected ImageView ivPhoto;
 
     @Override
     protected int setContentLayoutId() {

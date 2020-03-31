@@ -23,6 +23,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleImageAdapter;
+import com.njxm.smart.api.UploadFileApi;
+import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
@@ -51,6 +53,9 @@ import butterknife.BindView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MedicalReportActivity extends BaseActivity {
@@ -297,20 +302,32 @@ public class MedicalReportActivity extends BaseActivity {
     }
 
     private void uploadMedicalReports() {
-        RequestEvent.Builder requestBuilder = new RequestEvent.Builder()
-                .url(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getUrl())
-                .addPart(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
 
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        parts.add(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
         for (String filePath : mDatas) {
             if (filePath.endsWith("camera_default.png")) {
                 continue;
             }
             File file = new File(filePath);
-            requestBuilder.addPart(MultipartBody.Part.createFormData("files", file.getName(),
+            parts.add(MultipartBody.Part.createFormData("files", file.getName(),
                     RequestBody.create(MediaType.parse("image/png"), file)));
         }
 
-        HttpUtils.getInstance().doPostFile(requestBuilder.build());
+        UploadFileApi api = HttpUtils.getInstance().getApi(UploadFileApi.class);
+
+        api.uploadFile(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
+            @Override
+            public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
+                EventBus.getDefault().post(new ToastEvent(response.code() == 200 ? "上传成功" : response.message()));
+            }
+
+            @Override
+            public void onFailure(Call<ServerResponseBean> call, Throwable t) {
+                EventBus.getDefault().post(new ToastEvent("网络异常"));
+            }
+        });
+
     }
 
     private File photoFile;

@@ -12,10 +12,11 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.api.UploadFileApi;
+import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
@@ -29,11 +30,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 个人信息页面（由主页 我的-姓名跳转）
@@ -176,19 +183,18 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void uploadHeadFile() {
-        HttpUtils.getInstance().doPostFile(new RequestEvent.Builder()
-                .url(UrlPath.PATH_USER_HEAD_COMMIT.getUrl())
-                .addPart(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)))
-                .addPart(MultipartBody.Part.createFormData("file", photoFile.getName(),
-                        RequestBody.create(MediaType.parse("image/png"), photoFile)))
-                .build());
-    }
 
-    @Override
-    public void onResponse(ResponseEvent event) {
-        if (event.getUrl().equals(UrlPath.PATH_USER_HEAD_COMMIT.getUrl())) {
-            if (event.isSuccess()) {
-                EventBus.getDefault().post(new ToastEvent("头像上传成功"));
+        UploadFileApi api = HttpUtils.getInstance().getApi(UploadFileApi.class);
+
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        parts.add(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
+        parts.add(MultipartBody.Part.createFormData("file", photoFile.getName(),
+                RequestBody.create(MediaType.parse("image/png"), photoFile)));
+
+        api.uploadFile(UrlPath.PATH_USER_HEAD_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
+            @Override
+            public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
+                EventBus.getDefault().post(new ToastEvent(response.code() == 200 ? "上传成功" : response.message()));
                 invoke(new Runnable() {
                     @Override
                     public void run() {
@@ -196,7 +202,12 @@ public class PersonalInformationActivity extends BaseActivity {
                     }
                 });
             }
-        }
+
+            @Override
+            public void onFailure(Call<ServerResponseBean> call, Throwable t) {
+                EventBus.getDefault().post(new ToastEvent("网络异常"));
+            }
+        });
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

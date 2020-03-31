@@ -64,4 +64,8 @@ public enum UrlPath {
         }
         return host + path;
     }
+
+    public String getPath() {
+        return path;
+    }
 }
