@@ -1,10 +1,15 @@
 package com.njxm.smart.api;
 
-import okhttp3.ResponseBody;
+import com.njxm.smart.bean.LoginBean;
+import com.njxm.smart.bean.ServerResponseBean;
+
+import java.util.Map;
+
 import retrofit2.Call;
-import retrofit2.http.Field;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by Hxin on 2020/3/26
@@ -12,10 +17,7 @@ import retrofit2.http.Query;
  */
 public interface LoginApi {
 
-    @POST("/auth/user/login")
-    Call<ResponseBody> loginByPassword(@Query(value = "username") String userName, @Query(value = "password") String password,
-                                       @Query(value = "code") String code, @Query(value = "kaptchaToken") String token);
-
-    @POST("/auth/mobile/login")
-    Call<ResponseBody> loginByMessage(@Field(value = "mobile") String mobile, @Field(value = "code") String code);
+    @POST("/auth/{way}/login")
+    @Headers(value = {"Content-Type:application/x-www-form-urlencoded"})
+    Call<ServerResponseBean<LoginBean>> login(@Path("way") String name, @QueryMap Map<String, String> params);
 }

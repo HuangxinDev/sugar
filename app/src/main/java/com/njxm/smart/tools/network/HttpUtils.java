@@ -54,7 +54,6 @@ public final class HttpUtils {
     }
 
     public static HttpUtils getInstance() {
-
         if (sInstance == null) {
             synchronized (sLock) {
                 if (sInstance == null) {
@@ -197,5 +196,47 @@ public final class HttpUtils {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(tClass);
+    }
+
+    private String baseUrl;
+
+    private HttpUtils(Builder builder) {
+        this.baseUrl = builder.baseUrl;
+        getInstance();
+    }
+
+    /**
+     * 获取Retrofit的指定Api
+     *
+     * @param tClass 网络请求的Api
+     * @param <T>    泛型
+     * @return 对应类型的网络请求Api
+     */
+    public <T> T getServerApi(Class<T> tClass) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(getOkHttpClient())
+                .client(sOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(tClass);
+    }
+
+    public static class Builder {
+
+        private String baseUrl;
+
+        public Builder() {
+
+        }
+
+        public Builder baseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
+        public HttpUtils build() {
+            return new HttpUtils(this);
+        }
     }
 }
