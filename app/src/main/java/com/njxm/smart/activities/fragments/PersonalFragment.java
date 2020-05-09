@@ -77,18 +77,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mCertItem.setOnClickListener(this);
         mAboutUsItem.setOnClickListener(this);
         mSettingItem.setOnClickListener(this);
-
-        requestUserBaseNews();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        RequestEvent requestEvent = RequestEvent.newBuilder()
-                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .url(UrlPath.PATH_USER_DETAILS_NEWS.getUrl())
-                .build();
-        HttpUtils.getInstance().request(requestEvent);
+
     }
 
     @OnClick(R.id.qr_btn)
@@ -102,8 +96,13 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    void onLazyLoad() {
-
+    protected void onLazyLoad() {
+        RequestEvent requestEvent = RequestEvent.newBuilder()
+                .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .url(UrlPath.PATH_USER_DETAILS_NEWS.getUrl())
+                .build();
+        HttpUtils.getInstance().request(requestEvent);
+        requestUserBaseNews();
     }
 
     private void requestUserBaseNews() {

@@ -77,7 +77,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     /**
      * 执行懒加载操作
      */
-    abstract void onLazyLoad();
+    protected abstract void onLazyLoad();
 
     /**
      * 此方法用于返回Fragment设置ContentView的布局文件资源ID

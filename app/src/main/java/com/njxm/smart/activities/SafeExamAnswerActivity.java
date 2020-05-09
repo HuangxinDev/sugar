@@ -1,131 +1,70 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.fragments.ExamFragment;
 import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 
+@Route(path = "/app/safe/activity")
 public class SafeExamAnswerActivity extends BaseActivity {
 
-    @BindView(R.id.recycler_view)
-    protected RecyclerView mRecyclerView;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected int setContentLayoutId() {
+
         return R.layout.safe_exam_answer_activity;
     }
-
-    SafeExamAnswerAdapter adapter;
 
     protected int currentPostion = 0;
     private List<ExamQuestionBean> data = new ArrayList<>();
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LinearLayoutManager manager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-        };
-        manager.setSmoothScrollbarEnabled(false);
-        mRecyclerView.setLayoutManager(manager);
-//        mRecyclerView.setNestedScrollingEnabled(false);
-//        mRecyclerView.setNestedScrollingEnabled(true);
-//        mNextStep.setEnabled(false);
-        data = loadData();
-        adapter = new SafeExamAnswerAdapter(data);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                LogTool.printD("view is Group: %s : isTextView: %s",
-                        view.getParent() instanceof RadioGroup,
-                        view instanceof RadioButton);
-            }
-        });
+    @OnClick(R.id.next_step)
+    public void clickNext() {
 
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                ExamQuestionBean bean = (ExamQuestionBean) adapter.getItem(position);
+        if (currentPostion >= data.size()) {
+            currentPostion = 0;
+        }
+        replaceFragment(data.get(currentPostion).topic);
 
-                // 此题打错直接返回失败
-
-                if (bean != null) {
-                }
-
-                if (position < adapter.getData().size() - 1) {
-                    if (view.getId() == R.id.next_step) {
-                        mRecyclerView.scrollToPosition(position + 1);
-                        view.setEnabled(false);
-                    }
-                } else {
-                    if (view.getId() == R.id.next_step) {
-                        Intent intent = new Intent(SafeExamAnswerActivity.this,
-                                SafeExamResultActivity.class);
-                        intent.putExtra("result", true);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            }
-        });
-
-//        PagerSnapHelper snapHelper = new PagerSnapHelper();
-//        snapHelper.attachToRecyclerView(mRecyclerView);
-
-        mRecyclerView.setAdapter(adapter);
-
-//        mNextStep.setEnabled(false);
+        currentPostion++;
     }
 
-//    @OnClick(R.id.next_step)
-//    protected void nextStep() {
-//
-//        if (currentPostion >= loadData().size() - 1) {
-//
-//            return;
-//        }
-//
-//        // TODO 判断当前题目答案是否正确
-//
-//
-//
-//        currentPostion += 1;
-//
-//
-////        mNextStep.setEnabled(false);
-//
-////        if (currentPostion == data.size() - 1) {
-////            mNextStep.setText("提交");
-////        }
-//    }
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        mFragmentManager = getSupportFragmentManager();
+        data = loadData();
+    }
 
     @OnClick(R.id.cancel)
     protected void cancel() {
         finish();
+    }
+
+    public void replaceFragment(String name) {
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, ExamFragment.newInstance(name))
+                .commit();
+
     }
 
     public List<ExamQuestionBean> loadData() {
@@ -262,14 +201,6 @@ public class SafeExamAnswerActivity extends BaseActivity {
                         muls[3] = isChecked;
                         break;
                 }
-
-//                for (boolean flag : muls) {
-//                    if (flag) {
-//                        mNextStep.setEnabled(true);
-//                        return;
-//                    }
-//                }
-//                mNextStep.setEnabled(false);
             }
         };
 

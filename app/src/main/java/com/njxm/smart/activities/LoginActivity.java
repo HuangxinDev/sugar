@@ -12,14 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
-import com.njxm.smart.api.LoginApi;
-import com.njxm.smart.bean.LoginBean;
-import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
@@ -29,16 +24,8 @@ import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 登录页面
@@ -122,64 +109,67 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         super.onClick(v);
         if (v == mLoginBtn) {
-            boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
-            String username = mLoginAccountEditText.getText().trim();
-
-            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
-                EventBus.getDefault().post(new ToastEvent("账户不符和条件"));
-                return;
-            }
-
-            if (!isQuickLogin && StringUtils.isEmpty(mLoginQrEditText.getText())) {
-                showToast("图形验证为空");
-                return;
-            }
-
-            String password = isQuickLogin ? mLoginNumberEditText.getText().trim() : mLoginPwdEditText.getText().trim();
-
-            if (StringUtils.isEmpty(password)) {
-                showToast(isQuickLogin ? "验证码为空" : "密码为空");
-                return;
-            }
-
-
-            String qrCode = mLoginQrEditText.getText().trim();
-            Map<String, String> params = new HashMap<>();
-            params.put(isQuickLogin ? "mobile" : "username", username);
-            params.put(isQuickLogin ? "code" : "password", password);
-            if (!isQuickLogin) {
-                params.put("code", qrCode);
-                params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
-            }
-
-            LoginApi api = new HttpUtils.Builder()
-                    .baseUrl("http://119.3.136.127:7777")
-                    .build()
-                    .getServerApi(LoginApi.class);
-            api.login(isQuickLogin ? "mobile" : "user", params).enqueue(new Callback<ServerResponseBean<LoginBean>>() {
-                @Override
-                public void onResponse(Call<ServerResponseBean<LoginBean>> call, Response<ServerResponseBean<LoginBean>> response) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+//            boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
+//            String username = mLoginAccountEditText.getText().trim();
+//
+//            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
+//                EventBus.getDefault().post(new ToastEvent("账户不符和条件"));
+//                return;
+//            }
+//
+//            if (!isQuickLogin && StringUtils.isEmpty(mLoginQrEditText.getText())) {
+//                showToast("图形验证为空");
+//                return;
+//            }
+//
+//            String password = isQuickLogin ? mLoginNumberEditText.getText().trim() : mLoginPwdEditText.getText().trim();
+//
+//            if (StringUtils.isEmpty(password)) {
+//                showToast(isQuickLogin ? "验证码为空" : "密码为空");
+//                return;
+//            }
 
 
-                    if (response.isSuccessful() && response.body() != null) {
-                        LoginBean loginBean = response.body().getData();
-                        SPUtils.putValue(KeyConstant.KEY_USER_ID, loginBean.getId());
-                        SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, loginBean.getToken());
-                        SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, loginBean.getSuAccount());
-                        SPUtils.putValue("login_message", new Gson().toJson(loginBean));
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        EventBus.getDefault().post(new ToastEvent(response.message()));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ServerResponseBean<LoginBean>> call, Throwable t) {
-
-                }
-            });
+//            String qrCode = mLoginQrEditText.getText().trim();
+//            Map<String, String> params = new HashMap<>();
+//            params.put(isQuickLogin ? "mobile" : "username", username);
+//            params.put(isQuickLogin ? "code" : "password", password);
+//            if (!isQuickLogin) {
+//                params.put("code", qrCode);
+//                params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
+//            }
+//
+//            LoginApi api = new HttpUtils.Builder()
+//                    .baseUrl("http://119.3.136.127:7777")
+//                    .build()
+//                    .getServerApi(LoginApi.class);
+//            api.login(isQuickLogin ? "mobile" : "user", params).enqueue(new Callback<ServerResponseBean<LoginBean>>() {
+//                @Override
+//                public void onResponse(Call<ServerResponseBean<LoginBean>> call, Response<ServerResponseBean<LoginBean>> response) {
+//
+//
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        LoginBean loginBean = response.body().getData();
+//                        SPUtils.putValue(KeyConstant.KEY_USER_ID, loginBean.getId());
+//                        SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, loginBean.getToken());
+//                        SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, loginBean.getSuAccount());
+//                        SPUtils.putValue("login_message", new Gson().toJson(loginBean));
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        EventBus.getDefault().post(new ToastEvent(response.message()));
+//                    }
+//                }
+///
+//                @Override
+//                public void onFailure(Call<ServerResponseBean<LoginBean>> call, Throwable t) {
+//
+//                }
+//            });
         } else if (v == mQuickLoginBtn) {
             switchLoginWay(false);
         } else if (v == mPasswordLoginBtn) {

@@ -119,7 +119,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     }
 
     @Override
-    void onLazyLoad() {
+    protected void onLazyLoad() {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

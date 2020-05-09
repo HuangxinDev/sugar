@@ -93,6 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             app:hint="@string/hint_user_login_account"
+            app:edit_text="wz_yzczy"
             app:leftIcon="@mipmap/edt_icon_user_account"
             app:right_type="none" />
 
@@ -124,6 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_44"
             app:hint="@string/user_password_hint_text"
+            app:edit_text="123456"
             app:inputType="textPassword"
             app:leftIcon="@mipmap/edt_icon_user_password"
             app:right_type="none" />

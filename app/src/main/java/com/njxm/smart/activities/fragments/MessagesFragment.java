@@ -12,7 +12,7 @@ public class MessagesFragment extends BaseFragment {
     }
 
     @Override
-    void onLazyLoad() {
+    protected void onLazyLoad() {
 
     }
 }

@@ -55,7 +55,7 @@ public class WorkCenterFragment extends BaseFragment {
     }
 
     @Override
-    void onLazyLoad() {
+    protected void onLazyLoad() {
         mAdapter = new WorkCenterItemAdapter(getActivity(), mData);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -127,4 +127,9 @@ public class WorkCenterFragment extends BaseFragment {
         }
     }
 
+
+    @OnClick(R.id.toDo)
+    void clickTodoBtn() {
+        ARouter.getInstance().build("/app/safe/activity").navigation();
+    }
 }

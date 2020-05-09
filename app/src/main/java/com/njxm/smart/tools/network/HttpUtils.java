@@ -9,23 +9,14 @@ import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
-import com.njxm.smart.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.Util;
 import retrofit2.Retrofit;
@@ -80,44 +71,46 @@ public final class HttpUtils {
      * @param requestEvent
      */
     public void request(RequestEvent requestEvent) {
-        RequestBody body;
-        StringBuilder url = new StringBuilder(requestEvent.url);
-        if (requestEvent.params != null && requestEvent.params.size() > 0) {
-            url.append("?");
-            for (Map.Entry<String, String> entry : requestEvent.params.entrySet()) {
-                url.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-            }
-            url.deleteCharAt(url.length() - 1);
-        }
 
 
-        if (StringUtils.isNotEmpty(requestEvent.bodyJson)) {
-            body = FormBody.create(MediaType.parse("application/json"),
-                    requestEvent.bodyJson);
-        } else {
-            body = new FormBody.Builder().build();
-        }
-
-        Request request = new Request.Builder()
-                .url(url.toString())
-                .build();
-
-
-        if (requestEvent.httpMethod == HttpMethod.POST) {
-            request = request.newBuilder().post(body).build();
-        }
-
-        sOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                onSuccess(response, requestEvent);
-            }
-        });
+//        RequestBody body;
+//        StringBuilder url = new StringBuilder(requestEvent.url);
+//        if (requestEvent.params != null && requestEvent.params.size() > 0) {
+//            url.append("?");
+//            for (Map.Entry<String, String> entry : requestEvent.params.entrySet()) {
+//                url.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+//            }
+//            url.deleteCharAt(url.length() - 1);
+//        }
+//
+//
+//        if (StringUtils.isNotEmpty(requestEvent.bodyJson)) {
+//            body = FormBody.create(MediaType.parse("application/json"),
+//                    requestEvent.bodyJson);
+//        } else {
+//            body = new FormBody.Builder().build();
+//        }
+//
+//        Request request = new Request.Builder()
+//                .url(url.toString())
+//                .build();
+//
+//
+//        if (requestEvent.httpMethod == HttpMethod.POST) {
+//            request = request.newBuilder().post(body).build();
+//        }
+//
+//        sOkHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                onSuccess(response, requestEvent);
+//            }
+//        });
     }
 
     /**
@@ -126,29 +119,29 @@ public final class HttpUtils {
      * @param requestEvent
      */
     public void doPostFile(RequestEvent requestEvent) {
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM);
-
-        if (requestEvent.parts != null && requestEvent.parts.size() > 0) {
-            for (MultipartBody.Part part : requestEvent.parts) {
-                builder.addPart(part);
-            }
-        }
-
-        Request request = new Request.Builder().url(requestEvent.url)
-                .post(builder.build())
-                .build();
-        sOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                onSuccess(response, requestEvent);
-            }
-        });
+//        MultipartBody.Builder builder = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM);
+//
+//        if (requestEvent.parts != null && requestEvent.parts.size() > 0) {
+//            for (MultipartBody.Part part : requestEvent.parts) {
+//                builder.addPart(part);
+//            }
+//        }
+//
+//        Request request = new Request.Builder().url(requestEvent.url)
+//                .post(builder.build())
+//                .build();
+//        sOkHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                EventBus.getDefault().post(new ToastEvent("网络异常，请稍后再试"));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                onSuccess(response, requestEvent);
+//            }
+//        });
     }
 
     /**
