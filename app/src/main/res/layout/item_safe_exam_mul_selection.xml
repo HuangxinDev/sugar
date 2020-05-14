@@ -2,83 +2,83 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/dp_16"
+    android:paddingEnd="@dimen/dp_16">
 
     <TextView
         android:id="@id/title_type"
         style="@style/BaseTextViewStyle.Blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:text="单选题"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@id/title"
         style="@style/BaseTextViewStyle.Black.14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
         android:layout_marginTop="@dimen/dp_28"
-        app:layout_constraintTop_toBottomOf="@id/title_type"
+        android:layout_marginBottom="27dp"
         android:gravity="center_vertical"
-        android:text="拆除（       ）模板时，为避免突然整体塌落，必要时应先设立临时支撑，然后进行拆卸。" />
+        android:text="拆除（       ）模板时，为避免突然整体塌落，必要时应先设立临时支撑，然后进行拆卸。"
+        app:layout_constraintTop_toBottomOf="@id/title_type" />
 
 
-    <CheckBox
-        android:id="@+id/mul_id_a"
-        style="@style/BaseTextViewStyle.Black.14"
+    <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_53"
-        android:layout_marginTop="27dp"
-        android:button="@drawable/drawable_mul_a"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:text="多选A"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title">
 
-    <CheckBox
-        android:id="@+id/mul_id_b"
-        style="@style/BaseTextViewStyle.Black.14"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_53"
-        android:button="@drawable/drawable_mul_b"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:text="多选B"
-        app:layout_constraintTop_toBottomOf="@id/mul_id_a" />
+        <CheckBox
+            android:id="@+id/mul_id_a"
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:layout_marginTop="27dp"
+            android:button="@drawable/drawable_mul_a"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_16"
+            android:text="多选A"
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <CheckBox
-        android:id="@+id/mul_id_c"
-        style="@style/BaseTextViewStyle.Black.14"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_53"
-        android:button="@drawable/drawable_mul_c"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:text="多选C"
-        app:layout_constraintTop_toBottomOf="@id/mul_id_b" />
+        <CheckBox
+            android:id="@+id/mul_id_b"
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:button="@drawable/drawable_mul_b"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_16"
+            android:text="多选B"
+            app:layout_constraintTop_toBottomOf="@id/mul_id_a" />
 
-    <CheckBox
-        android:id="@+id/mul_id_d"
-        style="@style/BaseTextViewStyle.Black.14"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_53"
-        android:button="@drawable/drawable_mul_d"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/dp_16"
-        android:text="多选D"
-        app:layout_constraintTop_toBottomOf="@id/mul_id_c" />
+        <CheckBox
+            android:id="@+id/mul_id_c"
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:button="@drawable/drawable_mul_c"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_16"
+            android:text="多选C"
+            app:layout_constraintTop_toBottomOf="@id/mul_id_b" />
 
-    <TextView
-        android:id="@id/next_step"
-        style="@style/TVBtn"
-        android:layout_marginBottom="47dp"
-        android:background="@drawable/background_btn_flavor_1"
-        android:text="下一题"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <CheckBox
+            android:id="@+id/mul_id_d"
+            style="@style/BaseTextViewStyle.Black.14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_53"
+            android:button="@drawable/drawable_mul_d"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_16"
+            android:text="多选D"
+            app:layout_constraintTop_toBottomOf="@id/mul_id_c" />
+
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

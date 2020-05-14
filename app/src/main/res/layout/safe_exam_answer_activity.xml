@@ -7,56 +7,46 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-
-    <LinearLayout
-        android:id="@+id/bar"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
+    <TextView
+        android:id="@id/cancel"
+        style="@style/BaseTextViewStyle.Blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
+        android:text="取消"
+        android:textSize="16sp"
+        app:layout_constraintDimensionRatio="W, 2:1"
+        app:layout_constraintHeight_percent="0.06875"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@id/cancel"
-            style="@style/BaseTextViewStyle.Blue"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="取消"
-            android:textSize="16sp" />
-
-        <TextView
-            style="@style/BaseTextViewStyle.Gray"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="剩余题目 19"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            style="@style/BaseTextViewStyle.Gray"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="27dp"
-            android:text="剩余时间 19:30"
-            android:textSize="@dimen/sp_12" />
-    </LinearLayout>
+    <TextView
+        style="@style/BaseTextViewStyle.Gray"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:paddingEnd="@dimen/dp_16"
+        android:text="剩余题目 19 剩余时间 19:30"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@id/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cancel" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#0f0"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@id/next_step"
-        app:layout_constraintTop_toBottomOf="@id/bar" />
+        app:layout_constraintTop_toBottomOf="@id/cancel" />
 
     <TextView
         android:id="@id/next_step"
         style="@style/TVBtn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="47dp"
         android:background="@drawable/background_btn_flavor_1"
         android:text="下一题"
