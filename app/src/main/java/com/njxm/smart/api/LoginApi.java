@@ -20,4 +20,8 @@ public interface LoginApi {
     @POST("/auth/{way}/login")
     @Headers(value = {"Content-Type:application/x-www-form-urlencoded"})
     Call<ServerResponseBean<LoginBean>> login(@Path("way") String name, @QueryMap Map<String, String> params);
+
+
+    @POST("auth/kaptcha/get")
+    void requestQrCode();
 }

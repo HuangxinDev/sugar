@@ -105,8 +105,11 @@ public final class LogTool {
      * @param objects null or 相应格式对应的值
      * @return 是否成功打印
      */
-    public static boolean printE(String format, Object... objects) {
-        return print(Log.ERROR, format, objects);
+//    public static boolean printE(String format, Object... objects) {
+//        return print(Log.ERROR, format, objects);
+//    }
+    public static boolean printE(String tag, String format, Object... objects) {
+        return print(Log.ERROR, String.format(Locale.CHINA, "[%s] %s", tag, format), objects);
     }
 
 

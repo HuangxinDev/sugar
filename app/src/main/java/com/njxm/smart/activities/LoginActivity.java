@@ -2,35 +2,45 @@ package com.njxm.smart.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.contract.LoginContract;
 import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.presenter.LoginPresenter;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 
+import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements LoginContract.View, View.OnClickListener {
 
     // 登录按钮
     private TextView mLoginBtn;
@@ -59,16 +69,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // 忘记密码
     private AppCompatTextView mForgetPwdBtn;
 
+    private LoginPresenter mLoginPresenter;
+
+    @Override
+    protected int setContentLayoutId() {
+        return R.layout.activity_login;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         if (StringUtils.isNotEmpty(SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
             return;
         }
+        super.onCreate(savedInstanceState);
+        mLoginPresenter = new LoginPresenter();
+        mLoginPresenter.attachView(this); // Presenter内部持有一个Activity对象
 
         mLoginBtn = findViewById(R.id.btn_login);
         mLoginBtn.setOnClickListener(this);
@@ -95,81 +113,50 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mLoginQrEditText.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getQRCode();
+                mLoginPresenter.requestQrCode();
             }
         });
     }
 
     @Override
-    protected int setContentLayoutId() {
-        return R.layout.activity_login;
+    protected void onStop() {
+        super.onStop();
+        mLoginPresenter.detachView();
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         if (v == mLoginBtn) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-//            boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
-//            String username = mLoginAccountEditText.getText().trim();
-//
-//            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
-//                EventBus.getDefault().post(new ToastEvent("账户不符和条件"));
-//                return;
-//            }
-//
-//            if (!isQuickLogin && StringUtils.isEmpty(mLoginQrEditText.getText())) {
-//                showToast("图形验证为空");
-//                return;
-//            }
-//
-//            String password = isQuickLogin ? mLoginNumberEditText.getText().trim() : mLoginPwdEditText.getText().trim();
-//
-//            if (StringUtils.isEmpty(password)) {
-//                showToast(isQuickLogin ? "验证码为空" : "密码为空");
-//                return;
-//            }
+            boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
+            String username = mLoginAccountEditText.getText().trim();
 
+            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
+                EventBus.getDefault().post(new ToastEvent("账户不符和条件"));
+                return;
+            }
 
-//            String qrCode = mLoginQrEditText.getText().trim();
-//            Map<String, String> params = new HashMap<>();
-//            params.put(isQuickLogin ? "mobile" : "username", username);
-//            params.put(isQuickLogin ? "code" : "password", password);
-//            if (!isQuickLogin) {
-//                params.put("code", qrCode);
-//                params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
-//            }
-//
-//            LoginApi api = new HttpUtils.Builder()
-//                    .baseUrl("http://119.3.136.127:7777")
-//                    .build()
-//                    .getServerApi(LoginApi.class);
-//            api.login(isQuickLogin ? "mobile" : "user", params).enqueue(new Callback<ServerResponseBean<LoginBean>>() {
-//                @Override
-//                public void onResponse(Call<ServerResponseBean<LoginBean>> call, Response<ServerResponseBean<LoginBean>> response) {
-//
-//
-//                    if (response.isSuccessful() && response.body() != null) {
-//                        LoginBean loginBean = response.body().getData();
-//                        SPUtils.putValue(KeyConstant.KEY_USER_ID, loginBean.getId());
-//                        SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, loginBean.getToken());
-//                        SPUtils.putValue(KeyConstant.KEY_USER_ACCOUNT, loginBean.getSuAccount());
-//                        SPUtils.putValue("login_message", new Gson().toJson(loginBean));
-//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    } else {
-//                        EventBus.getDefault().post(new ToastEvent(response.message()));
-//                    }
-//                }
-///
-//                @Override
-//                public void onFailure(Call<ServerResponseBean<LoginBean>> call, Throwable t) {
-//
-//                }
-//            });
+            if (!isQuickLogin && StringUtils.isEmpty(mLoginQrEditText.getText())) {
+                showToast("图形验证为空");
+                return;
+            }
+
+            String password = isQuickLogin ? mLoginNumberEditText.getText().trim() : mLoginPwdEditText.getText().trim();
+
+            if (StringUtils.isEmpty(password)) {
+                showToast(isQuickLogin ? "验证码为空" : "密码为空");
+                return;
+            }
+
+            String qrCode = mLoginQrEditText.getText().trim();
+            Map<String, String> params = new HashMap<>();
+            params.put(isQuickLogin ? "mobile" : "username", username);
+            params.put(isQuickLogin ? "code" : "password", password);
+            if (!isQuickLogin) {
+                params.put("code", qrCode);
+                params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
+            }
+            mLoginPresenter.loginAccount(params);
         } else if (v == mQuickLoginBtn) {
             switchLoginWay(false);
         } else if (v == mPasswordLoginBtn) {
@@ -193,14 +180,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 showToast("图形验证码为空");
                 return;
             }
+            mLoginPresenter.requestSms(mLoginAccountEditText.getText().trim(), mLoginQrEditText.getText().trim());
 
-            RequestEvent requestEvent = new RequestEvent.Builder().url(UrlPath.PATH_SMS.getUrl())
-                    .addBodyJson(KeyConstant.KEY_QR_IMAGE_TOKEN,
-                            SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
-                    .addBodyJson("code", mLoginQrEditText.getText().trim())
-                    .addBodyJson("mobile", mLoginAccountEditText.getText().trim())
-                    .build();
-            HttpUtils.getInstance().request(requestEvent);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -246,12 +227,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             mLoginPwdEditText.clearText();
         }
 
-        getQRCode();
+        mLoginPresenter.requestQrCode();
         mLoginQrEditText.clearText();
-    }
-
-    private void getQRCode() {
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_PICTURE_VERIFY.getUrl()).build());
     }
 
     @Override
@@ -262,7 +239,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
             JSONObject dataObject = JSONObject.parseObject(event.getData());
             final String bitmapStr = dataObject.getString("kaptcha");
-            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
+
             invoke(new Runnable() {
                 @Override
                 public void run() {
@@ -298,6 +275,39 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         }
                 );
             }
+        });
+    }
+
+    @Override
+    public void showLoading() {
+    }
+
+    @Override
+    public void hideLoading() {
+    }
+
+    @Override
+    public void onError(@NotNull Throwable throwable) {
+        LogTool.printE(TAG, "onError: MyFirstMvpLog: %s", Log.getStackTraceString(throwable));
+    }
+
+    @Override
+    public void onError(@NotNull String err) {
+        EventBus.getDefault().post(new ToastEvent(err));
+    }
+
+    @Override
+    public void onLoginState(int state) {
+        if (state == 1) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
+
+    @Override
+    @UiThread
+    public void onQrCode(Bitmap bitmap) {
+        runOnUiThread(() -> {
+            mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
         });
     }
 }

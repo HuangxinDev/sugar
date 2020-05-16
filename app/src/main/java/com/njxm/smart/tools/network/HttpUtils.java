@@ -1,14 +1,11 @@
 package com.njxm.smart.tools.network;
 
-import android.util.Log;
-
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
-import com.njxm.smart.utils.LogTool;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -24,11 +21,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class HttpUtils {
 
+    public static HttpUtils getInstance() {
+        return HttpInstance.instance;
+    }
+
+    /**
+     * 获取OKHttpClient实例
+     *
+     * @return OKHttpClient实例
+     */
+    public OkHttpClient getOkHttpClient() {
+        return sOkHttpClient;
+    }
+
     private static HttpUtils sInstance = null;
 
     private static final Object sLock = new Object();
 
     private static OkHttpClient sOkHttpClient;
+
 
     ///////////////////////////////////////////////////////////////////////////
     // 单例模式，避免创建多个HttpClient
@@ -44,24 +55,34 @@ public final class HttpUtils {
                 .build();
     }
 
-    public static HttpUtils getInstance() {
-        if (sInstance == null) {
-            synchronized (sLock) {
-                if (sInstance == null) {
-                    sInstance = new HttpUtils();
-                }
-            }
-        }
-        return sInstance;
-    }
-
     /**
-     * 获取OKHttpClient实例
+     * 网络请求成功回调
      *
-     * @return OKHttpClient实例
+     * @param response
+     * @param requestEvent
      */
-    private OkHttpClient getOkHttpClient() {
-        return sOkHttpClient;
+    private void onSuccess(Response response, RequestEvent requestEvent) {
+        try {
+            ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
+                    ResponseEvent.class);
+            responseEvent.setUrl(requestEvent.url);
+
+            if (!responseEvent.isSuccess()) {
+                EventBus.getDefault().post(new ToastEvent(responseEvent.getMessage()));
+                return;
+            }
+
+            int code = responseEvent.getCode();
+            if (code == 401 || code == 999) {
+                // 身份信息过期,需要重新登录
+                EventBus.getDefault().post(new LogoutEvent());
+                EventBus.getDefault().post(new ToastEvent("身份信息过期,需要重新登录"));
+                return;
+            }
+            EventBus.getDefault().post(responseEvent);
+        } catch (IOException e) {
+//            LogTool.printE(Log.getStackTraceString(e));
+        }
     }
 
 
@@ -144,34 +165,8 @@ public final class HttpUtils {
 //        });
     }
 
-    /**
-     * 网络请求成功回调
-     *
-     * @param response
-     * @param requestEvent
-     */
-    private void onSuccess(Response response, RequestEvent requestEvent) {
-        try {
-            ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
-                    ResponseEvent.class);
-            responseEvent.setUrl(requestEvent.url);
-
-            if (!responseEvent.isSuccess()) {
-                EventBus.getDefault().post(new ToastEvent(responseEvent.getMessage()));
-                return;
-            }
-
-            int code = responseEvent.getCode();
-            if (code == 401 || code == 999) {
-                // 身份信息过期,需要重新登录
-                EventBus.getDefault().post(new LogoutEvent());
-                EventBus.getDefault().post(new ToastEvent("身份信息过期,需要重新登录"));
-                return;
-            }
-            EventBus.getDefault().post(responseEvent);
-        } catch (IOException e) {
-            LogTool.printE(Log.getStackTraceString(e));
-        }
+    private static class HttpInstance {
+        static HttpUtils instance = new HttpUtils();
     }
 
     /**

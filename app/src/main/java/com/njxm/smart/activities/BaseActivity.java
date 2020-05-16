@@ -122,6 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+
     }
 
     @Override

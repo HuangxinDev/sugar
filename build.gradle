@@ -1,3 +1,7 @@
+import jdk.nashorn.internal.runtime.options.Options
+
+import javax.tools.JavaCompiler
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply plugin: 'com.alibaba.arouter'
 
@@ -42,4 +46,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+tasks.withType(JavaCompiler) {
+    options.encoding = "utf-8"
 }
