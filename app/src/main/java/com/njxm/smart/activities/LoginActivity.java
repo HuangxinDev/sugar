@@ -1,6 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,7 +20,6 @@ import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.presenter.LoginPresenter;
-import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
@@ -36,6 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.alibaba.fastjson.JSON.parseObject;
 
 /**
  * 登录页面
@@ -52,7 +52,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     private TextView mPasswordLoginBtn;
 
     // 快捷登录和密码登录下方的下划线
-    private View mQuickLoginDivider, mPasswordLoginDivider;
+    private View mQuickLoginDivider;
+    private View mPasswordLoginDivider;
 
     // 账号验证布局
     private AppEditText mLoginAccountEditText;
@@ -110,23 +111,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
 
         mLoginNumberEditText.getRightTextView().setOnClickListener(this);
 
-        mLoginQrEditText.setOnRightClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLoginPresenter.requestQrCode();
-            }
-        });
+        mLoginQrEditText.setOnRightClickListener(v -> mLoginPresenter.requestQrCode());
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         mLoginPresenter.detachView();
     }
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         if (v == mLoginBtn) {
             boolean isQuickLogin = !mQuickLoginBtn.isEnabled();
             String username = mLoginAccountEditText.getText().trim();
@@ -186,19 +181,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    invoke(new Runnable() {
-                        @Override
-                        public void run() {
-                            mLoginNumberEditText.setRightText((count--) + " 秒");
-                            if (count == 0) {
-                                mLoginNumberEditText.setRightText("重新获取");
-                                count = 60;
-                                cancel();
-                            }
+                    invoke(() -> {
+                        mLoginNumberEditText.setRightText((count--) + " 秒");
+                        if (count == 0) {
+                            mLoginNumberEditText.setRightText("重新获取");
+                            count = 60;
+                            cancel();
                         }
                     });
                 }
             }, 0, 1000);
+        } else {
+            super.onClick(v);
         }
     }
 
@@ -237,53 +231,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
         final String url = event.getUrl();
 
         if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
-            JSONObject dataObject = JSONObject.parseObject(event.getData());
+            JSONObject dataObject = parseObject(event.getData());
             final String bitmapStr = dataObject.getString("kaptcha");
 
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr)));
-                }
-            });
+            invoke(() -> mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), BitmapUtils.stringToBitmap(bitmapStr))));
         } else {
             super.onResponse(event);
         }
     }
 
-    /**
-     * 使用错误Dialog
-     */
-    private void showDialog() {
-        invoke(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialogUtils.getInstance().showConfirmDialog(LoginActivity.this,
-                        "账号或密码输入错误", "忘记密码", "重新输入", new AlertDialogUtils.OnButtonClickListener() {
-                            @Override
-                            public void onPositiveButtonClick(AlertDialog dialog) {
-                                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-                                intent.putExtra("action", "1");
-                                startActivity(intent);
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void onNegativeButtonClick(AlertDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        }
-                );
-            }
-        });
-    }
-
     @Override
     public void showLoading() {
+        // 暂时不确定UI这边显示
     }
 
     @Override
     public void hideLoading() {
+        // 此处暂时不需要处理
     }
 
     @Override
@@ -306,8 +270,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     @Override
     @UiThread
     public void onQrCode(Bitmap bitmap) {
-        runOnUiThread(() -> {
-            mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-        });
+        runOnUiThread(() -> mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap)));
     }
 }

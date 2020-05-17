@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -43,7 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * 个人信息页面（由主页 我的-姓名跳转）
+ * 个人信息页面（由主页 我的-姓名跳转）.
  */
 public class PersonalInformationActivity extends BaseActivity {
 
@@ -103,10 +104,6 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private boolean showDetails = false;
 
-    private static final int REQUEST_USER_HEAD = 412;
-
-    private UserBean mNewestUserBean;
-
 
     @Override
     protected int setContentLayoutId() {
@@ -164,6 +161,8 @@ public class PersonalInformationActivity extends BaseActivity {
             case R.id.news_user_emergency_contact_item:
                 ARouter.getInstance().build(GlobalRouter.USER_EMERGENCY_CONTACT).navigation();
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + view.getId());
         }
     }
 
@@ -171,12 +170,9 @@ public class PersonalInformationActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            invoke(new Runnable() {
-                @Override
-                public void run() {
-                    if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
-                        uploadHeadFile();
-                    }
+            invoke(() -> {
+                if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
+                    uploadHeadFile();
                 }
             });
         }
@@ -193,32 +189,28 @@ public class PersonalInformationActivity extends BaseActivity {
 
         api.uploadFile(UrlPath.PATH_USER_HEAD_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
             @Override
-            public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
+            public void onResponse(@NonNull Call<ServerResponseBean> call, @NonNull Response<ServerResponseBean> response) {
                 EventBus.getDefault().post(new ToastEvent(response.code() == 200 ? "上传成功" : response.message()));
-                invoke(new Runnable() {
-                    @Override
-                    public void run() {
-                        Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead);
-                    }
-                });
+                invoke(() -> Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead));
             }
 
             @Override
-            public void onFailure(Call<ServerResponseBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<ServerResponseBean> call, @NonNull Throwable t) {
                 EventBus.getDefault().post(new ToastEvent("网络异常"));
             }
         });
     }
 
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {
-        mNewestUserBean = bean;
         tvUserName.setText(bean.getUserName());
         tvUserCompanyName.setText(bean.getCompanyName());
         tvUserDepartmentName.setText(bean.getDeptName());
         tvUserTeamName.setText(bean.getTeamName());
         tvUserPhone.setText(bean.getPhone());
-        tvUserAddress.setText(StringUtils.isEmpty(bean.getAllAddress()) ? "请补充地址" : bean.getAddress());
+        tvUserAddress.setText(StringUtils.isEmpty(bean.getAllAddress())
+                ? "请补充地址" : bean.getAddress());
         tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
         tvUserJobName.setText(bean.getWorkType());
         Glide.with(this)

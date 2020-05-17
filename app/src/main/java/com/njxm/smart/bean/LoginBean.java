@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Hxin on 2020/3/28
  * Function: 登录接口
  */
-public class LoginBean {
+public class LoginBean<T> {
 
 
     /**
@@ -76,7 +76,7 @@ public class LoginBean {
     private String suIdCardNum;
     private List<String> authorities;
     private List<OrgsBean> orgs;
-    private List<?> managers;
+    private List<T> managers;
     private List<String> permissionIds;
 
     public String getTeamName() {
@@ -327,11 +327,11 @@ public class LoginBean {
         this.orgs = orgs;
     }
 
-    public List<?> getManagers() {
+    public List<T> getManagers() {
         return managers;
     }
 
-    public void setManagers(List<?> managers) {
+    public void setManagers(List<T> managers) {
         this.managers = managers;
     }
 

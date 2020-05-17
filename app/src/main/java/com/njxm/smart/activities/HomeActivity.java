@@ -25,16 +25,13 @@ import java.util.List;
 public class HomeActivity extends BaseActivity {
 
 
+    // mdskds
     private int[] res = {R.mipmap.startup_one, R.mipmap.startup_three, R.mipmap.startup_two};
 
     private SharedPreferences mSharedPreferences;
 
-    private FragmentManager mFragmentManager;
-
     // 立即体验
     private TextView mTextView;
-
-    private ViewPager mViewPager;
 
     private DotsView mDotsView;
 
@@ -50,11 +47,11 @@ public class HomeActivity extends BaseActivity {
 
         mDotsView = findViewById(R.id.dots_view);
         mTextView = findViewById(R.id.experience);
-        mViewPager = findViewById(R.id.home_view_pager);
+        ViewPager mViewPager = findViewById(R.id.home_view_pager);
 
         mDotsView.setDotSize(res.length);
         mDotsView.setSelected(0);
-        mFragmentManager = getSupportFragmentManager();
+        FragmentManager mFragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = new ArrayList<>();
         for (int resId : res) {
             fragments.add(new HomeFragment(resId));
@@ -70,21 +67,18 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-
+                //
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+//
             }
         });
 
-        mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSharedPreferences.edit().putBoolean("isFirst", false).apply();
-                startLoginActivity();
-            }
+        mTextView.setOnClickListener(v -> {
+            mSharedPreferences.edit().putBoolean("isFirst", false).apply();
+            startLoginActivity();
         });
     }
 
