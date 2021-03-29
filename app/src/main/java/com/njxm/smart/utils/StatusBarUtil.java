@@ -1,5 +1,12 @@
 package com.njxm.smart.utils;
 
+import com.ntxm.smart.R;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
@@ -7,15 +14,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import androidx.annotation.IntDef;
-
-import com.ntxm.smart.R;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class StatusBarUtil {
 

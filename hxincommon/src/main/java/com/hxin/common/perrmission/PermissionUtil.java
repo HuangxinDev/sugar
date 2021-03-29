@@ -1,14 +1,13 @@
 package com.hxin.common.perrmission;
 
+import java.util.WeakHashMap;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-
-import java.util.WeakHashMap;
 
 /**
  * Created by Hxin on 2020/3/27
@@ -16,11 +15,11 @@ import java.util.WeakHashMap;
  */
 public final class PermissionUtil {
 
-    private static WeakHashMap<String, Integer> MIN_SDK_PERMISSIONS = new WeakHashMap<>();
+    private static final WeakHashMap<String, Integer> MIN_SDK_PERMISSIONS = new WeakHashMap<>();
 
     static {
-        MIN_SDK_PERMISSIONS.put("android.permission.WRITE_CALL_LOG", 16);
-        MIN_SDK_PERMISSIONS.put("android.permission.WRITE_SETTINGS", 23);
+        com.hxin.common.perrmission.PermissionUtil.MIN_SDK_PERMISSIONS.put("android.permission.WRITE_CALL_LOG", 16);
+        com.hxin.common.perrmission.PermissionUtil.MIN_SDK_PERMISSIONS.put("android.permission.WRITE_SETTINGS", 23);
     }
 
     /**
@@ -30,7 +29,7 @@ public final class PermissionUtil {
      */
     public static boolean hasAllPermission(Context context, @NonNull String[] permissions) {
         for (String permission : permissions) {
-            if (permissionExist(permission) && !hasSelfPermission(context, permission)) {
+            if (com.hxin.common.perrmission.PermissionUtil.permissionExist(permission) && !com.hxin.common.perrmission.PermissionUtil.hasSelfPermission(context, permission)) {
                 return false;
             }
         }
@@ -78,7 +77,7 @@ public final class PermissionUtil {
      * @return retutn true if permission exist in SDK version
      */
     private static boolean permissionExist(@NonNull String permssion) {
-        Integer minVersion = MIN_SDK_PERMISSIONS.get(permssion);
+        Integer minVersion = com.hxin.common.perrmission.PermissionUtil.MIN_SDK_PERMISSIONS.get(permssion);
         return minVersion == null || Build.VERSION.SDK_INT >= minVersion;
     }
 }

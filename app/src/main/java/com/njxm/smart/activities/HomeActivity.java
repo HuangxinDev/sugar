@@ -1,16 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
-
 import com.njxm.smart.fragments.BaseFragmentAdapter;
 import com.njxm.smart.fragments.HomeFragment;
 import com.njxm.smart.view.DotsView;
@@ -19,6 +8,17 @@ import com.ntxm.smart.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+
 /**
  * 引导页
  */
@@ -26,7 +26,7 @@ public class HomeActivity extends BaseActivity {
 
 
     // mdskds
-    private int[] res = {R.mipmap.startup_one, R.mipmap.startup_three, R.mipmap.startup_two};
+    private final int[] res = {R.mipmap.startup_one, R.mipmap.startup_three, R.mipmap.startup_two};
 
     private SharedPreferences mSharedPreferences;
 
@@ -38,22 +38,22 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        boolean isFirstLaunch = mSharedPreferences.getBoolean("isFirst", true);
+        this.mSharedPreferences = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        boolean isFirstLaunch = this.mSharedPreferences.getBoolean("isFirst", true);
         if (!isFirstLaunch) {
-            startLoginActivity();
+            this.startLoginActivity();
             return;
         }
 
-        mDotsView = findViewById(R.id.dots_view);
-        mTextView = findViewById(R.id.experience);
-        ViewPager mViewPager = findViewById(R.id.home_view_pager);
+        this.mDotsView = this.findViewById(R.id.dots_view);
+        this.mTextView = this.findViewById(R.id.experience);
+        ViewPager mViewPager = this.findViewById(R.id.home_view_pager);
 
-        mDotsView.setDotSize(res.length);
-        mDotsView.setSelected(0);
-        FragmentManager mFragmentManager = getSupportFragmentManager();
+        this.mDotsView.setDotSize(this.res.length);
+        this.mDotsView.setSelected(0);
+        FragmentManager mFragmentManager = this.getSupportFragmentManager();
         List<Fragment> fragments = new ArrayList<>();
-        for (int resId : res) {
+        for (int resId : this.res) {
             fragments.add(new HomeFragment(resId));
         }
         mViewPager.setAdapter(new BaseFragmentAdapter(mFragmentManager, fragments));
@@ -61,8 +61,8 @@ public class HomeActivity extends BaseActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mDotsView.setSelected(position);
-                mTextView.setVisibility((position == res.length - 1) ? View.VISIBLE : View.INVISIBLE);
+                com.njxm.smart.activities.HomeActivity.this.mDotsView.setSelected(position);
+                com.njxm.smart.activities.HomeActivity.this.mTextView.setVisibility((position == com.njxm.smart.activities.HomeActivity.this.res.length - 1) ? View.VISIBLE : View.INVISIBLE);
             }
 
             @Override
@@ -76,9 +76,9 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-        mTextView.setOnClickListener(v -> {
-            mSharedPreferences.edit().putBoolean("isFirst", false).apply();
-            startLoginActivity();
+        this.mTextView.setOnClickListener(v -> {
+            this.mSharedPreferences.edit().putBoolean("isFirst", false).apply();
+            this.startLoginActivity();
         });
     }
 
@@ -89,7 +89,7 @@ public class HomeActivity extends BaseActivity {
 
     private void startLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        this.startActivity(intent);
+        this.finish();
     }
 }

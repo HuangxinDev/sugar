@@ -1,13 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-import android.widget.RadioGroup;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.fragments.AttendanceFragment;
 import com.njxm.smart.activities.fragments.MessagesFragment;
@@ -24,6 +16,13 @@ import com.ntxm.smart.R;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.os.Bundle;
+import android.widget.RadioGroup;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 
 /**
@@ -32,12 +31,11 @@ import butterknife.BindView;
 @Route(path = "/app/main")
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
-    // FragmentManager
-    private FragmentManager mFragmentManager;
-
     private final Map<Integer, Fragment> fragments = new HashMap<>();
     @BindView(R.id.radio_group)
     protected RadioGroup mBarGroup;
+    // FragmentManager
+    private FragmentManager mFragmentManager;
     private int mLastFragmentIndex = R.id.first_btn;
 
     @Override
@@ -48,9 +46,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFragmentManager = getSupportFragmentManager();
-        mBarGroup.setOnCheckedChangeListener(this);
-        mBarGroup.check(R.id.first_btn);
+        this.mFragmentManager = this.getSupportFragmentManager();
+        this.mBarGroup.setOnCheckedChangeListener(this);
+        this.mBarGroup.check(R.id.first_btn);
     }
 
 
@@ -73,7 +71,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             return;
         }
 
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        FragmentTransaction transaction = this.mFragmentManager.beginTransaction();
 
         if (!toFragmnet.isAdded()) {
             transaction.add(R.id.fragment_container, toFragmnet);
@@ -93,16 +91,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void onBackPressed() {
-        if (mLastFragmentIndex == R.id.first_btn) {
+        if (this.mLastFragmentIndex == R.id.first_btn) {
             super.onBackPressed();
         } else {
-            mBarGroup.check(R.id.first_btn);
+            this.mBarGroup.check(R.id.first_btn);
         }
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        Fragment fragment = fragments.get(checkedId);
+        Fragment fragment = this.fragments.get(checkedId);
 
         if (fragment == null) {
             switch (checkedId) {
@@ -123,11 +121,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 default:
                     return;
             }
-            fragments.put(checkedId, fragment);
-
+            this.fragments.put(checkedId, fragment);
         }
 
-        switchFragment(fragments.get(mLastFragmentIndex), fragment);
-        mLastFragmentIndex = checkedId;
+        this.switchFragment(this.fragments.get(this.mLastFragmentIndex), fragment);
+        this.mLastFragmentIndex = checkedId;
     }
 }

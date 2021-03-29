@@ -1,15 +1,15 @@
 package com.njxm.smart.contract;
 
-import android.graphics.Bitmap;
-
 import com.njxm.smart.bean.LoginBean;
 import com.njxm.smart.view.BaseView;
 
 import java.util.Map;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Hxin on 2020/5/14
- * Function:
+ * Function: 登录页面契约合同
  */
 public interface LoginContract {
     interface Model {

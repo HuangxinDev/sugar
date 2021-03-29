@@ -5,12 +5,11 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 
 public class ContactsView extends LinearLayout {
 
-    private LinearLayout contactsLayout;
+    private final LinearLayout contactsLayout;
 
     public ContactsView(Context context) {
         this(context, null);
@@ -26,23 +25,23 @@ public class ContactsView extends LinearLayout {
 
     public ContactsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        setOrientation(LinearLayout.VERTICAL);
-        contactsLayout = new LinearLayout(context);
-        contactsLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        this.setOrientation(LinearLayout.VERTICAL);
+        this.contactsLayout = new LinearLayout(context);
+        this.contactsLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         TextView textView = new TextView(context);
         textView.setText("巡检人");
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        addView(textView);
-        addView(contactsLayout);
+        this.addView(textView);
+        this.addView(this.contactsLayout);
     }
 
 
     public void addData() {
-        TextView textView = new TextView(contactsLayout.getContext());
+        TextView textView = new TextView(this.contactsLayout.getContext());
         textView.setText("联系人");
         textView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        contactsLayout.addView(textView);
-        contactsLayout.invalidate();
+        this.contactsLayout.addView(textView);
+        this.contactsLayout.invalidate();
     }
 
 

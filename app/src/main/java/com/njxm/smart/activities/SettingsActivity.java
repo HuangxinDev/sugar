@@ -1,18 +1,17 @@
 package com.njxm.smart.activities;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
-
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.ntxm.smart.R;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,47 +23,43 @@ import butterknife.OnClick;
 // 设置页面
 ///////////////////////////////////////////////////////////////////////////
 public class SettingsActivity extends BaseActivity {
-    @Override
-    protected int setContentLayoutId() {
-        return R.layout.my_setting;
-    }
-
     @BindView(R.id.login_exit)
     protected AppCompatTextView mExitLoginBtn;
-
     @BindView(R.id.settings_reset_pwd)
     protected View mResetPwdBtn;
-
     @BindView(R.id.settings_update_phone)
     protected View mUpdateTelBtn;
-
     @BindView(R.id.settings_check_update)
     protected View mCheckUpdateBtn;
-
     @BindView(R.id.settings_clean_cache)
     protected View mCleanCacheBtn;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setActionBarTitle("设置");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-    }
 
     /**
      * 清除缓存文件
      */
     @OnClick(R.id.settings_clean_cache)
-    protected void cleanCache() {
-        showToast("清除缓存完成");
+    protected static void cleanCache() {
+        com.njxm.smart.activities.BaseActivity.showToast("清除缓存完成");
     }
 
     /**
      * 检查版本更新
      */
     @OnClick(R.id.settings_check_update)
-    protected void checkUpdate() {
-        showToast("当前已是最新版本");
+    protected static void checkUpdate() {
+        com.njxm.smart.activities.BaseActivity.showToast("当前已是最新版本");
+    }
+
+    @Override
+    protected int setContentLayoutId() {
+        return R.layout.my_setting;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setActionBarTitle("设置");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
     }
 
     /**
@@ -74,7 +69,7 @@ public class SettingsActivity extends BaseActivity {
     protected void resetPwd() {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
         intent.putExtra("action", "2");
-        startActivity(intent);
+        this.startActivity(intent);
     }
 
     /**
@@ -83,7 +78,7 @@ public class SettingsActivity extends BaseActivity {
     @OnClick(R.id.settings_update_phone)
     protected void updateTelPhone() {
         Intent intent = new Intent(this, UpdateTelPhoneActivity.class);
-        startActivity(intent);
+        this.startActivity(intent);
     }
 
     @OnClick(R.id.login_exit)

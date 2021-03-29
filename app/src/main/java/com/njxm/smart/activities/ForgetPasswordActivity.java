@@ -1,11 +1,9 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
 import com.ntxm.smart.R;
 
+import android.os.Bundle;
+import androidx.annotation.Nullable;
 
 /**
  * 忘记密码
@@ -20,7 +18,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showTitle(false, null);
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.showTitle(false, null);
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
     }
 }

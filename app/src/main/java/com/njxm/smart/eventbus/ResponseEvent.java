@@ -18,22 +18,6 @@ public class ResponseEvent {
     private int requestId;
 
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public int getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(int requestId) {
-        this.requestId = requestId;
-    }
-
     public ResponseEvent() {
 
     }
@@ -45,8 +29,24 @@ public class ResponseEvent {
         this.data = data;
     }
 
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getRequestId() {
+        return this.requestId;
+    }
+
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
+    }
+
     public boolean isSuccess() {
-        return success;
+        return this.success;
     }
 
     public void setSuccess(boolean success) {
@@ -54,7 +54,7 @@ public class ResponseEvent {
     }
 
     public int getCode() {
-        return code;
+        return this.code;
     }
 
     public void setCode(int code) {
@@ -62,7 +62,7 @@ public class ResponseEvent {
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public void setMessage(String message) {
@@ -70,7 +70,7 @@ public class ResponseEvent {
     }
 
     public String getData() {
-        return data;
+        return this.data;
     }
 
     public void setData(String data) {

@@ -3,7 +3,6 @@ package com.njxm.smart.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -27,7 +26,7 @@ public class NoScrollViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (mNeedScroll) {
+        if (this.mNeedScroll) {
             return super.onTouchEvent(ev);
         }
         return false;
@@ -35,7 +34,7 @@ public class NoScrollViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (mNeedScroll) {
+        if (this.mNeedScroll) {
             return super.onInterceptTouchEvent(ev);
         }
         return false;
@@ -43,7 +42,7 @@ public class NoScrollViewPager extends ViewPager {
 
     @Override
     public void setCurrentItem(int item) {
-        setCurrentItem(item, mNeedScroll);
+        this.setCurrentItem(item, this.mNeedScroll);
     }
 
     @Override

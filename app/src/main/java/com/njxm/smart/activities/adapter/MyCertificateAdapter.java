@@ -1,10 +1,5 @@
 package com.njxm.smart.activities.adapter;
 
-import android.app.Activity;
-import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -14,9 +9,13 @@ import com.ntxm.smart.R;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.widget.ImageView;
+import androidx.annotation.Nullable;
+
 public class MyCertificateAdapter extends BaseQuickAdapter<UserCertificateActivity.CertificateItem, BaseViewHolder> {
 
-    private Activity context;
+    private final Activity context;
 
     public MyCertificateAdapter(@Nullable List<UserCertificateActivity.CertificateItem> data,
                                 Activity context) {
@@ -36,7 +35,7 @@ public class MyCertificateAdapter extends BaseQuickAdapter<UserCertificateActivi
         }
 
         if (item.file != null) {
-            Glide.with(context).load(item.file)
+            Glide.with(this.context).load(item.file)
                     .into((ImageView) helper.getView(R.id.certificate_image_show));
         }
 
@@ -45,6 +44,6 @@ public class MyCertificateAdapter extends BaseQuickAdapter<UserCertificateActivi
         helper.setNestView(R.id.certificate_image_show);
 
 
-        helper.setVisible(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
+        helper.setVisible(R.id.divider1, helper.getAdapterPosition() != this.mData.size() - 1);
     }
 }

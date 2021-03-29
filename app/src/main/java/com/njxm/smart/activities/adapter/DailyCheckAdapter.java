@@ -1,13 +1,14 @@
 package com.njxm.smart.activities.adapter;
 
-import androidx.annotation.Nullable;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
 import com.ntxm.smart.R;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
+
 
 public class DailyCheckAdapter extends BaseQuickAdapter<DailyCheckTaskBean, BaseViewHolder> {
 
@@ -28,6 +29,6 @@ public class DailyCheckAdapter extends BaseQuickAdapter<DailyCheckTaskBean, Base
                 (state == 1 ? R.drawable.color_green_state : R.drawable.color_blue_state));
         helper.setText(R.id.task_state, state == 0 ? "未开始" : state == 1 ? "进行中" : "完成");
         helper.setText(R.id.task_time, item.getCreateTime());
-        helper.setVisible(R.id.divider3, helper.getAdapterPosition() != mData.size() - 1);
+        helper.setVisible(R.id.divider3, helper.getAdapterPosition() != this.mData.size() - 1);
     }
 }

@@ -1,11 +1,10 @@
 package com.njxm.smart.activities;
 
+import com.ntxm.smart.R;
+
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.annotation.Nullable;
-
-import com.ntxm.smart.R;
 
 import butterknife.BindView;
 
@@ -22,8 +21,8 @@ public class SafeInspectTaskActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("创建巡检任务");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        mNavTab.setVisibility(View.GONE);
+        this.setActionBarTitle("创建巡检任务");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.mNavTab.setVisibility(View.GONE);
     }
 }

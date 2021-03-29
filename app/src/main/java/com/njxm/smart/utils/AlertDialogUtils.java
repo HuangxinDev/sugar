@@ -1,19 +1,16 @@
 package com.njxm.smart.utils;
 
+import com.ntxm.smart.R;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import androidx.appcompat.widget.AppCompatTextView;
-
-import com.ntxm.smart.R;
 
 public class AlertDialogUtils {
 
-    public static AlertDialogUtils getInstance() {
-        return new AlertDialogUtils();
-    }
+    private static OnButtonClickListener onButtonClickListener;
 
 //    /**
 //     * 弹出自定义样式的AlertDialog
@@ -48,27 +45,16 @@ public class AlertDialogUtils {
 //
 //        dialog.getWindow().setContentView(view);
 //    }
+private OnDialogItemSelectListener onDialogItemSelectListener;
+    private boolean isShow = false;
 
-    private OnDialogItemSelectListener onDialogItemSelectListener;
+    public static AlertDialogUtils getInstance() {
+        return new AlertDialogUtils();
+    }
 
     public void setOnDialogItemSelectListener(AlertDialogUtils.OnDialogItemSelectListener onDialogItemSelectListener) {
         this.onDialogItemSelectListener = onDialogItemSelectListener;
     }
-
-    /**
-     * item选中回调接口
-     */
-    public interface OnDialogItemSelectListener {
-        /**
-         * item选中回调方法
-         *
-         * @param str 选中的item中的String
-         */
-        void onItemSelect(String str);
-    }
-
-
-    private boolean isShow = false;
 
     /**
      * 带有确认取消按钮的自定义dialog
@@ -77,11 +63,11 @@ public class AlertDialogUtils {
      * @param message 显示的信息
      */
     public void showConfirmDialog(Context context, String message, String yesText,
-                                         String noText, final OnButtonClickListener clickListener) {
+                                  String noText, OnButtonClickListener clickListener) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.simple_dialog_layout, null);
 
-        final AlertDialog dialog = new AlertDialog.Builder(context).setView(view).create();
+        AlertDialog dialog = new AlertDialog.Builder(context).setView(view).create();
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -106,7 +92,7 @@ public class AlertDialogUtils {
                 } else {
                     dialog.dismiss();
                 }
-                isShow = false;
+                com.njxm.smart.utils.AlertDialogUtils.this.isShow = false;
             }
         });
         tvConfirm.setOnClickListener(new View.OnClickListener() {
@@ -117,19 +103,28 @@ public class AlertDialogUtils {
                 } else {
                     dialog.dismiss();
                 }
-                isShow = false;
+                com.njxm.smart.utils.AlertDialogUtils.this.isShow = false;
             }
         });
 
         dialog.show();
-        isShow = true;
+        this.isShow = true;
     }
 
-
-    private static OnButtonClickListener onButtonClickListener;
-
     public void setOnButtonClickListener(OnButtonClickListener onButtonClickListener) {
-        this.onButtonClickListener = onButtonClickListener;
+        AlertDialogUtils.onButtonClickListener = onButtonClickListener;
+    }
+
+    /**
+     * item选中回调接口
+     */
+    public interface OnDialogItemSelectListener {
+        /**
+         * item选中回调方法
+         *
+         * @param str 选中的item中的String
+         */
+        void onItemSelect(String str);
     }
 
     /**

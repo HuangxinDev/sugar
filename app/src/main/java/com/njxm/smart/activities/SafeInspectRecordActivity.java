@@ -1,15 +1,6 @@
 package com.njxm.smart.activities;
 
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -21,12 +12,30 @@ import com.ntxm.smart.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 
 public class SafeInspectRecordActivity extends BaseActivity {
 
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
+
+    private static List<MultiItemEntity> loadData(int count) {
+        List<MultiItemEntity> data = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            ZSSimpleTitleBean<SafeInspectReformBean> bean = new ZSSimpleTitleBean<SafeInspectReformBean>("问题 " + (i + 1) + "  整改完成");
+            bean.addSubItem(new SafeInspectReformBean());
+            data.add(bean);
+        }
+        return data;
+    }
 
     @Override
     protected int setContentLayoutId() {
@@ -36,41 +45,31 @@ public class SafeInspectRecordActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("巡检记录");
+        this.setActionBarTitle("巡检记录");
 
         View headerView = LayoutInflater.from(this).inflate(R.layout.safe_inspect_record_recycler_header_item, null);
-        boolean hasProblem = getIntent().getBooleanExtra("has_problem", false);
+        boolean hasProblem = this.getIntent().getBooleanExtra("has_problem", false);
 
         View footView = LayoutInflater.from(this).inflate(hasProblem ?
                 R.layout.safe_inspect_record_recycler_footer_problem_item :
                 R.layout.safe_inspect_record_recycler_footer_item, null);
-        SafeInspectRecordAdapter adapter = new SafeInspectRecordAdapter(hasProblem ? loadData(5) : null);
+        SafeInspectRecordAdapter adapter = new SafeInspectRecordAdapter(hasProblem ? com.njxm.smart.activities.SafeInspectRecordActivity.loadData(5) : null);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.look_detail:
-                        startActivity(new Intent(SafeInspectRecordActivity.this,
+                        com.njxm.smart.activities.SafeInspectRecordActivity.this.startActivity(new Intent(SafeInspectRecordActivity.this,
                                 SafeInspectReformActivity.class));
                         break;
                 }
             }
         });
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.addHeaderView(headerView);
         adapter.addFooterView(footView);
-        mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.setAdapter(adapter);
 
-    }
-
-    private List<MultiItemEntity> loadData(int count) {
-        List<MultiItemEntity> data = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            ZSSimpleTitleBean<SafeInspectReformBean> bean = new ZSSimpleTitleBean<SafeInspectReformBean>("问题 " + (i + 1) + "  整改完成");
-            bean.addSubItem(new SafeInspectReformBean());
-            data.add(bean);
-        }
-        return data;
     }
 
     private static final class SafeInspectRecordAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
@@ -83,8 +82,8 @@ public class SafeInspectRecordActivity extends BaseActivity {
          */
         public SafeInspectRecordAdapter(List<MultiItemEntity> data) {
             super(data);
-            addItemType(ZSSimpleTitleBean.ITEM_TITLE, R.layout.item_fragment_workcenter_list);
-            addItemType(ZSSimpleTitleBean.ITEM_SUB, R.layout.safe_inspect_record_reform_recycler_item);
+            this.addItemType(ZSSimpleTitleBean.ITEM_TITLE, R.layout.item_fragment_workcenter_list);
+            this.addItemType(ZSSimpleTitleBean.ITEM_SUB, R.layout.safe_inspect_record_reform_recycler_item);
         }
 
         @Override
@@ -97,9 +96,9 @@ public class SafeInspectRecordActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             if (bean.isExpanded()) {
-                                collapse(helper.getAdapterPosition());
+                                com.njxm.smart.activities.SafeInspectRecordActivity.SafeInspectRecordAdapter.this.collapse(helper.getAdapterPosition());
                             } else {
-                                expand(helper.getAdapterPosition());
+                                com.njxm.smart.activities.SafeInspectRecordActivity.SafeInspectRecordAdapter.this.expand(helper.getAdapterPosition());
                             }
 
                         }

@@ -7,10 +7,10 @@ import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
+import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -20,6 +20,31 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class HttpUtils {
+
+    private static final HttpUtils sInstance = null;
+    private static final Object sLock = new Object();
+    private static OkHttpClient sOkHttpClient;
+    private String baseUrl;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 单例模式，避免创建多个HttpClient
+    ///////////////////////////////////////////////////////////////////////////
+    private HttpUtils() {
+        //no instance
+        com.njxm.smart.tools.network.HttpUtils.sOkHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .protocols(Util.immutableList(Protocol.HTTP_2, Protocol.HTTP_1_1))
+                .addInterceptor(new HeaderInterceptor())
+                .build();
+    }
+
+
+    private HttpUtils(Builder builder) {
+        this.baseUrl = builder.baseUrl;
+        com.njxm.smart.tools.network.HttpUtils.getInstance();
+    }
 
     public static HttpUtils getInstance() {
         return HttpInstance.instance;
@@ -31,28 +56,7 @@ public final class HttpUtils {
      * @return OKHttpClient实例
      */
     public OkHttpClient getOkHttpClient() {
-        return sOkHttpClient;
-    }
-
-    private static HttpUtils sInstance = null;
-
-    private static final Object sLock = new Object();
-
-    private static OkHttpClient sOkHttpClient;
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 单例模式，避免创建多个HttpClient
-    ///////////////////////////////////////////////////////////////////////////
-    private HttpUtils() {
-        //no instance
-        sOkHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .protocols(Util.immutableList(Protocol.HTTP_2, Protocol.HTTP_1_1))
-                .addInterceptor(new HeaderInterceptor())
-                .build();
+        return com.njxm.smart.tools.network.HttpUtils.sOkHttpClient;
     }
 
     /**
@@ -84,7 +88,6 @@ public final class HttpUtils {
 //            LogTool.printE(Log.getStackTraceString(e));
         }
     }
-
 
     /**
      * 普通网络请求-请求数据
@@ -165,10 +168,6 @@ public final class HttpUtils {
 //        });
     }
 
-    private static class HttpInstance {
-        static HttpUtils instance = new HttpUtils();
-    }
-
     /**
      * 获取Retrofit的指定Api
      *
@@ -179,18 +178,11 @@ public final class HttpUtils {
     public <T> T getApi(Class<T> tClass) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://119.3.136.127:7776")
-                .client(getOkHttpClient())
-                .client(sOkHttpClient)
+                .client(this.getOkHttpClient())
+                .client(com.njxm.smart.tools.network.HttpUtils.sOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(tClass);
-    }
-
-    private String baseUrl;
-
-    private HttpUtils(Builder builder) {
-        this.baseUrl = builder.baseUrl;
-        getInstance();
     }
 
     /**
@@ -202,12 +194,16 @@ public final class HttpUtils {
      */
     public <T> T getServerApi(Class<T> tClass) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(getOkHttpClient())
-                .client(sOkHttpClient)
+                .baseUrl(this.baseUrl)
+                .client(this.getOkHttpClient())
+                .client(com.njxm.smart.tools.network.HttpUtils.sOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(tClass);
+    }
+
+    private static class HttpInstance {
+        static HttpUtils instance = new HttpUtils();
     }
 
     public static class Builder {

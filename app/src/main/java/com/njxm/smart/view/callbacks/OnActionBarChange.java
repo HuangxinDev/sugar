@@ -1,7 +1,6 @@
 package com.njxm.smart.view.callbacks;
 
 import android.view.View;
-
 import androidx.appcompat.widget.AppCompatImageButton;
 
 public interface OnActionBarChange {

@@ -1,18 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -32,13 +19,25 @@ import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 
+import java.io.File;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -54,7 +53,8 @@ public class InputFaceActivity extends BaseActivity {
     private static final int TAKE_PHOTO = 389;
 
     @BindView(R.id.news_user_input_face)
-    protected ImageView ivPhoto;
+    ImageView ivPhoto;
+    private File photoFile;
 
     @Override
     protected int setContentLayoutId() {
@@ -65,49 +65,47 @@ public class InputFaceActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        setActionBarTitle("录入人脸");
-        showRightBtn(true, R.mipmap.new_add);
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("录入人脸");
+        this.showRightBtn(true, R.mipmap.new_add);
 
-        ivPhoto = findViewById(R.id.news_user_input_face);
-        ivPhoto.setOnClickListener(this);
+        this.ivPhoto = this.findViewById(R.id.news_user_input_face);
+        this.ivPhoto.setOnClickListener(this);
 
-        final String faceUrl = SPUtils.getStringValue(KeyConstant.KEY_USER_FACE_URL);
+        String faceUrl = SPUtils.getStringValue(KeyConstant.KEY_USER_FACE_URL);
         Glide.with(this)
                 .asBitmap()
                 .load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + faceUrl)
                 .apply(new RequestOptions().centerCrop().placeholder(R.mipmap.realname_face_detect))
-                .into(ivPhoto);
+                .into(this.ivPhoto);
     }
-
-    private File photoFile;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAKE_PHOTO && photoFile != null && photoFile.exists() && photoFile.length() > 0) {
+        if (requestCode == InputFaceActivity.TAKE_PHOTO && this.photoFile != null && this.photoFile.exists() && this.photoFile.length() > 0) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
 
-                        final Bitmap drawable =
+                        Bitmap drawable =
                                 Glide.with(InputFaceActivity.this)
-                                        .asBitmap().load(photoFile)
+                                        .asBitmap().load(InputFaceActivity.this.photoFile)
                                         .submit(ResolutionUtil.dp2Px(172), ResolutionUtil.dp2Px(109))
                                         .get();
-                        invoke(new Runnable() {
+                        InputFaceActivity.this.invoke(new Runnable() {
                             @Override
                             public void run() {
                                 Glide.with(InputFaceActivity.this)
                                         .load(drawable)
                                         .apply(new RequestOptions().centerCrop())
-                                        .into(ivPhoto);
+                                        .into(InputFaceActivity.this.ivPhoto);
                             }
                         });
 
-                        BitmapUtils.saveBitmap(drawable, photoFile);
-                        uploadInputFace();
+                        BitmapUtils.saveBitmap(drawable, InputFaceActivity.this.photoFile);
+                        InputFaceActivity.this.uploadInputFace();
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -119,10 +117,10 @@ public class InputFaceActivity extends BaseActivity {
     /**
      * 上传录入人脸图像
      */
-    public void uploadInputFace() {
+    private void uploadInputFace() {
         UploadInputFaceApi api = HttpUtils.getInstance().getApi(UploadInputFaceApi.class);
         api.uploadFacePhoto(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)),
-                MultipartBody.Part.createFormData("file", photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), photoFile)))
+                MultipartBody.Part.createFormData("file", this.photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), this.photoFile)))
                 .enqueue(new Callback<ServerResponseBean>() {
                     @Override
                     public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
@@ -130,7 +128,7 @@ public class InputFaceActivity extends BaseActivity {
                         ServerResponseBean bean = response.body();
 
                         if (bean == null) {
-                            LogTool.printE(TAG, "文件上传出现问题");
+                            LogTool.printE(InputFaceActivity.class, "文件上传出现问题");
                             return;
                         }
 
@@ -141,7 +139,7 @@ public class InputFaceActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(Call<ServerResponseBean> call, Throwable t) {
-                        LogTool.printD(TAG, "上传失败: " + Log.getStackTraceString(t));
+                        LogTool.printD(InputFaceActivity.class, "上传失败: " + Log.getStackTraceString(t));
                     }
                 });
     }
@@ -149,14 +147,14 @@ public class InputFaceActivity extends BaseActivity {
     @Override
     public void onClickRightBtn() {
         super.onClickRightBtn();
-        takePhoto(TAKE_PHOTO);
+        this.takePhoto(InputFaceActivity.TAKE_PHOTO);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        if (v == ivPhoto) {
-            takePhoto(TAKE_PHOTO);
+        if (v == this.ivPhoto) {
+            this.takePhoto(InputFaceActivity.TAKE_PHOTO);
         }
     }
 
@@ -164,21 +162,22 @@ public class InputFaceActivity extends BaseActivity {
     public void refreshUI(UserBean bean) {
         Glide.with(this).load(bean.getFaceUrl())
                 .apply(new RequestOptions().placeholder(R.mipmap.realname_face_detect).centerCrop())
-                .into(ivPhoto);
+                .into(this.ivPhoto);
     }
 
+    @Override
     public void takePhoto(int requestId) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
+        this.photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
-                    ".fileProvider", photoFile);
+                    ".fileProvider", this.photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         } else {
-            Uri uri = Uri.fromFile(photoFile);
+            Uri uri = Uri.fromFile(this.photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        startActivityForResult(intent, requestId);
+        this.startActivityForResult(intent, requestId);
     }
 }

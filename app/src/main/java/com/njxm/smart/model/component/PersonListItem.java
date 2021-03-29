@@ -4,11 +4,11 @@ import android.content.res.Resources;
 
 public class PersonListItem {
 
-    private int iconRes;
+    private final int iconRes;
 
-    private String titleRes;
+    private final String titleRes;
 
-    private String subTitle;
+    private final String subTitle;
 
     private boolean showStar = false;
 
@@ -32,18 +32,18 @@ public class PersonListItem {
     }
 
     public int getIconRes() {
-        return iconRes;
+        return this.iconRes;
     }
 
     public String getTitleRes() {
-        return titleRes;
+        return this.titleRes;
     }
 
     public String getSubTitle() {
-        return subTitle;
+        return this.subTitle;
     }
 
     public boolean isShowStar() {
-        return showStar;
+        return this.showStar;
     }
 }

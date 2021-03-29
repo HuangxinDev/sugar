@@ -1,31 +1,24 @@
 package com.njxm.smart.utils;
 
-import android.util.Log;
-
 import com.ntxm.smart.BuildConfig;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Locale;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 /**
  * 日志打印工具
  * 对android.util.Log进行了封装
  */
 public final class LogTool {
-    // 日志输出开关
-    private static boolean DEBUG = true;
-
     // App 日志TAG
     private static final String TAG = "SmartFactory";
 
-    /**
-     * 是否允许打印日志
-     */
-    public static void enableDebug() {
-        if (BuildConfig.DEBUG) {
-            printW("[%s] %s", TAG, "项目DEBUG模式开关已打开, 发版请将其关闭");
-        }
+    private LogTool() {
+
     }
 
     /**
@@ -40,25 +33,34 @@ public final class LogTool {
             return false;
         }
 
-        String tempStr = (format == null) ? "null" : ((objects != null && objects.length != 0) ?
-                String.format(Locale.US, format, objects) : format);
+        if (TextUtils.isEmpty(format)) {
+            format = "format格式信息不对";
+        }
+
+        if (objects != null && objects.length > 0) {
+            format = String.format(Locale.US, format, objects);
+        }
 
         switch (level) {
             case Log.INFO:
-                Log.i(TAG, tempStr);
+                Log.i(LogTool.TAG, format);
                 return true;
             case Log.DEBUG:
-                Log.d(TAG, tempStr);
+                Log.d(LogTool.TAG, format);
                 return true;
             case Log.WARN:
-                Log.w(TAG, tempStr);
+                Log.w(LogTool.TAG, format);
                 return true;
             case Log.ERROR:
-                Log.e(TAG, tempStr);
+                Log.e(LogTool.TAG, format);
                 return true;
             default:
                 return false;
         }
+    }
+
+    private static String formatTag(Class<?> klass, String format) {
+        return String.format(Locale.US, "[%s] %s", klass.getSimpleName(), format);
     }
 
     /**
@@ -69,7 +71,11 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printD(String format, Object... objects) {
-        return print(Log.DEBUG, format, objects);
+        return LogTool.print(Log.DEBUG, format, objects);
+    }
+
+    public static boolean printD(Class<?> klass, String format, Object... objects) {
+        return LogTool.print(Log.DEBUG, LogTool.formatTag(klass, format), objects);
     }
 
     /**
@@ -80,12 +86,13 @@ public final class LogTool {
      * @return 是否成功打印
      */
     public static boolean printI(String format, Object... objects) {
-        return print(Log.INFO, format, objects);
+        return LogTool.print(Log.INFO, format, objects);
     }
 
-    public static boolean printD(String tag, String format, Object... objects) {
-        return print(Log.DEBUG, "[ %s ] %s ", tag, format, objects);
+    public static boolean printI(Class<?> klass, String format, Object... objects) {
+        return LogTool.print(Log.INFO, LogTool.formatTag(klass, format), objects);
     }
+
 
     /**
      * 打印Warn日志
@@ -94,8 +101,12 @@ public final class LogTool {
      * @param objects null or 相应格式对应的值
      * @return 是否成功打印
      */
-    public static boolean printW(String format, Object... objects) {
-        return print(Log.WARN, format, objects);
+    private static boolean printW(String format, Object... objects) {
+        return LogTool.print(Log.WARN, format, objects);
+    }
+
+    public static boolean printW(Class<?> klass, String format, Object... objects) {
+        return LogTool.print(Log.WARN, LogTool.formatTag(klass, format), objects);
     }
 
     /**
@@ -105,11 +116,12 @@ public final class LogTool {
      * @param objects null or 相应格式对应的值
      * @return 是否成功打印
      */
-//    public static boolean printE(String format, Object... objects) {
-//        return print(Log.ERROR, format, objects);
-//    }
-    public static boolean printE(String tag, String format, Object... objects) {
-        return print(Log.ERROR, String.format(Locale.CHINA, "[%s] %s", tag, format), objects);
+    public static boolean printE(String format, Object... objects) {
+        return LogTool.print(Log.ERROR, format, objects);
+    }
+
+    public static boolean printE(Class<?> klass, String format, Object... objects) {
+        return LogTool.print(Log.ERROR, LogTool.formatTag(klass, format), objects);
     }
 
 
@@ -119,12 +131,13 @@ public final class LogTool {
      * @param paramThrowable 异常堆栈
      * @return 是否打印成功
      */
-    public static boolean printStack(Throwable paramThrowable) {
-        if (!DEBUG) {
+    static boolean printStack(Throwable paramThrowable) {
+        if (!BuildConfig.DEBUG) {
             return false;
         }
+        String errMsg = LogTool.getStackTrace(paramThrowable);
 
-        return print(3, getStackTrace(paramThrowable));
+        return LogTool.print(Log.ERROR, errMsg);
     }
 
     /**
@@ -143,8 +156,11 @@ public final class LogTool {
             paramThrowable.printStackTrace(new PrintWriter(writer));
             return writer.getBuffer().toString();
         } catch (Throwable throwable) {
+            if (!LogTool.printStack(throwable)) {
+                throwable.printStackTrace();
+            }
+
             return "failed";
         }
     }
-
 }

@@ -1,5 +1,7 @@
 package com.njxm.smart.view;
 
+import com.ntxm.smart.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -11,17 +13,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
-import com.ntxm.smart.R;
-
 public class ItemView extends LinearLayout {
 
-    private float mContactsSpacing;
-    private String title;
-    private int testCount;
+    private final float mContactsSpacing;
+    private final String title;
+    private final int testCount;
+    private TextView tvTitle;
+    private ImageButton mAddBtn;
+    private HorizontalScrollView mHorizontalScrollView;
+    private LinearLayout mContactsLayout;
+    private OnItemClickListener listener;
 
     public ItemView(Context context) {
         this(context, null);
@@ -39,90 +43,84 @@ public class ItemView extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ItemView, defStyleAttr,
                 defStyleRes);
-        mContactsSpacing = a.getDimensionPixelSize(R.styleable.ItemView_contacts_spacing, 0);
-        title = a.getString(R.styleable.ItemView_title);
-        testCount = a.getInt(R.styleable.ItemView_contacts_count, 0);
+        this.mContactsSpacing = a.getDimensionPixelSize(R.styleable.ItemView_contacts_spacing, 0);
+        this.title = a.getString(R.styleable.ItemView_title);
+        this.testCount = a.getInt(R.styleable.ItemView_contacts_count, 0);
         a.recycle();
     }
-
-    private TextView tvTitle;
-    private ImageButton mAddBtn;
-    private HorizontalScrollView mHorizontalScrollView;
-    private LinearLayout mContactsLayout;
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        View rootView = LayoutInflater.from(getContext()).inflate(R.layout.item_custom, null);
+        View rootView = LayoutInflater.from(this.getContext()).inflate(R.layout.item_custom, null);
         rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        tvTitle = rootView.findViewById(R.id.item_title);
-        tvTitle.setText(title);
-        mAddBtn = rootView.findViewById(R.id.item_add);
-        mAddBtn.setOnClickListener(new OnClickListener() {
+        this.tvTitle = rootView.findViewById(R.id.item_title);
+        this.tvTitle.setText(this.title);
+        this.mAddBtn = rootView.findViewById(R.id.item_add);
+        this.mAddBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                addContact(1);
-                if (listener != null) {
-                    listener.onAddItem();
+                com.njxm.smart.view.ItemView.this.addContact(1);
+                if (com.njxm.smart.view.ItemView.this.listener != null) {
+                    com.njxm.smart.view.ItemView.this.listener.onAddItem();
                 }
             }
         });
-        mHorizontalScrollView = rootView.findViewById(R.id.horizontal_scrollview);
-        mContactsLayout = rootView.findViewById(R.id.contact_layouts);
-        addView(rootView);
-        addContact(testCount);
+        this.mHorizontalScrollView = rootView.findViewById(R.id.horizontal_scrollview);
+        this.mContactsLayout = rootView.findViewById(R.id.contact_layouts);
+        this.addView(rootView);
+        this.addContact(this.testCount);
     }
 
     public void addContact(int count) {
         for (int i = 0; i < count; i++) {
-            ViewGroup contactView = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.item_contacts, null);
+            ViewGroup contactView = (ViewGroup) LayoutInflater.from(this.getContext()).inflate(R.layout.item_contacts, null);
             ImageView mHead = contactView.findViewById(R.id.item_head);
             TextView mContactName = contactView.findViewById(R.id.item_name);
             View view = contactView.findViewById(R.id.item_delete);
-            view.setVisibility(mAddBtn.getVisibility());
+            view.setVisibility(this.mAddBtn.getVisibility());
             view.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     View parent = (View) v.getParent();
-                    int viewAt = mContactsLayout.indexOfChild(parent);
+                    int viewAt = com.njxm.smart.view.ItemView.this.mContactsLayout.indexOfChild(parent);
                     if (viewAt != -1) {
-                        mContactsLayout.removeViewAt(viewAt);
+                        com.njxm.smart.view.ItemView.this.mContactsLayout.removeViewAt(viewAt);
                     }
-                    int childCount = mContactsLayout.getChildCount();
+                    int childCount = com.njxm.smart.view.ItemView.this.mContactsLayout.getChildCount();
                     if (viewAt == 0 && childCount > 0) {
-                        mContactsLayout.getChildAt(0).setPadding(0, 0, 0, 0);
+                        com.njxm.smart.view.ItemView.this.mContactsLayout.getChildAt(0).setPadding(0, 0, 0, 0);
                     }
 
-                    mHorizontalScrollView.setVisibility((mContactsLayout.getChildCount() == 0) ? View.GONE : View.VISIBLE);
+                    com.njxm.smart.view.ItemView.this.mHorizontalScrollView.setVisibility((com.njxm.smart.view.ItemView.this.mContactsLayout.getChildCount() == 0) ? View.GONE : View.VISIBLE);
                 }
             });
-            int childCount = mContactsLayout.getChildCount();
+            int childCount = this.mContactsLayout.getChildCount();
             if (childCount != 0) {
-                contactView.setPadding((int) mContactsSpacing, 0, 0, 0);
+                contactView.setPadding((int) this.mContactsSpacing, 0, 0, 0);
             }
-            mContactsLayout.addView(contactView);
+            this.mContactsLayout.addView(contactView);
         }
-        mHorizontalScrollView.setVisibility((mContactsLayout.getChildCount() == 0) ? View.GONE : View.VISIBLE);
-        mHorizontalScrollView.fullScroll(View.FOCUS_RIGHT);
+        this.mHorizontalScrollView.setVisibility((this.mContactsLayout.getChildCount() == 0) ? View.GONE : View.VISIBLE);
+        this.mHorizontalScrollView.fullScroll(View.FOCUS_RIGHT);
     }
 
-
     public void setTitle(CharSequence text) {
-        tvTitle.setText(text);
+        this.tvTitle.setText(text);
     }
 
     public void setTitle(@StringRes int resId) {
-        tvTitle.setText(resId);
+        this.tvTitle.setText(resId);
     }
 
     public void showAdd(boolean showAdd) {
-        mAddBtn.setVisibility(showAdd ? VISIBLE : GONE);
+        this.mAddBtn.setVisibility(showAdd ? android.view.View.VISIBLE : android.view.View.GONE);
 
-        int visible = mAddBtn.getVisibility();
+        int visible = this.mAddBtn.getVisibility();
 
-        for (int i = 0; i < mContactsLayout.getChildCount(); i++) {
-            View view = mContactsLayout.getChildAt(i);
+        for (int i = 0; i < this.mContactsLayout.getChildCount(); i++) {
+            View view = this.mContactsLayout.getChildAt(i);
             if (view instanceof ViewGroup) {
                 for (int j = 0; j < ((ViewGroup) view).getChildCount(); j++) {
                     View child = ((ViewGroup) view).getChildAt(j);
@@ -134,8 +132,6 @@ public class ItemView extends LinearLayout {
             }
         }
     }
-
-    private OnItemClickListener listener;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;

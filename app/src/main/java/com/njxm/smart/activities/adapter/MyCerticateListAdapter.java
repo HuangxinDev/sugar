@@ -1,10 +1,5 @@
 package com.njxm.smart.activities.adapter;
 
-import android.app.Activity;
-import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -14,6 +9,10 @@ import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
 import java.util.List;
+
+import android.app.Activity;
+import android.widget.ImageView;
+import androidx.annotation.Nullable;
 
 public class MyCerticateListAdapter extends BaseQuickAdapter<UserCertificateActivity.CertificateListItem, BaseViewHolder> {
 
@@ -36,7 +35,7 @@ public class MyCerticateListAdapter extends BaseQuickAdapter<UserCertificateActi
     @Override
     protected void convert(BaseViewHolder helper, UserCertificateActivity.CertificateListItem item) {
 
-        Glide.with(activity).load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + item.certificateImage)
+        Glide.with(this.activity).load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + item.certificateImage)
                 .into((ImageView) helper.getView(R.id.certificate_image_show));
 
         if (StringUtils.isNotEmpty(item.certificateName)) {

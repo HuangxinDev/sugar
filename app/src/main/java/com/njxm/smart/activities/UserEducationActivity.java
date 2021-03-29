@@ -1,12 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.EduTypeAdapter;
@@ -19,11 +12,17 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 
@@ -33,15 +32,13 @@ import butterknife.BindView;
 @Route(path = GlobalRouter.USER_CETIFICATION)
 public class UserEducationActivity extends BaseActivity {
 
+    @BindView(R.id.recycler_view)
+    protected RecyclerView mRecyclerView;
     private List<EduTypeBean> typeBeans = new ArrayList<>();
     private EduTypeAdapter adapter;
     private int lastSelected = 0;
     private int selectedId = 0;
-
     private String mUserEdu;
-
-    @BindView(R.id.recycler_view)
-    protected RecyclerView mRecyclerView;
 
     @Override
     protected int setContentLayoutId() {
@@ -51,35 +48,35 @@ public class UserEducationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        setActionBarTitle("学历");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("学历");
 
-        if (getIntent() != null) {
-            mUserEdu = getIntent().getStringExtra("params");
+        if (this.getIntent() != null) {
+            this.mUserEdu = this.getIntent().getStringExtra("params");
         }
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EduTypeAdapter(typeBeans);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.adapter = new EduTypeAdapter(this.typeBeans);
+        this.adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                lastSelected = selectedId;
-                selectedId = position;
-                if (lastSelected == selectedId) {
+                com.njxm.smart.activities.UserEducationActivity.this.lastSelected = com.njxm.smart.activities.UserEducationActivity.this.selectedId;
+                com.njxm.smart.activities.UserEducationActivity.this.selectedId = position;
+                if (com.njxm.smart.activities.UserEducationActivity.this.lastSelected == com.njxm.smart.activities.UserEducationActivity.this.selectedId) {
                     return;
                 }
                 try {
-                    typeBeans.get(selectedId).setSelected(true);
-                    typeBeans.get(lastSelected).setSelected(false);
+                    com.njxm.smart.activities.UserEducationActivity.this.typeBeans.get(com.njxm.smart.activities.UserEducationActivity.this.selectedId).setSelected(true);
+                    com.njxm.smart.activities.UserEducationActivity.this.typeBeans.get(com.njxm.smart.activities.UserEducationActivity.this.lastSelected).setSelected(false);
                 } catch (ArrayIndexOutOfBoundsException ex) {
 
                 } finally {
                     adapter.notifyDataSetChanged();
-                    uploadEdu();
+                    com.njxm.smart.activities.UserEducationActivity.this.uploadEdu();
                 }
             }
         });
-        mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.setAdapter(this.adapter);
         RequestEvent requestEvent = RequestEvent.newBuilder().url(UrlPath.PATH_USER_EDU_PULL.getUrl())
                 .addBodyJson("code", "education_type")
                 .build();
@@ -89,26 +86,26 @@ public class UserEducationActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshEduState(List<EduTypeBean> beans) {
-        typeBeans = beans;
-        for (EduTypeBean bean : typeBeans) {
-            if (bean.getSdName().equals(mUserEdu)) {
+        this.typeBeans = beans;
+        for (EduTypeBean bean : this.typeBeans) {
+            if (bean.getSdName().equals(this.mUserEdu)) {
                 bean.setSelected(true);
-                selectedId = lastSelected = typeBeans.indexOf(bean);
+                this.selectedId = this.lastSelected = this.typeBeans.indexOf(bean);
                 break;
             }
         }
-        adapter.setNewData(typeBeans);
+        this.adapter.setNewData(this.typeBeans);
     }
 
     private void uploadEdu() {
-        if (selectedId == -1 || typeBeans.size() == 0) {
+        if (this.selectedId == -1 || this.typeBeans.size() == 0) {
             return;
         }
 
         RequestEvent requestEvent = RequestEvent.newBuilder()
                 .url(UrlPath.PATH_USER_EDU_NEWS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addBodyJson("education", typeBeans.get(selectedId).getValue())
+                .addBodyJson("education", this.typeBeans.get(this.selectedId).getValue())
                 .build();
         HttpUtils.getInstance().request(requestEvent);
     }

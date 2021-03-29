@@ -1,10 +1,9 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
 import com.ntxm.smart.R;
+
+import android.os.Bundle;
+import androidx.annotation.Nullable;
 
 public class SafeExamStudyActivity extends BaseActivity {
     @Override

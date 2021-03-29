@@ -1,10 +1,9 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
 import com.ntxm.smart.R;
+
+import android.os.Bundle;
+import androidx.annotation.Nullable;
 
 
 /**
@@ -12,7 +11,7 @@ import com.ntxm.smart.R;
  */
 public class DailyCheckDetailActivity extends BaseActivity {
 
-    private boolean isEdit = false;
+    private final boolean isEdit = false;
 
     @Override
     protected int setContentLayoutId() {
@@ -22,12 +21,13 @@ public class DailyCheckDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        setActionBarTitle("巡检详情");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("巡检详情");
     }
 
     /**
      * 设置控件属性
+     *
      * @param tvId
      * @param resId
      */

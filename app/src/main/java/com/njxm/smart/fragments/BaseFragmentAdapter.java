@@ -1,16 +1,14 @@
 package com.njxm.smart.fragments;
 
-import androidx.fragment.app.Fragment;
-
-import androidx.fragment.app.FragmentManager;
-
-import androidx.fragment.app.FragmentStatePagerAdapter;
-
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class BaseFragmentAdapter extends FragmentStatePagerAdapter {
 
-    private List<Fragment> mFragments;
+    private final List<Fragment> mFragments;
 
     public BaseFragmentAdapter(FragmentManager fm, List<Fragment> paramFragments) {
         super(fm);
@@ -19,11 +17,11 @@ public class BaseFragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return mFragments.get(position);
+        return this.mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return mFragments.size();
+        return this.mFragments.size();
     }
 }

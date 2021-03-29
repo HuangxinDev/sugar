@@ -1,19 +1,18 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 
@@ -22,9 +21,20 @@ import butterknife.BindView;
  */
 public class SearchActivity extends BaseActivity {
 
-    private MMAdapter<ContactsBean> mAdapter;
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
+    private MMAdapter<ContactsBean> mAdapter;
+
+    public static List<ContactsBean> getContactsBeans() {
+        List<ContactsBean> contactsBeans = new ArrayList<>();
+        contactsBeans.add(new ContactsBean("联系人1", "", "普工", false));
+        contactsBeans.add(new ContactsBean("联系人2", "", "普工", false));
+        contactsBeans.add(new ContactsBean("联系人3", "", "特工", true));
+        contactsBeans.add(new ContactsBean("联系人4", "", "普工", false));
+        contactsBeans.add(new ContactsBean("联系人5", "", "特工", true));
+        contactsBeans.add(new ContactsBean("联系人6", "", "普工", false));
+        return contactsBeans;
+    }
 
     @Override
     protected int setContentLayoutId() {
@@ -34,10 +44,10 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new MMAdapter<>(R.layout.layout_contacts_item, getContactsBeans());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        this.mAdapter = new MMAdapter<>(R.layout.layout_contacts_item, com.njxm.smart.activities.SearchActivity.getContactsBeans());
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        this.mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ContactsBean bean = ((ContactsBean) adapter.getItem(position));
@@ -45,18 +55,7 @@ public class SearchActivity extends BaseActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
-    public List<ContactsBean> getContactsBeans() {
-        List<ContactsBean> contactsBeans = new ArrayList<>();
-        contactsBeans.add(new ContactsBean("联系人1", "", "普工", false));
-        contactsBeans.add(new ContactsBean("联系人2", "", "普工", false));
-        contactsBeans.add(new ContactsBean("联系人3", "", "特工", true));
-        contactsBeans.add(new ContactsBean("联系人4", "", "普工", false));
-        contactsBeans.add(new ContactsBean("联系人5", "", "特工", true));
-        contactsBeans.add(new ContactsBean("联系人6", "", "普工", false));
-        return contactsBeans;
+        this.mRecyclerView.setAdapter(this.mAdapter);
     }
 }
 
@@ -75,7 +74,7 @@ class ContactsBean {
     }
 
     public boolean isSelected() {
-        return selected;
+        return this.selected;
     }
 
     public void setSelected(boolean selected) {
@@ -83,7 +82,7 @@ class ContactsBean {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -91,7 +90,7 @@ class ContactsBean {
     }
 
     public String getHeadUrl() {
-        return headUrl;
+        return this.headUrl;
     }
 
     public void setHeadUrl(String headUrl) {
@@ -99,7 +98,7 @@ class ContactsBean {
     }
 
     public String getJob() {
-        return job;
+        return this.job;
     }
 
     public void setJob(String job) {
@@ -107,7 +106,7 @@ class ContactsBean {
     }
 
     public boolean isSuperWorker() {
-        return superWorker;
+        return this.superWorker;
     }
 
     public void setSuperWorker(boolean superWorker) {

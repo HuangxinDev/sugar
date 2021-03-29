@@ -1,10 +1,5 @@
 package com.njxm.smart.activities.adapter;
 
-import android.app.Activity;
-import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -12,6 +7,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ntxm.smart.R;
 
 import java.util.List;
+
+import android.app.Activity;
+import android.widget.ImageView;
+import androidx.annotation.Nullable;
 
 public class SimpleImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
@@ -24,44 +23,44 @@ public class SimpleImageAdapter extends BaseQuickAdapter<String, BaseViewHolder>
 
     public SimpleImageAdapter(int layoutResId, @Nullable List<String> data) {
         super(layoutResId, data);
-        init();
+        this.init();
     }
 
     public SimpleImageAdapter(Activity activity, @Nullable List<String> data) {
         this(R.layout.item_simple_image_layout, data);
         this.activity = activity;
-        init();
+        this.init();
     }
 
     public SimpleImageAdapter(Activity activity) {
         this(R.layout.item_simple_image_layout, null);
         this.activity = activity;
-        init();
+        this.init();
     }
 
     private void init() {
-        requestOptions = new RequestOptions().centerCrop();
+        this.requestOptions = new RequestOptions().centerCrop();
     }
 
 
     @Override
-    protected void convert(final BaseViewHolder helper, final String item) {
-        Glide.with(activity)
+    protected void convert(BaseViewHolder helper, String item) {
+        Glide.with(this.activity)
                 .load(item)
-                .apply(requestOptions)
+                .apply(this.requestOptions)
                 .into((ImageView) helper.getView(R.id.item_image));
         helper.setVisible(R.id.item_cancel,
-                isShowDelete && (helper.getAdapterPosition() != getData().size() - 1));
-        if (isShowDelete) {
+                this.isShowDelete && (helper.getAdapterPosition() != this.getData().size() - 1));
+        if (this.isShowDelete) {
             helper.setNestView(R.id.item_cancel);
         }
     }
 
     public boolean isShowDelete() {
-        return isShowDelete;
+        return this.isShowDelete;
     }
 
     public void setShowDelete(boolean showDelete) {
-        isShowDelete = showDelete;
+        this.isShowDelete = showDelete;
     }
 }

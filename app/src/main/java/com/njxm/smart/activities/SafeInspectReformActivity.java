@@ -1,11 +1,10 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
+import com.ntxm.smart.R;
 
+import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.ntxm.smart.R;
 
 import butterknife.BindView;
 
@@ -22,6 +21,6 @@ public class SafeInspectReformActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle(R.string.reform_record);
+        this.setActionBarTitle(R.string.reform_record);
     }
 }

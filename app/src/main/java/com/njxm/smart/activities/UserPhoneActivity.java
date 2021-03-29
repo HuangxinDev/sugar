@@ -1,12 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.model.jsonbean.UserBean;
@@ -14,6 +7,12 @@ import com.ntxm.smart.R;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import androidx.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,14 +32,14 @@ public class UserPhoneActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("手机");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("手机");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
     }
 
 
     @OnClick(R.id.settings_update_phone)
     public void onViewClicked(View v) {
-        startActivity(new Intent(this, UpdateTelPhoneActivity.class));
+        this.startActivity(new Intent(this, UpdateTelPhoneActivity.class));
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -48,9 +47,9 @@ public class UserPhoneActivity extends BaseActivity {
         try {
             StringBuilder builder = new StringBuilder(11);
             builder.append(bean.getPhone());
-            tvUserPhone.setText(builder.replace(3, 7, "****").toString());
+            this.tvUserPhone.setText(builder.replace(3, 7, "****").toString());
         } catch (Exception e) {
-            tvUserPhone.setText("手机号未获取到");
+            this.tvUserPhone.setText("手机号未获取到");
         }
     }
 }

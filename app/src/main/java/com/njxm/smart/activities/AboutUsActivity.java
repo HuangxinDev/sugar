@@ -1,12 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
@@ -18,10 +11,16 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.ntxm.smart.R;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,13 +31,7 @@ import butterknife.OnClick;
 public class AboutUsActivity extends BaseActivity {
 
     private static final int REQUEST_WEBVIEW_URL = 316;
-
-    private AppCompatImageView mAppIcon;
-
-    private AppCompatTextView mAppName;
-
-    private AppCompatTextView mAppVersion;
-
+    private final List<UrlBean> mUrls = new ArrayList<>();
     // 服务协议
     @BindView(R.id.about_us_service)
     protected View mAppServiceBtn;
@@ -51,8 +44,18 @@ public class AboutUsActivity extends BaseActivity {
     // 新功能介绍
     @BindView(R.id.about_us_feature)
     protected View mAppFeaturesBtn;
+    private AppCompatImageView mAppIcon;
+    private AppCompatTextView mAppName;
+    private AppCompatTextView mAppVersion;
 
-    private final List<UrlBean> mUrls = new ArrayList<>();
+    public static List<UrlBean> getLocalBean() {
+        List<UrlBean> urlBeans = new ArrayList<>();
+        urlBeans.add(new UrlBean("服务协议", "file:///android_asset/www/service.html"));
+        urlBeans.add(new UrlBean("新功能介绍", "file:///android_asset/www/features.html"));
+        urlBeans.add(new UrlBean("隐私政策", "file:///android_asset/www/privacy.html"));
+        urlBeans.add(new UrlBean("版本信息", "file:///android_asset/www/service.html"));
+        return urlBeans;
+    }
 
     @Override
     protected int setContentLayoutId() {
@@ -62,8 +65,8 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("关于我们");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("关于我们");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
 
         HttpUtils.getInstance().request(RequestEvent.newBuilder()
                 .url(UrlPath.PATH_ABOUT_US.getUrl())
@@ -78,25 +81,25 @@ public class AboutUsActivity extends BaseActivity {
     @OnClick({R.id.about_us_feature, R.id.about_us_secret, R.id.about_us_service, R.id.about_us_version})
     public void onViewClicked(View view) {
 
-        if (mUrls.size() < 4) {
-            mUrls.clear();
-            mUrls.addAll(getLocalBean());
+        if (this.mUrls.size() < 4) {
+            this.mUrls.clear();
+            this.mUrls.addAll(com.njxm.smart.activities.AboutUsActivity.getLocalBean());
         }
 
         UrlBean urlBean = null;
 
         switch (view.getId()) {
             case R.id.about_us_feature:
-                urlBean = getRequestUrlBean("新功能介绍");
+                urlBean = this.getRequestUrlBean("新功能介绍");
                 break;
             case R.id.about_us_secret:
-                urlBean = getRequestUrlBean("隐私政策");
+                urlBean = this.getRequestUrlBean("隐私政策");
                 break;
             case R.id.about_us_version:
-                urlBean = getRequestUrlBean("版本信息");
+                urlBean = this.getRequestUrlBean("版本信息");
                 break;
             case R.id.about_us_service:
-                urlBean = getRequestUrlBean("服务协议");
+                urlBean = this.getRequestUrlBean("服务协议");
                 break;
         }
         if (urlBean != null) {
@@ -110,7 +113,7 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     public UrlBean getRequestUrlBean(String name) {
-        for (UrlBean bean : mUrls) {
+        for (UrlBean bean : this.mUrls) {
             if (bean.getName().equals(name)) {
                 return bean;
             }
@@ -121,21 +124,12 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     public void onResponse(ResponseEvent event) {
         if (UrlPath.PATH_ABOUT_US.getUrl().equals(event.getUrl())) {
-            if (mUrls.size() > 0) {
-                mUrls.clear();
+            if (this.mUrls.size() > 0) {
+                this.mUrls.clear();
             }
-            mUrls.addAll(JsonUtils.getJsonArray(event.getData(), UrlBean.class));
+            this.mUrls.addAll(JsonUtils.getJsonArray(event.getData(), UrlBean.class));
         } else {
             super.onResponse(event);
         }
-    }
-
-    public List<UrlBean> getLocalBean() {
-        List<UrlBean> urlBeans = new ArrayList<>();
-        urlBeans.add(new UrlBean("服务协议", "file:///android_asset/www/service.html"));
-        urlBeans.add(new UrlBean("新功能介绍", "file:///android_asset/www/features.html"));
-        urlBeans.add(new UrlBean("隐私政策", "file:///android_asset/www/privacy.html"));
-        urlBeans.add(new UrlBean("版本信息", "file:///android_asset/www/service.html"));
-        return urlBeans;
     }
 }

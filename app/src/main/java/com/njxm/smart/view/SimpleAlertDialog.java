@@ -1,5 +1,7 @@
 package com.njxm.smart.view;
 
+import com.ntxm.smart.R;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,10 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-
 import androidx.appcompat.widget.AppCompatTextView;
-
-import com.ntxm.smart.R;
 
 public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
 

@@ -1,24 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -39,15 +20,33 @@ import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -57,12 +56,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class MedicalReportActivity extends BaseActivity {
 
 
-    private SimpleImageAdapter adapter;
-
+    public static final int default_icon = R.mipmap.camera_photo;
     /**
      * 个人信息-详细信息接口中的
      */
@@ -72,91 +69,89 @@ public class MedicalReportActivity extends BaseActivity {
     private static final int MEDICAL_CHECK_FAILED = 3; // 审批不通过
 
     private static final int MEDICAL_COMMIT = 194;
-
-    private int mLastMedicalState = MEDICAL_VOID;
-    private int mMedicalState = MEDICAL_VOID;
-
+    private final List<String> mDatas = new ArrayList<>();
     @BindView(R.id.default_layout)
     protected View mMedicalVoidLayout;
-
     @BindView(R.id.commit_layout)
     protected View mMedicalCommitLayout;
-
     @BindView(R.id.wait_check_layout)
     protected View mMedicalCheckWaitLayout;
-
     @BindView(R.id.check_failed_layout)
     protected View mMedicalCheckRetryLayout;
-
     @BindView(R.id.upload_success_title)
     protected View mMedicalCheckSuccessHeaderLayout;
-
     @BindView(R.id.upload_time)
     protected TextView tvModifyTime;
-
     // 提交图片资源
     @BindView(R.id.commit_btn)
     protected TextView mCommitBtn;
-
     // 开始上传图片
     @BindView(R.id.upload_btn)
     protected TextView mUploadBtn;
-
     // 重新申请
     @BindView(R.id.retry_upload_btn)
     protected TextView mRetryUploadBtn;
+    @BindView(R.id.recycler_view)
+    protected RecyclerView mRecyclerView;
+    private SimpleImageAdapter adapter;
+    private int mLastMedicalState = com.njxm.smart.activities.MedicalReportActivity.MEDICAL_VOID;
+    private int mMedicalState = com.njxm.smart.activities.MedicalReportActivity.MEDICAL_VOID;
+    private File photoFile;
+
+    /**
+     * 更新图片
+     */
+    private static void updateImages() {
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(UrlPath.PATH_MEDICAL_REPORT_PULL.getUrl())
+                .addBodyJson("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
+                .build());
+    }
 
     @Override
     protected int setContentLayoutId() {
         return R.layout.my_medical_report;
     }
 
-    @BindView(R.id.recycler_view)
-    protected RecyclerView mRecyclerView;
-
-    public static final int default_icon = R.mipmap.camera_photo;
-
-    private List<String> mDatas = new ArrayList<>();
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("体检报告");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("体检报告");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
 
-        mCommitBtn.setOnClickListener(this);
-        mUploadBtn.setOnClickListener(this);
-        mRetryUploadBtn.setOnClickListener(this);
+        this.mCommitBtn.setOnClickListener(this);
+        this.mUploadBtn.setOnClickListener(this);
+        this.mRetryUploadBtn.setOnClickListener(this);
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        mRecyclerView.setLayoutManager(layoutManager);
+        this.mRecyclerView.setLayoutManager(layoutManager);
         List<Drawable> drawables = new ArrayList<>();
-        drawables.add(getDrawable(default_icon));
-        adapter = new SimpleImageAdapter(this, mDatas);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        drawables.add(this.getDrawable(com.njxm.smart.activities.MedicalReportActivity.default_icon));
+        this.adapter = new SimpleImageAdapter(this, this.mDatas);
+        this.adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-                if (mDatas.size() >= 9) {
-                    showToast("上传图片已达上限");
+                if (com.njxm.smart.activities.MedicalReportActivity.this.mDatas.size() >= 9) {
+                    com.njxm.smart.activities.BaseActivity.showToast("上传图片已达上限");
                     return;
                 }
 
-                if (position == mDatas.size() - 1) {
-                    takePhoto(100);
+                if (position == com.njxm.smart.activities.MedicalReportActivity.this.mDatas.size() - 1) {
+                    com.njxm.smart.activities.MedicalReportActivity.this.takePhoto(100);
                 }
             }
         });
 
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        this.adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                final String delFilePath = mDatas.get(position);
-                mDatas.remove(position);
-                adapter.setNewData(mDatas);
+                String delFilePath = com.njxm.smart.activities.MedicalReportActivity.this.mDatas.get(position);
+                com.njxm.smart.activities.MedicalReportActivity.this.mDatas.remove(position);
+                adapter.setNewData(com.njxm.smart.activities.MedicalReportActivity.this.mDatas);
                 new File(delFilePath).delete();
             }
         });
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+        this.mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
@@ -165,37 +160,27 @@ public class MedicalReportActivity extends BaseActivity {
                 }
             }
         });
-        mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.setAdapter(this.adapter);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {
         try {
-            mMedicalState = Integer.parseInt(bean.getMedicalStatus());
+            this.mMedicalState = Integer.parseInt(bean.getMedicalStatus());
         } catch (NumberFormatException e) {
             e.printStackTrace();
 
         }
-        invalidateLayoutState(mMedicalState);
-        if (mMedicalState == MEDICAL_CHECK_SUCCESS) {
-            updateImages();
+        this.invalidateLayoutState(this.mMedicalState);
+        if (this.mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS) {
+            com.njxm.smart.activities.MedicalReportActivity.updateImages();
         }
-    }
-
-    /**
-     * 更新图片
-     */
-    private void updateImages() {
-        HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(UrlPath.PATH_MEDICAL_REPORT_PULL.getUrl())
-                .addBodyJson("userId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .build());
     }
 
     @Override
     public void onResponse(ResponseEvent event) {
 
-        final String url = event.getUrl();
+        String url = event.getUrl();
 
         if (url.equals(UrlPath.PATH_MEDICAL_REPORT_PULL.getUrl())) {
             MedicalBean bean = JSONObject.parseObject(event.getData(), MedicalBean.class);
@@ -203,7 +188,7 @@ public class MedicalReportActivity extends BaseActivity {
         } else if (url.equals(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getUrl())) {
             if (event.isSuccess()) {
                 EventBus.getDefault().post(new ToastEvent("上传成功"));
-                finish();
+                this.finish();
             }
         } else {
             super.onResponse(event);
@@ -211,38 +196,38 @@ public class MedicalReportActivity extends BaseActivity {
     }
 
     private void invalidateLayoutState(int mMedicalState) {
-        mLastMedicalState = this.mMedicalState;
+        this.mLastMedicalState = this.mMedicalState;
         this.mMedicalState = mMedicalState;
-        mMedicalVoidLayout.setVisibility(mMedicalState == MEDICAL_VOID ? View.VISIBLE : View.GONE);
-        mMedicalCheckWaitLayout.setVisibility(mMedicalState == MEDICAL_CHECK_WAIT ? View.VISIBLE : View.GONE);
-        mMedicalCheckRetryLayout.setVisibility(mMedicalState == MEDICAL_CHECK_FAILED ? View.VISIBLE : View.GONE);
-        mMedicalCheckSuccessHeaderLayout.setVisibility(mMedicalState == MEDICAL_CHECK_SUCCESS ? View.VISIBLE : View.GONE);
-        mCommitBtn.setVisibility(mMedicalState == MEDICAL_COMMIT ? View.VISIBLE : View.GONE);
-        mMedicalCommitLayout.setVisibility((mMedicalState == MEDICAL_COMMIT || mMedicalState == MEDICAL_CHECK_SUCCESS) ? View.VISIBLE : View.GONE);
+        this.mMedicalVoidLayout.setVisibility(mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_VOID ? View.VISIBLE : View.GONE);
+        this.mMedicalCheckWaitLayout.setVisibility(mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_CHECK_WAIT ? View.VISIBLE : View.GONE);
+        this.mMedicalCheckRetryLayout.setVisibility(mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_CHECK_FAILED ? View.VISIBLE : View.GONE);
+        this.mMedicalCheckSuccessHeaderLayout.setVisibility(mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS ? View.VISIBLE : View.GONE);
+        this.mCommitBtn.setVisibility(mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_COMMIT ? View.VISIBLE : View.GONE);
+        this.mMedicalCommitLayout.setVisibility((mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_COMMIT || mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS) ? View.VISIBLE : View.GONE);
 
-        if (mMedicalState == MEDICAL_COMMIT) {
-            mDatas.clear();
-            File defalutFile = new File(getCacheDir(), "camera_default.png");
-            BitmapUtils.saveBitmap(BitmapFactory.decodeResource(getResources(),
+        if (mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_COMMIT) {
+            this.mDatas.clear();
+            File defalutFile = new File(this.getCacheDir(), "camera_default.png");
+            BitmapUtils.saveBitmap(BitmapFactory.decodeResource(this.getResources(),
                     R.mipmap.camera_photo), defalutFile);
-            mDatas.add(defalutFile.getPath());
-            adapter.setShowDelete(true);
-            adapter.setNewData(mDatas);
+            this.mDatas.add(defalutFile.getPath());
+            this.adapter.setShowDelete(true);
+            this.adapter.setNewData(this.mDatas);
         }
 
-        showRightBtn(mMedicalState == MEDICAL_CHECK_SUCCESS, "更新");
+        this.showRightBtn(mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS, "更新");
     }
 
     @Override
     public void onClickRightBtn() {
-        invalidateLayoutState(MEDICAL_COMMIT);
+        this.invalidateLayoutState(com.njxm.smart.activities.MedicalReportActivity.MEDICAL_COMMIT);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 100 && photoFile != null && photoFile.exists() && photoFile.length() > 0) {
+        if (requestCode == 100 && this.photoFile != null && this.photoFile.exists() && this.photoFile.length() > 0) {
 
             new Thread(new Runnable() {
                 @Override
@@ -252,14 +237,14 @@ public class MedicalReportActivity extends BaseActivity {
                         bitmap = Glide
                                 .with(MedicalReportActivity.this)
                                 .asBitmap()
-                                .load(photoFile)
+                                .load(com.njxm.smart.activities.MedicalReportActivity.this.photoFile)
                                 .submit(ResolutionUtil.dp2Px(109), ResolutionUtil.dp2Px(109))
                                 .get();
-                        BitmapUtils.saveBitmap(bitmap, photoFile);
-                        invoke(new Runnable() {
+                        BitmapUtils.saveBitmap(bitmap, com.njxm.smart.activities.MedicalReportActivity.this.photoFile);
+                        com.njxm.smart.activities.MedicalReportActivity.this.invoke(new Runnable() {
                             @Override
                             public void run() {
-                                update(photoFile.getAbsolutePath());
+                                com.njxm.smart.activities.MedicalReportActivity.this.update(com.njxm.smart.activities.MedicalReportActivity.this.photoFile.getAbsolutePath());
                             }
                         });
 //                        EventBus.getDefault().post(photoFile.getPath());
@@ -273,31 +258,31 @@ public class MedicalReportActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void update(String filePath) {
-        mDatas.add(0, photoFile.getAbsolutePath());
-        adapter.setNewData(mDatas);
+        this.mDatas.add(0, this.photoFile.getAbsolutePath());
+        this.adapter.setNewData(this.mDatas);
     }
 
     @Override
     public void onBackPressed() {
-        onClickLeftBtn();
+        this.onClickLeftBtn();
     }
 
     @Override
     public void onClickLeftBtn() {
-        if (mMedicalState == MEDICAL_COMMIT) {
-            invalidateLayoutState(mLastMedicalState);
+        if (this.mMedicalState == com.njxm.smart.activities.MedicalReportActivity.MEDICAL_COMMIT) {
+            this.invalidateLayoutState(this.mLastMedicalState);
         } else {
-            finish();
+            this.finish();
         }
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        if (v == mUploadBtn || v == mRetryUploadBtn) {
-            invalidateLayoutState(MEDICAL_COMMIT);
-        } else if (v == mCommitBtn) {
-            uploadMedicalReports();
+        if (v == this.mUploadBtn || v == this.mRetryUploadBtn) {
+            this.invalidateLayoutState(com.njxm.smart.activities.MedicalReportActivity.MEDICAL_COMMIT);
+        } else if (v == this.mCommitBtn) {
+            this.uploadMedicalReports();
         }
     }
 
@@ -305,7 +290,7 @@ public class MedicalReportActivity extends BaseActivity {
 
         List<MultipartBody.Part> parts = new ArrayList<>();
         parts.add(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
-        for (String filePath : mDatas) {
+        for (String filePath : this.mDatas) {
             if (filePath.endsWith("camera_default.png")) {
                 continue;
             }
@@ -330,21 +315,33 @@ public class MedicalReportActivity extends BaseActivity {
 
     }
 
-    private File photoFile;
-
+    @Override
     public void takePhoto(int requestId) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
+        this.photoFile = new File(FileUtils.getCameraDir(), UUID.randomUUID() + ".jpg");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
-                    ".fileProvider", photoFile);
+                    ".fileProvider", this.photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         } else {
-            Uri uri = Uri.fromFile(photoFile);
+            Uri uri = Uri.fromFile(this.photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        startActivityForResult(intent, requestId);
+        this.startActivityForResult(intent, requestId);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateView(MedicalBean bean) {
+        this.tvModifyTime.setText("上传时间:  " + bean.getCreateTime());
+
+        this.mDatas.clear();
+        for (String path : bean.getPathList()) {
+            this.mDatas.add(UrlPath.PATH_PICTURE_PREFIX.getUrl() + path);
+        }
+
+        this.adapter.setShowDelete(false);
+        this.adapter.setNewData(this.mDatas);
     }
 
     public static class MedicalBean {
@@ -360,7 +357,7 @@ public class MedicalReportActivity extends BaseActivity {
         private List<String> pathList;
 
         public String getId() {
-            return id;
+            return this.id;
         }
 
         public void setId(String id) {
@@ -368,7 +365,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public int getDelFlag() {
-            return delFlag;
+            return this.delFlag;
         }
 
         public void setDelFlag(int delFlag) {
@@ -376,7 +373,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getCreateTime() {
-            return createTime;
+            return this.createTime;
         }
 
         public void setCreateTime(String createTime) {
@@ -384,7 +381,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getCreateUser() {
-            return createUser;
+            return this.createUser;
         }
 
         public void setCreateUser(String createUser) {
@@ -392,7 +389,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getModifyTime() {
-            return modifyTime;
+            return this.modifyTime;
         }
 
         public void setModifyTime(String modifyTime) {
@@ -400,7 +397,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getModifyUser() {
-            return modifyUser;
+            return this.modifyUser;
         }
 
         public void setModifyUser(String modifyUser) {
@@ -408,7 +405,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getSumrStatus() {
-            return sumrStatus;
+            return this.sumrStatus;
         }
 
         public void setSumrStatus(String sumrStatus) {
@@ -416,7 +413,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getSumrUserId() {
-            return sumrUserId;
+            return this.sumrUserId;
         }
 
         public void setSumrUserId(String sumrUserId) {
@@ -424,7 +421,7 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public String getFiles() {
-            return files;
+            return this.files;
         }
 
         public void setFiles(String files) {
@@ -432,24 +429,11 @@ public class MedicalReportActivity extends BaseActivity {
         }
 
         public List<String> getPathList() {
-            return pathList;
+            return this.pathList;
         }
 
         public void setPathList(List<String> pathList) {
             this.pathList = pathList;
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateView(MedicalBean bean) {
-        tvModifyTime.setText("上传时间:  " + bean.getCreateTime());
-
-        mDatas.clear();
-        for (String path : bean.getPathList()) {
-            mDatas.add(UrlPath.PATH_PICTURE_PREFIX.getUrl() + path);
-        }
-
-        adapter.setShowDelete(false);
-        adapter.setNewData(mDatas);
     }
 }

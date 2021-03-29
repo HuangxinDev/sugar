@@ -35,22 +35,22 @@ public enum UrlPath {
     PATH_MAIN_KAO_QIN(3, "/#/attendance/sign"), // 首页考勤
     PATH_PICTURE_PREFIX(3, "/business_modules_api_app/proxy/show/"); // 图片信息前缀url
 
-    private int type; // 接口类型
-    private String path;
+    private final int type; // 接口类型
+    private final String path;
 
 
     /**
      * @param type  业务类型： 1 鉴权, 2 业务, 3 H5
      * @param param url path
      */
-    UrlPath(final int type, final String param) {
+    UrlPath(int type, String param) {
         this.type = type;
         this.path = param;
     }
 
     public String getUrl() {
         String host;
-        switch (type) {
+        switch (this.type) {
             case 1:
                 host = GlobalConst.GRANT_HOST;
                 break;
@@ -62,10 +62,10 @@ public enum UrlPath {
                 host = GlobalConst.H5_HOST;
                 break;
         }
-        return host + path;
+        return host + this.path;
     }
 
     public String getPath() {
-        return path;
+        return this.path;
     }
 }

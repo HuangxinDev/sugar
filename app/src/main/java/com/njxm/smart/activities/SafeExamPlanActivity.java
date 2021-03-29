@@ -1,13 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,6 +10,13 @@ import com.ntxm.smart.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 
 @Route(path = "/app/safety/examination")
@@ -26,6 +25,14 @@ public class SafeExamPlanActivity extends BaseActivity {
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
 
+    public static List<String> getData() {
+        List<String> strings = new ArrayList<>();
+        strings.add("aaa");
+        strings.add("aaa");
+        strings.add("安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育");
+        strings.add("安全教");
+        return strings;
+    }
 
     @Override
     protected int setContentLayoutId() {
@@ -35,37 +42,28 @@ public class SafeExamPlanActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("考试计划");
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SafeExamPlanAdapter adapter = new SafeExamPlanAdapter(R.layout.safe_exam_list_item, getData());
+        this.setActionBarTitle("考试计划");
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        SafeExamPlanAdapter adapter = new SafeExamPlanAdapter(R.layout.safe_exam_list_item, com.njxm.smart.activities.SafeExamPlanActivity.getData());
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.start_exam:
-                        startActivity(new Intent(SafeExamPlanActivity.this, SafeExamActivity.class));
+                        com.njxm.smart.activities.SafeExamPlanActivity.this.startActivity(new Intent(SafeExamPlanActivity.this, SafeExamActivity.class));
                         break;
                     case R.id.exam_study:
-                        startActivity(new Intent(SafeExamPlanActivity.this, SafeExamStudyActivity.class));
+                        com.njxm.smart.activities.SafeExamPlanActivity.this.startActivity(new Intent(SafeExamPlanActivity.this, SafeExamStudyActivity.class));
                         break;
                 }
             }
         });
-        mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.setAdapter(adapter);
 
         HttpUtils.getInstance().request(new RequestEvent.Builder().url("http://119.3.136" +
                 ".127:7776/api/safety/educationPlan/findPageByOrg").addBodyJson("sepoOrgId",
                 "b83f455303a5fce45a402d2ab8bf2c4c").addBodyJson("permissionId",
                 "a8da5dd8b935eb444dc25d87a34e2287").build());
-    }
-
-    public List<String> getData() {
-        List<String> strings = new ArrayList<>();
-        strings.add("aaa");
-        strings.add("aaa");
-        strings.add("安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育安全教育特种工人教育");
-        strings.add("安全教");
-        return strings;
     }
 
     private static final class SafeExamPlanAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
@@ -87,7 +85,7 @@ public class SafeExamPlanActivity extends BaseActivity {
             helper.setNestView(R.id.start_exam);
             helper.setNestView(R.id.exam_study);
             helper.setText(R.id.exam_content, item);
-            helper.setGone(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
+            helper.setGone(R.id.divider1, helper.getAdapterPosition() != this.mData.size() - 1);
         }
     }
 }

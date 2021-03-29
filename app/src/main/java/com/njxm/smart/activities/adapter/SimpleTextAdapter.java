@@ -1,13 +1,13 @@
 package com.njxm.smart.activities.adapter;
 
-import androidx.annotation.Nullable;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.AddressBean;
 import com.ntxm.smart.R;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class SimpleTextAdapter extends BaseQuickAdapter<AddressBean, BaseViewHolder> {
 

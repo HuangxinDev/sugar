@@ -1,14 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.njxm.smart.activities.adapter.SuggestionDetailAdapter;
 import com.njxm.smart.divider.MyRecyclerViewItemDecoration;
 import com.njxm.smart.model.component.SuggestionDetailItem;
@@ -17,29 +8,25 @@ import com.ntxm.smart.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * 意见箱 主页工作中心 - 意见箱
  */
 public class SuggestionsActivity extends BaseActivity {
 
-    enum Suggestion {
-        NONE,
-        EDIT,
-        COMMIT
-    }
-
     Suggestion mSuggestion = Suggestion.NONE;
-
     private RecyclerView mRecyclerView;
-
     private View mSuggestionEdit;
-
     private AppCompatEditText mAppCompatEditText;
-
     private AppCompatTextView mAppCompatTextView;
-
     private AppCompatTextView mCommitBtnAppCompatTextView;
-
 
     @Override
     protected int setContentLayoutId() {
@@ -49,17 +36,17 @@ public class SuggestionsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showTitle(true, "意见箱");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        showRightBtn(true, R.mipmap.new_add);
+        this.showTitle(true, "意见箱");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.showRightBtn(true, R.mipmap.new_add);
 
-        mSuggestionEdit = findViewById(R.id.suggestion_edit);
-        mAppCompatEditText = findViewById(R.id.suggestion_edit_message);
-        mAppCompatTextView = findViewById(R.id.void_suggestion);
-        mCommitBtnAppCompatTextView = findViewById(R.id.suggestion_commit_btn);
+        this.mSuggestionEdit = this.findViewById(R.id.suggestion_edit);
+        this.mAppCompatEditText = this.findViewById(R.id.suggestion_edit_message);
+        this.mAppCompatTextView = this.findViewById(R.id.void_suggestion);
+        this.mCommitBtnAppCompatTextView = this.findViewById(R.id.suggestion_commit_btn);
 
 
-        mRecyclerView = findViewById(R.id.recycler_view);
+        this.mRecyclerView = this.findViewById(R.id.recycler_view);
         List<SuggestionDetailItem> data = new ArrayList<>();
         data.add(new SuggestionDetailItem("员工1", "普工", "建议或意见1"));
         data.add(new SuggestionDetailItem("员工2", "管理", "建议或意见2"));
@@ -69,55 +56,61 @@ public class SuggestionsActivity extends BaseActivity {
         SuggestionDetailAdapter adapter = new SuggestionDetailAdapter(R.layout.suggestion_commit_item, data);
 
         MyRecyclerViewItemDecoration itemDecoration = new MyRecyclerViewItemDecoration();
-        mRecyclerView.addItemDecoration(itemDecoration);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.addItemDecoration(itemDecoration);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.setAdapter(adapter);
 
-        if (mSuggestion == Suggestion.NONE) {
-            mRecyclerView.setVisibility(View.GONE);
-            mSuggestionEdit.setVisibility(View.GONE);
-            mAppCompatTextView.setVisibility(View.VISIBLE);
+        if (this.mSuggestion == Suggestion.NONE) {
+            this.mRecyclerView.setVisibility(View.GONE);
+            this.mSuggestionEdit.setVisibility(View.GONE);
+            this.mAppCompatTextView.setVisibility(View.VISIBLE);
         }
 
-        mCommitBtnAppCompatTextView.setOnClickListener(this);
+        this.mCommitBtnAppCompatTextView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        if (v == mCommitBtnAppCompatTextView) {
-            setVisible(mRecyclerView, View.VISIBLE);
-            setVisible(mActionBarRightBtn, View.VISIBLE);
-            setVisible(mSuggestionEdit, View.GONE);
-            setVisible(mAppCompatTextView, View.GONE);
+        if (v == this.mCommitBtnAppCompatTextView) {
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mRecyclerView, View.VISIBLE);
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mActionBarRightBtn, View.VISIBLE);
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mSuggestionEdit, View.GONE);
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mAppCompatTextView, View.GONE);
 
-            mAppCompatEditText.getText().clear();
-            mSuggestion = Suggestion.COMMIT;
+            this.mAppCompatEditText.getText().clear();
+            this.mSuggestion = Suggestion.COMMIT;
         }
     }
 
     @Override
     public void onClickLeftBtn() {
-        if (mSuggestion == Suggestion.NONE || mSuggestion == Suggestion.COMMIT) {
-            finish();
-        } else if (mSuggestion == Suggestion.EDIT) {
-            mRecyclerView.setVisibility(View.GONE);
-            mSuggestionEdit.setVisibility(View.GONE);
-            mAppCompatTextView.setVisibility(View.VISIBLE);
-            showRightBtn(true, R.mipmap.new_add);
-            mSuggestion = Suggestion.NONE;
+        if (this.mSuggestion == Suggestion.NONE || this.mSuggestion == Suggestion.COMMIT) {
+            this.finish();
+        } else if (this.mSuggestion == Suggestion.EDIT) {
+            this.mRecyclerView.setVisibility(View.GONE);
+            this.mSuggestionEdit.setVisibility(View.GONE);
+            this.mAppCompatTextView.setVisibility(View.VISIBLE);
+            this.showRightBtn(true, R.mipmap.new_add);
+            this.mSuggestion = Suggestion.NONE;
         }
     }
 
     @Override
     public void onClickRightBtn() {
         super.onClickRightBtn();
-        if (mSuggestion == Suggestion.NONE || mSuggestion == Suggestion.COMMIT) {
-            setVisible(mActionBarRightBtn, View.GONE);
-            setVisible(mSuggestionEdit, View.VISIBLE);
-            setVisible(mAppCompatTextView, View.GONE);
-            setVisible(mRecyclerView, View.GONE);
-            mSuggestion = Suggestion.EDIT;
+        if (this.mSuggestion == Suggestion.NONE || this.mSuggestion == Suggestion.COMMIT) {
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mActionBarRightBtn, View.GONE);
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mSuggestionEdit, View.VISIBLE);
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mAppCompatTextView, View.GONE);
+            com.njxm.smart.activities.BaseActivity.setVisible(this.mRecyclerView, View.GONE);
+            this.mSuggestion = Suggestion.EDIT;
         }
+    }
+
+    enum Suggestion {
+        NONE,
+        EDIT,
+        COMMIT
     }
 }

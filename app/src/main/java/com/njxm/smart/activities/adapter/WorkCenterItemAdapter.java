@@ -1,12 +1,5 @@
 package com.njxm.smart.activities.adapter;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -17,6 +10,12 @@ import com.njxm.smart.constant.UrlPath;
 import com.ntxm.smart.R;
 
 import java.util.List;
+
+import android.content.Context;
+import android.view.View;
+import android.widget.ImageView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
 
@@ -33,8 +32,8 @@ public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
      */
     public WorkCenterItemAdapter(List<MultiItemEntity> data) {
         super(data);
-        addItemType(ITEM_TITLE_TYPE, R.layout.item_fragment_workcenter_list);
-        addItemType(ITEM_CONTENT_TYPE, R.layout.item_workcenter);
+        this.addItemType(com.njxm.smart.activities.adapter.WorkCenterItemAdapter.ITEM_TITLE_TYPE, R.layout.item_fragment_workcenter_list);
+        this.addItemType(com.njxm.smart.activities.adapter.WorkCenterItemAdapter.ITEM_CONTENT_TYPE, R.layout.item_workcenter);
     }
 
     public WorkCenterItemAdapter(Context context, List<MultiItemEntity> data) {
@@ -44,10 +43,10 @@ public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
     @Override
     protected void convert(BaseViewHolder helper, MultiItemEntity item) {
-        final PermissionBean itemBean = (PermissionBean) item;
+        PermissionBean itemBean = (PermissionBean) item;
 
         switch (helper.getItemViewType()) {
-            case ITEM_TITLE_TYPE:
+            case com.njxm.smart.activities.adapter.WorkCenterItemAdapter.ITEM_TITLE_TYPE:
                 helper.setText(R.id.title, itemBean.getName());
                 helper.setText(R.id.list_state, itemBean.isExpanded() ? "收起" : "展开");
 
@@ -57,16 +56,16 @@ public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                     public void onClick(View v) {
                         int pos = helper.getAdapterPosition();
                         if (itemBean.isExpanded()) {
-                            collapse(pos);
+                            com.njxm.smart.activities.adapter.WorkCenterItemAdapter.this.collapse(pos);
                         } else {
-                            expand(pos);
+                            com.njxm.smart.activities.adapter.WorkCenterItemAdapter.this.expand(pos);
                         }
                     }
                 });
                 break;
-            case ITEM_CONTENT_TYPE:
+            case com.njxm.smart.activities.adapter.WorkCenterItemAdapter.ITEM_CONTENT_TYPE:
                 helper.setText(R.id.item_text, itemBean.getName());
-                Glide.with(context).load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + itemBean.getIcon())
+                Glide.with(this.context).load(UrlPath.PATH_PICTURE_PREFIX.getUrl() + itemBean.getIcon())
                         .apply(new RequestOptions().placeholder(R.mipmap.mine_icon_real_name_auth))
                         .into((ImageView) helper.getView(R.id.item_image));
                 break;
@@ -81,7 +80,7 @@ public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (getItemViewType(position) == ITEM_TITLE_TYPE) {
+                    if (com.njxm.smart.activities.adapter.WorkCenterItemAdapter.this.getItemViewType(position) == com.njxm.smart.activities.adapter.WorkCenterItemAdapter.ITEM_TITLE_TYPE) {
                         return ((GridLayoutManager) layoutManager).getSpanCount();
                     }
                     return 1;

@@ -1,13 +1,5 @@
 package com.njxm.smart.activities.fragments;
 
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -22,10 +14,17 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.content.Intent;
+import android.util.Log;
+import android.view.View;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,15 +38,17 @@ import retrofit2.Response;
 public class WorkCenterFragment extends BaseFragment {
 
 
+    private final List<MultiItemEntity> mData = new ArrayList<>();
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
-
     @BindView(R.id.suggestion_box)
     protected AppCompatTextView mSuggestionBox;
-
     private WorkCenterItemAdapter mAdapter;
 
-    private final List<MultiItemEntity> mData = new ArrayList<>();
+    @OnClick(R.id.toDo)
+    static void clickTodoBtn() {
+        ARouter.getInstance().build("/app/safe/activity").navigation();
+    }
 
     @Override
     protected int setLayoutResourceID() {
@@ -56,10 +57,10 @@ public class WorkCenterFragment extends BaseFragment {
 
     @Override
     protected void onLazyLoad() {
-        mAdapter = new WorkCenterItemAdapter(getActivity(), mData);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+        this.mAdapter = new WorkCenterItemAdapter(this.getActivity(), this.mData);
+        GridLayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 4, GridLayoutManager.VERTICAL, false);
+        this.mRecyclerView.setLayoutManager(layoutManager);
+        this.mAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == WorkCenterItemAdapter.ITEM_TITLE_TYPE) {
                 return;
             }
@@ -73,7 +74,7 @@ public class WorkCenterFragment extends BaseFragment {
                     "/" + workCenterData.getUrl().replace(":", "/") : "/app/webview";
             ARouter.getInstance().build(routerPath)
                     .withString("loadUrl", workCenterData.getUrl())
-                    .navigation(getActivity(), new NavCallback() {
+                    .navigation(this.getActivity(), new NavCallback() {
                         @Override
                         public void onArrival(Postcard postcard) {
 
@@ -86,7 +87,7 @@ public class WorkCenterFragment extends BaseFragment {
                         }
                     });
         });
-        mRecyclerView.setAdapter(mAdapter);
+        this.mRecyclerView.setAdapter(this.mAdapter);
 
         GetUserFuctionItemsApi api = HttpUtils.getInstance().getApi(GetUserFuctionItemsApi.class);
         api.getFeatureItems().enqueue(new Callback<ServerResponseBean<List<PermissionBean>>>() {
@@ -103,11 +104,11 @@ public class WorkCenterFragment extends BaseFragment {
                         }
                         data.add(parent);
                     }
-                    invoke(new Runnable() {
+                    com.njxm.smart.activities.fragments.WorkCenterFragment.this.invoke(new Runnable() {
                         @Override
                         public void run() {
-                            mAdapter.setNewData(data);
-                            mAdapter.expandAll(0, true);
+                            com.njxm.smart.activities.fragments.WorkCenterFragment.this.mAdapter.setNewData(data);
+                            com.njxm.smart.activities.fragments.WorkCenterFragment.this.mAdapter.expandAll(0, true);
                         }
                     });
                 }
@@ -115,7 +116,7 @@ public class WorkCenterFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ServerResponseBean<List<PermissionBean>>> call, Throwable t) {
-                Log.e(TAG, "request failed: " + Log.getStackTraceString(t));
+                Log.e(com.njxm.smart.activities.fragments.WorkCenterFragment.this.TAG, "request failed: " + Log.getStackTraceString(t));
             }
         });
     }
@@ -123,13 +124,7 @@ public class WorkCenterFragment extends BaseFragment {
     @OnClick({R.id.suggestion_box})
     void onClickEvent(View view) {
         if (view.getId() == R.id.suggestion_box) {
-            startActivity(new Intent(getActivity(), SuggestionsActivity.class));
+            this.startActivity(new Intent(this.getActivity(), SuggestionsActivity.class));
         }
-    }
-
-
-    @OnClick(R.id.toDo)
-    void clickTodoBtn() {
-        ARouter.getInstance().build("/app/safe/activity").navigation();
     }
 }

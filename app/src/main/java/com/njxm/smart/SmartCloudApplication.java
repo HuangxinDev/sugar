@@ -1,13 +1,5 @@
 package com.njxm.smart;
 
-import android.app.Application;
-import android.app.Service;
-import android.content.Context;
-import android.os.Vibrator;
-import android.util.Log;
-
-import androidx.multidex.MultiDex;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baidu.location.LocationClientOption;
 import com.njxm.smart.service.LocationService;
@@ -15,22 +7,29 @@ import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import android.app.Application;
+import android.app.Service;
+import android.content.Context;
+import android.os.Vibrator;
+import android.util.Log;
+import androidx.multidex.MultiDex;
+
 public class SmartCloudApplication extends Application {
 
     private static SmartCloudApplication smartCloudApplication;
+    public LocationService locationService;
+    public Vibrator mVibrator;
 
     public static Application getApplication() {
-        return smartCloudApplication;
+        return SmartCloudApplication.smartCloudApplication;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        smartCloudApplication = this;
+        SmartCloudApplication.smartCloudApplication = this;
         SPUtils.initSharedPreferences(this);
-        CrashReport.initCrashReport(getApplicationContext(), "2af2871764", true);
-
-        LogTool.enableDebug();
+        CrashReport.initCrashReport(this.getApplicationContext(), "2af2871764", true);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -44,18 +43,15 @@ public class SmartCloudApplication extends Application {
 //            ARouter.openLog();
 //            ARouter.openDebug();
 //        }
-        ARouter.init(smartCloudApplication);
+        ARouter.init(SmartCloudApplication.smartCloudApplication);
 
-        initLocation();
+        this.initLocation();
     }
 
-    public LocationService locationService;
-    public Vibrator mVibrator;
-
     private void initLocation() {
-        locationService = new LocationService(getApplicationContext());
-        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
-        LocationClientOption locationClientOption = locationService.getOption();
+        this.locationService = new LocationService(this.getApplicationContext());
+        this.mVibrator = (Vibrator) this.getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+        LocationClientOption locationClientOption = this.locationService.getOption();
         locationClientOption.setLocationPurpose(LocationClientOption.BDLocationPurpose.SignIn);
 //        locationService.setLocationOption(locationClientOption);
     }

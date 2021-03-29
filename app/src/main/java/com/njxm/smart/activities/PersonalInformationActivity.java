@@ -1,15 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,12 +17,21 @@ import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ntxm.smart.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -113,8 +112,8 @@ public class PersonalInformationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("个人信息");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("个人信息");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
     }
 
     @Override
@@ -138,12 +137,12 @@ public class PersonalInformationActivity extends BaseActivity {
     protected void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.news_user_head:
-                takePhoto(1);
+                this.takePhoto(1);
                 break;
             case R.id.news_user_base_new:
-                showDetails = !showDetails;
-                mUserBaseDetailNews.setVisibility(showDetails ? View.VISIBLE : View.GONE);
-                mUserNewsImage.setImageResource(showDetails ? R.mipmap.arrow_down : R.mipmap.arrow_detail);
+                this.showDetails = !this.showDetails;
+                this.mUserBaseDetailNews.setVisibility(this.showDetails ? View.VISIBLE : View.GONE);
+                this.mUserNewsImage.setImageResource(this.showDetails ? R.mipmap.arrow_down : R.mipmap.arrow_detail);
                 break;
             case R.id.news_user_phone_ll:
                 ARouter.getInstance().build(GlobalRouter.USER_PHONE).navigation();
@@ -156,7 +155,7 @@ public class PersonalInformationActivity extends BaseActivity {
                 break;
             case R.id.news_user_education_item:
                 ARouter.getInstance().build(GlobalRouter.USER_CETIFICATION).withString("params",
-                        tvUserEducation.getText().toString()).navigation();
+                        this.tvUserEducation.getText().toString()).navigation();
                 break;
             case R.id.news_user_emergency_contact_item:
                 ARouter.getInstance().build(GlobalRouter.USER_EMERGENCY_CONTACT).navigation();
@@ -170,9 +169,9 @@ public class PersonalInformationActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            invoke(() -> {
-                if (photoFile != null && photoFile.exists() && photoFile.length() > 0) {
-                    uploadHeadFile();
+            this.invoke(() -> {
+                if (this.photoFile != null && this.photoFile.exists() && this.photoFile.length() > 0) {
+                    this.uploadHeadFile();
                 }
             });
         }
@@ -184,14 +183,14 @@ public class PersonalInformationActivity extends BaseActivity {
 
         List<MultipartBody.Part> parts = new ArrayList<>();
         parts.add(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
-        parts.add(MultipartBody.Part.createFormData("file", photoFile.getName(),
-                RequestBody.create(MediaType.parse("image/png"), photoFile)));
+        parts.add(MultipartBody.Part.createFormData("file", this.photoFile.getName(),
+                RequestBody.create(MediaType.parse("image/png"), this.photoFile)));
 
         api.uploadFile(UrlPath.PATH_USER_HEAD_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
             @Override
             public void onResponse(@NonNull Call<ServerResponseBean> call, @NonNull Response<ServerResponseBean> response) {
                 EventBus.getDefault().post(new ToastEvent(response.code() == 200 ? "上传成功" : response.message()));
-                invoke(() -> Glide.with(PersonalInformationActivity.this).load(photoFile).into(ivUserHead));
+                com.njxm.smart.activities.PersonalInformationActivity.this.invoke(() -> Glide.with(PersonalInformationActivity.this).load(com.njxm.smart.activities.PersonalInformationActivity.this.photoFile).into(com.njxm.smart.activities.PersonalInformationActivity.this.ivUserHead));
             }
 
             @Override
@@ -204,19 +203,19 @@ public class PersonalInformationActivity extends BaseActivity {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {
-        tvUserName.setText(bean.getUserName());
-        tvUserCompanyName.setText(bean.getCompanyName());
-        tvUserDepartmentName.setText(bean.getDeptName());
-        tvUserTeamName.setText(bean.getTeamName());
-        tvUserPhone.setText(bean.getPhone());
-        tvUserAddress.setText(StringUtils.isEmpty(bean.getAllAddress())
+        this.tvUserName.setText(bean.getUserName());
+        this.tvUserCompanyName.setText(bean.getCompanyName());
+        this.tvUserDepartmentName.setText(bean.getDeptName());
+        this.tvUserTeamName.setText(bean.getTeamName());
+        this.tvUserPhone.setText(bean.getPhone());
+        this.tvUserAddress.setText(StringUtils.isEmpty(bean.getAllAddress())
                 ? "请补充地址" : bean.getAddress());
-        tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
-        tvUserJobName.setText(bean.getWorkType());
+        this.tvUserEducation.setText(StringUtils.isEmpty(bean.getEducation()) ? "未上传" : bean.getEducation());
+        this.tvUserJobName.setText(bean.getWorkType());
         Glide.with(this)
                 .load(bean.getIcon())
                 .apply(new RequestOptions().placeholder(R.mipmap.personal_news_head))
-                .into(ivUserHead);
-        tvUsereEmergencyContact.setText(bean.getContactPhone());
+                .into(this.ivUserHead);
+        this.tvUsereEmergencyContact.setText(bean.getContactPhone());
     }
 }

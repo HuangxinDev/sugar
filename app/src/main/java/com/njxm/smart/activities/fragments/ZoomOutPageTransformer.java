@@ -1,7 +1,6 @@
 package com.njxm.smart.activities.fragments;
 
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
@@ -21,7 +20,7 @@ public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         if (position < -1) {
             page.setAlpha(0f);
         } else if (position <= 1) {
-            float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+            float scaleFactor = Math.max(com.njxm.smart.activities.fragments.ZoomOutPageTransformer.MIN_SCALE, 1 - Math.abs(position));
             float vertMargin = pageHeight * (1 - scaleFactor) / 2;
             float horzMargin = pageWidth * (1 - scaleFactor) / 2;
             if (position < 0) {
@@ -35,9 +34,9 @@ public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
             page.setScaleY(scaleFactor);
 
             // Fade the page relative to its size.
-            page.setAlpha(MIN_ALPHA +
-                    (scaleFactor - MIN_SCALE) /
-                            (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+            page.setAlpha(com.njxm.smart.activities.fragments.ZoomOutPageTransformer.MIN_ALPHA +
+                    (scaleFactor - com.njxm.smart.activities.fragments.ZoomOutPageTransformer.MIN_SCALE) /
+                            (1 - com.njxm.smart.activities.fragments.ZoomOutPageTransformer.MIN_SCALE) * (1 - com.njxm.smart.activities.fragments.ZoomOutPageTransformer.MIN_ALPHA));
         } else {
             page.setAlpha(0f);
         }

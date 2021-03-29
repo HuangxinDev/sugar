@@ -1,17 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.SafeInspectRecordBean;
@@ -21,6 +9,17 @@ import com.ntxm.smart.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,45 +49,7 @@ public class SafeInspectTaskDetailActivity extends BaseActivity {
     @BindView(R.id.inspect_contact)
     protected ItemView mInspectContact;
 
-    @Override
-    protected int setContentLayoutId() {
-        return R.layout.safe_inspect_task_detail_new_activity;
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setActionBarTitle("任务详情");
-        mCommitBtn.setVisibility(View.GONE);
-        initPage(rlTaskDetailTab);
-        SimpleAdapter adapter = new SimpleAdapter(R.layout.safe_inspect_recycler_item_record, loadData());
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(SafeInspectTaskDetailActivity.this, SafeInspectRecordActivity.class);
-                intent.putExtra("has_problem", ((SafeInspectRecordBean) adapter.getItem(position)).isExistProblem());
-                startActivity(intent);
-            }
-        });
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        itemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.divider_gray)));
-        mRecyclerView.addItemDecoration(itemDecoration);
-        mRecyclerView.setAdapter(adapter);
-    }
-
-    private void initPage(RelativeLayout view) {
-        enableChildView(rlTaskDetailTab, view == rlTaskDetailTab);
-        enableChildView(rlInspectRecordTab, view == rlInspectRecordTab);
-        mTab1Content.setVisibility(view == rlTaskDetailTab ? View.VISIBLE : View.GONE);
-        mRecyclerView.setVisibility(view == rlInspectRecordTab ? View.VISIBLE : View.GONE);
-
-        if (view == rlTaskDetailTab) {
-            mInspectContact.showAdd(false);
-        }
-    }
-
-    public List<SafeInspectRecordBean> loadData() {
+    public static List<SafeInspectRecordBean> loadData() {
         List<SafeInspectRecordBean> data = new ArrayList<>();
         data.add(new SafeInspectRecordBean(true, "2019-11-22 15:30"));
         data.add(new SafeInspectRecordBean(false, "2019-11-22 15:30"));
@@ -97,7 +58,7 @@ public class SafeInspectTaskDetailActivity extends BaseActivity {
         return data;
     }
 
-    private void enableChildView(View view, boolean enable) {
+    private static void enableChildView(View view, boolean enable) {
         if (view == null) {
             return;
         }
@@ -119,9 +80,47 @@ public class SafeInspectTaskDetailActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int setContentLayoutId() {
+        return R.layout.safe_inspect_task_detail_new_activity;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setActionBarTitle("任务详情");
+        this.mCommitBtn.setVisibility(View.GONE);
+        this.initPage(this.rlTaskDetailTab);
+        SimpleAdapter adapter = new SimpleAdapter(R.layout.safe_inspect_recycler_item_record, com.njxm.smart.activities.SafeInspectTaskDetailActivity.loadData());
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(SafeInspectTaskDetailActivity.this, SafeInspectRecordActivity.class);
+                intent.putExtra("has_problem", ((SafeInspectRecordBean) adapter.getItem(position)).isExistProblem());
+                com.njxm.smart.activities.SafeInspectTaskDetailActivity.this.startActivity(intent);
+            }
+        });
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.divider_gray)));
+        this.mRecyclerView.addItemDecoration(itemDecoration);
+        this.mRecyclerView.setAdapter(adapter);
+    }
+
+    private void initPage(RelativeLayout view) {
+        com.njxm.smart.activities.SafeInspectTaskDetailActivity.enableChildView(this.rlTaskDetailTab, view == this.rlTaskDetailTab);
+        com.njxm.smart.activities.SafeInspectTaskDetailActivity.enableChildView(this.rlInspectRecordTab, view == this.rlInspectRecordTab);
+        this.mTab1Content.setVisibility(view == this.rlTaskDetailTab ? View.VISIBLE : View.GONE);
+        this.mRecyclerView.setVisibility(view == this.rlInspectRecordTab ? View.VISIBLE : View.GONE);
+
+        if (view == this.rlTaskDetailTab) {
+            this.mInspectContact.showAdd(false);
+        }
+    }
+
     @OnClick({R.id.tab1, R.id.tab2})
     protected void switchTab(RelativeLayout view) {
-        initPage(view);
+        this.initPage(view);
     }
 
     private static class SimpleAdapter extends BaseQuickAdapter<SafeInspectRecordBean, BaseViewHolder> {

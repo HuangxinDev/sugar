@@ -1,6 +1,11 @@
 package com.njxm.smart.global;
 
 public final class KeyConstant {
+
+    private KeyConstant() {
+        // 禁止构造此方法
+    }
+
     public static final String KEY_USER_HEAD_ICON = "icon_address";
     public static final String KEY_USER_FACE_URL = "faceUrl";
     public static final String KEY_USERNAME = "userName";

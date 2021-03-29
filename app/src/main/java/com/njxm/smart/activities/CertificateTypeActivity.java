@@ -1,19 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -25,11 +11,24 @@ import com.njxm.smart.model.jsonbean.CertificateParentBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ntxm.smart.R;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,39 +37,39 @@ import butterknife.OnClick;
  * 证书种类Activity
  */
 public class CertificateTypeActivity extends BaseActivity {
+    @BindView(R.id.recycler_view)
+    protected RecyclerView mRecyclerView;
+    @BindView(R.id.navi_bar)
+    protected LinearLayout llBarContainer;
+    @BindView(R.id.allType)
+    protected TextView tvAllType;
+    @BindView(R.id.search_certificate)
+    protected AppCompatImageButton ibSearchCertificate;
+    @BindView(R.id.search_bar)
+    protected AppCompatEditText etSearchContent;
+    private List<CertificateParentBean> mDatas = new ArrayList<>();
+    private SimpleAdapter mAdapter;
+
+    private static void requestMainType() {
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())
+                .addBodyJson("", "")
+                .build());
+    }
+
     @Override
     protected int setContentLayoutId() {
         return R.layout.my_certificate_type_activity;
     }
 
-
-    @BindView(R.id.recycler_view)
-    protected RecyclerView mRecyclerView;
-
-    private List<CertificateParentBean> mDatas = new ArrayList<>();
-
-    private SimpleAdapter mAdapter;
-
-    @BindView(R.id.navi_bar)
-    protected LinearLayout llBarContainer;
-
-    @BindView(R.id.allType)
-    protected TextView tvAllType;
-
-    @BindView(R.id.search_certificate)
-    protected AppCompatImageButton ibSearchCertificate;
-
-    @BindView(R.id.search_bar)
-    protected AppCompatEditText etSearchContent;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActionBarTitle.setText("证书种类");
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new SimpleAdapter(R.layout.item_simple_text_layout, mDatas);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        this.mActionBarTitle.setText("证书种类");
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mAdapter = new SimpleAdapter(R.layout.item_simple_text_layout, this.mDatas);
+        this.mRecyclerView.setAdapter(this.mAdapter);
+        this.mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CertificateParentBean bean = ((CertificateParentBean) adapter.getItem(position));
@@ -82,63 +81,39 @@ public class CertificateTypeActivity extends BaseActivity {
                             .addBodyJson("sctParentId", bean.getId())
                             .build();
                     HttpUtils.getInstance().request(requestEvent);
-                    llBarContainer.addView(createTextView(bean.getSctName(), Integer.parseInt(bean.getId())));
+                    CertificateTypeActivity.this.llBarContainer.addView(CertificateTypeActivity.this.createTextView(bean.getSctName(), Integer.parseInt(bean.getId())));
                 } else {
                     EventBus.getDefault().postSticky(new SelectCertificateEvent(bean.getSctName(), bean.getId()));
-                    finish();
+                    CertificateTypeActivity.this.finish();
                 }
             }
         });
 
-        requestMainType();
-    }
-
-    private void requestMainType() {
-        HttpUtils.getInstance().request(new RequestEvent.Builder()
-                .url(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())
-                .addBodyJson("", "")
-                .build());
+        CertificateTypeActivity.requestMainType();
     }
 
     @Override
     public void onResponse(ResponseEvent event) {
 
-        final String url = event.getUrl();
+        String url = event.getUrl();
 
         if (url.equals(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())) {
             JSONObject jsonObject = JSONObject.parseObject(event.getData());
-            mDatas = JSONObject.parseArray(jsonObject.getString("data"),
+            this.mDatas = JSONObject.parseArray(jsonObject.getString("data"),
                     CertificateParentBean.class);
         } else if (url.equals(UrlPath.PATH_SUB_CERTIFICATE_TYPE_PULL.getUrl())) {
-            mDatas = JSONObject.parseArray(event.getData(), CertificateParentBean.class);
+            this.mDatas = JSONObject.parseArray(event.getData(), CertificateParentBean.class);
         } else {
             super.onResponse(event);
         }
 
-        invoke(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.setNewData(mDatas);
-            }
-        });
+        this.invoke(() -> this.mAdapter.setNewData(this.mDatas));
     }
 
     @OnClick(R.id.allType)
     protected void requestAllType() {
-        requestMainType();
-        removeViewAfterClickView(tvAllType);
-    }
-
-    private static class SimpleAdapter extends BaseQuickAdapter<CertificateParentBean, BaseViewHolder> {
-
-        public SimpleAdapter(int layoutResId, @Nullable List<CertificateParentBean> data) {
-            super(layoutResId, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, CertificateParentBean item) {
-            helper.setText(R.id.simple_text, item.getSctName());
-        }
+        CertificateTypeActivity.requestMainType();
+        this.removeViewAfterClickView(this.tvAllType);
     }
 
     private TextView createTextView(String text, int id) {
@@ -153,7 +128,7 @@ public class CertificateTypeActivity extends BaseActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeViewAfterClickView(v);
+                CertificateTypeActivity.this.removeViewAfterClickView(v);
             }
         });
         textView.setText(text);
@@ -161,13 +136,13 @@ public class CertificateTypeActivity extends BaseActivity {
     }
 
     private void removeViewAfterClickView(View clickView) {
-        int index = llBarContainer.indexOfChild(clickView);
+        int index = this.llBarContainer.indexOfChild(clickView);
         if (index == -1) {
             return;
         }
 
-        for (int i = index + 1; i < llBarContainer.getChildCount(); i++) {
-            llBarContainer.removeViewAt(i);
+        for (int i = index + 1; i < this.llBarContainer.getChildCount(); i++) {
+            this.llBarContainer.removeViewAt(i);
         }
     }
 
@@ -180,12 +155,24 @@ public class CertificateTypeActivity extends BaseActivity {
 //            showToast("搜索内容为空");
 //            return;
 //        }
-        removeViewAfterClickView(tvAllType);
+        this.removeViewAfterClickView(this.tvAllType);
         HttpUtils.getInstance().request(new RequestEvent.Builder()
                 .url(UrlPath.PATH_CERTIFICATE_TYPE_PULL.getUrl())
-                .addBodyJson("sctName", etSearchContent.getText().toString())
+                .addBodyJson("sctName", this.etSearchContent.getText().toString())
                 .build());
 
+    }
+
+    private static class SimpleAdapter extends BaseQuickAdapter<CertificateParentBean, BaseViewHolder> {
+
+        public SimpleAdapter(int layoutResId, @Nullable List<CertificateParentBean> data) {
+            super(layoutResId, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, CertificateParentBean item) {
+            helper.setText(R.id.simple_text, item.getSctName());
+        }
     }
 
 

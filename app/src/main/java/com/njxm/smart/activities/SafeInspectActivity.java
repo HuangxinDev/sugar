@@ -1,25 +1,24 @@
 package com.njxm.smart.activities;
 
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.SystemClock;
-import android.view.View;
-import android.widget.RelativeLayout;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.adapter.DailyCheckAdapter;
 import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
 import com.ntxm.smart.R;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.view.View;
+import android.widget.RelativeLayout;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 
@@ -60,46 +59,46 @@ public class SafeInspectActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        setActionBarTitle("日常巡检");
-        showRightBtn(true, R.mipmap.new_add);
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.setActionBarTitle("日常巡检");
+        this.showRightBtn(true, R.mipmap.new_add);
 
 
-        mDailyCheckAdapter = new DailyCheckAdapter(mData);
-        mDailyCheckAdapter.setOnItemClickListener((adapter, view, position) -> {
+        this.mDailyCheckAdapter = new DailyCheckAdapter(this.mData);
+        this.mDailyCheckAdapter.setOnItemClickListener((adapter, view, position) -> {
             EventBus.getDefault().postSticky((adapter.getItem(position)));
-            startActivity(new Intent(this, SafeInspectTaskDetailActivity.class));
+            this.startActivity(new Intent(this, SafeInspectTaskDetailActivity.class));
         });
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mDailyCheckAdapter);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.setAdapter(this.mDailyCheckAdapter);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mData = getData();
+                com.njxm.smart.activities.SafeInspectActivity.this.mData = com.njxm.smart.activities.SafeInspectActivity.this.getData();
                 SystemClock.sleep(2000);
-                updateView();
+                com.njxm.smart.activities.SafeInspectActivity.this.updateView();
             }
         }).start();
 
-        updateView();
+        this.updateView();
     }
 
     @Override
     public void onClickRightBtn() {
         super.onClickRightBtn();
-        startActivity(new Intent(this, SafeInspectTaskActivity.class));
+        this.startActivity(new Intent(this, SafeInspectTaskActivity.class));
     }
 
     private void updateView() {
-        invoke(new Runnable() {
+        this.invoke(new Runnable() {
             @Override
             public void run() {
-                boolean hasData = mData.size() > 0;
-                rlVoidData.setVisibility(hasData ? View.GONE : View.VISIBLE);
-                mRecyclerView.setVisibility(hasData ? View.VISIBLE : View.GONE);
+                boolean hasData = com.njxm.smart.activities.SafeInspectActivity.this.mData.size() > 0;
+                com.njxm.smart.activities.SafeInspectActivity.this.rlVoidData.setVisibility(hasData ? View.GONE : View.VISIBLE);
+                com.njxm.smart.activities.SafeInspectActivity.this.mRecyclerView.setVisibility(hasData ? View.VISIBLE : View.GONE);
                 if (hasData) {
-                    mDailyCheckAdapter.setNewData(mData);
+                    com.njxm.smart.activities.SafeInspectActivity.this.mDailyCheckAdapter.setNewData(com.njxm.smart.activities.SafeInspectActivity.this.mData);
                 }
             }
         });
@@ -107,13 +106,13 @@ public class SafeInspectActivity extends BaseActivity {
 
 
     private List<DailyCheckTaskBean> getData() {
-        mData.add(new DailyCheckTaskBean("任务1", "任务1ccsac " +
+        this.mData.add(new DailyCheckTaskBean("任务1", "任务1ccsac " +
                 "jahjjjjjjskjdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "内容", 0, "2019-12-22 10:00:00"));
-        mData.add(new DailyCheckTaskBean("任务2", "任务2内容", 1, "2019-12-23 10:00:00"));
-        mData.add(new DailyCheckTaskBean("任务3", "任务3内容", 2, "2019-12-24 10:00:00"));
-        mData.add(new DailyCheckTaskBean("任务4", "任务4内容", 1, "2019-12-25 10:00:00"));
-        mData.add(new DailyCheckTaskBean("任务5", "任务5内容", 2, "2019-12-26 10:00:00"));
-        return mData;
+        this.mData.add(new DailyCheckTaskBean("任务2", "任务2内容", 1, "2019-12-23 10:00:00"));
+        this.mData.add(new DailyCheckTaskBean("任务3", "任务3内容", 2, "2019-12-24 10:00:00"));
+        this.mData.add(new DailyCheckTaskBean("任务4", "任务4内容", 1, "2019-12-25 10:00:00"));
+        this.mData.add(new DailyCheckTaskBean("任务5", "任务5内容", 2, "2019-12-26 10:00:00"));
+        return this.mData;
     }
 }

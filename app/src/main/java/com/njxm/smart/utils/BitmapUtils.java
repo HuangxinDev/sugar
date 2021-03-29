@@ -1,10 +1,5 @@
 package com.njxm.smart.utils;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.text.TextUtils;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -18,7 +13,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
+
 public final class BitmapUtils {
+
+    private BitmapUtils() {
+        // 禁止构造
+    }
 
     public static Bitmap stringToBitmap(String imageStr) {
         byte[] encodeByte = android.util.Base64.decode(imageStr, android.util.Base64.DEFAULT);
@@ -44,9 +48,10 @@ public final class BitmapUtils {
             tempFile.getParentFile().mkdirs();
         }
         tempFile.delete();
-        try {
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
             tempFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(tempFile);
+
+
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bos.flush();
@@ -54,7 +59,7 @@ public final class BitmapUtils {
 //            bitmap.recycle();
             return tempFile;
         } catch (IOException e) {
-            e.printStackTrace();
+            LogTool.printStack(e);
         }
 
         return null;
@@ -80,7 +85,7 @@ public final class BitmapUtils {
 
     public static File compressFile(File imageFile) {
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-        return saveBitmap(bitmap, imageFile);
+        return BitmapUtils.saveBitmap(bitmap, imageFile);
     }
 
 
@@ -143,8 +148,8 @@ public final class BitmapUtils {
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
             return bitmap;
         } catch (WriterException e) {
-            e.printStackTrace();
-            return null;
+            LogTool.printStack(e);
         }
+        return null;
     }
 }

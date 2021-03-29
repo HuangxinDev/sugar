@@ -1,27 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.FileProvider;
-
 import com.hxin.common.perrmission.PermissionRequestActivity;
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.constant.UrlPath;
@@ -37,17 +15,39 @@ import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StatusBarUtil;
+import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+
+import java.io.File;
+import java.util.Locale;
+import java.util.UUID;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.UUID;
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.FileProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,10 +60,8 @@ import butterknife.Optional;
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange,
         OnClickListener, BaseRunnable {
 
-    protected final String TAG;
-
-    protected static Handler mHandler = new Handler();
-
+    protected static Handler sHandler = new Handler();
+    protected final String mTag;
     @Nullable
     @BindView(R.id.action_bar_left)
     protected AppCompatImageButton mActionBarBackBtn;
@@ -79,35 +77,77 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Nullable
     @BindView(R.id.action_bar_right_text)
     protected AppCompatTextView tvActionBarRightText;
+    protected File photoFile;
+    private long lastClickTime = 0;
 
     protected BaseActivity() {
-        TAG = this.getClass().getSimpleName();
+        this.mTag = this.getClass().getSimpleName();
+    }
+
+    public static Handler getMainHandler() {
+        return BaseActivity.sHandler;
+    }
+
+    /**
+     * 获取状态栏高度
+     *
+     * @param context
+     * @return
+     */
+    public static int getStatusBarHeight(Context context) {
+        int statusBarHeight = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        LogTool.printD(BaseActivity.class, "status bar height: %s", statusBarHeight);
+        return statusBarHeight;
+    }
+
+    protected static int setStatusBarColor() {
+        return R.color.text_color_white;
+    }
+
+    protected static void setVisible(View view, int visible) {
+        if (view == null) {
+            return;
+        }
+        view.setVisibility(visible);
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public static void doOtherThing(Runnable runnable) {
+        runnable.run();
+    }
+
+    /**
+     * 显示弹窗错误信息
+     *
+     * @param format
+     * @param objects
+     */
+    protected static void showToast(String format, Object... objects) {
+
+
+        if (StringUtils.isEmpty(format)) {
+            return;
+        }
+        String toastMsg = (objects != null && objects.length != 0) ?
+                String.format(Locale.US, format, objects) : format;
+
+
+        EventBus.getDefault().post(new ToastEvent(toastMsg));
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        StatusBarUtil.setStatusBarColor(this, R.color.text_color_gray);
-        // 禁止屏幕旋转,固定屏幕方向
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(setContentLayoutId());
+/*
+         禁止屏幕旋转,固定屏幕方向
+        */
+        this.setContentView(this.setContentLayoutId());
         ButterKnife.bind(this);
-//        getWindow().setStatusBarColor(setStatusBarColor());
-//        getWindow().setStatusBarColor(getColor(R.color.color_blue_1));
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        View ll = findViewById(R.id.ll_root);
-//        if (ll != null) {
-//            ll.setPadding(0, getStatusBarHeight(this), 0, 0);
-//        }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            View contentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-//            if (contentView != null) {
-//                contentView.setFitsSystemWindows(true);
-//            }
-//        }
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         StatusBarUtil.setStatusBar(this, false, false);
     }
@@ -138,31 +178,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     }
 
     /**
-     * 获取状态栏高度
-     *
-     * @param context
-     * @return
-     */
-    public int getStatusBarHeight(Context context) {
-        int statusBarHeight = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        LogTool.printD("status bar height: %s", statusBarHeight);
-        return statusBarHeight;
-    }
-
-    /**
      * 获取 布局ID
      *
      * @return
      */
     protected abstract int setContentLayoutId();
-
-    protected int setStatusBarColor() {
-        return R.color.text_color_white;
-    }
 
     @Override
     public void onClick(View v) {
@@ -171,15 +191,17 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     /**
      * ActionBar 左侧点击事件 - 默认返回键-点击返回
      */
+    @Override
     @Optional
     @OnClick(R.id.action_bar_left)
     public void onClickLeftBtn() {
-        onBackPressed();
+        this.onBackPressed();
     }
 
     /**
      * ActionBar 右侧按钮点击事件
      */
+    @Override
     @Optional
     @OnClick({R.id.action_bar_right, R.id.action_bar_right_text})
     public void onClickRightBtn() {
@@ -191,19 +213,20 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      *
      * @param title 标题
      */
+    @Override
     @Optional
     public void setActionBarTitle(String title) {
-        if (mActionBarTitle != null) {
-            mActionBarTitle.setText(title);
-            mActionBarTitle.setVisibility(View.VISIBLE);
+        if (this.mActionBarTitle != null) {
+            this.mActionBarTitle.setText(title);
+            this.mActionBarTitle.setVisibility(View.VISIBLE);
         }
     }
 
     @Optional
     public void setActionBarTitle(int resId) {
-        if (mActionBarTitle != null) {
-            mActionBarTitle.setText(resId);
-            mActionBarTitle.setVisibility(View.VISIBLE);
+        if (this.mActionBarTitle != null) {
+            this.mActionBarTitle.setText(resId);
+            this.mActionBarTitle.setVisibility(View.VISIBLE);
         }
     }
 
@@ -223,65 +246,49 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Override
     public void showLeftBtn(boolean show, int resourcesId) {
-        if (mActionBarBackBtn != null) {
+        if (this.mActionBarBackBtn != null) {
             if (show) {
-                mActionBarBackBtn.setImageResource(resourcesId);
-                mActionBarBackBtn.setVisibility(View.VISIBLE);
+                this.mActionBarBackBtn.setImageResource(resourcesId);
+                this.mActionBarBackBtn.setVisibility(View.VISIBLE);
             } else {
-                mActionBarBackBtn.setVisibility(View.GONE);
+                this.mActionBarBackBtn.setVisibility(View.GONE);
             }
         }
     }
 
     @Override
     public void showRightBtn(boolean show, int resourcesId) {
-        if (mActionBarRightBtn != null) {
-            mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
-            mActionBarRightBtn.setImageResource(resourcesId);
+        if (this.mActionBarRightBtn != null) {
+            this.mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
+            this.mActionBarRightBtn.setImageResource(resourcesId);
         }
 
-        if (show && tvActionBarRightText != null) {
-            tvActionBarRightText.setVisibility(View.GONE);
+        if (show && this.tvActionBarRightText != null) {
+            this.tvActionBarRightText.setVisibility(View.GONE);
         }
     }
 
     public void showRightBtn(boolean show, String text) {
-        if (tvActionBarRightText != null) {
-            tvActionBarRightText.setVisibility(show ? View.VISIBLE : View.GONE);
-            tvActionBarRightText.setText(text);
+        if (this.tvActionBarRightText != null) {
+            this.tvActionBarRightText.setVisibility(show ? View.VISIBLE : View.GONE);
+            this.tvActionBarRightText.setText(text);
         }
 
-        if (show && mActionBarRightBtn != null) {
-            mActionBarRightBtn.setVisibility(View.GONE);
+        if (show && this.mActionBarRightBtn != null) {
+            this.mActionBarRightBtn.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void showTitle(boolean show, String title) {
-        if (mActionBarTitle != null) {
+        if (this.mActionBarTitle != null) {
             if (show) {
-                mActionBarTitle.setText(title);
-                mActionBarTitle.setVisibility(View.VISIBLE);
+                this.mActionBarTitle.setText(title);
+                this.mActionBarTitle.setVisibility(View.VISIBLE);
             } else {
-                mActionBarTitle.setVisibility(View.GONE);
+                this.mActionBarTitle.setVisibility(View.GONE);
             }
         }
-    }
-
-    /**
-     * 显示弹窗错误信息
-     *
-     * @param format
-     * @param objects
-     */
-    protected void showToast(String format, Object... objects) {
-
-
-        final String toastMsg = (format == null) ? "null" :
-                ((objects != null && objects.length != 0) ?
-                        String.format(Locale.US, format, objects) : format);
-
-        EventBus.getDefault().post(new ToastEvent(toastMsg));
     }
 
     @Override
@@ -289,55 +296,42 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    protected void setVisible(View view, int visible) {
-        if (view == null) {
-            return;
-        }
-        view.setVisibility(visible);
-    }
-
     @Override
     public void invoke(Runnable runnable) {
         if (AppUtils.isMainThread()) {
             runnable.run();
         } else {
-            mHandler.post(runnable);
+            BaseActivity.sHandler.post(runnable);
         }
     }
-
-    public static Handler getMainHandler() {
-        return mHandler;
-    }
-
-    protected File photoFile;
 
     public void takePhoto(int requestId) {
         PermissionRequestActivity.startPermissionRequest(this, new String[]{Manifest.permission.CAMERA}, 100, null);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         UUID uuid = UUID.randomUUID();
-        photoFile = new File(getFilesDir(), uuid + ".jpg");
+        this.photoFile = new File(this.getFilesDir(), uuid + ".jpg");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
-                    ".fileProvider", photoFile);
+                    ".fileProvider", this.photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         } else {
-            Uri uri = Uri.fromFile(photoFile);
+            Uri uri = Uri.fromFile(this.photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        startActivityForResult(intent, requestId);
+        this.startActivityForResult(intent, requestId);
 
     }
 
     @Subscribe(sticky = true)
     public void onResponse(ResponseEvent event) {
-        final String url = event.getUrl();
+        String url = event.getUrl();
         if (url.equals(UrlPath.PATH_USER_DETAILS_NEWS.getUrl())) {
             EventBus.getDefault().postSticky(JsonUtils.getJsonObject(event.getData(), UserBean.class));
         } else if (url.equals(UrlPath.PATH_USER_EDU_PULL.getUrl())) {
             EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(), EduTypeBean.class));
         } else if (url.equals(UrlPath.PATH_SYS_LOGOUT.getUrl())) {
-            showToast("登出成功");
+            BaseActivity.showToast("登出成功");
             EventBus.getDefault().post(new LogoutEvent());
         } else if (url.equals(UrlPath.PATH_PROVINCE_CITY_AREA.getUrl())) {
             if (event.isSuccess()) {
@@ -359,13 +353,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void doOtherThing(Runnable runnable) {
-        runnable.run();
+        this.startActivity(intent);
+        this.finish();
     }
 
     /**
@@ -377,14 +366,13 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            if (isFastDoubleClick()) {
-                return true;
+            if (!this.isFastDoubleClick()) {
+                return super.dispatchTouchEvent(ev);
             }
+            return true;
         }
         return super.dispatchTouchEvent(ev);
     }
-
-    private long lastClickTime = 0;
 
     /**
      * 300ms内是否重复点击
@@ -393,8 +381,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      */
     private boolean isFastDoubleClick() {
         long time = System.currentTimeMillis();
-        long timeDiff = time - lastClickTime;
-        lastClickTime = time;
+        long timeDiff = time - this.lastClickTime;
+        this.lastClickTime = time;
         return timeDiff <= 300;
     }
 }

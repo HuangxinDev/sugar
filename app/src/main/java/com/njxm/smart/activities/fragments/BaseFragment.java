@@ -1,16 +1,5 @@
 package com.njxm.smart.activities.fragments;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.LogTool;
@@ -18,6 +7,16 @@ import com.njxm.smart.utils.LogTool;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import butterknife.ButterKnife;
 
@@ -43,34 +42,39 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         this.TAG = "BaseFragment-" + this.getClass().getSimpleName();
     }
 
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public static void doOtherThing(Runnable runnable) {
+        runnable.run();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mHandler = new Handler(Looper.getMainLooper());
-        LogTool.printD(TAG, "==onCreate==");
+        this.mHandler = new Handler(Looper.getMainLooper());
+        LogTool.printD(this.getClass(), "==onCreate==");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (mContentView != null) {
-            return mContentView;
+        if (this.mContentView != null) {
+            return this.mContentView;
         }
-        mContentView = inflater.inflate(setLayoutResourceID(), container, false);
-        ButterKnife.bind(this, mContentView);
-        init();
-        setUpView();
-        setUpData();
-        return mContentView;
+        this.mContentView = inflater.inflate(this.setLayoutResourceID(), container, false);
+        ButterKnife.bind(this, this.mContentView);
+        this.init();
+        this.setUpView();
+        this.setUpData();
+        return this.mContentView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LogTool.printD(TAG, "==onResume==");
-        if (isLazyLoad) {
-            onLazyLoad();
-            isLazyLoad = false;
+        LogTool.printD(this.getClass(), "==onResume==");
+        if (this.isLazyLoad) {
+            this.onLazyLoad();
+            this.isLazyLoad = false;
         }
     }
 
@@ -108,37 +112,37 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     }
 
     View getContentView() {
-        return mContentView;
+        return this.mContentView;
     }
 
     protected Handler getMainHandler() {
-        return mHandler;
+        return this.mHandler;
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        LogTool.printD(TAG, "==onStart()==");
+        LogTool.printD(this.getClass(), "==onStart()==");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LogTool.printD(TAG, "==onPause()==");
+        LogTool.printD(this.getClass(), "==onPause()==");
     }
 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-        LogTool.printD(TAG, "==onStop()==");
+        LogTool.printD(this.getClass(), "==onStop()==");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LogTool.printD(TAG, "==onDestroy==");
+        LogTool.printD(this.getClass(), "==onDestroy==");
     }
 
     /**
@@ -151,17 +155,12 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         if (AppUtils.isMainThread()) {
             runnable.run();
         } else {
-            mHandler.post(runnable);
+            this.mHandler.post(runnable);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(String msg) {
 
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void doOtherThing(Runnable runnable) {
-        runnable.run();
     }
 }

@@ -11,7 +11,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -39,18 +38,18 @@ public class CircleImageView extends AppCompatImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //由于是圆形，宽高应保持一致
-        int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
-        mRadius = size / 2;
-        setMeasuredDimension(size, size);
+        int size = Math.min(this.getMeasuredWidth(), this.getMeasuredHeight());
+        this.mRadius = size / 2;
+        this.setMeasuredDimension(size, size);
     }
 
     @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
 
-        mPaint = new Paint();
+        this.mPaint = new Paint();
 
-        Drawable drawable = getDrawable();
+        Drawable drawable = this.getDrawable();
 
         if (null != drawable) {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -58,14 +57,14 @@ public class CircleImageView extends AppCompatImageView {
             //初始化BitmapShader，传入bitmap对象
             BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             //计算缩放比例
-            mScale = (mRadius * 2.0f) / Math.min(bitmap.getHeight(), bitmap.getWidth());
+            this.mScale = (this.mRadius * 2.0f) / Math.min(bitmap.getHeight(), bitmap.getWidth());
 
             Matrix matrix = new Matrix();
-            matrix.setScale(mScale, mScale);
+            matrix.setScale(this.mScale, this.mScale);
             bitmapShader.setLocalMatrix(matrix);
-            mPaint.setShader(bitmapShader);
+            this.mPaint.setShader(bitmapShader);
             //画圆形，指定好坐标，半径，画笔
-            canvas.drawCircle(mRadius, mRadius, mRadius, mPaint);
+            canvas.drawCircle(this.mRadius, this.mRadius, this.mRadius, this.mPaint);
         } else {
             super.onDraw(canvas);
         }

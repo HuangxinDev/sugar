@@ -1,17 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.os.Bundle;
-import android.text.SpannableStringBuilder;
-import android.view.View;
-import android.view.animation.TranslateAnimation;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
@@ -21,6 +9,17 @@ import com.ntxm.smart.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -29,45 +28,53 @@ import butterknife.OnClick;
  * 考试记录
  */
 public class SafeExamRecordActivity extends BaseActivity {
+    private final List<ViewData> mData1 = new ArrayList<>();
+    private final List<ViewData> mData2 = new ArrayList<>();
+    // 指示条
+    @BindView(R.id.indicator)
+    protected View mIndicator;
+    @BindView(R.id.recycler_view)
+    protected RecyclerView mRecyclerView;
+    @BindView(R.id.my_exam)
+    protected TextView tvMyExam;
+    @BindView(R.id.my_team_member_exam)
+    protected TextView tvMyMemberExam;
+    TranslateAnimation animation;
+    private MutiAdapter mAdapter;
+
+    public static List<ViewData> listData(int type) {
+        List<ViewData> data = new ArrayList<>();
+        data.add(new ViewData(type));
+        data.add(new ViewData(type));
+        data.add(new ViewData(type));
+        data.add(new ViewData(type));
+        return data;
+    }
+
     @Override
     protected int setContentLayoutId() {
         return R.layout.safe_exam_record_activity;
     }
 
-    // 指示条
-    @BindView(R.id.indicator)
-    protected View mIndicator;
-
-    TranslateAnimation animation;
-
-    @BindView(R.id.recycler_view)
-    protected RecyclerView mRecyclerView;
-
-    private List<ViewData> mData1 = new ArrayList<>();
-    private List<ViewData> mData2 = new ArrayList<>();
-
-    private MutiAdapter mAdapter;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("考试记录");
+        this.setActionBarTitle("考试记录");
 
-        mData1.addAll(listData(MutiAdapter.TYPE_CONTACTS));
-        mData2.addAll(listData(MutiAdapter.TYPE_EXAM_RECORD));
+        this.mData1.addAll(com.njxm.smart.activities.SafeExamRecordActivity.listData(MutiAdapter.TYPE_CONTACTS));
+        this.mData2.addAll(com.njxm.smart.activities.SafeExamRecordActivity.listData(MutiAdapter.TYPE_EXAM_RECORD));
 
-        mAdapter = new MutiAdapter(mData2);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
+        this.mAdapter = new MutiAdapter(this.mData2);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.setAdapter(this.mAdapter);
 
-        initIndicator(tvMyExam);
+        this.initIndicator(this.tvMyExam);
     }
 
     public void initIndicator(View clickView) {
-        float startX = mIndicator.getLeft();
-        float toX = clickView.getLeft() + (clickView.getWidth() - mIndicator.getWidth()) / 2.0f;
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mIndicator, "translationX", toX - startX);
+        float startX = this.mIndicator.getLeft();
+        float toX = clickView.getLeft() + (clickView.getWidth() - this.mIndicator.getWidth()) / 2.0f;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this.mIndicator, "translationX", toX - startX);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -77,31 +84,31 @@ public class SafeExamRecordActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 SpannableStringBuilder text = new SpannableStringBuilder();
-                if (clickView == tvMyExam) {
-                    text.append(CharUtils.color(getColor(R.color.color_007AFF), "我的考试"))
-                    .append("\n")
-                    .append(CharUtils.font(16,
-                            CharUtils.bold(CharUtils.color(getColor(R.color.color_007AFF),
-                                    mData1.size() + ""))));
-                    tvMyExam.setText(text);
-                    text.clear();
-                    text.append(CharUtils.color(getColor(R.color.color_96A1AD), "组员考试"))
+                if (clickView == com.njxm.smart.activities.SafeExamRecordActivity.this.tvMyExam) {
+                    text.append(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_007AFF), "我的考试"))
                             .append("\n")
                             .append(CharUtils.font(16,
-                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_252525), mData2.size() + ""))));
-                    tvMyMemberExam.setText(text);
+                                    CharUtils.bold(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_007AFF),
+                                            com.njxm.smart.activities.SafeExamRecordActivity.this.mData1.size() + ""))));
+                    com.njxm.smart.activities.SafeExamRecordActivity.this.tvMyExam.setText(text);
+                    text.clear();
+                    text.append(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_96A1AD), "组员考试"))
+                            .append("\n")
+                            .append(CharUtils.font(16,
+                                    CharUtils.bold(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_252525), com.njxm.smart.activities.SafeExamRecordActivity.this.mData2.size() + ""))));
+                    com.njxm.smart.activities.SafeExamRecordActivity.this.tvMyMemberExam.setText(text);
                 } else {
-                    text.append(CharUtils.color(getColor(R.color.color_96A1AD), "我的考试"))
+                    text.append(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_96A1AD), "我的考试"))
                             .append("\n")
                             .append(CharUtils.font(16,
-                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_252525), mData1.size() + ""))));
-                    tvMyExam.setText(text);
+                                    CharUtils.bold(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_252525), com.njxm.smart.activities.SafeExamRecordActivity.this.mData1.size() + ""))));
+                    com.njxm.smart.activities.SafeExamRecordActivity.this.tvMyExam.setText(text);
                     text.clear();
-                    text.append(CharUtils.color(getColor(R.color.color_007AFF), "组员考试"))
+                    text.append(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_007AFF), "组员考试"))
                             .append("\n")
                             .append(CharUtils.font(16,
-                                    CharUtils.bold(CharUtils.color(getColor(R.color.color_007AFF), mData2.size() + ""))));
-                    tvMyMemberExam.setText(text);
+                                    CharUtils.bold(CharUtils.color(com.njxm.smart.activities.SafeExamRecordActivity.this.getColor(R.color.color_007AFF), com.njxm.smart.activities.SafeExamRecordActivity.this.mData2.size() + ""))));
+                    com.njxm.smart.activities.SafeExamRecordActivity.this.tvMyMemberExam.setText(text);
                 }
             }
 
@@ -119,27 +126,11 @@ public class SafeExamRecordActivity extends BaseActivity {
 
     }
 
-    @BindView(R.id.my_exam)
-    protected TextView tvMyExam;
-
-    @BindView(R.id.my_team_member_exam)
-    protected TextView tvMyMemberExam;
-
     @OnClick({R.id.my_exam, R.id.my_team_member_exam})
     public void onViewClicked(View view) {
-        mAdapter.setNewData(view.getId() == R.id.my_exam ? mData2 : mData1);
-        initIndicator(view);
+        this.mAdapter.setNewData(view.getId() == R.id.my_exam ? this.mData2 : this.mData1);
+        this.initIndicator(view);
     }
-
-    public List<ViewData> listData(int type) {
-        List<ViewData> data = new ArrayList<>();
-        data.add(new ViewData(type));
-        data.add(new ViewData(type));
-        data.add(new ViewData(type));
-        data.add(new ViewData(type));
-        return data;
-    }
-
 
     @Override
     protected void onResume() {
@@ -156,7 +147,7 @@ public class SafeExamRecordActivity extends BaseActivity {
 
         @Override
         public int getItemType() {
-            return type;
+            return this.type;
         }
     }
 
@@ -174,14 +165,14 @@ public class SafeExamRecordActivity extends BaseActivity {
          */
         public MutiAdapter(List<ViewData> data) {
             super(data);
-            addItemType(TYPE_CONTACTS, R.layout.item_contacts_layout);
-            addItemType(TYPE_EXAM_RECORD, R.layout.item_exam_record_list);
+            this.addItemType(com.njxm.smart.activities.SafeExamRecordActivity.MutiAdapter.TYPE_CONTACTS, R.layout.item_contacts_layout);
+            this.addItemType(com.njxm.smart.activities.SafeExamRecordActivity.MutiAdapter.TYPE_EXAM_RECORD, R.layout.item_exam_record_list);
 
         }
 
         @Override
         protected void convert(BaseViewHolder helper, ViewData item) {
-            helper.setGone(R.id.divider1, helper.getAdapterPosition() != mData.size() - 1);
+            helper.setGone(R.id.divider1, helper.getAdapterPosition() != this.mData.size() - 1);
         }
     }
 }

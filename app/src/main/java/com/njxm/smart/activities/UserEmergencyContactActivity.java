@@ -1,10 +1,5 @@
 package com.njxm.smart.activities;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
@@ -14,6 +9,10 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
+
+import android.os.Bundle;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 
 @Route(path = GlobalRouter.USER_EMERGENCY_CONTACT)
 public class UserEmergencyContactActivity extends BaseActivity {
@@ -29,38 +28,38 @@ public class UserEmergencyContactActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle("紧急联系人");
-        showLeftBtn(true, R.mipmap.arrow_back_blue);
-        showRightBtn(true, "保存");
+        this.setActionBarTitle("紧急联系人");
+        this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.showRightBtn(true, "保存");
 
-        etUserName = findViewById(R.id.user_name);
-        etUserPhone = findViewById(R.id.news_user_phone);
+        this.etUserName = this.findViewById(R.id.user_name);
+        this.etUserPhone = this.findViewById(R.id.news_user_phone);
 
-        etUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
-        etUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE));
+        this.etUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
+        this.etUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE));
     }
 
     @Override
     public void onClickRightBtn() {
         super.onClickRightBtn();
-        uploadContacts();
+        this.uploadContacts();
     }
 
     private void uploadContacts() {
-        if (StringUtils.isEmpty(etUserName.getText().toString())
-                || StringUtils.isEmpty(etUserPhone.getText().toString())) {
-            showToast("姓名和手机号不可为空");
+        if (StringUtils.isEmpty(this.etUserName.getText().toString())
+                || StringUtils.isEmpty(this.etUserPhone.getText().toString())) {
+            com.njxm.smart.activities.BaseActivity.showToast("姓名和手机号不可为空");
             return;
         }
 
         HttpUtils.getInstance().request(new RequestEvent.Builder()
                 .url(UrlPath.PATH_USER_EMERGENCY_PEOPLE_NEWS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addBodyJson("contact", etUserName.getText().toString().trim())
-                .addBodyJson("contactPhone", etUserPhone.getText().toString().trim())
+                .addBodyJson("contact", this.etUserName.getText().toString().trim())
+                .addBodyJson("contactPhone", this.etUserPhone.getText().toString().trim())
                 .build());
-        SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, etUserName.getText().toString().trim());
-        SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, etUserPhone.getText().toString().trim());
-        finish();
+        SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT, this.etUserName.getText().toString().trim());
+        SPUtils.putValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE, this.etUserPhone.getText().toString().trim());
+        this.finish();
     }
 }
