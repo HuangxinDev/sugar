@@ -51,7 +51,7 @@ public class SmartCloudApplication extends Application {
     private void initLocation() {
         this.locationService = new LocationService(this.getApplicationContext());
         this.mVibrator = (Vibrator) this.getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
-        LocationClientOption locationClientOption = this.locationService.getOption();
+        LocationClientOption locationClientOption = com.njxm.smart.service.LocationService.getOption();
         locationClientOption.setLocationPurpose(LocationClientOption.BDLocationPurpose.SignIn);
 //        locationService.setLocationOption(locationClientOption);
     }

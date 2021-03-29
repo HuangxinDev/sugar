@@ -52,6 +52,10 @@ private OnDialogItemSelectListener onDialogItemSelectListener;
         return new AlertDialogUtils();
     }
 
+    public static void setOnButtonClickListener(OnButtonClickListener onButtonClickListener) {
+        AlertDialogUtils.onButtonClickListener = onButtonClickListener;
+    }
+
     public void setOnDialogItemSelectListener(AlertDialogUtils.OnDialogItemSelectListener onDialogItemSelectListener) {
         this.onDialogItemSelectListener = onDialogItemSelectListener;
     }
@@ -109,10 +113,6 @@ private OnDialogItemSelectListener onDialogItemSelectListener;
 
         dialog.show();
         this.isShow = true;
-    }
-
-    public void setOnButtonClickListener(OnButtonClickListener onButtonClickListener) {
-        AlertDialogUtils.onButtonClickListener = onButtonClickListener;
     }
 
     /**

@@ -179,7 +179,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void uploadHeadFile() {
 
-        UploadFileApi api = HttpUtils.getInstance().getApi(UploadFileApi.class);
+        UploadFileApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadFileApi.class);
 
         List<MultipartBody.Part> parts = new ArrayList<>();
         parts.add(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));

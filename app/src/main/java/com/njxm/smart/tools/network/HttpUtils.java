@@ -55,7 +55,7 @@ public final class HttpUtils {
      *
      * @return OKHttpClient实例
      */
-    public OkHttpClient getOkHttpClient() {
+    public static OkHttpClient getOkHttpClient() {
         return com.njxm.smart.tools.network.HttpUtils.sOkHttpClient;
     }
 
@@ -65,7 +65,7 @@ public final class HttpUtils {
      * @param response
      * @param requestEvent
      */
-    private void onSuccess(Response response, RequestEvent requestEvent) {
+    private static void onSuccess(Response response, RequestEvent requestEvent) {
         try {
             ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
                     ResponseEvent.class);
@@ -87,6 +87,23 @@ public final class HttpUtils {
         } catch (IOException e) {
 //            LogTool.printE(Log.getStackTraceString(e));
         }
+    }
+
+    /**
+     * 获取Retrofit的指定Api
+     *
+     * @param tClass 网络请求的Api
+     * @param <T>    泛型
+     * @return 对应类型的网络请求Api
+     */
+    public static <T> T getApi(Class<T> tClass) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://119.3.136.127:7776")
+                .client(com.njxm.smart.tools.network.HttpUtils.getOkHttpClient())
+                .client(com.njxm.smart.tools.network.HttpUtils.sOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(tClass);
     }
 
     /**
@@ -175,27 +192,10 @@ public final class HttpUtils {
      * @param <T>    泛型
      * @return 对应类型的网络请求Api
      */
-    public <T> T getApi(Class<T> tClass) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://119.3.136.127:7776")
-                .client(this.getOkHttpClient())
-                .client(com.njxm.smart.tools.network.HttpUtils.sOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        return retrofit.create(tClass);
-    }
-
-    /**
-     * 获取Retrofit的指定Api
-     *
-     * @param tClass 网络请求的Api
-     * @param <T>    泛型
-     * @return 对应类型的网络请求Api
-     */
     public <T> T getServerApi(Class<T> tClass) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(this.baseUrl)
-                .client(this.getOkHttpClient())
+                .client(com.njxm.smart.tools.network.HttpUtils.getOkHttpClient())
                 .client(com.njxm.smart.tools.network.HttpUtils.sOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

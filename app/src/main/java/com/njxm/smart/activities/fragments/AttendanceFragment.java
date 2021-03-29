@@ -58,7 +58,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
 
             LogTool.printD(AttendanceFragment.class, "==baidu location success==" + bdLocation.getAddrStr());
 
-            AttendanceFragment.this.mLocationService.unregisterListener(this);
+            com.njxm.smart.service.LocationService.unregisterListener(this);
             AttendanceFragment.this.mLocationService.stop();
 
 
@@ -120,7 +120,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     @Override
     public void onPause() {
         super.onPause();
-        this.mLocationService.unregisterListener(this.mBdAbstractLocationListener);
+        com.njxm.smart.service.LocationService.unregisterListener(this.mBdAbstractLocationListener);
         this.mLocationService.stop();
         this.mWebView.removeJavascriptObject(null);
     }
@@ -219,9 +219,9 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
         if (requestCode == 100) { // 相机
             this.takePhoto(999);
         } else if (requestCode == 101) {// 定位
-            this.mLocationService.registerListener(this.mBdAbstractLocationListener);
+            com.njxm.smart.service.LocationService.registerListener(this.mBdAbstractLocationListener);
             this.mLocationService.start();
-            this.mLocationService.requestLocation();
+            com.njxm.smart.service.LocationService.requestLocation();
         }
     }
 

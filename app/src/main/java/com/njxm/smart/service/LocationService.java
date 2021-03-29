@@ -29,7 +29,7 @@ public class LocationService {
         synchronized (this.objLock) {
             if (com.njxm.smart.service.LocationService.client == null) {
                 com.njxm.smart.service.LocationService.client = new LocationClient(locationContext);
-                com.njxm.smart.service.LocationService.client.setLocOption(this.getDefaultLocationClientOption());
+                com.njxm.smart.service.LocationService.client.setLocOption(com.njxm.smart.service.LocationService.getDefaultLocationClientOption());
             }
         }
     }
@@ -59,7 +59,7 @@ public class LocationService {
      * @return
      */
 
-    public boolean registerListener(BDAbstractLocationListener listener) {
+    public static boolean registerListener(BDAbstractLocationListener listener) {
         boolean isSuccess = false;
         if (listener != null) {
             com.njxm.smart.service.LocationService.client.registerLocationListener(listener);
@@ -68,7 +68,7 @@ public class LocationService {
         return isSuccess;
     }
 
-    public void unregisterListener(BDAbstractLocationListener listener) {
+    public static void unregisterListener(BDAbstractLocationListener listener) {
         if (listener != null) {
             com.njxm.smart.service.LocationService.client.unRegisterLocationListener(listener);
         }
@@ -77,7 +77,7 @@ public class LocationService {
     /**
      * @return 获取sdk版本
      */
-    public String getSDKVersion() {
+    public static String getSDKVersion() {
         if (com.njxm.smart.service.LocationService.client != null) {
             return com.njxm.smart.service.LocationService.client.getVersion();
         }
@@ -89,7 +89,7 @@ public class LocationService {
      *
      * @param webView 传入webView控件
      */
-    public void enableAssistanLocation(WebView webView) {
+    public static void enableAssistanLocation(WebView webView) {
         if (com.njxm.smart.service.LocationService.client != null) {
             com.njxm.smart.service.LocationService.client.enableAssistantLocation(webView);
         }
@@ -98,7 +98,7 @@ public class LocationService {
     /**
      * 停止H5辅助定位
      */
-    public void disableAssistantLocation() {
+    public static void disableAssistantLocation() {
         if (com.njxm.smart.service.LocationService.client != null) {
             com.njxm.smart.service.LocationService.client.disableAssistantLocation();
         }
@@ -108,11 +108,11 @@ public class LocationService {
      *
      * @return DefaultLocationClientOption  默认O设置
      */
-    private LocationClientOption getDefaultLocationClientOption() {
+    private static LocationClientOption getDefaultLocationClientOption() {
         if (com.njxm.smart.service.LocationService.mOption == null) {
             com.njxm.smart.service.LocationService.mOption = new LocationClientOption();
             com.njxm.smart.service.LocationService.mOption.setLocationMode(LocationMode.Hight_Accuracy); // 可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-            com.njxm.smart.service.LocationService.mOption.setCoorType( "bd09ll" ); // 可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
+            com.njxm.smart.service.LocationService.mOption.setCoorType("bd09ll"); // 可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
             com.njxm.smart.service.LocationService.mOption.setScanSpan(1000); // 可选，默认0，即仅定位一次，设置发起连续定位请求的间隔需要大于等于1000ms才是有效的
             com.njxm.smart.service.LocationService.mOption.setOnceLocation(true);
             com.njxm.smart.service.LocationService.mOption.setIsNeedAddress(true); // 可选，设置是否需要地址信息，默认不需要
@@ -133,11 +133,26 @@ public class LocationService {
     /**
      * @return DIYOption 自定义Option设置
      */
-    public LocationClientOption getOption() {
+    public static LocationClientOption getOption() {
         if (com.njxm.smart.service.LocationService.DIYoption == null) {
             com.njxm.smart.service.LocationService.DIYoption = new LocationClientOption();
         }
         return com.njxm.smart.service.LocationService.DIYoption;
+    }
+
+    public static void requestLocation() {
+        if (com.njxm.smart.service.LocationService.client != null) {
+            Log.d("BDLocation", "BDLocation invoke JPI");
+            com.njxm.smart.service.LocationService.client.requestLocation();
+        }
+    }
+
+    public static boolean isStart() {
+        return com.njxm.smart.service.LocationService.client.isStarted();
+    }
+
+    public static boolean requestHotSpotState() {
+        return com.njxm.smart.service.LocationService.client.requestHotSpotState();
     }
 
     public void start() {
@@ -148,26 +163,11 @@ public class LocationService {
         }
     }
 
-    public void requestLocation() {
-        if (com.njxm.smart.service.LocationService.client != null) {
-            Log.d("BDLocation", "BDLocation invoke JPI");
-            com.njxm.smart.service.LocationService.client.requestLocation();
-        }
-    }
-
     public void stop() {
         synchronized (this.objLock) {
             if (com.njxm.smart.service.LocationService.client != null && com.njxm.smart.service.LocationService.client.isStarted()) {
                 com.njxm.smart.service.LocationService.client.stop();
             }
         }
-    }
-
-    public boolean isStart() {
-        return com.njxm.smart.service.LocationService.client.isStarted();
-    }
-
-    public boolean requestHotSpotState() {
-        return com.njxm.smart.service.LocationService.client.requestHotSpotState();
     }
 }

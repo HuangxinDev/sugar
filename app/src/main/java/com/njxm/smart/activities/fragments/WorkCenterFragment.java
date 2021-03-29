@@ -10,7 +10,6 @@ import com.njxm.smart.api.GetUserFuctionItemsApi;
 import com.njxm.smart.bean.PermissionBean;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
@@ -89,7 +88,7 @@ public class WorkCenterFragment extends BaseFragment {
         });
         this.mRecyclerView.setAdapter(this.mAdapter);
 
-        GetUserFuctionItemsApi api = HttpUtils.getInstance().getApi(GetUserFuctionItemsApi.class);
+        GetUserFuctionItemsApi api = com.njxm.smart.tools.network.HttpUtils.getApi(GetUserFuctionItemsApi.class);
         api.getFeatureItems().enqueue(new Callback<ServerResponseBean<List<PermissionBean>>>() {
             @Override
             public void onResponse(Call<ServerResponseBean<List<PermissionBean>>> call, Response<ServerResponseBean<List<PermissionBean>>> response) {

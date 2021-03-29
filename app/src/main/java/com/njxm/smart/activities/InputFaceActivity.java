@@ -10,7 +10,6 @@ import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.LogTool;
@@ -118,7 +117,7 @@ public class InputFaceActivity extends BaseActivity {
      * 上传录入人脸图像
      */
     private void uploadInputFace() {
-        UploadInputFaceApi api = HttpUtils.getInstance().getApi(UploadInputFaceApi.class);
+        UploadInputFaceApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadInputFaceApi.class);
         api.uploadFacePhoto(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)),
                 MultipartBody.Part.createFormData("file", this.photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), this.photoFile)))
                 .enqueue(new Callback<ServerResponseBean>() {

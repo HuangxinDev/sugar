@@ -299,7 +299,7 @@ public class MedicalReportActivity extends BaseActivity {
                     RequestBody.create(MediaType.parse("image/png"), file)));
         }
 
-        UploadFileApi api = HttpUtils.getInstance().getApi(UploadFileApi.class);
+        UploadFileApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadFileApi.class);
 
         api.uploadFile(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
             @Override
