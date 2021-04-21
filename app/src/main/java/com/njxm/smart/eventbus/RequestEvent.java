@@ -1,7 +1,12 @@
-package com.njxm.smart.eventbus;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.tools.network.HttpMethod;
+package com.njxm.smart.eventbus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.IntDef;
+
+import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.tools.network.HttpMethod;
 
 import okhttp3.MultipartBody;
 

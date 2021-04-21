@@ -1,10 +1,13 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
 
-
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.njxm.smart.activities.adapter.DailyCheckAdapter;
-import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
-import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,15 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.RelativeLayout;
+
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.njxm.smart.activities.adapter.DailyCheckAdapter;
+import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 
@@ -48,7 +57,6 @@ public class SafeInspectActivity extends BaseActivity {
     private List<DailyCheckTaskBean> mData = new ArrayList<>();
 
     private DailyCheckAdapter mDailyCheckAdapter;
-
 
 
     @Override

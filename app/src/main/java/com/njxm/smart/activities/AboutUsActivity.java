@@ -1,4 +1,24 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.njxm.smart.constant.UrlPath;
@@ -10,17 +30,6 @@ import com.njxm.smart.tools.network.HttpMethod;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.ntxm.smart.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-
-import android.os.Bundle;
-import android.view.View;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;

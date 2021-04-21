@@ -1,4 +1,17 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
+
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.constant.GlobalRouter;
@@ -9,10 +22,6 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
-
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
 
 @Route(path = GlobalRouter.USER_EMERGENCY_CONTACT)
 public class UserEmergencyContactActivity extends BaseActivity {

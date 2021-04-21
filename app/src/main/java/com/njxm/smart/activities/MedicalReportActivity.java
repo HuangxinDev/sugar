@@ -1,24 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.njxm.smart.activities.adapter.SimpleImageAdapter;
-import com.njxm.smart.api.UploadFileApi;
-import com.njxm.smart.bean.ServerResponseBean;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.FileUtils;
-import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
-import com.ntxm.smart.BuildConfig;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,12 +29,33 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.njxm.smart.activities.adapter.SimpleImageAdapter;
+import com.njxm.smart.api.UploadFileApi;
+import com.njxm.smart.bean.ServerResponseBean;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.UserBean;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.FileUtils;
+import com.njxm.smart.utils.ResolutionUtil;
+import com.njxm.smart.utils.SPUtils;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import okhttp3.MediaType;

@@ -1,6 +1,12 @@
-package com.njxm.smart.utils;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.ntxm.smart.R;
+package com.njxm.smart.utils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,21 +20,16 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import androidx.annotation.IntDef;
+
+import com.ntxm.smart.R;
 
 public class StatusBarUtil {
 
     public final static int TYPE_MIUI = 0;
     public final static int TYPE_FLYME = 1;
     public final static int TYPE_M = 3; //6.0
-
-    @IntDef({TYPE_MIUI,
-            TYPE_FLYME,
-            TYPE_M})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface ViewType {
-    }
-
 
     /**
      * 修改状态栏颜色，支持4.4以上版本
@@ -39,7 +40,7 @@ public class StatusBarUtil {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
-            setTranslucentStatus(activity);
+            StatusBarUtil.setTranslucentStatus(activity);
             window.setStatusBarColor(colorId);
         } /*else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //使用SystemBarTintManager,需要先将状态栏设置为透明
@@ -77,17 +78,17 @@ public class StatusBarUtil {
      * @param fontIconDark 状态栏字体和图标颜色是否为深色
      */
     public static void setImmersiveStatusBar(Activity activity, boolean fontIconDark) {
-        setStatusBarColor(activity, Color.WHITE);
-        setTranslucentStatus(activity);
+        StatusBarUtil.setStatusBarColor(activity, Color.WHITE);
+        StatusBarUtil.setTranslucentStatus(activity);
         if (fontIconDark) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                setStatusBarFontIconDark(activity, TYPE_M);
+                StatusBarUtil.setStatusBarFontIconDark(activity, StatusBarUtil.TYPE_M);
             }/* else if (OSUtils.isMiui()) {
                 setStatusBarFontIconDark(activity, TYPE_MIUI);
             } else if (OSUtils.isFlyme()) {
                 setStatusBarFontIconDark(activity, TYPE_FLYME);
             } */ else {//其他情况下我们将状态栏设置为灰色，就不会看不见字体
-                setStatusBarColor(activity, Color.LTGRAY);//灰色
+                StatusBarUtil.setStatusBarColor(activity, Color.LTGRAY);//灰色
             }
         }
     }
@@ -97,14 +98,14 @@ public class StatusBarUtil {
      */
     public static void setStatusBarFontIconDark(Activity activity, @ViewType int type) {
         switch (type) {
-            case TYPE_MIUI:
-                setMiuiUI(activity, true);
+            case StatusBarUtil.TYPE_MIUI:
+                StatusBarUtil.setMiuiUI(activity, true);
                 break;
-            case TYPE_M:
-                setCommonUI(activity);
+            case StatusBarUtil.TYPE_M:
+                StatusBarUtil.setCommonUI(activity);
                 break;
-            case TYPE_FLYME:
-                setFlymeUI(activity, true);
+            case StatusBarUtil.TYPE_FLYME:
+                StatusBarUtil.setFlymeUI(activity, true);
                 break;
         }
     }
@@ -178,6 +179,13 @@ public class StatusBarUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !useStatusBarColor) {//android6.0以后可以对状态栏文字颜色和图标进行修改
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+    }
+
+    @IntDef({StatusBarUtil.TYPE_MIUI,
+            StatusBarUtil.TYPE_FLYME,
+            StatusBarUtil.TYPE_M})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ViewType {
     }
 }
 

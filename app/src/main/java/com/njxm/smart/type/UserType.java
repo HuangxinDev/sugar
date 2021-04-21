@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.type;
 
 /**
@@ -9,7 +17,7 @@ public enum UserType {
     WORKER("worker"), // 工人
     CONSTRUCTION("construction"); //施工单位管理员
 
-    private String userType;
+    private final String userType;
 
     UserType(String userType) {
         this.userType = userType;
@@ -30,6 +38,6 @@ public enum UserType {
     }
 
     private String getUserType() {
-        return userType;
+        return this.userType;
     }
 }

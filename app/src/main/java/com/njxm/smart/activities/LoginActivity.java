@@ -1,18 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.contract.LoginContract;
-import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.presenter.LoginPresenter;
-import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.LogTool;
-import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
-import com.njxm.smart.view.AppEditText;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,9 +25,25 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.activities.main.MainActivity;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.contract.LoginContract;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.presenter.LoginPresenter;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.view.AppEditText;
+import com.ntxm.smart.R;
 
 import okio.AsyncTimeout;
 
@@ -282,5 +292,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     @UiThread
     public void onQrCode(Bitmap bitmap) {
         this.runOnUiThread(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), bitmap)));
+    }
+
+    @Override
+    public void showQrCode(Bitmap bitmap) {
+
     }
 }

@@ -1,4 +1,29 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.constant.UrlPath;
@@ -15,22 +40,6 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.greenrobot.eventbus.EventBus;
-
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.View;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 
 public class ResetPasswordActivity extends BaseActivity {
     private AppEditText mAccountEdit;

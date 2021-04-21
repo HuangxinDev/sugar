@@ -1,6 +1,12 @@
-package com.njxm.smart.view;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.ntxm.smart.R;
+package com.njxm.smart.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,7 +17,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+
 import androidx.appcompat.widget.AppCompatTextView;
+
+import com.ntxm.smart.R;
 
 public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
 
@@ -22,23 +31,32 @@ public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
 
     private OnClickListener mOnClickListener;
     private OnClickListener mOnClickListener2;
+    private DialogOnClickListener simpleDialogOnClickListener;
+
+    public SimpleAlertDialog(Context context) {
+        this(context, 0);
+    }
+
+    public SimpleAlertDialog(Context context, int themeResId) {
+        super(context, themeResId);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_dialog_layout);
+        this.setContentView(R.layout.simple_dialog_layout);
 
-        setCancelable(false);
-        setCanceledOnTouchOutside(false);
+        this.setCancelable(false);
+        this.setCanceledOnTouchOutside(false);
 
-        yesBtn = findViewById(R.id.dialog_yes);
-        yesBtn.setOnClickListener(this);
-        noBtn = findViewById(R.id.dialog_no);
-        noBtn.setOnClickListener(this);
-        messgaeContent = findViewById(R.id.dialog_content);
+        this.yesBtn = this.findViewById(R.id.dialog_yes);
+        this.yesBtn.setOnClickListener(this);
+        this.noBtn = this.findViewById(R.id.dialog_no);
+        this.noBtn.setOnClickListener(this);
+        this.messgaeContent = this.findViewById(R.id.dialog_content);
 
 
-        Window window = getWindow();
+        Window window = this.getWindow();
 
         if (window != null) {
             WindowManager.LayoutParams wlp = window.getAttributes();
@@ -49,7 +67,7 @@ public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
     }
 
     public SimpleAlertDialog setMsg(int textId) {
-        messgaeContent.setText(textId);
+        this.messgaeContent.setText(textId);
         return this;
     }
 
@@ -58,38 +76,25 @@ public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
         return this;
     }
 
-
     public SimpleAlertDialog setYesBtn(CharSequence text) {
-        yesBtn.setText(text);
+        this.yesBtn.setText(text);
         return this;
     }
 
-
     public SimpleAlertDialog setYesBtn(int textId) {
-        yesBtn.setText(textId);
+        this.yesBtn.setText(textId);
         return this;
     }
 
     public SimpleAlertDialog setNoBtn(CharSequence text) {
-        noBtn.setText(text);
+        this.noBtn.setText(text);
         return this;
     }
 
     public SimpleAlertDialog setNoBtn(int textId) {
-        noBtn.setText(textId);
+        this.noBtn.setText(textId);
         return this;
     }
-
-    public SimpleAlertDialog(Context context) {
-        this(context, 0);
-    }
-
-
-    public SimpleAlertDialog(Context context, int themeResId) {
-        super(context, themeResId);
-    }
-
-    private DialogOnClickListener simpleDialogOnClickListener;
 
     public SimpleAlertDialog setDialogClickListener(DialogOnClickListener listener) {
         this.simpleDialogOnClickListener = listener;
@@ -98,8 +103,8 @@ public class SimpleAlertDialog extends AlertDialog implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (simpleDialogOnClickListener != null) {
-            simpleDialogOnClickListener.onClick(this, v == yesBtn);
+        if (this.simpleDialogOnClickListener != null) {
+            this.simpleDialogOnClickListener.onClick(this, v == this.yesBtn);
         }
     }
 

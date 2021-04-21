@@ -1,18 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.FileUtils;
-import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
-import com.ntxm.smart.BuildConfig;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.io.File;
 import java.util.UUID;
@@ -28,9 +22,24 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.FileUtils;
+import com.njxm.smart.utils.ResolutionUtil;
+import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StringUtils;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;

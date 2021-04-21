@@ -1,15 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.fastjson.JSONObject;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.eventbus.SelectCertificateEvent;
-import com.njxm.smart.model.jsonbean.CertificateParentBean;
-import com.njxm.smart.tools.network.HttpUtils;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,11 +21,23 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.alibaba.fastjson.JSONObject;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.SelectCertificateEvent;
+import com.njxm.smart.model.jsonbean.CertificateParentBean;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;

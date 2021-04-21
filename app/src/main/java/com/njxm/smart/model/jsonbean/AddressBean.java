@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.model.jsonbean;
 
-import com.alibaba.fastjson.annotation.JSONField;
-
 import java.util.List;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 public class AddressBean {
 
@@ -19,7 +27,7 @@ public class AddressBean {
     private List<AddressBean> areas; // 下级地区
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -27,7 +35,7 @@ public class AddressBean {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -35,7 +43,7 @@ public class AddressBean {
     }
 
     public String getPinyin() {
-        return pinyin;
+        return this.pinyin;
     }
 
     public void setPinyin(String pinyin) {
@@ -43,7 +51,7 @@ public class AddressBean {
     }
 
     public List<AddressBean> getAreas() {
-        return areas;
+        return this.areas;
     }
 
     public void setAreas(List<AddressBean> areas) {

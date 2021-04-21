@@ -1,4 +1,21 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities.adapter;
+
+import java.util.List;
+
+import android.content.Context;
+import android.view.View;
+import android.widget.ImageView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -8,14 +25,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.bean.PermissionBean;
 import com.njxm.smart.constant.UrlPath;
 import com.ntxm.smart.R;
-
-import java.util.List;
-
-import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class WorkCenterItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
 

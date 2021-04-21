@@ -1,8 +1,33 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
+
+import android.location.Address;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSONObject;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.njxm.smart.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
@@ -19,26 +44,12 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
-
-import android.location.Address;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 @Route(path = GlobalRouter.USER_ADDRESS)
 public class UserAddressActivity extends BaseActivity implements AreaContract.View {
 
+    public static final int PROVINCE_CODE = 0;
+    public static final int CITY_CODE = 1;
+    public static final int DISTICT_CODE = 2;
     String province = "";
     String city = "";
     String distance = "";
@@ -85,37 +96,35 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
         this.simpleTextAdapter = new SimpleTextAdapter(this.provinceBaseBeans);
         this.tvPop = this.findViewById(R.id.retry_select);
         this.tvPop.setOnClickListener(this);
-        this.simpleTextAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                AddressBean baseAddressBean = (AddressBean) adapter.getData().get(position);
-                switch (com.njxm.smart.activities.UserAddressActivity.this.selectAddressType) {
-                    case 0:
-                        LogTool.printD("click province: %s", baseAddressBean.getName());
-                        com.njxm.smart.activities.UserAddressActivity.this.cityBaseBeans = baseAddressBean.getAreas();
-                        com.njxm.smart.activities.UserAddressActivity.this.province = baseAddressBean.getName();
-                        com.njxm.smart.activities.UserAddressActivity.this.provinceId = baseAddressBean.getId();
-                        adapter.setNewData(com.njxm.smart.activities.UserAddressActivity.this.cityBaseBeans);
-                        com.njxm.smart.activities.UserAddressActivity.this.selectAddressType = 1;
-                        com.njxm.smart.activities.UserAddressActivity.this.tvPop.setText("点击重新选择");
+        this.simpleTextAdapter.setOnItemClickListener((adapter, view, position) -> {
+            AddressBean baseAddressBean = (AddressBean) adapter.getData().get(position);
+            Area area = new ProvinceArea(baseAddressBean);
+            switch (UserAddressActivity.this.selectAddressType) {
+                case UserAddressActivity.PROVINCE_CODE:
+                    LogTool.printD("click province: %s", baseAddressBean.getName());
+                    UserAddressActivity.this.cityBaseBeans = baseAddressBean.getAreas();
+                    UserAddressActivity.this.province = baseAddressBean.getName();
+                    UserAddressActivity.this.provinceId = baseAddressBean.getId();
+                    adapter.setNewData(UserAddressActivity.this.cityBaseBeans);
+                    UserAddressActivity.this.selectAddressType = 1;
+                    UserAddressActivity.this.tvPop.setText("点击重新选择");
 
-                        break;
-                    case 1:
-                        com.njxm.smart.activities.UserAddressActivity.this.areaBaseBeans = baseAddressBean.getAreas();
-                        com.njxm.smart.activities.UserAddressActivity.this.selectAddressType = 2;
-                        com.njxm.smart.activities.UserAddressActivity.this.city = baseAddressBean.getName();
-                        com.njxm.smart.activities.UserAddressActivity.this.cityId = baseAddressBean.getId();
-                        adapter.setNewData(com.njxm.smart.activities.UserAddressActivity.this.areaBaseBeans);
-                        break;
-                    case 2:
-                        com.njxm.smart.activities.UserAddressActivity.this.distance = baseAddressBean.getName();
-                        com.njxm.smart.activities.UserAddressActivity.this.distanceId = baseAddressBean.getId();
-                        break;
-                    default:
-                }
-
-                com.njxm.smart.activities.UserAddressActivity.this.tvUserAddress.setText(com.njxm.smart.activities.UserAddressActivity.this.province + com.njxm.smart.activities.UserAddressActivity.this.city + com.njxm.smart.activities.UserAddressActivity.this.distance);
+                    break;
+                case UserAddressActivity.CITY_CODE:
+                    UserAddressActivity.this.areaBaseBeans = baseAddressBean.getAreas();
+                    UserAddressActivity.this.selectAddressType = 2;
+                    UserAddressActivity.this.city = baseAddressBean.getName();
+                    UserAddressActivity.this.cityId = baseAddressBean.getId();
+                    adapter.setNewData(UserAddressActivity.this.areaBaseBeans);
+                    break;
+                case UserAddressActivity.DISTICT_CODE:
+                    UserAddressActivity.this.distance = baseAddressBean.getName();
+                    UserAddressActivity.this.distanceId = baseAddressBean.getId();
+                    break;
+                default:
             }
+
+            UserAddressActivity.this.tvUserAddress.setText(UserAddressActivity.this.province + UserAddressActivity.this.city + UserAddressActivity.this.distance);
         });
 
         mRecyclerView.setAdapter(this.simpleTextAdapter);

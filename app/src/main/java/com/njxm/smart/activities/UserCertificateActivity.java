@@ -1,21 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.njxm.smart.activities.adapter.MyCerticateListAdapter;
-import com.njxm.smart.activities.adapter.MyCertificateAdapter;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.eventbus.SelectCertificateEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.JsonUtils;
-import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,10 +24,28 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.alibaba.fastjson.annotation.JSONField;
+import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.njxm.smart.activities.adapter.MyCerticateListAdapter;
+import com.njxm.smart.activities.adapter.MyCertificateAdapter;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.SelectCertificateEvent;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.JsonUtils;
+import com.njxm.smart.utils.ResolutionUtil;
+import com.njxm.smart.utils.SPUtils;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;

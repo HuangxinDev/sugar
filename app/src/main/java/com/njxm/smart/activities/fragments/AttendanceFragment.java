@@ -1,22 +1,12 @@
-package com.njxm.smart.activities.fragments;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.fastjson.JSONObject;
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.bumptech.glide.Glide;
-import com.hxin.common.perrmission.IPermission;
-import com.hxin.common.perrmission.PermissionRequestActivity;
-import com.njxm.smart.SmartCloudApplication;
-import com.njxm.smart.activities.BaseActivity;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.service.LocationService;
-import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.FileUtils;
-import com.njxm.smart.utils.LogTool;
-import com.njxm.smart.utils.SPUtils;
-import com.ntxm.smart.BuildConfig;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities.fragments;
 
 import java.io.File;
 import java.util.UUID;
@@ -37,8 +27,27 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.bumptech.glide.Glide;
+import com.hxin.common.perrmission.IPermission;
+import com.hxin.common.perrmission.PermissionRequestActivity;
+import com.njxm.smart.SmartCloudApplication;
+import com.njxm.smart.activities.BaseActivity;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.service.LocationService;
+import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.FileUtils;
+import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.SPUtils;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import wendu.dsbridge.DWebView;
@@ -60,8 +69,6 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
 
             com.njxm.smart.service.LocationService.unregisterListener(this);
             AttendanceFragment.this.mLocationService.stop();
-
-
             JSONObject object = new JSONObject();
             object.put("x", bdLocation.getLongitude());
             object.put("y", bdLocation.getLatitude());

@@ -1,4 +1,25 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities.fragments;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+
+import android.content.Intent;
+import android.util.Log;
+import android.view.View;
+
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
@@ -12,18 +33,6 @@ import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;

@@ -1,4 +1,19 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities.adapter;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -7,12 +22,6 @@ import com.njxm.smart.activities.UserCertificateActivity;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
-
-import java.util.List;
-
-import android.app.Activity;
-import android.widget.ImageView;
-import androidx.annotation.Nullable;
 
 public class MyCerticateListAdapter extends BaseQuickAdapter<UserCertificateActivity.CertificateListItem, BaseViewHolder> {
 

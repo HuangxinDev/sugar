@@ -1,24 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.hxin.common.perrmission.PermissionRequestActivity;
-import com.njxm.smart.base.BaseRunnable;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.LogoutEvent;
-import com.njxm.smart.eventbus.ResponseEvent;
-import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.model.jsonbean.EduTypeBean;
-import com.njxm.smart.model.jsonbean.QRCodeBean;
-import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.utils.AppUtils;
-import com.njxm.smart.utils.JsonUtils;
-import com.njxm.smart.utils.LogTool;
-import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StatusBarUtil;
-import com.njxm.smart.utils.StringUtils;
-import com.njxm.smart.view.callbacks.OnActionBarChange;
-import com.ntxm.smart.BuildConfig;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.io.File;
 import java.util.Locale;
@@ -42,12 +30,33 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
+
+import com.hxin.common.perrmission.PermissionRequestActivity;
+import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.LogoutEvent;
+import com.njxm.smart.eventbus.ResponseEvent;
+import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.EduTypeBean;
+import com.njxm.smart.model.jsonbean.QRCodeBean;
+import com.njxm.smart.model.jsonbean.UserBean;
+import com.njxm.smart.utils.AppUtils;
+import com.njxm.smart.utils.JsonUtils;
+import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.StatusBarUtil;
+import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.view.callbacks.OnActionBarChange;
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

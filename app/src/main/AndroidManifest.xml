@@ -1,3 +1,11 @@
+<!--
+  ~ Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ntxm.smart">
@@ -20,21 +28,21 @@
 
     <supports-screens
         android:anyDensity="true"
-        android:smallScreens="true"
-        android:normalScreens="true"
         android:largeScreens="true"
-        android:resizeable="true" />
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
 
     <application
         android:name="com.njxm.smart.SmartCloudApplication"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/LaunchTheme"
-        android:allowBackup="false"
         android:supportsRtl="false"
-        tools:replace="android:allowBackup,android:supportsRtl"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/LaunchTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup,android:supportsRtl">
 
         <!--百度SDK-->
         <meta-data
@@ -48,8 +56,8 @@
 
         <activity
             android:name="com.njxm.smart.activities.HomeActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -58,104 +66,104 @@
 
         <activity
             android:name="com.njxm.smart.activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name="com.njxm.smart.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:name="com.njxm.smart.activities.main.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.AboutUsActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.WebViewActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.SettingsActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.ForgetPasswordActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.PersonalInformationActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.SuggestionsActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.ResetPasswordActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.UpdateTelPhoneActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.RealNameAuthenticationActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.MedicalReportActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.UserPhoneActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.InputFaceActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.UserEducationActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.UserAddressActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.UserEmergencyContactActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.UserCertificateActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.CertificateTypeActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.SafeInspectActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.njxm.smart.activities.DailyCheckDetailActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.njxm.smart.activities.SearchActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.njxm.smart.activities.SafeExamResultActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="com.njxm.smart.activities.QRUserActivity"

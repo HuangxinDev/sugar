@@ -1,8 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.njxm.smart.fragments.ExamFragment;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +16,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.njxm.smart.fragments.ExamFragment;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;

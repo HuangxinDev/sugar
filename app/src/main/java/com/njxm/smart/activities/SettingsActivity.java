@@ -1,4 +1,20 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
@@ -6,22 +22,12 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.ntxm.smart.R;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
  * 设置页面 主页我的-设置
  */
-///////////////////////////////////////////////////////////////////////////
-// 设置页面
-///////////////////////////////////////////////////////////////////////////
 public class SettingsActivity extends BaseActivity {
     @BindView(R.id.login_exit)
     protected AppCompatTextView mExitLoginBtn;

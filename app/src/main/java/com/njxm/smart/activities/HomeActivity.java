@@ -1,9 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.njxm.smart.fragments.BaseFragmentAdapter;
-import com.njxm.smart.fragments.HomeFragment;
-import com.njxm.smart.view.DotsView;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +17,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
+
+import com.njxm.smart.fragments.BaseFragmentAdapter;
+import com.njxm.smart.fragments.HomeFragment;
+import com.njxm.smart.view.DotsView;
+import com.ntxm.smart.R;
 
 /**
  * 引导页

@@ -1,10 +1,18 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.bean;
+
+import java.util.List;
 
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
-
-import java.util.List;
 
 /**
  * Created by Hxin on 2020/3/28
@@ -39,7 +47,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     private List<PermissionBean> children;
 
     public int getSrStatus() {
-        return srStatus;
+        return this.srStatus;
     }
 
     public void setSrStatus(int srStatus) {
@@ -47,7 +55,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -55,7 +63,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public String getIcon() {
-        return icon;
+        return this.icon;
     }
 
     public void setIcon(String icon) {
@@ -63,7 +71,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public String getExtraIcon() {
-        return extraIcon;
+        return this.extraIcon;
     }
 
     public void setExtraIcon(String extraIcon) {
@@ -71,7 +79,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -79,7 +87,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public int getSr_sort() {
-        return sr_sort;
+        return this.sr_sort;
     }
 
     public void setSr_sort(int sr_sort) {
@@ -87,7 +95,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public String getSr_parent_id() {
-        return sr_parent_id;
+        return this.sr_parent_id;
     }
 
     public void setSr_parent_id(String sr_parent_id) {
@@ -95,7 +103,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public int getSrLinkType() {
-        return srLinkType;
+        return this.srLinkType;
     }
 
     public void setSrLinkType(int srLinkType) {
@@ -103,7 +111,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public String getUrl() {
-        return url;
+        return this.url;
     }
 
     public void setUrl(String url) {
@@ -112,7 +120,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public int getSr_level() {
-        return sr_level;
+        return this.sr_level;
     }
 
     public void setSr_level(int sr_level) {
@@ -120,7 +128,7 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
     }
 
     public List<PermissionBean> getChildren() {
-        return children;
+        return this.children;
     }
 
     public void setChildren(List<PermissionBean> children) {
@@ -134,9 +142,9 @@ public class PermissionBean extends AbstractExpandableItem<PermissionBean> imple
 
     @Override
     public int getItemType() {
-        if (sr_level == 1) {
+        if (this.sr_level == 1) {
             return WorkCenterItemAdapter.ITEM_TITLE_TYPE;
-        } else if (sr_level == 2) {
+        } else if (this.sr_level == 2) {
             return WorkCenterItemAdapter.ITEM_CONTENT_TYPE;
         }
         throw new RuntimeException("工作重心列表非法层级");

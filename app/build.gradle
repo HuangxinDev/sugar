@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 // 编译kotlin代码
 apply plugin: 'kotlin-android'
 // 可选 代码支持通过view id 获取对象，不再需要findViewById
@@ -11,9 +19,13 @@ android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
-//    viewBinding {
-//        enabled true
-//    }
+    viewBinding {
+        enabled true
+    }
+
+    dataBinding {
+        enabled true
+    }
 
     defaultConfig {
         applicationId "com.ntxm.smart"

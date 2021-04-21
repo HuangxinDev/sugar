@@ -1,13 +1,13 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.activities;
 
-
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.model.jsonbean.SafeInspectReformBean;
-import com.njxm.smart.model.jsonbean.ZSSimpleTitleBean;
-import com.ntxm.smart.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.njxm.smart.model.jsonbean.SafeInspectReformBean;
+import com.njxm.smart.model.jsonbean.ZSSimpleTitleBean;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 
@@ -32,6 +40,7 @@ public class SafeInspectRecordActivity extends BaseActivity {
         for (int i = 0; i < count; i++) {
             ZSSimpleTitleBean<SafeInspectReformBean> bean = new ZSSimpleTitleBean<SafeInspectReformBean>("问题 " + (i + 1) + "  整改完成");
             bean.addSubItem(new SafeInspectReformBean());
+            data.add(bean);
             data.add(bean);
         }
         return data;
@@ -57,15 +66,14 @@ public class SafeInspectRecordActivity extends BaseActivity {
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (view.getId()) {
-                    case R.id.look_detail:
-                        com.njxm.smart.activities.SafeInspectRecordActivity.this.startActivity(new Intent(SafeInspectRecordActivity.this,
-                                SafeInspectReformActivity.class));
-                        break;
+                if (view.getId() == R.id.look_detail) {
+                    SafeInspectRecordActivity.this.startActivity(new Intent(SafeInspectRecordActivity.this,
+                            SafeInspectReformActivity.class));
                 }
             }
         });
-        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         adapter.addHeaderView(headerView);
         adapter.addFooterView(footView);
         this.mRecyclerView.setAdapter(adapter);

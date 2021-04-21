@@ -1,10 +1,12 @@
-package com.njxm.smart.activities;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.utils.CharUtils;
-import com.ntxm.smart.R;
+package com.njxm.smart.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,16 @@ import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.njxm.smart.utils.CharUtils;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;

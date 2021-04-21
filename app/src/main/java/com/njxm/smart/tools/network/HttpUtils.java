@@ -1,4 +1,17 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.tools.network;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import org.greenrobot.eventbus.EventBus;
 
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
@@ -6,11 +19,6 @@ import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
-
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -56,7 +64,7 @@ public final class HttpUtils {
      * @return OKHttpClient实例
      */
     public static OkHttpClient getOkHttpClient() {
-        return com.njxm.smart.tools.network.HttpUtils.sOkHttpClient;
+        return HttpUtils.sOkHttpClient;
     }
 
     /**

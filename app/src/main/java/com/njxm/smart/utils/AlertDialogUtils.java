@@ -1,18 +1,27 @@
-package com.njxm.smart.utils;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.ntxm.smart.R;
+package com.njxm.smart.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import androidx.appcompat.widget.AppCompatTextView;
+
+import com.ntxm.smart.R;
 
 public class AlertDialogUtils {
 
     private static OnButtonClickListener onButtonClickListener;
 
-//    /**
+    //    /**
 //     * 弹出自定义样式的AlertDialog
 //     *
 //     * @param context 上下文

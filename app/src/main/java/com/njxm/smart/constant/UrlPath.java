@@ -1,4 +1,14 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.njxm.smart.constant;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.njxm.smart.GlobalConst;
 
@@ -50,6 +60,13 @@ public enum UrlPath {
 
     public String getUrl() {
         String host;
+        host = this.getHost();
+        return host + this.getPath();
+    }
+
+    @NotNull
+    private String getHost() {
+        String host;
         switch (this.type) {
             case 1:
                 host = GlobalConst.GRANT_HOST;
@@ -62,7 +79,7 @@ public enum UrlPath {
                 host = GlobalConst.H5_HOST;
                 break;
         }
-        return host + this.path;
+        return host;
     }
 
     public String getPath() {

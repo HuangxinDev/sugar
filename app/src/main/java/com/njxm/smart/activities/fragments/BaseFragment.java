@@ -1,8 +1,12 @@
-package com.njxm.smart.activities.fragments;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.njxm.smart.base.BaseRunnable;
-import com.njxm.smart.utils.AppUtils;
-import com.njxm.smart.utils.LogTool;
+package com.njxm.smart.activities.fragments;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -14,9 +18,14 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.njxm.smart.base.BaseRunnable;
+import com.njxm.smart.utils.AppUtils;
+import com.njxm.smart.utils.LogTool;
 
 import butterknife.ButterKnife;
 

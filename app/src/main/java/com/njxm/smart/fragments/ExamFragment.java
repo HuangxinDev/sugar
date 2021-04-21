@@ -1,14 +1,23 @@
-package com.njxm.smart.fragments;
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
-import com.njxm.smart.activities.SafeExamAnswerActivity;
-import com.njxm.smart.activities.fragments.BaseFragment;
-import com.ntxm.smart.R;
+package com.njxm.smart.fragments;
 
 import android.os.Bundle;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.njxm.smart.activities.SafeExamAnswerActivity;
+import com.njxm.smart.activities.fragments.BaseFragment;
+import com.ntxm.smart.R;
 
 import butterknife.BindView;
 
