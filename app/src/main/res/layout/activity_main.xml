@@ -1,20 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
-  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
-  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
-  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
-  -->
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@id/ll_root"
+    android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_white"
     android:orientation="vertical"
     android:splitMotionEvents="false">
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_gray"
+        app:layout_constraintBottom_toTopOf="@id/radio_group" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.086">
+
+        <RadioButton
+            android:id="@+id/first_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/first_page_attendance_btn"
+            android:gravity="center_horizontal"
+            android:text="考勤"
+            android:textColor="@color/blue_gray_selector" />
+
+        <RadioButton
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/first_page_workcenter_btn"
+            android:gravity="center_horizontal"
+            android:text="工作中心"
+            android:textColor="@color/blue_gray_selector" />
+
+        <RadioButton
+            android:id="@+id/btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/first_page_message_btn"
+            android:gravity="center_horizontal"
+            android:text="消息"
+            android:textColor="@color/blue_gray_selector" />
+
+        <RadioButton
+            android:id="@+id/btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/first_page_my_btn"
+            android:gravity="center_horizontal"
+            android:text="我的"
+            android:textColor="@color/blue_gray_selector" />
+    </RadioGroup>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
@@ -23,76 +80,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/bar_guide"
+        app:layout_constraintBottom_toTopOf="@+id/divider1"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_home" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bar_guide"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintGuide_percent="0.914" />
-
-
-    <RadioGroup
-        android:id="@+id/radio_group"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.086"
-        app:layout_constraintTop_toBottomOf="@id/bar_guide">
-
-        <RadioButton
-            android:id="@+id/first_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/first_page_attendance_btn"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:text="考勤"
-            android:textColor="@color/blue_gray_selector" />
-
-        <RadioButton
-            android:id="@+id/btn2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/first_page_workcenter_btn"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:text="工作中心"
-            android:textColor="@color/blue_gray_selector" />
-
-        <RadioButton
-            android:id="@+id/btn3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/first_page_message_btn"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:text="消息"
-            android:textColor="@color/blue_gray_selector" />
-
-        <RadioButton
-            android:id="@+id/btn4"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/first_page_my_btn"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:text="我的"
-            android:textColor="@color/blue_gray_selector" />
-    </RadioGroup>
-
+        app:navGraph="@navigation/nav_fragment_main" />
 </androidx.constraintlayout.widget.ConstraintLayout>

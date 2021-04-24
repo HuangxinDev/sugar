@@ -8,8 +8,6 @@
 
 package com.njxm.smart.activities;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -123,35 +121,36 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     @Override
     public void onClick(View v) {
         if (v == this.mLoginBtn) {
-            boolean isQuickLogin = !this.mQuickLoginBtn.isEnabled();
-            String username = this.mLoginAccountEditText.getText().trim();
-
-            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
-                EventBus.getDefault().post(new ToastEvent("账户不符和条件"));
-                return;
-            }
-
-            if (!isQuickLogin && StringUtils.isEmpty(this.mLoginQrEditText.getText())) {
-                BaseActivity.showToast("图形验证为空");
-                return;
-            }
-
-            String password = isQuickLogin ? this.mLoginNumberEditText.getText().trim() : this.mLoginPwdEditText.getText().trim();
-
-            if (StringUtils.isEmpty(password)) {
-                BaseActivity.showToast(isQuickLogin ? "验证码为空" : "密码为空");
-                return;
-            }
-
-            String qrCode = this.mLoginQrEditText.getText().trim();
-            Map<String, String> params = new HashMap<>();
-            params.put(isQuickLogin ? "mobile" : "username", username);
-            params.put(isQuickLogin ? "code" : "password", password);
-            if (!isQuickLogin) {
-                params.put("code", qrCode);
-                params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
-            }
-            this.mLoginPresenter.loginAccount(params);
+//            boolean isQuickLogin = !this.mQuickLoginBtn.isEnabled();
+//            String username = this.mLoginAccountEditText.getText().trim();
+//
+//            if (StringUtils.isEmpty(username) || (isQuickLogin && !username.matches("1[0-9]{10}"))) {
+//                EventBus.getDefault().post(new ToastEvent("账户不符和条件"));
+//                return;
+//            }
+//
+//            if (!isQuickLogin && StringUtils.isEmpty(this.mLoginQrEditText.getText())) {
+//                BaseActivity.showToast("图形验证为空");
+//                return;
+//            }
+//
+//            String password = isQuickLogin ? this.mLoginNumberEditText.getText().trim() : this.mLoginPwdEditText.getText().trim();
+//
+//            if (StringUtils.isEmpty(password)) {
+//                BaseActivity.showToast(isQuickLogin ? "验证码为空" : "密码为空");
+//                return;
+//            }
+//
+//            String qrCode = this.mLoginQrEditText.getText().trim();
+//            Map<String, String> params = new HashMap<>();
+//            params.put(isQuickLogin ? "mobile" : "username", username);
+//            params.put(isQuickLogin ? "code" : "password", password);
+//            if (!isQuickLogin) {
+//                params.put("code", qrCode);
+//                params.put(KeyConstant.KEY_QR_IMAGE_TOKEN, SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN));
+//            }
+//            this.mLoginPresenter.loginAccount(params);
+            this.startActivity(new Intent(this, MainActivity.class));
         } else if (v == this.mQuickLoginBtn) {
             this.switchLoginWay(false);
         } else if (v == this.mPasswordLoginBtn) {

@@ -28,7 +28,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,7 +51,6 @@ import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StatusBarUtil;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ntxm.smart.BuildConfig;
@@ -68,7 +66,6 @@ import butterknife.Optional;
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange,
         OnClickListener, BaseRunnable {
-
     protected static Handler sHandler = new Handler();
     protected final String mTag;
     @Nullable
@@ -88,6 +85,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     protected AppCompatTextView tvActionBarRightText;
     protected File photoFile;
     private long lastClickTime = 0;
+
+    private View container;
 
     protected BaseActivity() {
         this.mTag = this.getClass().getSimpleName();
@@ -136,29 +135,20 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      * @param objects
      */
     protected static void showToast(String format, Object... objects) {
-
-
         if (StringUtils.isEmpty(format)) {
             return;
         }
         String toastMsg = (objects != null && objects.length != 0) ?
                 String.format(Locale.US, format, objects) : format;
-
-
         EventBus.getDefault().post(new ToastEvent(toastMsg));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*
-         禁止屏幕旋转,固定屏幕方向
-        */
         this.setContentView(this.setContentLayoutId());
         ButterKnife.bind(this);
-        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        StatusBarUtil.setImmersiveStatusBar(this, true);
-        StatusBarUtil.setStatusBar(this, false, false);
+        this.container = this.findViewById(R.id.ll_root);
     }
 
     @Override
@@ -166,6 +156,29 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         super.onStart();
         EventBus.getDefault().register(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (this.container != null) {
+            this.container.postDelayed(() -> {
+                this.container.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LOW_PROFILE |
+                                View.SYSTEM_UI_FLAG_FULLSCREEN |
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            }, 500);
+        }
+    }
+
+    /**
+     * 全屏 this.container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE |
+     * View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+     * View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+     * View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+     */
 
     @Override
     protected void onStop() {

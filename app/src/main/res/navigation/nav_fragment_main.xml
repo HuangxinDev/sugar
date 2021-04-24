@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_home"
+    app:startDestination="@id/attendanceFragment">
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.njxm.smart.activities.fragments.AttendanceFragment"
+        android:label="AttendanceFragment">
+        <action
+            android:id="@+id/action_attendanceFragment_to_messageFragment"
+            app:destination="@id/messageFragment"
+            app:popUpTo="@id/attendanceFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_attendanceFragment_to_personalFragment"
+            app:destination="@id/personalFragment"
+            app:popUpTo="@id/attendanceFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_attendanceFragment_to_workCenterFragment"
+            app:destination="@id/workCenterFragment"
+            app:popUpTo="@id/attendanceFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/workCenterFragment"
+        android:name="com.njxm.smart.activities.fragments.WorkCenterFragment"
+        android:label="WorkCenterFragment">
+        <action
+            android:id="@+id/action_workCenterFragment_to_messageFragment"
+            app:destination="@id/messageFragment"
+            app:popUpTo="@id/workCenterFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_workCenterFragment_to_personalFragment"
+            app:destination="@id/personalFragment"
+            app:popUpTo="@id/workCenterFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_workCenterFragment_to_attendanceFragment"
+            app:destination="@id/attendanceFragment"
+            app:popUpTo="@id/workCenterFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.njxm.smart.activities.fragments.MessagesFragment"
+        android:label="MessagesFragment">
+        <action
+            android:id="@+id/action_messageFragment_to_personalFragment"
+            app:destination="@id/personalFragment"
+            app:popUpTo="@id/messageFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_messageFragment_to_workCenterFragment"
+            app:destination="@id/workCenterFragment"
+            app:popUpTo="@id/messageFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_messageFragment_to_attendanceFragment"
+            app:destination="@id/attendanceFragment"
+            app:popUpTo="@id/messageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/personalFragment"
+        android:name="com.njxm.smart.activities.fragments.PersonalFragment"
+        android:label="PersonalFragment">
+        <action
+            android:id="@+id/action_personalFragment_to_workCenterFragment"
+            app:destination="@id/workCenterFragment"
+            app:popUpTo="@id/personalFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_personalFragment_to_messageFragment"
+            app:destination="@id/messageFragment"
+            app:popUpTo="@id/personalFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_personalFragment_to_attendanceFragment"
+            app:destination="@id/attendanceFragment"
+            app:popUpTo="@id/personalFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

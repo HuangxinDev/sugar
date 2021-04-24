@@ -47,8 +47,6 @@ import retrofit2.Response;
  * 工作中心Fragment
  */
 public class WorkCenterFragment extends BaseFragment {
-
-
     private final List<MultiItemEntity> mData = new ArrayList<>();
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
