@@ -7,8 +7,4 @@
   ~ Vestibulum commodo. Ut rhoncus gravida arcu.
   -->
 
-<resources>
-    <plurals name="item_list_title">
-        <item quantity="one">%s  </item>
-    </plurals>
-</resources>
+<resources></resources>

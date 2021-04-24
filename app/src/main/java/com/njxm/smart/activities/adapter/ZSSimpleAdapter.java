@@ -22,17 +22,17 @@ public class ZSSimpleAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 //        addData(loadData());
     }
 
-    @Override
-    protected void convert(BaseViewHolder helper, String item) {
-        helper.setText(R.id.simple_text, item);
-    }
-
-    private List<String> loadData() {
+    private static List<String> loadData() {
         List<String> data = new ArrayList<>();
         data.add("AAA");
         data.add("BBB");
         data.add("CCC");
         data.add("DDD");
         return data;
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, String item) {
+        helper.setText(R.id.simple_text, item);
     }
 }

@@ -9,9 +9,6 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
 
 
     <!--    闪屏主题-->
@@ -24,11 +21,6 @@
 
     <style name="ActivityStyle" parent="LaunchTheme">
         <item name="android:windowBackground">@color/background_white</item>
-    </style>
-
-    <style name="XmlBackground">
-        <item name="android:background">@color/background_white</item>
-        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <style name="TextViewStyle1">
@@ -67,14 +59,6 @@
         <item name="android:textSize">@dimen/sp_26</item>
     </style>
 
-    <style name="BaseTextViewStyle.Black2">
-        <item name="android:textColor">@color/color_black_383838</item>
-    </style>
-
-    <style name="BaseTextViewStyle.Black2.14">
-        <item name="android:textSize">@dimen/sp_14</item>
-    </style>
-
     <style name="BaseTextViewStyle.Blue">
         <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:textColor">@color/color_007AFF</item>
@@ -82,10 +66,6 @@
 
     <style name="BaseTextViewStyle.White">
         <item name="android:textColor">@color/text_color_white</item>
-    </style>
-
-    <style name="BaseTextViewStyle.White.23">
-        <item name="android:textSize">@dimen/sp_23</item>
     </style>
 
     <style name="BaseTextViewStyle.Gray">

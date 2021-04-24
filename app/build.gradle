@@ -15,7 +15,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
@@ -26,6 +25,10 @@ android {
     dataBinding {
         enabled true
     }
+
+//    buildFeatures {
+//        viewBinding true
+//    }
 
     defaultConfig {
         applicationId "com.ntxm.smart"
@@ -93,7 +96,10 @@ dependencies {
     // android 依赖包, 主要以androidx为主
     implementation 'androidx.multidex:multidex:2.0.1' // 支持分包
     implementation 'androidx.recyclerview:recyclerview:1.1.0' // recyclerview
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0' // 对应com.android.support:support-v4
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+// 对应com.android.support:support-v4
     apply plugin: 'eclipse'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     implementation 'androidx.appcompat:appcompat:1.2.0' // 对应com.android.support:appcompat-v7

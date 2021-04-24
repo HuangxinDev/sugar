@@ -14,9 +14,12 @@ import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,14 +56,17 @@ public class WorkCenterFragment extends BaseFragment {
     protected AppCompatTextView mSuggestionBox;
     private WorkCenterItemAdapter mAdapter;
 
-    @OnClick(R.id.toDo)
-    static void clickTodoBtn() {
-        ARouter.getInstance().build("/app/safe/activity").navigation();
-    }
-
     @Override
     protected int setLayoutResourceID() {
         return R.layout.fragment_main_workcenter;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.toDo).setOnClickListener(v -> {
+            ARouter.getInstance().build("/app/safe/activity").navigation();
+        });
     }
 
     @Override

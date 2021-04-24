@@ -16,13 +16,16 @@
     android:orientation="vertical"
     android:splitMotionEvents="false">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/bar_guide"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_home" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bar_guide"

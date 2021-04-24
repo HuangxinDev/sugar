@@ -15,18 +15,12 @@
     <dimen name="sp_15">15sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_17">17sp</dimen>
-    <dimen name="sp_19">19sp</dimen>
     <dimen name="sp_23">23sp</dimen>
     <dimen name="sp_26">26sp</dimen>
 
     <!-- 控件大小集合 -->
 
-    <dimen name="icon_width_22dp">22dp</dimen>
-    <dimen name="icon_height_22dp">22dp</dimen>
-
     <!-- 设置AppCompatTextView 最小、最大字体 -->
-    <dimen name="font_min_size">8sp</dimen>
-    <dimen name="font_max_size">30sp</dimen>
 
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_9">9dp</dimen>
@@ -40,7 +34,6 @@
     <dimen name="dp_53">53dp</dimen>
     <dimen name="dp_61">61dp</dimen>
     <dimen name="dp_18">18dp</dimen>
-    <dimen name="dp_159">159dp</dimen>
     <dimen name="dp_26">26dp</dimen>
     <dimen name="dp_42">42dp</dimen>
     <dimen name="dp_275">275dp</dimen>
@@ -51,12 +44,8 @@
     <dimen name="dp_7">7dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_19">19dp</dimen>
-    <dimen name="dp_24">24dp</dimen>
     <dimen name="dp_73">73dp</dimen>
-    <dimen name="dp_23">23dp</dimen>
     <dimen name="dp_39">39dp</dimen>
-    <dimen name="dp_173">173dp</dimen>
-    <dimen name="dp_110">110dp</dimen>
     <dimen name="dp_56">56dp</dimen>
     <dimen name="dp_60">60dp</dimen>
     <dimen name="sp_21">21sp</dimen>

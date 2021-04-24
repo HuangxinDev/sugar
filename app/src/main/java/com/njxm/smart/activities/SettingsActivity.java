@@ -40,22 +40,6 @@ public class SettingsActivity extends BaseActivity {
     @BindView(R.id.settings_clean_cache)
     protected View mCleanCacheBtn;
 
-    /**
-     * 清除缓存文件
-     */
-    @OnClick(R.id.settings_clean_cache)
-    protected static void cleanCache() {
-        com.njxm.smart.activities.BaseActivity.showToast("清除缓存完成");
-    }
-
-    /**
-     * 检查版本更新
-     */
-    @OnClick(R.id.settings_check_update)
-    protected static void checkUpdate() {
-        com.njxm.smart.activities.BaseActivity.showToast("当前已是最新版本");
-    }
-
     @Override
     protected int setContentLayoutId() {
         return R.layout.my_setting;
@@ -66,6 +50,9 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         this.setActionBarTitle("设置");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
+        this.findViewById(R.id.settings_check_update).setOnClickListener(v -> {
+            com.njxm.smart.activities.BaseActivity.showToast("清除缓存完成");
+        });
     }
 
     /**

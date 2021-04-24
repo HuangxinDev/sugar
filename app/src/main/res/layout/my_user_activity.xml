@@ -74,7 +74,7 @@
                     android:textColor="@color/color_black_383838" />
 
                 <TextView
-                    android:id="@id/news_user_name"
+                    android:id="@+id/news_user_name1"
                     style="@style/BaseTextViewStyle.Gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,8 +107,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:contentDescription="手机号"
+                    android:gravity="end"
                     android:textColor="@color/color_gray_7c7c7c"
                     android:textSize="@dimen/sp_14" />
 
@@ -290,7 +290,7 @@
                         android:textSize="@dimen/sp_15" />
 
                     <TextView
-                        android:id="@id/news_user_name"
+                        android:id="@+id/news_user_name2"
                         style="@style/BaseTextViewStyle.Gray.11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -437,7 +437,7 @@
                         android:textSize="@dimen/sp_15" />
 
                     <TextView
-                        android:id="@id/news_user_name"
+                        android:id="@+id/news_user_name3"
                         style="@style/BaseTextViewStyle.Gray"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -488,7 +488,7 @@
                         android:textSize="@dimen/sp_15" />
 
                     <TextView
-                        android:id="@id/news_user_name"
+                        android:id="@+id/news_user_name4"
                         style="@style/BaseTextViewStyle.Gray"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

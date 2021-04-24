@@ -50,12 +50,7 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
     public static final int PROVINCE_CODE = 0;
     public static final int CITY_CODE = 1;
     public static final int DISTICT_CODE = 2;
-    String province = "";
-    String city = "";
-    String distance = "";
-    String provinceId = "";
-    String cityId = "";
-    String distanceId = "";
+    final SelectedAddress selectedAddress = new SelectedAddress();
     private AppCompatTextView tvUserAddress;
     private AppCompatEditText etUserAddressDetail;
     private SimpleTextAdapter simpleTextAdapter;
@@ -98,13 +93,12 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
         this.tvPop.setOnClickListener(this);
         this.simpleTextAdapter.setOnItemClickListener((adapter, view, position) -> {
             AddressBean baseAddressBean = (AddressBean) adapter.getData().get(position);
-            Area area = new ProvinceArea(baseAddressBean);
             switch (UserAddressActivity.this.selectAddressType) {
                 case UserAddressActivity.PROVINCE_CODE:
                     LogTool.printD("click province: %s", baseAddressBean.getName());
                     UserAddressActivity.this.cityBaseBeans = baseAddressBean.getAreas();
-                    UserAddressActivity.this.province = baseAddressBean.getName();
-                    UserAddressActivity.this.provinceId = baseAddressBean.getId();
+                    UserAddressActivity.this.selectedAddress.province = baseAddressBean.getName();
+                    UserAddressActivity.this.selectedAddress.provinceId = baseAddressBean.getId();
                     adapter.setNewData(UserAddressActivity.this.cityBaseBeans);
                     UserAddressActivity.this.selectAddressType = 1;
                     UserAddressActivity.this.tvPop.setText("点击重新选择");
@@ -113,28 +107,25 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
                 case UserAddressActivity.CITY_CODE:
                     UserAddressActivity.this.areaBaseBeans = baseAddressBean.getAreas();
                     UserAddressActivity.this.selectAddressType = 2;
-                    UserAddressActivity.this.city = baseAddressBean.getName();
-                    UserAddressActivity.this.cityId = baseAddressBean.getId();
+                    UserAddressActivity.this.selectedAddress.city = baseAddressBean.getName();
+                    UserAddressActivity.this.selectedAddress.cityId = baseAddressBean.getId();
                     adapter.setNewData(UserAddressActivity.this.areaBaseBeans);
                     break;
                 case UserAddressActivity.DISTICT_CODE:
-                    UserAddressActivity.this.distance = baseAddressBean.getName();
-                    UserAddressActivity.this.distanceId = baseAddressBean.getId();
+                    UserAddressActivity.this.selectedAddress.distance = baseAddressBean.getName();
+                    UserAddressActivity.this.selectedAddress.distanceId = baseAddressBean.getId();
                     break;
                 default:
             }
 
-            UserAddressActivity.this.tvUserAddress.setText(UserAddressActivity.this.province + UserAddressActivity.this.city + UserAddressActivity.this.distance);
+            UserAddressActivity.this.tvUserAddress.setText(UserAddressActivity.this.selectedAddress.province + UserAddressActivity.this.selectedAddress.city + UserAddressActivity.this.selectedAddress.distance);
         });
 
         mRecyclerView.setAdapter(this.simpleTextAdapter);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                com.njxm.smart.activities.UserAddressActivity.this.provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
-                com.njxm.smart.activities.UserAddressActivity.this.simpleTextAdapter.setNewData(com.njxm.smart.activities.UserAddressActivity.this.provinceBaseBeans);
-            }
+        new Thread(() -> {
+            UserAddressActivity.this.provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
+            UserAddressActivity.this.simpleTextAdapter.setNewData(UserAddressActivity.this.provinceBaseBeans);
         }).start();
     }
 
@@ -148,7 +139,7 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
     public void onClickRightBtn() {
         super.onClickRightBtn();
 
-        if (StringUtils.isEmpty(this.province) || StringUtils.isEmpty(this.city) || StringUtils.isEmpty(this.distance)
+        if (StringUtils.isEmpty(this.selectedAddress.province) || StringUtils.isEmpty(this.selectedAddress.city) || StringUtils.isEmpty(this.selectedAddress.distance)
                 || StringUtils.isEmpty(this.etUserAddressDetail.getText().toString())) {
             com.njxm.smart.activities.BaseActivity.showToast("请正确选择地区和填写地址");
             return;
@@ -157,9 +148,9 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
         HttpUtils.getInstance().request(new RequestEvent.Builder()
                 .url(UrlPath.PATH_USER_ADDRESS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
-                .addBodyJson("province", this.provinceId)
-                .addBodyJson("city", this.cityId)
-                .addBodyJson("district", this.distanceId)
+                .addBodyJson("province", this.selectedAddress.provinceId)
+                .addBodyJson("city", this.selectedAddress.cityId)
+                .addBodyJson("district", this.selectedAddress.distanceId)
                 .addBodyJson("address", this.etUserAddressDetail.getText().toString())
                 .build());
     }

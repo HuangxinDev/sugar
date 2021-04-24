@@ -19,13 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.AppBaseActivity;
-import com.njxm.smart.activities.fragments.AttendanceFragment;
-import com.njxm.smart.activities.fragments.MessagesFragment;
-import com.njxm.smart.activities.fragments.PersonalFragment;
-import com.njxm.smart.activities.fragments.WorkCenterFragment;
 import com.ntxm.smart.R;
 import com.ntxm.smart.databinding.ActivityMainBinding;
 
@@ -51,12 +48,12 @@ public class MainActivity extends AppBaseActivity<MainView, MainPresenter> imple
         this.setContentView(this.layoutBinding.getRoot());
         this.initVariants();
         this.initViews();
-        this.fragments.add(new AttendanceFragment());
-        this.fragments.add(new WorkCenterFragment());
-        this.fragments.add(new MessagesFragment());
-        this.fragments.add(new PersonalFragment());
-        this.currentFragment = this.fragments.get(0);
-        this.changeFragment(this.currentFragment, this.currentFragment);
+//        this.fragments.add(new AttendanceFragment());
+//        this.fragments.add(new WorkCenterFragment());
+//        this.fragments.add(new MessagesFragment());
+//        this.fragments.add(new PersonalFragment());
+//        this.currentFragment = this.fragments.get(0);
+//        this.changeFragment(this.currentFragment, this.currentFragment);
     }
 
     @Override
@@ -72,9 +69,10 @@ public class MainActivity extends AppBaseActivity<MainView, MainPresenter> imple
     @SuppressLint("NonConstantResourceId")
     private void initViews() {
         this.layoutBinding.radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            Fragment fragment = this.fragments.get(checkedId);
-            this.changeFragment(this.currentFragment, fragment);
-            this.currentFragment = fragment;
+//            Fragment fragment = this.fragments.get(checkedId);
+//            this.changeFragment(this.currentFragment, fragment);
+//            this.currentFragment = fragment;
+            Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.action_attendanceFragment_to_homeFragment);
         });
         this.layoutBinding.firstBtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
 

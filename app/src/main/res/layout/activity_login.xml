@@ -32,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginTop="41dp"
+        android:drawablePadding="@dimen/dp_10"
         android:fontFamily="@font/msyh"
         android:paddingTop="13dp"
-        android:paddingBottom="13dp"
         android:text="@string/quick_login_text"
         android:textColor="@drawable/login_text_color_selector"
         android:textSize="14sp"
@@ -46,46 +46,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="33dp"
+        android:drawablePadding="10dp"
         android:fontFamily="@font/msyh"
         android:paddingTop="13dp"
-        android:paddingBottom="13dp"
         android:text="@string/password_login_text"
         android:textColor="@drawable/login_text_color_selector"
         android:textSize="14sp"
+        app:drawableBottomCompat="@drawable/line_blue"
         app:layout_constraintBaseline_toBaselineOf="@+id/quick_login_btn"
         app:layout_constraintLeft_toRightOf="@+id/quick_login_btn" />
 
-    <View
-        android:id="@+id/quick_login_divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#FF007AFF"
-        android:visibility="invisible"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toLeftOf="@id/quick_login_btn"
-        app:layout_constraintRight_toRightOf="@id/quick_login_btn"
-        app:layout_constraintTop_toBottomOf="@id/quick_login_btn" />
-
-    <View
-        android:id="@+id/password_login_divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#FF007AFF"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toLeftOf="@id/password_login_btn"
-        app:layout_constraintRight_toRightOf="@id/password_login_btn"
-        app:layout_constraintTop_toBottomOf="@id/password_login_btn" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="quick_login_btn, password_login_btn" />
 
     <View
         android:id="@+id/divider_login"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginEnd="46dp"
+        android:layout_margin="1dp"
         android:background="@color/divider_color_ffdedede"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toLeftOf="@id/quick_login_btn"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_login_divider" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/quick_login_btn"
+        app:layout_constraintTop_toBottomOf="@id/barrier1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,8 +86,8 @@
             android:id="@id/login_account"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            app:hint="@string/hint_user_login_account"
             app:edit_text="wz_yzczy"
+            app:hint="@string/hint_user_login_account"
             app:leftIcon="@mipmap/edt_icon_user_account"
             app:right_type="none" />
 
@@ -132,8 +118,8 @@
             android:id="@id/login_pwd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_44"
-            app:hint="@string/user_password_hint_text"
             app:edit_text="123456"
+            app:hint="@string/user_password_hint_text"
             app:inputType="textPassword"
             app:leftIcon="@mipmap/edt_icon_user_password"
             app:right_type="none" />

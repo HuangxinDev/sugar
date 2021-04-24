@@ -8,9 +8,9 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -47,11 +47,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/selector_007aff_96a1ad"
                 android:layout_below="@id/head_1"
-                android:text="任务详情" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_6"
+                android:text="任务详情"
+                android:textColor="@color/selector_007aff_96a1ad" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -70,11 +70,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
                 android:layout_below="@id/head_2"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/selector_007aff_96a1ad"
-                android:text="巡检记录" />
+                android:layout_marginTop="@dimen/dp_6"
+                android:text="巡检记录"
+                android:textColor="@color/selector_007aff_96a1ad" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -106,7 +106,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name1"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name2"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name3"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name4"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name5"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name6"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -272,7 +272,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name7"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -302,7 +302,7 @@
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@id/task_name"
+                    android:id="@+id/task_name8"
                     style="@style/BaseTextViewStyle.Black.14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -366,8 +366,8 @@
                 android:id="@id/inspect_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contacts_spacing="@dimen/dp_26"
                 app:contacts_count="4"
+                app:contacts_spacing="@dimen/dp_26"
                 app:title="复查人" />
 
             <View
@@ -378,10 +378,11 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:paddingTop="74dp"
                 android:layout_weight="1"
-                android:paddingBottom="48dp"
-                android:background="@color/background_gray">
+                android:background="@color/background_gray"
+                android:paddingTop="74dp"
+                android:paddingBottom="48dp">
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@id/confirm"
                     style="@style/TVBtn"

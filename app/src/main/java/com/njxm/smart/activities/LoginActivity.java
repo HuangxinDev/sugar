@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSONObject;
 import com.njxm.smart.activities.main.MainActivity;
@@ -60,16 +62,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
             // 取消定时
         }
     };
-    private final int i = 5;
     // 登录按钮
     private TextView mLoginBtn;
     // 快捷登录 Tab
     private TextView mQuickLoginBtn;
     // 密码登录 Tab
     private TextView mPasswordLoginBtn;
-    // 快捷登录和密码登录下方的下划线
-    private View mQuickLoginDivider;
-    private View mPasswordLoginDivider;
     // 账号验证布局
     private AppEditText mLoginAccountEditText;
     // 密码验证布局
@@ -81,16 +79,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     // 忘记密码
     private AppCompatTextView mForgetPwdBtn;
     private LoginPresenter mLoginPresenter;
-    private String she;
     private int count = 60;
-
-    public static void test() {
-
-    }
-
-    public static void onMyCreate() {
-
-    }
 
     @Override
     protected int setContentLayoutId() {
@@ -105,33 +94,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
             this.finish();
             return;
         }
-
         super.onCreate(savedInstanceState);
         this.mLoginPresenter = new LoginPresenter();
         this.mLoginPresenter.attachView(this); // Presenter内部持有一个Activity对象
-
         this.mLoginBtn = this.findViewById(R.id.btn_login);
         this.mLoginBtn.setOnClickListener(this);
-
         this.mQuickLoginBtn = this.findViewById(R.id.quick_login_btn);
         this.mQuickLoginBtn.setOnClickListener(this);
         this.mPasswordLoginBtn = this.findViewById(R.id.password_login_btn);
         this.mPasswordLoginBtn.setOnClickListener(this);
-
-        this.mQuickLoginDivider = this.findViewById(R.id.quick_login_divider);
-        this.mPasswordLoginDivider = this.findViewById(R.id.password_login_divider);
-
         this.mForgetPwdBtn = this.findViewById(R.id.forget_password);
         this.mForgetPwdBtn.setOnClickListener(this);
-
         this.mLoginAccountEditText = this.findViewById(R.id.login_account);
         this.mLoginPwdEditText = this.findViewById(R.id.login_pwd);
         this.mLoginQrEditText = this.findViewById(R.id.login_qr_code);
         this.mLoginNumberEditText = this.findViewById(R.id.login_number_code);
         this.switchLoginWay(true);
-
         this.mLoginNumberEditText.getRightTextView().setOnClickListener(this);
-
         this.mLoginQrEditText.setOnRightClickListener(v -> this.mLoginPresenter.requestQrCode());
     }
 
@@ -227,8 +206,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     private void switchLoginWay(boolean pwdLogin) {
         this.mPasswordLoginBtn.setEnabled(!pwdLogin);
         this.mQuickLoginBtn.setEnabled(pwdLogin);
-        this.mPasswordLoginDivider.setVisibility(pwdLogin ? View.VISIBLE : View.INVISIBLE);
-        this.mQuickLoginDivider.setVisibility(pwdLogin ? View.INVISIBLE : View.VISIBLE);
         this.mLoginPwdEditText.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
         this.mLoginNumberEditText.setVisibility(pwdLogin ? View.GONE : View.VISIBLE);
         this.mForgetPwdBtn.setVisibility(pwdLogin ? View.VISIBLE : View.GONE);
@@ -236,6 +213,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
         this.mLoginAccountEditText.getEditText().setInputType(pwdLogin ?
                 InputType.TYPE_CLASS_TEXT : InputType.TYPE_CLASS_PHONE);
         this.mLoginAccountEditText.clearText();
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.line_blue);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        this.mPasswordLoginBtn.setCompoundDrawables(null, null, null, pwdLogin ? drawable : null);
+        this.mQuickLoginBtn.setCompoundDrawables(null, null, null, pwdLogin ? null : drawable);
         if (pwdLogin) {
             this.mLoginNumberEditText.clearText();
         } else {
@@ -248,13 +229,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
 
     @Override
     public void onResponse(ResponseEvent event) {
-
         String url = event.getUrl();
-
         if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
             JSONObject dataObject = parseObject(event.getData());
             String bitmapStr = dataObject.getString("kaptcha");
-
             this.invoke(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.stringToBitmap(bitmapStr))));
         } else {
             super.onResponse(event);
