@@ -20,8 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.activities.AppBaseActivity;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ntxm.smart.R;
 
 /**
@@ -96,7 +96,7 @@ public class MainActivity extends AppBaseActivity<MainView, MainPresenter> imple
         return new MainPresenter();
     }
 
-    private static class NavTab {
+    private static class NavTbab {
         int from;
         int to;
         int action;
