@@ -5,7 +5,7 @@
     app:startDestination="@id/attendanceFragment">
     <fragment
         android:id="@+id/attendanceFragment"
-        android:name="com.njxm.smart.activities.fragments.AttendanceFragment"
+        android:name="com.njxm.smart.ui.activities.fragments.AttendanceFragment"
         android:label="AttendanceFragment">
         <action
             android:id="@+id/action_attendanceFragment_to_messageFragment"
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/workCenterFragment"
-        android:name="com.njxm.smart.activities.fragments.WorkCenterFragment"
+        android:name="com.njxm.smart.ui.activities.fragments.WorkCenterFragment"
         android:label="WorkCenterFragment">
         <action
             android:id="@+id/action_workCenterFragment_to_messageFragment"
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/messageFragment"
-        android:name="com.njxm.smart.activities.fragments.MessagesFragment"
+        android:name="com.njxm.smart.ui.activities.fragments.MessagesFragment"
         android:label="MessagesFragment">
         <action
             android:id="@+id/action_messageFragment_to_personalFragment"
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/personalFragment"
-        android:name="com.njxm.smart.activities.fragments.PersonalFragment"
+        android:name="com.njxm.smart.ui.activities.fragments.PersonalFragment"
         android:label="PersonalFragment">
         <action
             android:id="@+id/action_personalFragment_to_workCenterFragment"

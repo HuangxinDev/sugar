@@ -10,7 +10,7 @@ package com.njxm.smart.base;
 
 import androidx.annotation.NonNull;
 
-import com.njxm.smart.activities.BaseActivity;
+import com.njxm.smart.ui.activities.BaseActivity;
 
 /**
  * Created by Hxin on 2021/4/2 Function:

@@ -12,7 +12,7 @@ import java.util.List;
 
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.activities.adapter.WorkCenterItemAdapter;
+import com.njxm.smart.ui.activities.adapter.WorkCenterItemAdapter;
 
 /**
  * Created by Hxin on 2020/3/28
