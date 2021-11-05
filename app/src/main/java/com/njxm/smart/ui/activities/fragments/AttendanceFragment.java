@@ -8,11 +8,6 @@
 
 package com.njxm.smart.ui.activities.fragments;
 
-import java.io.File;
-import java.util.UUID;
-
-import org.greenrobot.eventbus.EventBus;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -38,16 +33,22 @@ import com.bumptech.glide.Glide;
 import com.hxin.common.perrmission.IPermission;
 import com.hxin.common.perrmission.PermissionRequestActivity;
 import com.njxm.smart.SmartCloudApplication;
-import com.njxm.smart.ui.activities.BaseActivity;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.service.LocationService;
+import com.njxm.smart.ui.activities.BaseActivity;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
+import com.njxm.smart.utils.ScreenUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
+import java.util.UUID;
 
 import butterknife.BindView;
 import wendu.dsbridge.DWebView;
@@ -64,9 +65,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     private final BDAbstractLocationListener mBdAbstractLocationListener = new BDAbstractLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
-
             LogTool.printD(AttendanceFragment.class, "==baidu location success==" + bdLocation.getAddrStr());
-
             com.njxm.smart.service.LocationService.unregisterListener(this);
             AttendanceFragment.this.mLocationService.stop();
             JSONObject object = new JSONObject();
@@ -109,7 +108,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     protected void setUpView() {
         LinearLayout llRootView = this.getContentView().findViewById(R.id.ll_root);
         if (this.getActivity() instanceof BaseActivity) {
-            llRootView.setPadding(0, BaseActivity.getStatusBarHeight(this.getActivity()), 0, 0);
+            llRootView.setPadding(0, ScreenUtils.getStatusBarHeight(this.getActivity()), 0, 0);
         }
     }
 

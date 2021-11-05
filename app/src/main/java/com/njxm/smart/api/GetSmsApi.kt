@@ -17,7 +17,6 @@ import retrofit2.http.POST
  * Function: 获取短信息
  */
 interface GetSmsApi {
-
     @POST("/auth/sms/sendSms")
     fun sendSms(@Body converter: Converter<String, String>)
 }

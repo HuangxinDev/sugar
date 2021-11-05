@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_attachment"
+        android:icon="@drawable/first_page_attendance_btn"
+        android:title="@string/attachment" />
+
+    <item
+        android:id="@+id/nav_function_collection"
+        android:checked="true"
+        android:icon="@drawable/first_page_workcenter_btn"
+        android:title="@string/function_collection" />
+
+    <item
+        android:id="@+id/nav_message"
+        android:icon="@drawable/first_page_message_btn"
+        android:title="@string/message" />
+
+    <item
+        android:id="@+id/nav_mine"
+        android:icon="@drawable/first_page_my_btn"
+        android:title="@string/mine" />
+</menu>

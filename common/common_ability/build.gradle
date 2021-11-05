@@ -1,0 +1,11 @@
+apply plugin: 'com.android.library'
+android {
+    compileSdk 31
+
+    sourceSets {
+        main {
+            java.srcDirs "src/p_base/java", "src/p_http/java", "src/p_config/java"
+            resources.srcDirs("src/p_base/res", "src/p_http/res", "src/p_config/res")
+        }
+    }
+}

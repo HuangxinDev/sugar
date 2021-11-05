@@ -8,17 +8,18 @@
 
 package com.njxm.smart.tools.network;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import org.greenrobot.eventbus.EventBus;
-
+import com.njxm.smart.api.ConvertFactory;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -109,7 +110,7 @@ public final class HttpUtils {
                 .baseUrl("http://119.3.136.127:7776")
                 .client(com.njxm.smart.tools.network.HttpUtils.getOkHttpClient())
                 .client(com.njxm.smart.tools.network.HttpUtils.sOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(new ConvertFactory())
                 .build();
         return retrofit.create(tClass);
     }

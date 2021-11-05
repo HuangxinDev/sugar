@@ -7,6 +7,15 @@
     android:orientation="vertical"
     android:splitMotionEvents="false">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemBackground="@color/text_color_white"
+        app:itemIconSize="24dp"
+        app:itemTextColor="@color/text_color_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/navigation" />
+
     <View
         android:id="@+id/divider1"
         android:layout_width="match_parent"
@@ -20,6 +29,7 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.086">
 

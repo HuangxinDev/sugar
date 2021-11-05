@@ -8,11 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.greenrobot.eventbus.EventBus;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.njxm.smart.activities.login.LoginActivity;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
@@ -38,8 +34,16 @@ import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
+import com.smart.cloud.utils.VerifyCodeUtils;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ResetPasswordActivity extends BaseActivity {
     private AppEditText mAccountEdit;
@@ -86,10 +90,6 @@ public class ResetPasswordActivity extends BaseActivity {
     private boolean isForgetPwd;
     private int count = 60;
 
-    private static void getQRCode() {
-        HttpUtils.getInstance().request(RequestEvent.newBuilder().url(UrlPath.PATH_PICTURE_VERIFY.getUrl()).build());
-    }
-
     @Override
     protected int setContentLayoutId() {
         return R.layout.activity_reset_password;
@@ -107,12 +107,12 @@ public class ResetPasswordActivity extends BaseActivity {
         this.isForgetPwd = action.equals("1");
 
         if (this.isForgetPwd) {
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(this.mActionBarTitle, View.GONE);
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(divider, View.GONE);
+            ViewUtils.setVisibility(this.mActionBarTitle, View.GONE);
+            ViewUtils.setVisibility(divider, View.GONE);
         } else {
             this.setActionBarTitle("重置密码");
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(this.mActionBarRightBtn, View.GONE);
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(title, View.GONE);
+            ViewUtils.setVisibility(this.mActionBarRightBtn, View.GONE);
+            ViewUtils.setVisibility(title, View.GONE);
         }
 
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
@@ -127,10 +127,10 @@ public class ResetPasswordActivity extends BaseActivity {
         this.mAccountNumber = this.findViewById(R.id.login_number_code);
         this.mNextStepBtn = this.findViewById(R.id.next_step);
         this.mNextStepBtn.setOnClickListener(this);
-        com.njxm.smart.ui.activities.BaseActivity.setVisible(this.root_two, View.VISIBLE);
+        ViewUtils.setVisibility(this.root_two, View.VISIBLE);
         this.mConfirmBtn = this.findViewById(R.id.login_confirm);
         this.mConfirmBtn.setOnClickListener(this);
-        com.njxm.smart.ui.activities.BaseActivity.setVisible(this.root_two, View.GONE);
+        ViewUtils.setVisibility(this.root_two, View.GONE);
 
         this.mNewPwd1 = this.findViewById(R.id.new_pwd1);
         this.mNewPwd2 = this.findViewById(R.id.new_pwd2);
@@ -155,7 +155,7 @@ public class ResetPasswordActivity extends BaseActivity {
         this.mNewPwd1.getEditText().addTextChangedListener(this.watcher);
         this.mNewPwd2.getEditText().addTextChangedListener(this.watcher);
 
-        com.njxm.smart.ui.activities.ResetPasswordActivity.getQRCode();
+        VerifyCodeUtils.getQRCode();
     }
 
     @Override
@@ -181,24 +181,23 @@ public class ResetPasswordActivity extends BaseActivity {
     public void onClick(View v) {
         super.onClick(v);
         if (v == this.mNextStepBtn) {
-
-            if (StringUtils.isEmpty(this.mAccountEdit.getText()) || !this.mAccountEdit.getText().matches(RegexUtil.REGEX_PHONE)) {
-                com.njxm.smart.ui.activities.BaseActivity.showToast("请输入正确的手机号");
+            if (RegexUtil.isMobilePhone(mAccountEdit.getText())) {
+                ToastUtils.showToast("请输入正确的手机号");
                 return;
             }
 
             if (StringUtils.isEmpty(this.mAccountQR.getText())) {
-                com.njxm.smart.ui.activities.BaseActivity.showToast("验证码不可为空");
+                ToastUtils.showToast("验证码不可为空");
                 return;
             }
 
             if (StringUtils.isEmpty(this.mAccountNumber.getText())) {
-                com.njxm.smart.ui.activities.BaseActivity.showToast("请输入账户密码");
+                ToastUtils.showToast("请输入账户密码");
                 return;
             }
 
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(this.root_one, View.GONE);
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(this.root_two, View.VISIBLE);
+            ViewUtils.setVisibility(this.root_one, View.GONE);
+            ViewUtils.setVisibility(this.root_two, View.VISIBLE);
         } else if (v == this.mAccountNumber.getRightTextView()) {
             this.mAccountNumber.setEnabled(false);
             if (this.count != 60) {
@@ -240,7 +239,7 @@ public class ResetPasswordActivity extends BaseActivity {
             requestBuilder.addBodyJson("password", this.mNewPwd2.getText().trim());
             HttpUtils.getInstance().request(requestBuilder.build());
         } else if (v == this.mAccountQR.getRightTextView()) {
-            com.njxm.smart.ui.activities.ResetPasswordActivity.getQRCode();
+            VerifyCodeUtils.getQRCode();
         }
     }
 
@@ -253,8 +252,8 @@ public class ResetPasswordActivity extends BaseActivity {
         if (this.root_two.getVisibility() == View.VISIBLE && this.isForgetPwd) {
             this.mNewPwd1.clearText();
             this.mNewPwd2.clearText();
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(this.root_one, View.VISIBLE);
-            com.njxm.smart.ui.activities.BaseActivity.setVisible(this.root_two, View.GONE);
+            ViewUtils.setVisibility(this.root_one, View.VISIBLE);
+            ViewUtils.setVisibility(this.root_two, View.GONE);
         } else {
             this.finish();
         }

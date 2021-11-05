@@ -8,10 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.io.File;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -40,6 +36,11 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
+
+import java.io.File;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -105,11 +106,11 @@ public class RealNameAuthenticationActivity extends BaseActivity {
     private void uploadBitmap() {
 
         if (StringUtils.isEmpty(this.etCardId.getText().toString().trim()) || StringUtils.isEmpty(this.etCardName.getText().toString().trim())) {
-            com.njxm.smart.ui.activities.BaseActivity.showToast("请输入姓名和身份证号");
+            ToastUtils.showToast("请输入姓名和身份证号");
             return;
         }
         if (this.sparseArray.size() < 3) {
-            com.njxm.smart.ui.activities.BaseActivity.showToast("请补全照片");
+            ToastUtils.showToast("请补全照片");
             return;
         }
 

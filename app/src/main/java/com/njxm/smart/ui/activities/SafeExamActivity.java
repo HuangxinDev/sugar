@@ -37,7 +37,7 @@ public class SafeExamActivity extends BaseActivity {
         this.showView(this.mActionBarTitle, false);
         this.showLeftBtn(true, R.mipmap.arrow_back);
         this.showRightBtn(true, "考试记录");
-        this.tvActionBarRightText.setTextColor(Color.WHITE);
+        this.actionBarRightTextView.setTextColor(Color.WHITE);
     }
 
     @OnClick(R.id.start_exam)

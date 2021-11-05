@@ -20,7 +20,6 @@ import com.njxm.smart.utils.LogTool;
 import com.ntxm.smart.R;
 
 public class DotsView extends LinearLayout {
-
     private Context context;
     private int selected = -1;
 
@@ -44,13 +43,11 @@ public class DotsView extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
         for (int i = 0; i < this.getChildCount(); i++) {
             if (i != this.getChildCount() - 1) {
                 super.onLayout(changed, l + 24, t, r + 24, b);
             }
         }
-
     }
 
     @Override
@@ -63,8 +60,6 @@ public class DotsView extends LinearLayout {
             return;
         }
 
-//        normal.setMargins(10, 0, 10, 0);
-//        selectedParams.setMargins(9, 0, 9, 0);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.setMargins(11, 0, 11, 0);
         ImageView imageView;
@@ -78,9 +73,6 @@ public class DotsView extends LinearLayout {
         // 刷新
         this.setSelected(0);
     }
-
-//    private LinearLayout.LayoutParams normal = new LinearLayout.LayoutParams(6 * 4, 6 * 4);
-//    private LinearLayout.LayoutParams selectedParams = new LinearLayout.LayoutParams(7 * 4, 7 * 4);
 
     public void setSelected(int position) {
         // 刷新

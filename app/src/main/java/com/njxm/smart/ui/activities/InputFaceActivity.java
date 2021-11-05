@@ -8,14 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.io.File;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -32,13 +24,16 @@ import androidx.core.content.FileProvider;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.api.GetAreaApi;
 import com.njxm.smart.api.UploadInputFaceApi;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.AddressBean;
 import com.njxm.smart.model.jsonbean.UserBean;
+import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.LogTool;
@@ -46,6 +41,14 @@ import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -126,6 +129,19 @@ public class InputFaceActivity extends BaseActivity {
      * 上传录入人脸图像
      */
     private void uploadInputFace() {
+
+        HttpUtils.getApi(GetAreaApi.class).testArrayTest().enqueue(new Callback<AddressBean>() {
+            @Override
+            public void onResponse(Call<AddressBean> call, Response<AddressBean> response) {
+            }
+
+            @Override
+            public void onFailure(Call<AddressBean> call, Throwable t) {
+
+            }
+        });
+
+
         UploadInputFaceApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadInputFaceApi.class);
         api.uploadFacePhoto(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)),
                 MultipartBody.Part.createFormData("file", this.photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), this.photoFile)))

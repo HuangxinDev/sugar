@@ -8,8 +8,6 @@
 
 package com.njxm.smart.api;
 
-import java.util.List;
-
 import com.njxm.smart.model.jsonbean.AddressBean;
 
 import okhttp3.ResponseBody;
@@ -29,5 +27,5 @@ public interface GetAreaApi {
 
     @POST(value = "/sys/provinceAndCity/findAll")
     @Headers(value = {"Platform:APP", "Content-Type:application/json"})
-    Call<List<AddressBean>> testArrayTest();
+    Call<AddressBean> testArrayTest();
 }

@@ -21,6 +21,7 @@ import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,7 +52,7 @@ public class SettingsActivity extends BaseActivity {
         this.setActionBarTitle("设置");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
         this.findViewById(R.id.settings_check_update).setOnClickListener(v -> {
-            com.njxm.smart.ui.activities.BaseActivity.showToast("清除缓存完成");
+            ToastUtils.showToast("清除缓存完成");
         });
     }
 

@@ -23,4 +23,6 @@ public class AppUtils {
     public static boolean isMainThread() {
         return Looper.myLooper() == Looper.getMainLooper();
     }
+
+    
 }

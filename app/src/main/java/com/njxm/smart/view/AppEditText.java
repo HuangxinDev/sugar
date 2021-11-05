@@ -60,19 +60,11 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
 
     public AppEditText(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        if (this.rootView == null) {
-            this.rootView = LayoutInflater.from(context).inflate(R.layout.item_custom_edit_text, this, true);
-            this.mAppCompatImageView = this.rootView.findViewById(R.id.edit_icon);
-            this.mAppCompatEditText = this.rootView.findViewById(R.id.edit);
-            this.mAppCompatTextView = this.rootView.findViewById(R.id.edit_image_text);
-            this.mDividerView = this.rootView.findViewById(R.id.divider1);
-        }
+        getInit(context);
 
         Resources.Theme theme = context.getTheme();
         TypedArray ta = theme.obtainStyledAttributes(attrs, R.styleable.AppEditText, defStyleAttr, 0);
-
         int n = ta.getIndexCount();
-
         int inputType = ta.getInt(R.styleable.AppEditText_inputType, InputType.TYPE_CLASS_TEXT);
         boolean toRightOfEdit = false;
         String editText = null;
@@ -95,7 +87,7 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
                     toRightOfEdit = ta.getBoolean(attr, false);
                     break;
                 case R.styleable.AppEditText_right_type:
-                    this.mRightType = ta.getInt(attr, com.njxm.smart.view.AppEditText.RIGHT_NONE);
+                    this.mRightType = ta.getInt(attr, AppEditText.RIGHT_NONE);
                     break;
                 case R.styleable.AppEditText_leftIcon:
                     leftIconRes = ta.getResourceId(attr, 0);
@@ -115,13 +107,11 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
             layoutParams.rightToRight = R.id.edit;
             this.mDividerView.setLayoutParams(layoutParams);
         }
-        this.mAppCompatEditText.setHint(editHint);
-        this.mAppCompatEditText.setText(editText);
-        this.mAppCompatEditText.setInputType(inputType);
+        setValue(inputType, editText, editHint);
 
-        if (this.mRightType == com.njxm.smart.view.AppEditText.RIGHT_NONE) {
-            this.mAppCompatTextView.setVisibility(android.view.View.GONE);
-        } else if (this.mRightType == com.njxm.smart.view.AppEditText.RIGHT_IMAGE) {
+        if (this.mRightType == AppEditText.RIGHT_NONE) {
+            this.mAppCompatTextView.setVisibility(View.GONE);
+        } else if (this.mRightType == AppEditText.RIGHT_IMAGE) {
             this.mAppCompatTextView.setText("");
             this.mAppCompatTextView.setBackgroundResource(rightIconRes);
         } else {
@@ -133,6 +123,25 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
 
         this.mAppCompatTextView.setOnClickListener(this);
         this.mAppCompatImageView.setOnClickListener(this);
+    }
+
+
+    private void getInit(Context context) {
+        init(context);
+    }
+
+    private void setValue(int inputType, String editText, String editHint) {
+        this.mAppCompatEditText.setHint(editHint);
+        this.mAppCompatEditText.setText(editText);
+        this.mAppCompatEditText.setInputType(inputType);
+    }
+
+    private void init(Context context) {
+        this.rootView = LayoutInflater.from(context).inflate(R.layout.item_custom_edit_text, this, true);
+        this.mAppCompatImageView = this.rootView.findViewById(R.id.edit_icon);
+        this.mAppCompatEditText = this.rootView.findViewById(R.id.edit);
+        this.mAppCompatTextView = this.rootView.findViewById(R.id.edit_image_text);
+        this.mDividerView = this.rootView.findViewById(R.id.divider1);
     }
 
     @Override

@@ -8,3 +8,8 @@
 
 include ':app'
 include ':hxincommon'
+//include ':annotationprocessor'
+include ':app_ui'
+include ':common:common_ability'
+include ':common:common_ui'
+

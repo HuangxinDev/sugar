@@ -8,14 +8,14 @@
 
 package com.njxm.smart.ui.activities.adapter;
 
-import java.util.List;
-
 import androidx.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.component.SuggestionDetailItem;
 import com.ntxm.smart.R;
+
+import java.util.List;
 
 public class SuggestionDetailAdapter extends BaseQuickAdapter<SuggestionDetailItem, BaseViewHolder> {
 

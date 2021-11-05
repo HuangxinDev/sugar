@@ -1,0 +1,6 @@
+//pin 工程gradle配置
+
+def getPinDirs() {
+    File file = File(getProjectDir(), 'src/')
+    file.listFiles()
+}

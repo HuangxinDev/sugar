@@ -8,13 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
-
 import android.location.Address;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.ui.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.contract.AreaContract;
@@ -39,14 +31,21 @@ import com.njxm.smart.model.jsonbean.AddressBean;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.presenter.AreaPresenter;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.LogTool;
+import com.njxm.smart.ui.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Route(path = GlobalRouter.USER_ADDRESS)
 public class UserAddressActivity extends BaseActivity implements AreaContract.View {
-
     public static final int PROVINCE_CODE = 0;
     public static final int CITY_CODE = 1;
     public static final int DISTICT_CODE = 2;
@@ -93,36 +92,45 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
         this.tvPop.setOnClickListener(this);
         this.simpleTextAdapter.setOnItemClickListener((adapter, view, position) -> {
             AddressBean baseAddressBean = (AddressBean) adapter.getData().get(position);
-            switch (UserAddressActivity.this.selectAddressType) {
-                case UserAddressActivity.PROVINCE_CODE:
-                    LogTool.printD("click province: %s", baseAddressBean.getName());
-                    UserAddressActivity.this.cityBaseBeans = baseAddressBean.getAreas();
-                    UserAddressActivity.this.selectedAddress.province = baseAddressBean.getName();
-                    UserAddressActivity.this.selectedAddress.provinceId = baseAddressBean.getId();
-                    adapter.setNewData(UserAddressActivity.this.cityBaseBeans);
-                    UserAddressActivity.this.selectAddressType = 1;
-                    UserAddressActivity.this.tvPop.setText("点击重新选择");
-
-                    break;
-                case UserAddressActivity.CITY_CODE:
-                    UserAddressActivity.this.areaBaseBeans = baseAddressBean.getAreas();
-                    UserAddressActivity.this.selectAddressType = 2;
-                    UserAddressActivity.this.selectedAddress.city = baseAddressBean.getName();
-                    UserAddressActivity.this.selectedAddress.cityId = baseAddressBean.getId();
-                    adapter.setNewData(UserAddressActivity.this.areaBaseBeans);
-                    break;
-                case UserAddressActivity.DISTICT_CODE:
-                    UserAddressActivity.this.selectedAddress.distance = baseAddressBean.getName();
-                    UserAddressActivity.this.selectedAddress.distanceId = baseAddressBean.getId();
-                    break;
-                default:
-            }
-
+            selectOffice(adapter, baseAddressBean);
             UserAddressActivity.this.tvUserAddress.setText(UserAddressActivity.this.selectedAddress.province + UserAddressActivity.this.selectedAddress.city + UserAddressActivity.this.selectedAddress.distance);
         });
 
         mRecyclerView.setAdapter(this.simpleTextAdapter);
 
+        parseOfficeData();
+    }
+
+    private void selectOffice(com.chad.library.adapter.base.BaseQuickAdapter adapter, AddressBean baseAddressBean) {
+        switch (this.selectAddressType) {
+            case PROVINCE_CODE:
+                this.cityBaseBeans = baseAddressBean.getAreas();
+                this.selectedAddress.province = baseAddressBean.getName();
+                this.selectedAddress.provinceId = baseAddressBean.getId();
+                adapter.setNewData(this.cityBaseBeans);
+                this.selectAddressType = 1;
+                this.tvPop.setText("点击重新选择");
+
+                break;
+            case CITY_CODE:
+                this.areaBaseBeans = baseAddressBean.getAreas();
+                this.selectAddressType = 2;
+                this.selectedAddress.city = baseAddressBean.getName();
+                this.selectedAddress.cityId = baseAddressBean.getId();
+                adapter.setNewData(this.areaBaseBeans);
+                break;
+            case DISTICT_CODE:
+                this.selectedAddress.distance = baseAddressBean.getName();
+                this.selectedAddress.distanceId = baseAddressBean.getId();
+                break;
+            default:
+        }
+    }
+
+    /**
+     * 解析行政数据
+     */
+    private void parseOfficeData() {
         new Thread(() -> {
             UserAddressActivity.this.provinceBaseBeans = JSONObject.parseArray(SPUtils.getStringValue(KeyConstant.KEY_COMMON_ADDRESS_LIST), AddressBean.class);
             UserAddressActivity.this.simpleTextAdapter.setNewData(UserAddressActivity.this.provinceBaseBeans);
@@ -141,7 +149,7 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
 
         if (StringUtils.isEmpty(this.selectedAddress.province) || StringUtils.isEmpty(this.selectedAddress.city) || StringUtils.isEmpty(this.selectedAddress.distance)
                 || StringUtils.isEmpty(this.etUserAddressDetail.getText().toString())) {
-            com.njxm.smart.ui.activities.BaseActivity.showToast("请正确选择地区和填写地址");
+            ToastUtils.showToast("请正确选择地区和填写地址");
             return;
         }
 

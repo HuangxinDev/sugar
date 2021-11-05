@@ -8,12 +8,11 @@
 
 package com.njxm.smart.model.jsonbean;
 
-import java.util.List;
-
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class AddressBean {
+import java.util.List;
 
+public class AddressBean {
     @JSONField(name = "code")
     private String id;  // 地区ID
 

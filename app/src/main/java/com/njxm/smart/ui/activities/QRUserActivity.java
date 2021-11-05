@@ -8,9 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -23,10 +20,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.utils.BitmapUtils;
+import com.njxm.smart.utils.QRImageParam;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ntxm.smart.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -52,18 +53,11 @@ public class QRUserActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.setActionBarTitle("二维码名片");
-
         Glide.with(this)
-                .load(BitmapUtils.createQRCodeBitmap("http://119.3.136.127:7775/#/personal?id="
-                                + SPUtils.getStringValue(KeyConstant.KEY_USER_ID),
-                        ResolutionUtil.dp2Px(244),
-                        ResolutionUtil.dp2Px(244),
-                        "UTF-8",
-                        "L",
-                        null,
-                        Color.BLACK, Color.WHITE))
+                .load(BitmapUtils.createQRCodeBitmap(
+                        new QRImageParam("http://119.3.136.127:7775/#/personal?id="
+                                + SPUtils.getStringValue(KeyConstant.KEY_USER_ID), ResolutionUtil.dp2Px(244), ResolutionUtil.dp2Px(244), "UTF-8", "L", null, Color.BLACK, Color.WHITE)))
                 .into(this.mQRImageView);
     }
 

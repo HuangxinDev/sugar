@@ -10,8 +10,6 @@ package com.njxm.smart.constant;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.njxm.smart.GlobalConst;
-
 /**
  * 服务端接口url定义
  */
@@ -66,19 +64,19 @@ public enum UrlPath {
 
     @NotNull
     private String getHost() {
-        String host;
-        switch (this.type) {
-            case 1:
-                host = GlobalConst.GRANT_HOST;
-                break;
-            case 2:
-                host = GlobalConst.BIZ_HOST;
-                break;
-            case 3:
-            default:
-                host = GlobalConst.H5_HOST;
-                break;
-        }
+        String host = "";
+//        switch (this.type) {
+//            case 1:
+//                host = GlobalConst.GRANT_HOST;
+//                break;
+//            case 2:
+//                host = GlobalConst.BIZ_HOST;
+//                break;
+//            case 3:
+//            default:
+//                host = GlobalConst.H5_HOST;
+//                break;
+//        }
         return host;
     }
 

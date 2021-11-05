@@ -8,16 +8,7 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.UUID;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -25,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -38,6 +28,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
 
 import com.hxin.common.perrmission.PermissionRequestActivity;
+import com.njxm.smart.activities.login.LoginActivity;
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.LogoutEvent;
@@ -49,12 +40,20 @@ import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,9 +81,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Nullable
     @BindView(R.id.action_bar_right_text)
-    protected AppCompatTextView tvActionBarRightText;
+    protected AppCompatTextView actionBarRightTextView;
     protected File photoFile;
-    private long lastClickTime = 0;
 
     private View container;
 
@@ -92,55 +90,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         this.mTag = this.getClass().getSimpleName();
     }
 
-    public static Handler getMainHandler() {
-        return BaseActivity.sHandler;
-    }
-
-    /**
-     * 获取状态栏高度
-     *
-     * @param context
-     * @return
-     */
-    public static int getStatusBarHeight(Context context) {
-        int statusBarHeight = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        LogTool.printD(BaseActivity.class, "status bar height: %s", statusBarHeight);
-        return statusBarHeight;
-    }
-
-    protected static int setStatusBarColor() {
-        return R.color.text_color_white;
-    }
-
-    protected static void setVisible(View view, int visible) {
-        if (view == null) {
-            return;
-        }
-        view.setVisibility(visible);
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public static void doOtherThing(Runnable runnable) {
-        runnable.run();
-    }
-
-    /**
-     * 显示弹窗错误信息
-     *
-     * @param format
-     * @param objects
-     */
-    protected static void showToast(String format, Object... objects) {
-        if (StringUtils.isEmpty(format)) {
-            return;
-        }
-        String toastMsg = (objects != null && objects.length != 0) ?
-                String.format(Locale.US, format, objects) : format;
-        EventBus.getDefault().post(new ToastEvent(toastMsg));
+    protected ActionBarItem getActionBarItem() {
+        return new ActionBarItem(R.mipmap.arrow_back, 0, "");
     }
 
     @Override
@@ -262,7 +213,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Override
     public void setImageResource(AppCompatImageButton view, int resourceId) {
         if (view != null) {
-            view.setImageResource(resourceId);
+            setRightResource(resourceId);
         }
     }
 
@@ -270,7 +221,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     public void showLeftBtn(boolean show, int resourcesId) {
         if (this.mActionBarBackBtn != null) {
             if (show) {
-                this.mActionBarBackBtn.setImageResource(resourcesId);
+                setRightResource(resourcesId);
                 this.mActionBarBackBtn.setVisibility(View.VISIBLE);
             } else {
                 this.mActionBarBackBtn.setVisibility(View.GONE);
@@ -282,18 +233,23 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     public void showRightBtn(boolean show, int resourcesId) {
         if (this.mActionBarRightBtn != null) {
             this.mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
-            this.mActionBarRightBtn.setImageResource(resourcesId);
+            setRightResource(resourcesId);
         }
 
-        if (show && this.tvActionBarRightText != null) {
-            this.tvActionBarRightText.setVisibility(View.GONE);
+        if (show && this.actionBarRightTextView != null) {
+            this.actionBarRightTextView.setVisibility(View.GONE);
         }
     }
 
+    private void setRightResource(int resourcesId) {
+        ViewUtils.setImageResource(mActionBarRightBtn, resourcesId);
+    }
+
     public void showRightBtn(boolean show, String text) {
-        if (this.tvActionBarRightText != null) {
-            this.tvActionBarRightText.setVisibility(show ? View.VISIBLE : View.GONE);
-            this.tvActionBarRightText.setText(text);
+        ViewUtils.setText(actionBarRightTextView, text);
+        if (this.actionBarRightTextView != null) {
+            this.actionBarRightTextView.setVisibility(show ? View.VISIBLE : View.GONE);
+
         }
 
         if (show && this.mActionBarRightBtn != null) {
@@ -353,7 +309,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         } else if (url.equals(UrlPath.PATH_USER_EDU_PULL.getUrl())) {
             EventBus.getDefault().post(JsonUtils.getJsonArray(event.getData(), EduTypeBean.class));
         } else if (url.equals(UrlPath.PATH_SYS_LOGOUT.getUrl())) {
-            BaseActivity.showToast("登出成功");
+            ToastUtils.showToast("登出成功");
             EventBus.getDefault().post(new LogoutEvent());
         } else if (url.equals(UrlPath.PATH_PROVINCE_CITY_AREA.getUrl())) {
             if (event.isSuccess()) {
@@ -368,7 +324,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      * 登出服务
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void logOut(LogoutEvent event) {
+    public void signUp(LogoutEvent event) {
         if (this instanceof LoginActivity) {
             return;
         }
@@ -379,32 +335,96 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         this.finish();
     }
 
-    /**
-     * 快速点击两次屏蔽第二次点击事件，避免出现同一页面.
-     *
-     * @param ev
-     * @return true:结束 false:继续传递
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            if (!this.isFastDoubleClick()) {
-                return super.dispatchTouchEvent(ev);
-            }
-            return true;
-        }
-        return super.dispatchTouchEvent(ev);
-    }
+    public static class MedicalBean {
+        protected String id;
+        private int delFlag;
+        private String createTime;
+        private String createUser;
+        private String modifyTime;
+        private String modifyUser;
+        private String sumrStatus;
+        private String sumrUserId;
+        private String files;
+        private List<String> pathList;
 
-    /**
-     * 300ms内是否重复点击
-     *
-     * @return true:是
-     */
-    private boolean isFastDoubleClick() {
-        long time = System.currentTimeMillis();
-        long timeDiff = time - this.lastClickTime;
-        this.lastClickTime = time;
-        return timeDiff <= 300;
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public int getDelFlag() {
+            return this.delFlag;
+        }
+
+        public void setDelFlag(int delFlag) {
+            this.delFlag = delFlag;
+        }
+
+        public String getCreateTime() {
+            return this.createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
+        }
+
+        public String getCreateUser() {
+            return this.createUser;
+        }
+
+        public void setCreateUser(String createUser) {
+            this.createUser = createUser;
+        }
+
+        public String getModifyTime() {
+            return this.modifyTime;
+        }
+
+        public void setModifyTime(String modifyTime) {
+            this.modifyTime = modifyTime;
+        }
+
+        public String getModifyUser() {
+            return this.modifyUser;
+        }
+
+        public void setModifyUser(String modifyUser) {
+            this.modifyUser = modifyUser;
+        }
+
+        public String getSumrStatus() {
+            return this.sumrStatus;
+        }
+
+        public void setSumrStatus(String sumrStatus) {
+            this.sumrStatus = sumrStatus;
+        }
+
+        public String getSumrUserId() {
+            return this.sumrUserId;
+        }
+
+        public void setSumrUserId(String sumrUserId) {
+            this.sumrUserId = sumrUserId;
+        }
+
+        public String getFiles() {
+            return this.files;
+        }
+
+        public void setFiles(String files) {
+            this.files = files;
+        }
+
+        public List<String> getPathList() {
+            return this.pathList;
+        }
+
+        public void setPathList(List<String> pathList) {
+            this.pathList = pathList;
+        }
     }
 }

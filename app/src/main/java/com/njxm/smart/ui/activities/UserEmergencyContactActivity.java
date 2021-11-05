@@ -22,6 +22,7 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
 
 @Route(path = GlobalRouter.USER_EMERGENCY_CONTACT)
 public class UserEmergencyContactActivity extends BaseActivity {
@@ -57,7 +58,7 @@ public class UserEmergencyContactActivity extends BaseActivity {
     private void uploadContacts() {
         if (StringUtils.isEmpty(this.etUserName.getText().toString())
                 || StringUtils.isEmpty(this.etUserPhone.getText().toString())) {
-            com.njxm.smart.ui.activities.BaseActivity.showToast("姓名和手机号不可为空");
+            ToastUtils.showToast("姓名和手机号不可为空");
             return;
         }
 

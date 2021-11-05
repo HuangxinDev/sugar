@@ -8,16 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.njxm.smart.ui.activities.adapter.SimpleImageAdapter;
 import com.njxm.smart.api.UploadFileApi;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.UrlPath;
@@ -50,12 +39,24 @@ import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.ui.activities.adapter.SimpleImageAdapter;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -139,9 +140,8 @@ public class MedicalReportActivity extends BaseActivity {
         this.adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
                 if (com.njxm.smart.ui.activities.MedicalReportActivity.this.mDatas.size() >= 9) {
-                    com.njxm.smart.ui.activities.BaseActivity.showToast("上传图片已达上限");
+                    ToastUtils.showToast("上传图片已达上限");
                     return;
                 }
 
@@ -342,107 +342,26 @@ public class MedicalReportActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateView(MedicalBean bean) {
-        this.tvModifyTime.setText("上传时间:  " + bean.getCreateTime());
-
-        this.mDatas.clear();
-        for (String path : bean.getPathList()) {
-            this.mDatas.add(UrlPath.PATH_PICTURE_PREFIX.getUrl() + path);
-        }
-
-        this.adapter.setShowDelete(false);
-        this.adapter.setNewData(this.mDatas);
+        new Test(bean).invoke();
     }
 
-    public static class MedicalBean {
-        protected String id;
-        private int delFlag;
-        private String createTime;
-        private String createUser;
-        private String modifyTime;
-        private String modifyUser;
-        private String sumrStatus;
-        private String sumrUserId;
-        private String files;
-        private List<String> pathList;
+    private class Test {
+        private MedicalBean bean;
 
-        public String getId() {
-            return this.id;
+        public Test(MedicalBean bean) {
+            this.bean = bean;
         }
 
-        public void setId(String id) {
-            this.id = id;
-        }
+        public void invoke() {
+            MedicalReportActivity.this.tvModifyTime.setText("上传时间:  " + bean.getCreateTime());
 
-        public int getDelFlag() {
-            return this.delFlag;
-        }
+            MedicalReportActivity.this.mDatas.clear();
+            for (String path : bean.getPathList()) {
+                MedicalReportActivity.this.mDatas.add(UrlPath.PATH_PICTURE_PREFIX.getUrl() + path);
+            }
 
-        public void setDelFlag(int delFlag) {
-            this.delFlag = delFlag;
-        }
-
-        public String getCreateTime() {
-            return this.createTime;
-        }
-
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
-        }
-
-        public String getCreateUser() {
-            return this.createUser;
-        }
-
-        public void setCreateUser(String createUser) {
-            this.createUser = createUser;
-        }
-
-        public String getModifyTime() {
-            return this.modifyTime;
-        }
-
-        public void setModifyTime(String modifyTime) {
-            this.modifyTime = modifyTime;
-        }
-
-        public String getModifyUser() {
-            return this.modifyUser;
-        }
-
-        public void setModifyUser(String modifyUser) {
-            this.modifyUser = modifyUser;
-        }
-
-        public String getSumrStatus() {
-            return this.sumrStatus;
-        }
-
-        public void setSumrStatus(String sumrStatus) {
-            this.sumrStatus = sumrStatus;
-        }
-
-        public String getSumrUserId() {
-            return this.sumrUserId;
-        }
-
-        public void setSumrUserId(String sumrUserId) {
-            this.sumrUserId = sumrUserId;
-        }
-
-        public String getFiles() {
-            return this.files;
-        }
-
-        public void setFiles(String files) {
-            this.files = files;
-        }
-
-        public List<String> getPathList() {
-            return this.pathList;
-        }
-
-        public void setPathList(List<String> pathList) {
-            this.pathList = pathList;
+            MedicalReportActivity.this.adapter.setShowDelete(false);
+            MedicalReportActivity.this.adapter.setNewData(MedicalReportActivity.this.mDatas);
         }
     }
 }

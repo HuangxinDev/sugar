@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
   ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
   ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
@@ -43,6 +42,14 @@
     <string name="biao_duan">标段</string>
     <string name="fen_bu_fen_xiang">分部分项</string>
     <string name="look_details">查看详情</string>
+    <string name="attachment">考勤</string>
+    <string name="function_collection">工作中心</string>
+    <string name="mine">我的</string>
+    <string name="message">消息</string>
+    <string name="input_username">输入用户名</string>
+    <string name="input_phone_or_idcard">请输入手机号或者身份证号</string>
+    <string name="null_mobile_or_verify_code">手机号码或者验证为空</string>
+    <string name="suggestion_title">意见箱</string>
 
 
 </resources>

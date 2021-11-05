@@ -8,12 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -41,6 +35,13 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
+import com.smart.cloud.utils.ToastUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UpdateTelPhoneActivity extends BaseActivity {
 
@@ -125,9 +126,8 @@ public class UpdateTelPhoneActivity extends BaseActivity {
         this.mNewPhoneNumberCode.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (StringUtils.isEmpty(com.njxm.smart.ui.activities.UpdateTelPhoneActivity.this.mQRCode.getText())) {
-                    com.njxm.smart.ui.activities.BaseActivity.showToast("图形验证码不可为空");
+                if (StringUtils.isEmpty(UpdateTelPhoneActivity.this.mQRCode.getText())) {
+                    ToastUtils.showToast("图形验证码不可为空");
                     return;
                 }
 
@@ -185,7 +185,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
                         this.tvPhonePop.setVisibility(View.GONE);
                         com.njxm.smart.ui.activities.UpdateTelPhoneActivity.requestQrCode();
                     } else {
-                        com.njxm.smart.ui.activities.BaseActivity.showToast("手机号格式不正确");
+                        ToastUtils.showToast("手机号格式不正确");
                     }
                     break;
                 case com.njxm.smart.ui.activities.UpdateTelPhoneActivity.TWO:

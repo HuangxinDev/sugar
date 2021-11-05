@@ -20,12 +20,24 @@ import androidx.fragment.app.Fragment;
 
 public class HomeFragment extends Fragment {
 
+    private static final String KEY_IMAGE_URL = "image_url";
 
-    private final int resId;
+    private int resId;
+
+    private String imageUrl;
+
+    public void setImageUrl(String imageUrl) {
+        Bundle args = new Bundle();
+        args.putString(KEY_IMAGE_URL, imageUrl);
+        setArguments(args);
+    }
 
 
     public HomeFragment(int resId) {
         this.resId = resId;
+    }
+
+    public HomeFragment() {
     }
 
     @Override
