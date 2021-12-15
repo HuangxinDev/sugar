@@ -6,9 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.njxm.smart.activities.login;
-
-import static com.alibaba.fastjson.JSON.parseObject;
+package com.njxm.smart.module.login;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,34 +15,33 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.activities.login.LoginData;
+import com.njxm.smart.base.BaseFragment;
 import com.njxm.smart.contract.LoginContract;
-import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.presenter.LoginPresenter;
-import com.njxm.smart.ui.activities.ActionBarItem;
-import com.njxm.smart.ui.activities.BaseActivity;
 import com.njxm.smart.ui.activities.ResetPasswordActivity;
 import com.njxm.smart.ui.activities.main.MainActivity;
-import com.njxm.smart.utils.BitmapUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
+import com.ntxm.smart.databinding.ActivityLoginBinding;
 import com.smart.cloud.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,7 +56,7 @@ import okio.AsyncTimeout;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.View, View.OnClickListener {
+public class LoginFragment extends BaseFragment implements LoginContract.View, View.OnClickListener {
     /**
      * 倒计时 60s
      */
@@ -91,18 +88,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
 
     private LoginData loginData = new LoginData();
 
+    private View rootView;
+
+    @Nullable
     @Override
-    protected int setContentLayoutId() {
-        return R.layout.activity_login;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = ActivityLoginBinding.inflate(inflater).getRoot();
+        return rootView;
     }
 
     @Override
-    protected ActionBarItem getActionBarItem() {
-        return null;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (quickStartIfToken()) {
             return;
         }
@@ -134,19 +131,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
         this.mLoginNumberEditText = this.findViewById(R.id.login_number_code);
     }
 
+    private <T extends View> T findViewById(@IdRes int id) {
+        return rootView.findViewById(id);
+    }
+
     private boolean quickStartIfToken() {
         if (StringUtils.isNotEmpty(SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
             this.startActivity(intent);
-            this.finish();
+            finishActivity();
             return true;
         }
         return false;
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         this.mLoginPresenter.detachView();
     }
 
@@ -162,13 +163,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
             doForget();
         } else if (v == this.mLoginNumberEditText.getRightTextView()) {
             requestVerifyCode();
-        } else {
-            super.onClick(v);
         }
     }
 
     private void doForget() {
-        Intent intent = new Intent(this, ResetPasswordActivity.class);
+        Intent intent = new Intent(getActivity(), ResetPasswordActivity.class);
         intent.putExtra("action", "1");
         this.startActivity(intent);
     }
@@ -200,7 +199,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
 
             @Override
             public void run() {
-                LoginActivity.this.invoke(() -> {
+                mLoginNumberEditText.post(() -> {
                     count -= 1;
                     mLoginNumberEditText.setRightText(count + " 秒");
                     if (count == 0) {
@@ -314,24 +313,24 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     }
 
     private Drawable getLineDrawable() {
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.line_blue);
+        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.line_blue);
         if (drawable != null) {
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
         return drawable;
     }
 
-    @Override
-    public void onResponse(ResponseEvent event) {
-        String url = event.getUrl();
-        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
-            JSONObject dataObject = parseObject(event.getData());
-            String bitmapStr = dataObject.getString("kaptcha");
-            this.invoke(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.stringToBitmap(bitmapStr))));
-        } else {
-            super.onResponse(event);
-        }
-    }
+//    @Override
+//    public void onResponse(ResponseEvent event) {
+//        String url = event.getUrl();
+//        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
+//            JSONObject dataObject = parseObject(event.getData());
+//            String bitmapStr = dataObject.getString("kaptcha");
+//            this.invoke(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.stringToBitmap(bitmapStr))));
+//        } else {
+//            super.onResponse(event);
+//        }
+//    }
 
     @Override
     public void showLoading() {
@@ -345,7 +344,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
 
     @Override
     public void onError(@NotNull Throwable throwable) {
-        LogTool.printE(this.mTag, "onError: MyFirstMvpLog: %s", Log.getStackTraceString(throwable));
+//        LogTool.printE(this.mTag, "onError: MyFirstMvpLog: %s", Log.getStackTraceString(throwable));
     }
 
     @Override
@@ -356,14 +355,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     @Override
     public void onLoginState(int state) {
         if (state == 1) {
-            this.startActivity(new Intent(this, MainActivity.class));
+            this.startActivity(new Intent(getActivity(), MainActivity.class));
         }
     }
 
     @Override
     @UiThread
     public void onQrCode(Bitmap bitmap) {
-        this.runOnUiThread(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), bitmap)));
+        mLoginAccountEditText.post(() -> {
+            this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(),
+                    bitmap));
+        });
     }
 
     @Override

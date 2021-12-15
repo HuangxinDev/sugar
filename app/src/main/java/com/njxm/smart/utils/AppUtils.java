@@ -8,7 +8,11 @@
 
 package com.njxm.smart.utils;
 
+import android.content.Context;
 import android.os.Looper;
+
+import com.ntxm.smart.BuildConfig;
+import com.ntxm.smart.R;
 
 /**
  * App常用工具类
@@ -24,5 +28,12 @@ public class AppUtils {
         return Looper.myLooper() == Looper.getMainLooper();
     }
 
-    
+    public static String getAppName(Context context) {
+        return context.getString(R.string.app_name);
+    }
+
+    public static String getAppVersion() {
+        return BuildConfig.VERSION_NAME;
+    }
+
 }

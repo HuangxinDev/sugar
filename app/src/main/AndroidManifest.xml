@@ -55,21 +55,12 @@
             android:value="1.0.1" />
 
         <activity
-            android:name="com.njxm.smart.activities.home.SplashActivity"
+            android:name="com.njxm.smart.module.splash.SplashActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.njxm.smart.activities.login.LoginActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
 

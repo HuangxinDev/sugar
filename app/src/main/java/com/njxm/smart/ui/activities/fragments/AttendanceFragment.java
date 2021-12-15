@@ -185,7 +185,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
                     }
                     try {
                         Bitmap bitmap = Glide.with(AttendanceFragment.this.getActivity()).asBitmap().load(AttendanceFragment.this.photoFile).submit(200, 200).get();
-                        String bitmapStr = Base64.encodeToString(BitmapUtils.bitmap2Bytes(bitmap), Base64.DEFAULT);
+                        String bitmapStr = Base64.encodeToString(BitmapUtils.transform(bitmap), Base64.DEFAULT);
                         AttendanceFragment.this.mWebView.callHandler("h5Photos", new Object[]{bitmapStr});
                         EventBus.getDefault().post(new ToastEvent("图片大小: " + bitmapStr.length()));
                     } catch (Exception e) {

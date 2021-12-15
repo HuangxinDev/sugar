@@ -262,7 +262,7 @@ public class UpdateTelPhoneActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void uploadQrCode(QRCodeBean bean) {
         this.mQRCode.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(),
-                BitmapUtils.stringToBitmap(bean.getImage())));
+                BitmapUtils.transform(bean.getImage())));
         SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, bean.getImageToken());
     }
 

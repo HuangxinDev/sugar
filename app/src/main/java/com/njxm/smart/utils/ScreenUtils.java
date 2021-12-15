@@ -3,7 +3,7 @@ package com.njxm.smart.utils;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.njxm.smart.ui.activities.BaseActivity;
+import com.njxm.smart.base.BaseActivity;
 
 /**
  * @author huangxin

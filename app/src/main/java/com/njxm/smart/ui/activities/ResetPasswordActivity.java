@@ -21,12 +21,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.njxm.smart.activities.login.LoginActivity;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.module.login.LoginFragment;
 import com.njxm.smart.tools.AppTextWatcher;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
@@ -160,22 +160,50 @@ public class ResetPasswordActivity extends BaseActivity {
 
     @Override
     public void onResponse(ResponseEvent event) {
-
         String url = event.getUrl();
-
         if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
-            JSONObject dataObject = JSONObject.parseObject(event.getData());
-            this.mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.stringToBitmap(dataObject.getString("kaptcha"))));
-            SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, dataObject.getString("kaptchaToken"));
+            JSONManager manager = new JSONManager(JSONObject.parseObject(event.getData()));
+            if (manager.hasProperties("kaptcha")) {
+                setCode(manager.getProperties("kaptcha"));
+            }
+
+            if (manager.hasProperties("kaptchaToken")) {
+                updateToken(manager.getProperties("kaptchaToken"));
+            }
         } else if (url.equals(UrlPath.PATH_MODIFY_PWD.getUrl()) || url.equals(UrlPath.PATH_RESET_PWD.getUrl())) {
             // 密码修改成功
             EventBus.getDefault().post(new ToastEvent("密码修改成功"));
-            this.startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+            this.startActivity(new Intent(ResetPasswordActivity.this, LoginFragment.class));
             this.finish();
         } else {
             super.onResponse(event);
         }
     }
+
+    private void updateToken(String token) {
+        SPUtils.putValue(KeyConstant.KEY_QR_IMAGE_TOKEN, token);
+    }
+
+    private void setCode(String bitmapStr) {
+        this.mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.transform(bitmapStr)));
+    }
+
+    private class JSONManager {
+        private final JSONObject jsonObject;
+
+        public JSONManager(JSONObject jsonObject) {
+            this.jsonObject = jsonObject;
+        }
+
+        private boolean hasProperties(String name) {
+            return jsonObject.containsKey(name);
+        }
+
+        public String getProperties(String name) {
+            return jsonObject.getString(name);
+        }
+    }
+
 
     @Override
     public void onClick(View v) {

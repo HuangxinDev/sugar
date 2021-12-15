@@ -8,10 +8,11 @@
 
 package com.njxm.smart.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -19,7 +20,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,45 +32,18 @@ public final class BitmapUtils {
         // 禁止构造
     }
 
-    public static Bitmap stringToBitmap(String imageStr) {
-        byte[] encodeByte = android.util.Base64.decode(imageStr, android.util.Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-        return bitmap;
+    public static Bitmap transform(@NonNull String bitmapStr) {
+        byte[] bytes = android.util.Base64.decode(bitmapStr, android.util.Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
     /**
      * 把Bitmap转Byte
      */
-    public static byte[] bitmap2Bytes(Bitmap bm) {
+    public static byte[] transform(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
-    }
-
-    /**
-     * 保存图片
-     */
-    public static File saveBitmap(Context context, Bitmap bitmap, String filename) {
-        File tempFile = new File(context.getFilesDir(), filename);
-        if (!tempFile.exists()) {
-            tempFile.getParentFile().mkdirs();
-        }
-        tempFile.delete();
-        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            tempFile.createNewFile();
-
-
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            bos.flush();
-            bos.close();
-//            bitmap.recycle();
-            return tempFile;
-        } catch (IOException e) {
-            LogTool.printStack(e);
-        }
-
-        return null;
     }
 
     /**

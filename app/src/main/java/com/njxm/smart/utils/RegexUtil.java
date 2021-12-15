@@ -12,9 +12,9 @@ public class RegexUtil {
     /**
      * 正则手机号匹配
      */
-    private static final String REGEX_PHONE_NUMBER = "1[0-9]{10}";
+    private static final String TEL_PHONE_REGEX = "1\\[\\d\\]{10}";
 
     public static boolean isMobilePhone(String mobile) {
-        return StringUtils.isNotEmpty(mobile) && mobile.matches(REGEX_PHONE_NUMBER);
+        return StringUtils.isNotEmpty(mobile) && mobile.matches(TEL_PHONE_REGEX);
     }
 }

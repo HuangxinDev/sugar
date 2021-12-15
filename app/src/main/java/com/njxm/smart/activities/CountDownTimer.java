@@ -2,13 +2,16 @@ package com.njxm.smart.activities;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author huangxin
  * @date 2021/8/15
  */
-public class CountTimer {
+public class CountDownTimer {
     private final Timer timer;
+
+    private CountDownLatch countDownLatch = new CountDownLatch(10);
 
     private int intervalInMills;
 
@@ -17,12 +20,11 @@ public class CountTimer {
     private OnTimeChanged timeChanged;
 
 
-    public CountTimer() {
+    public CountDownTimer() {
         this(0, 0);
-
     }
 
-    public CountTimer(int intervalInMills, int initializeInMills) {
+    public CountDownTimer(int intervalInMills, int initializeInMills) {
         this.intervalInMills = intervalInMills;
         this.initializeInMills = initializeInMills;
         this.timer = new Timer();
