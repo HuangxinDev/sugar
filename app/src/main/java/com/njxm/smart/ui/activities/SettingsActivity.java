@@ -8,7 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,9 +15,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
@@ -77,20 +73,7 @@ public class SettingsActivity extends BaseActivity {
 
     @OnClick(R.id.login_exit)
     protected void clickLogoutItem() {
-        AlertDialogUtils.getInstance().showConfirmDialog(this, "确定退出？", "取消", "确定", new AlertDialogUtils.OnButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(AlertDialog dialog) {
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onNegativeButtonClick(AlertDialog dialog) {
-                HttpUtils.getInstance().request(RequestEvent.newBuilder()
-                        .url(UrlPath.PATH_SYS_LOGOUT.getUrl())
-                        .build());
-                dialog.dismiss();
-            }
-        });
+        AlertDialogUtils.getInstance().showConfirmDialog(this, "确定退出？", "取消", "确定");
     }
 
     /**

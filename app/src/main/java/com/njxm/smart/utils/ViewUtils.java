@@ -57,4 +57,8 @@ public final class ViewUtils {
             view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         }
     }
+
+    public static boolean isVisibility(View view) {
+        return view != null && view.getVisibility() == View.VISIBLE;
+    }
 }

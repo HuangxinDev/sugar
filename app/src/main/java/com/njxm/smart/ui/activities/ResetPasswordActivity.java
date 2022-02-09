@@ -8,7 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -188,7 +187,7 @@ public class ResetPasswordActivity extends BaseActivity {
         this.mAccountQR.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.transform(bitmapStr)));
     }
 
-    private class JSONManager {
+    private static class JSONManager {
         private final JSONObject jsonObject;
 
         public JSONManager(JSONObject jsonObject) {
@@ -244,14 +243,10 @@ public class ResetPasswordActivity extends BaseActivity {
                 }
             }, 0, 1000);
 
-            HttpUtils.getInstance().request(new RequestEvent.Builder()
-                    .url(UrlPath.PATH_SMS.getUrl())
-                    .addBodyJson("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
-                    .addBodyJson("code", this.mAccountQR.getText().trim())
-                    .addBodyJson("mobile", this.mAccountEdit.getText().trim()).build());
+            sendSms();
         } else if (v == this.mConfirmBtn) {
             if (!TextUtils.equals(this.mNewPwd1.getText(), this.mNewPwd2.getText())) {
-                this.showDialog();
+                this.showDialog(new DialogMessage("", null, ""));
                 return;
             }
 
@@ -269,6 +264,17 @@ public class ResetPasswordActivity extends BaseActivity {
         } else if (v == this.mAccountQR.getRightTextView()) {
             VerifyCodeUtils.getQRCode();
         }
+    }
+
+    /**
+     * 发送短信
+     */
+    private void sendSms() {
+        HttpUtils.getInstance().request(new RequestEvent.Builder()
+                .url(UrlPath.PATH_SMS.getUrl())
+                .addBodyJson("kaptchaToken", SPUtils.getStringValue(KeyConstant.KEY_QR_IMAGE_TOKEN))
+                .addBodyJson("code", this.mAccountQR.getText().trim())
+                .addBodyJson("mobile", this.mAccountEdit.getText().trim()).build());
     }
 
     @Override
@@ -295,24 +301,24 @@ public class ResetPasswordActivity extends BaseActivity {
     /**
      * 使用错误Dialog
      */
-    private void showDialog() {
-        this.invoke(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialogUtils.getInstance().showConfirmDialog(ResetPasswordActivity.this,
-                        "两次密码不一致", "", "重新输入", new AlertDialogUtils.OnButtonClickListener() {
-                            @Override
-                            public void onPositiveButtonClick(AlertDialog dialog) {
+    private void showDialog(DialogMessage message) {
+        this.invoke(
+                () -> AlertDialogUtils.getInstance().showConfirmDialog(this, message.message,
+                        message.yesText, message.noText));
+//                        getString(R.string.different_password), null, getString(R.string.input_again)));
+    }
 
-                            }
+    private static final class DialogMessage {
+        String message;
 
-                            @Override
-                            public void onNegativeButtonClick(AlertDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        });
-            }
+        String yesText;
 
-        });
+        String noText;
+
+        public DialogMessage(String message, String yesText, String noText) {
+            this.message = message;
+            this.yesText = yesText;
+            this.noText = noText;
+        }
     }
 }

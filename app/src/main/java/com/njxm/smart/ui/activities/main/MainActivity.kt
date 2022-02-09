@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.njxm.smart.ui.activities.AppBaseActivity
 import com.ntxm.smart.R
+import com.smart.cloud.utils.ToastUtils
 import java.util.*
 
 /**
@@ -23,6 +24,7 @@ import java.util.*
 class MainActivity : AppBaseActivity<MainView?, MainPresenter?>(), MainView {
     private val navTabs: MutableList<NavTab> = ArrayList()
     private var lastSelected = R.id.first_btn
+    private var selectedTab: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViews()
@@ -32,7 +34,13 @@ class MainActivity : AppBaseActivity<MainView?, MainPresenter?>(), MainView {
     @SuppressLint("NonConstantResourceId")
     private fun initViews() {
         val radioGroup = findViewById<RadioGroup>(R.id.radio_group)
-        radioGroup.setOnCheckedChangeListener { group: RadioGroup?, checkedId: Int ->
+        radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+            ToastUtils.showToast("checkId: $checkedId")
+            if (lastSelected == checkedId) {
+                return@setOnCheckedChangeListener
+            }
+            lastSelected = checkedId
+
             val actionId = getNavActionId(lastSelected, checkedId)
             lastSelected = checkedId
             if (actionId != INVALID_ACTION) {
@@ -40,6 +48,28 @@ class MainActivity : AppBaseActivity<MainView?, MainPresenter?>(), MainView {
             }
         }
     }
+
+    private fun switchFragmentTo(tabIndex: Int) {
+        when (tabIndex) {
+            0 -> {
+
+            }
+            1 -> {
+
+            }
+            2 -> {
+
+            }
+            3 -> {
+
+            }
+            else -> {
+
+            }
+
+        }
+    }
+
 
     /**
      * 添加页面和导航action的映射关系
@@ -57,6 +87,10 @@ class MainActivity : AppBaseActivity<MainView?, MainPresenter?>(), MainView {
         navTabs.add(NavTab(R.id.btn4, R.id.first_btn, R.id.action_personalFragment_to_attendanceFragment))
         navTabs.add(NavTab(R.id.btn4, R.id.btn2, R.id.action_personalFragment_to_workCenterFragment))
         navTabs.add(NavTab(R.id.btn4, R.id.btn3, R.id.action_personalFragment_to_messageFragment))
+
+        // this is a mementation
+
+        // realty corp
     }
 
     override fun setContentLayoutId(): Int {

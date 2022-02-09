@@ -117,6 +117,10 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     }
 
     private void findView() {
+        initView();
+    }
+
+    private void initView() {
         this.mLoginBtn = this.findViewById(R.id.btn_login);
         this.mLoginBtn.setOnClickListener(this);
         this.mQuickLoginBtn = this.findViewById(R.id.quick_login_btn);
