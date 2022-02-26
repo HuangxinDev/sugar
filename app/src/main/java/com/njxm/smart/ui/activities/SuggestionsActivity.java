@@ -19,8 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.njxm.smart.divider.MyRecyclerViewItemDecoration;
 import com.njxm.smart.ui.activities.adapter.SuggestionDetailAdapter;
-import com.njxm.smart.utils.ViewUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.ViewUtils;
+import com.sugar.android.common.view.SafeOnClickListener;
 
 import java.util.Observable;
 
@@ -64,21 +65,17 @@ public class SuggestionsActivity extends BaseActivity {
         ViewUtils.setVisibility(this.mRecyclerView, model.getState() != Suggestion.NONE);
         ViewUtils.setVisibility(this.mSuggestionEdit, model.getState() != Suggestion.NONE);
         ViewUtils.setVisibility(this.mAppCompatTextView, model.getState() == Suggestion.NONE);
-
-        this.mCommitBtnAppCompatTextView.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v == this.mCommitBtnAppCompatTextView) {
-            ViewUtils.setVisibility(this.mRecyclerView, View.VISIBLE);
-            ViewUtils.setVisibility(this.mActionBarRightBtn, View.VISIBLE);
-            ViewUtils.setVisibility(this.mSuggestionEdit, View.GONE);
-            ViewUtils.setVisibility(this.mAppCompatTextView, View.GONE);
-            this.mAppCompatEditText.getText().clear();
-            model.updateSuggestionState(Suggestion.COMMIT);
-        }
+        ViewUtils.setOnClickListener(mCommitBtnAppCompatTextView, new SafeOnClickListener(1000) {
+            @Override
+            public void onSafeClick(View view) {
+                ViewUtils.setVisibility(mRecyclerView, true);
+                ViewUtils.setVisibility(mActionBarRightBtn, true);
+                ViewUtils.setVisibility(mSuggestionEdit, false);
+                ViewUtils.setVisibility(mAppCompatTextView, false);
+                mAppCompatEditText.getText().clear();
+                model.updateSuggestionState(Suggestion.COMMIT);
+            }
+        });
     }
 
     @Override

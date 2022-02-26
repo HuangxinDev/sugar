@@ -8,12 +8,12 @@
 
 package com.njxm.smart.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
 import com.ntxm.smart.R;
+import com.sugar.android.common.safe.SafeIntent;
 
 public class SafeExamResultActivity extends BaseActivity {
 
@@ -26,10 +26,8 @@ public class SafeExamResultActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Intent intent = this.getIntent();
-        if (intent != null) {
-            this.mSuccess = intent.getBooleanExtra("result", false);
-        }
+        SafeIntent safeIntent = new SafeIntent(getIntent());
+        this.mSuccess = safeIntent.getBooleanExtra("result", false);
         super.onCreate(savedInstanceState);
         this.showView(this.mActionBarTitle, false);
     }

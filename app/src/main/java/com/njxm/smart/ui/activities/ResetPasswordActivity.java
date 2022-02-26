@@ -32,19 +32,20 @@ import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
 import com.smart.cloud.utils.VerifyCodeUtils;
+import com.sugar.android.common.safe.SafeIntent;
+import com.sugar.android.common.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ResetPasswordActivity extends BaseActivity {
+public class ResetPasswordActivity extends BaseActivity implements View.OnClickListener {
     private AppEditText mAccountEdit;
     private AppEditText mAccountQR;
     private AppEditText mAccountNumber;
@@ -64,9 +65,9 @@ public class ResetPasswordActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            ResetPasswordActivity.this.mNextStepBtn.setEnabled(com.njxm.smart.utils.StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountEdit.getText()) &&
-                    com.njxm.smart.utils.StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountQR.getText()) &&
-                    com.njxm.smart.utils.StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountNumber.getText()));
+            ResetPasswordActivity.this.mNextStepBtn.setEnabled(StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountEdit.getText()) &&
+                    StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountQR.getText()) &&
+                    StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountNumber.getText()));
         }
     };
     private AppCompatTextView mConfirmBtn;
@@ -97,13 +98,11 @@ public class ResetPasswordActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String action = new SafeIntent(getIntent()).getStringExtra("action");
 
-        String action = this.getIntent().getStringExtra("action");
-
-        View divider = this.findViewById(R.id.divider1);
+        View divider = ViewUtils.findViewById(this, R.id.divider1);
         View title = this.findViewById(R.id.title);
-
-        this.isForgetPwd = action.equals("1");
+        this.isForgetPwd = StringUtils.isEqual(action, "1");
 
         if (this.isForgetPwd) {
             ViewUtils.setVisibility(this.mActionBarTitle, View.GONE);
@@ -206,7 +205,6 @@ public class ResetPasswordActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         if (v == this.mNextStepBtn) {
             if (RegexUtil.isMobilePhone(mAccountEdit.getText())) {
                 ToastUtils.showToast("请输入正确的手机号");

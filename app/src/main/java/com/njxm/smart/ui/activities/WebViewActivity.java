@@ -9,7 +9,6 @@
 package com.njxm.smart.ui.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,6 +17,7 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ntxm.smart.R;
+import com.sugar.android.common.safe.SafeIntent;
 
 import butterknife.BindView;
 import wendu.dsbridge.DWebView;
@@ -52,10 +52,8 @@ public class WebViewActivity extends BaseActivity {
         com.njxm.smart.ui.activities.WebViewActivity.setWebViewSettings(this.mWebView);
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
 
-        Intent intent = this.getIntent();
-        if (intent != null) {
-            this.showTitle(true, intent.getStringExtra("title_name"));
-            this.mWebView.loadUrl(intent.getStringExtra("resUrl"));
-        }
+        SafeIntent intent = new SafeIntent(getIntent());
+        this.showTitle(true, intent.getStringExtra("title_name"));
+        this.mWebView.loadUrl(intent.getStringExtra("resUrl"));
     }
 }

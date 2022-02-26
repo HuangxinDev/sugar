@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.njxm.smart.utils.ScreenUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.safe.SafeIntent;
 
 import butterknife.BindView;
 import wendu.dsbridge.DWebView;
@@ -43,6 +44,7 @@ public class DWebViewActivity extends BaseActivity {
         ARouter.getInstance().inject(this);
         this.llRoot.setPadding(0, ScreenUtils.getStatusBarHeight(this), 0, 0);
         this.mDWebView.addJavascriptObject(this, null);
-        this.mDWebView.loadUrl(this.getIntent().getStringExtra("loadUrl"));
+
+        this.mDWebView.loadUrl(new SafeIntent(getIntent()).getStringExtra("loadUrl"));
     }
 }

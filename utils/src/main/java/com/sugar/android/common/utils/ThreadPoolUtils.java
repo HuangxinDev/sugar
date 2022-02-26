@@ -1,4 +1,4 @@
-package com.sugar.android.common;
+package com.sugar.android.common.utils;
 
 /**
  * 线程池工具类

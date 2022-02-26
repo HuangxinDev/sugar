@@ -8,8 +8,6 @@
 
 package com.njxm.smart.ui.activities.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.widget.ImageView;
 
@@ -19,8 +17,10 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.ui.activities.UserCertificateActivity;
-import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.StringUtils;
+
+import java.util.List;
 
 public class MyCertificateAdapter extends BaseQuickAdapter<UserCertificateActivity.CertificateItem, BaseViewHolder> {
 

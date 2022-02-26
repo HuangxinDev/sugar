@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.LruCache;
 
+import com.sugar.android.common.utils.StringUtils;
+
 /**
  * SharedPreference工具类
  */

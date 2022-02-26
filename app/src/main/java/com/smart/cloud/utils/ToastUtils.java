@@ -1,7 +1,7 @@
 package com.smart.cloud.utils;
 
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.utils.StringUtils;
+import com.sugar.android.common.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

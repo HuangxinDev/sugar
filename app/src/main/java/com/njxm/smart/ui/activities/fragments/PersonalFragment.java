@@ -8,9 +8,6 @@
 
 package com.njxm.smart.ui.activities.fragments;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,6 +16,11 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.njxm.smart.constant.UrlPath;
+import com.njxm.smart.eventbus.RequestEvent;
+import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.model.jsonbean.UserBean;
+import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.ui.activities.AboutUsActivity;
 import com.njxm.smart.ui.activities.MedicalReportActivity;
 import com.njxm.smart.ui.activities.PersonalInformationActivity;
@@ -26,15 +28,13 @@ import com.njxm.smart.ui.activities.QRUserActivity;
 import com.njxm.smart.ui.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.ui.activities.SettingsActivity;
 import com.njxm.smart.ui.activities.UserCertificateActivity;
-import com.njxm.smart.constant.UrlPath;
-import com.njxm.smart.eventbus.RequestEvent;
-import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.StringUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.OnClick;
 

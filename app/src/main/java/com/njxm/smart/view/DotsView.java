@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.ntxm.smart.R;
-import com.sugar.android.common.Logger;
+import com.sugar.android.common.utils.Logger;
 
 public class DotsView extends LinearLayout {
     private static final String TAG = "DotsView";

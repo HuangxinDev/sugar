@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.StringUtils;
 
 public class AlertDialogUtils {
 

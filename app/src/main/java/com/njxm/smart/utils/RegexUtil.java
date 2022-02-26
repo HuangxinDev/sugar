@@ -8,6 +8,8 @@
 
 package com.njxm.smart.utils;
 
+import com.sugar.android.common.utils.StringUtils;
+
 public class RegexUtil {
     /**
      * 正则手机号匹配

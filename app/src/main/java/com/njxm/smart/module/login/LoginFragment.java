@@ -42,14 +42,14 @@ import com.njxm.smart.ui.activities.ResetPasswordActivity;
 import com.njxm.smart.ui.activities.main.MainActivity;
 import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.ntxm.smart.databinding.ActivityLoginBinding;
 import com.smart.cloud.utils.ToastUtils;
-import com.sugar.android.common.Logger;
-import com.sugar.android.common.TextViewUtils;
-import com.sugar.android.common.ViewUtils;
+import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.StringUtils;
+import com.sugar.android.common.utils.TextViewUtils;
+import com.sugar.android.common.utils.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;

@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,8 +44,8 @@ import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
-import com.sugar.android.common.HandlerUtils;
-import com.sugar.android.common.Logger;
+import com.sugar.android.common.utils.HandlerUtils;
+import com.sugar.android.common.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,8 +63,7 @@ import butterknife.Optional;
 /**
  * 基类，提供共用方法和回调
  */
-public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange,
-        OnClickListener, BaseRunnable {
+public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange, BaseRunnable {
     protected final String mTag;
     @Nullable
     @BindView(R.id.action_bar_left)
@@ -169,10 +167,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      * @return
      */
     protected abstract int setContentLayoutId();
-
-    @Override
-    public void onClick(View v) {
-    }
 
     /**
      * ActionBar 左侧点击事件 - 默认返回键-点击返回

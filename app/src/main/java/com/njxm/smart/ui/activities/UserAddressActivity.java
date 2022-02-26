@@ -33,9 +33,9 @@ import com.njxm.smart.presenter.AreaPresenter;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.ui.activities.adapter.SimpleTextAdapter;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.StringUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

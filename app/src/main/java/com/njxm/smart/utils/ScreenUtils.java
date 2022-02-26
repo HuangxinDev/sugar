@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.njxm.smart.base.BaseActivity;
-import com.sugar.android.common.Logger;
+import com.sugar.android.common.utils.Logger;
 
 /**
  * @author huangxin

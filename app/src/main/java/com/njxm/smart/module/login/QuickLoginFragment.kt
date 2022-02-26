@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.njxm.smart.utils.StringUtils
 import com.ntxm.smart.databinding.FragmentQuickLoginBinding
+import com.sugar.android.common.utils.StringUtils
 
 /**
  * 快速登录碎片
@@ -68,6 +68,6 @@ class QuickLoginFragment : Fragment() {
             layoutBinding.quickLoginUserNameEt.error = "请填写动态验证码"
             return
         }
-        
+
     }
 }

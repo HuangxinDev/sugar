@@ -15,7 +15,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.baidu.location.LocationClientOption
 import com.njxm.smart.service.LocationService
 import com.njxm.smart.utils.SPUtils
-import com.sugar.android.common.Logger
+import com.sugar.android.common.utils.Logger
 import com.tencent.bugly.crashreport.CrashReport
 
 class SmartCloudApplication : Application() {

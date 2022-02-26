@@ -8,12 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.os.Bundle;
 import android.view.View;
 
@@ -23,15 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.njxm.smart.ui.activities.adapter.EduTypeAdapter;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.ui.activities.adapter.EduTypeAdapter;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.safe.SafeIntent;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -59,11 +60,8 @@ public class UserEducationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
         this.setActionBarTitle("学历");
-
-        if (this.getIntent() != null) {
-            this.mUserEdu = this.getIntent().getStringExtra("params");
-        }
-
+        SafeIntent safeIntent = new SafeIntent(getIntent());
+        this.mUserEdu = safeIntent.getStringExtra("params");
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.adapter = new EduTypeAdapter(this.typeBeans);
         this.adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

@@ -1,7 +1,7 @@
 package com.njxm.smart.utils;
 
+import android.app.Activity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +15,7 @@ import androidx.annotation.StringRes;
  * @date 2021/8/10
  */
 public final class ViewUtils {
-    public static View findViewById(ViewGroup viewGroup, int resId) {
+    public static View findViewById(Activity viewGroup, int resId) {
         if (viewGroup != null) {
             return viewGroup.findViewById(resId);
         }

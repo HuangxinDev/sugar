@@ -6,12 +6,14 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.njxm.smart.utils;
+package com.sugar.android.common.utils;
 
 /**
  * 字符串处理类
  */
 public final class StringUtils {
+    private StringUtils() {
+    }
 
     /**
      * 字符串判空
@@ -30,4 +32,14 @@ public final class StringUtils {
     public static boolean isNotEmpty(String paramString) {
         return paramString != null && paramString.trim().length() != 0;
     }
+
+    public static boolean isEqual(String str1, String str2) {
+        if (str1 == null) {
+            return str2 == null;
+        } else {
+            return str1.equals(str2);
+        }
+    }
+
+
 }

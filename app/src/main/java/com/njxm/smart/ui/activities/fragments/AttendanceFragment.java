@@ -43,7 +43,7 @@ import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.ScreenUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
-import com.sugar.android.common.Logger;
+import com.sugar.android.common.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 

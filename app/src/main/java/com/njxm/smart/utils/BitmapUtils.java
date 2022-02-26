@@ -19,7 +19,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.sugar.android.common.Logger;
+import com.sugar.android.common.utils.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

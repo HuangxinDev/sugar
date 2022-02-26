@@ -33,10 +33,12 @@ import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.StringUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.StringUtils;
+import com.sugar.android.common.utils.ViewUtils;
+import com.sugar.android.common.view.SafeOnClickListener;
 
 import java.io.File;
 import java.util.UUID;
@@ -63,6 +65,22 @@ public class RealNameAuthenticationActivity extends BaseActivity {
     private EditText etCardName;
     private AppCompatTextView tvCommitBtn;
 
+    private final SafeOnClickListener safeOnClickListener = new SafeOnClickListener() {
+        @Override
+        public void onSafeClick(View view) {
+            if (view == ivCard1) {
+                start(com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_CARD_1, "zm");
+            } else if (view == ivCard2) {
+                start(com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_CARD_2, "fm");
+            } else if (view == ivFace) {
+                start(com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_FACE_1, "rl");
+            } else if (view == tvCommitBtn) {
+                uploadBitmap();
+            }
+
+        }
+    };
+
     @Override
     protected int setContentLayoutId() {
         return R.layout.my_realname_authentication;
@@ -79,28 +97,14 @@ public class RealNameAuthenticationActivity extends BaseActivity {
         this.ivCard2 = this.findViewById(R.id.card_id_native);
         this.ivFace = this.findViewById(R.id.face_detect);
         this.tvCommitBtn = this.findViewById(R.id.commitBtn);
-        this.tvCommitBtn.setOnClickListener(this);
+        ViewUtils.setOnClickListener(tvCommitBtn, safeOnClickListener);
 
         this.etCardName = this.findViewById(R.id.card_name);
         this.etCardId = this.findViewById(R.id.card_id);
 
-        this.ivCard1.setOnClickListener(this);
-        this.ivCard2.setOnClickListener(this);
-        this.ivFace.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v == this.ivCard1) {
-            this.start(com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_CARD_1, "zm");
-        } else if (v == this.ivCard2) {
-            this.start(com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_CARD_2, "fm");
-        } else if (v == this.ivFace) {
-            this.start(com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_FACE_1, "rl");
-        } else if (v == this.tvCommitBtn) {
-            this.uploadBitmap();
-        }
+        ViewUtils.setOnClickListener(ivCard1, safeOnClickListener);
+        ViewUtils.setOnClickListener(ivCard2, safeOnClickListener);
+        ViewUtils.setOnClickListener(ivFace, safeOnClickListener);
     }
 
     private void uploadBitmap() {

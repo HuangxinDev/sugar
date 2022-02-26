@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.sugar.android.common.safe.SafeIntent;
+
 
 /**
  * Created by Hxin on 2020/3/27
@@ -53,9 +55,7 @@ public class PermissionRequestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle = this.getIntent().getExtras();
-        assert bundle != null;
+        Bundle bundle = new SafeIntent(getIntent()).getExtras();
         String[] permission = bundle.getStringArray(com.hxin.common.perrmission.PermissionRequestActivity.PERMISSION);
         int code = bundle.getInt(com.hxin.common.perrmission.PermissionRequestActivity.PERMISSION_CODE);
         this.requestPermission(permission, code);

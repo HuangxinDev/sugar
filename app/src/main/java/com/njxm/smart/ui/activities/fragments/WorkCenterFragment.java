@@ -8,11 +8,6 @@
 
 package com.njxm.smart.ui.activities.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,14 +23,19 @@ import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.ui.activities.SuggestionsActivity;
-import com.njxm.smart.ui.activities.adapter.WorkCenterItemAdapter;
 import com.njxm.smart.api.GetUserFuctionItemsApi;
 import com.njxm.smart.bean.PermissionBean;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.eventbus.ToastEvent;
-import com.njxm.smart.utils.StringUtils;
+import com.njxm.smart.ui.activities.SuggestionsActivity;
+import com.njxm.smart.ui.activities.adapter.WorkCenterItemAdapter;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.StringUtils;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;

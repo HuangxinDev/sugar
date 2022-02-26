@@ -9,9 +9,6 @@
 package com.njxm.smart.ui.activities;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +24,10 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.model.jsonbean.SafeInspectReformBean;
 import com.njxm.smart.model.jsonbean.ZSSimpleTitleBean;
 import com.ntxm.smart.R;
+import com.sugar.android.common.safe.SafeIntent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -57,7 +58,7 @@ public class SafeInspectRecordActivity extends BaseActivity {
         this.setActionBarTitle("巡检记录");
 
         View headerView = LayoutInflater.from(this).inflate(R.layout.safe_inspect_record_recycler_header_item, null);
-        boolean hasProblem = this.getIntent().getBooleanExtra("has_problem", false);
+        boolean hasProblem = new SafeIntent(getIntent()).getBooleanExtra("has_problem", false);
 
         View footView = LayoutInflater.from(this).inflate(hasProblem ?
                 R.layout.safe_inspect_record_recycler_footer_problem_item :

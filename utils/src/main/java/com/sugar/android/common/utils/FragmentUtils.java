@@ -1,4 +1,4 @@
-package com.sugar.android.common;
+package com.sugar.android.common.utils;
 
 /**
  * 碎片工具类
@@ -19,6 +19,6 @@ public final class FragmentUtils {
     }
 
     public static void hideFragment() {
-        
+
     }
 }
