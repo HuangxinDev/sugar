@@ -114,7 +114,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_user_activity;
     }
 

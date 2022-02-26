@@ -8,9 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +22,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ntxm.smart.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -44,7 +44,7 @@ public class SafeExamPlanActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_exam_plan_activity;
     }
 

@@ -67,7 +67,7 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_about_us;
     }
 

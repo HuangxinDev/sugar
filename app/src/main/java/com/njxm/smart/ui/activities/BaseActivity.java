@@ -94,8 +94,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (setContentLayoutId() > 0) {
-            this.setContentView(this.setContentLayoutId());
+        if (getLayoutId() > 0) {
+            this.setContentView(this.getLayoutId());
         }
         ButterKnife.bind(this);
         this.container = this.findViewById(R.id.ll_root);
@@ -165,7 +165,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      *
      * @return
      */
-    protected abstract int setContentLayoutId();
+    protected abstract int getLayoutId();
 
     /**
      * ActionBar 左侧点击事件 - 默认返回键-点击返回

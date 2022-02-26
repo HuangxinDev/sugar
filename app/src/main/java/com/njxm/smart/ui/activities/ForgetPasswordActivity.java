@@ -19,7 +19,7 @@ import com.ntxm.smart.R;
  */
 public class ForgetPasswordActivity extends BaseActivity {
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_forget_password;
     }
 

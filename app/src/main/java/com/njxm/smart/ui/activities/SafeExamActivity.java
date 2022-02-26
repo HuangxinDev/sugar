@@ -26,7 +26,7 @@ public class SafeExamActivity extends BaseActivity {
     protected View actionBarLayout;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_exam_activity;
     }
 

@@ -8,9 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
@@ -28,6 +25,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.njxm.smart.utils.CharUtils;
 import com.ntxm.smart.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -61,7 +61,7 @@ public class SafeExamRecordActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_exam_record_activity;
     }
 

@@ -82,7 +82,7 @@ public class RealNameAuthenticationActivity extends BaseActivity {
     };
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_realname_authentication;
     }
 

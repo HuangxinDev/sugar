@@ -8,9 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +21,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.ui.fragments.ExamFragment;
 import com.ntxm.smart.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,7 +50,7 @@ public class SafeExamAnswerActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_exam_answer_activity;
     }
 

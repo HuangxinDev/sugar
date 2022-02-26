@@ -98,7 +98,7 @@ public class UserCertificateActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_certificate_actiivty;
     }
 

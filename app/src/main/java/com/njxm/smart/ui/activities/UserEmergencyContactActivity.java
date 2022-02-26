@@ -31,7 +31,7 @@ public class UserEmergencyContactActivity extends BaseActivity {
     private AppCompatEditText etUserPhone;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_user_emergency_contact_activity;
     }
 

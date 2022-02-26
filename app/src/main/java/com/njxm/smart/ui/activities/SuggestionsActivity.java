@@ -39,7 +39,7 @@ public class SuggestionsActivity extends BaseActivity {
     private SuggestionDetailAdapter adapter;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_suggestions_box;
     }
 

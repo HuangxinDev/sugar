@@ -8,10 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +25,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.njxm.smart.model.jsonbean.SafeInspectRecordBean;
 import com.njxm.smart.view.ItemView;
 import com.ntxm.smart.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -90,7 +90,7 @@ public class SafeInspectTaskDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_inspect_task_detail_new_activity;
     }
 

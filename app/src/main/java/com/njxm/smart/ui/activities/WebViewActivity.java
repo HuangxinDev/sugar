@@ -41,7 +41,7 @@ public class WebViewActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_webview;
     }
 

@@ -51,7 +51,7 @@ public class UserEducationActivity extends BaseActivity {
     private String mUserEdu;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_user_education_activity;
     }
 

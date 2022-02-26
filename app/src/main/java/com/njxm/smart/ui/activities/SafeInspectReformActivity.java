@@ -23,7 +23,7 @@ public class SafeInspectReformActivity extends BaseActivity {
     protected RecyclerView mRecyclerView;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_inspect_reform_activity;
     }
 

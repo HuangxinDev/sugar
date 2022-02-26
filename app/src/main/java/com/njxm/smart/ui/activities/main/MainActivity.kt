@@ -93,7 +93,7 @@ class MainActivity : AppBaseActivity<MainView?, MainPresenter?>(), MainView {
         // realty corp
     }
 
-    override fun setContentLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.activity_main
     }
 

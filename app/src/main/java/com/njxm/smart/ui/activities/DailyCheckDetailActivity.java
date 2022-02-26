@@ -23,7 +23,7 @@ public class DailyCheckDetailActivity extends BaseActivity {
     private final boolean isEdit = false;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_inspect_task_detail_new_activity;
     }
 

@@ -8,10 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +19,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.ntxm.smart.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,7 +39,7 @@ public class UserPhoneActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.user_phone_activity;
     }
 

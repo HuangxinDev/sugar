@@ -119,7 +119,7 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_medical_report;
     }
 

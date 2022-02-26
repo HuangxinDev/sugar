@@ -20,7 +20,7 @@ public class SafeExamResultActivity extends BaseActivity {
     private boolean mSuccess; // 考试是否过关
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return this.mSuccess ? R.layout.safe_exam_success : R.layout.safe_exam_failed;
     }
 

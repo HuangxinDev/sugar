@@ -1,5 +1,6 @@
 package com.njxm.smart.base
 
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 
 /**
@@ -9,6 +10,15 @@ import androidx.fragment.app.Fragment
  */
 abstract class BaseFragment : Fragment() {
     protected fun finishActivity() {
+        activity?.finish()
+        activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onHandleBackPressed()
+            }
+        })
+    }
+
+    public fun onHandleBackPressed() {
         activity?.finish()
     }
 }

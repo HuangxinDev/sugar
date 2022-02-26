@@ -67,7 +67,7 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
 
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_user_address_activity;
     }
 

@@ -34,7 +34,7 @@ public class DWebViewActivity extends BaseActivity {
     protected LinearLayout llRoot;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.js_activity;
     }
 

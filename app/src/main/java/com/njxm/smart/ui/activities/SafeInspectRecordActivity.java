@@ -48,7 +48,7 @@ public class SafeInspectRecordActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_inspect_record_activity;
     }
 

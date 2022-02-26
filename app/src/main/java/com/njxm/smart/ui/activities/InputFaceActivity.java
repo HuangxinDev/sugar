@@ -69,7 +69,7 @@ public class InputFaceActivity extends BaseActivity {
     private File photoFile;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_news_input_face;
     }
 

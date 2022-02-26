@@ -8,12 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +32,12 @@ import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.model.jsonbean.CertificateParentBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.ntxm.smart.R;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,7 +67,7 @@ public class CertificateTypeActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_certificate_type_activity;
     }
 

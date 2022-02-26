@@ -39,7 +39,7 @@ public class SettingsActivity extends BaseActivity {
     protected View mCleanCacheBtn;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.my_setting;
     }
 

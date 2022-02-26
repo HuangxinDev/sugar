@@ -81,7 +81,7 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_update_tel_phone;
     }
 

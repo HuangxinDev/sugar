@@ -91,7 +91,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     private int count = 60;
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_reset_password;
     }
 

@@ -40,7 +40,7 @@ class SplashActivity : BaseActivity() {
                 .commitAllowingStateLoss()
     }
 
-    override fun setContentLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return -1
     }
 

@@ -9,11 +9,6 @@
 package com.njxm.smart.ui.activities;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -25,15 +20,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.njxm.smart.ui.activities.adapter.DailyCheckAdapter;
 import com.njxm.smart.model.jsonbean.DailyCheckTaskBean;
+import com.njxm.smart.ui.activities.adapter.DailyCheckAdapter;
 import com.ntxm.smart.R;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
 /**
  * 日常巡检-页面（默认无数据、查看数据、高管有权限创建任务）
- *
+ * <p>
  * 页面逻辑-请求巡检记录数据、
  * 无: 显示默认
  * 有: 展示数据，（高管并显示右侧状态栏按钮，可以创建巡检项目）
@@ -60,7 +60,7 @@ public class SafeInspectActivity extends BaseActivity {
 
 
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.workcenter_daily_check_activity;
     }
 

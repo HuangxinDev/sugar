@@ -16,7 +16,7 @@ import com.ntxm.smart.R;
 
 public class SafeExamStudyActivity extends BaseActivity {
     @Override
-    protected int setContentLayoutId() {
+    protected int getLayoutId() {
         return R.layout.safe_exam_study_activity;
     }
 
