@@ -32,13 +32,13 @@ import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
 import com.smart.cloud.utils.VerifyCodeUtils;
 import com.sugar.android.common.safe.SafeIntent;
 import com.sugar.android.common.utils.StringUtils;
+import com.sugar.android.common.utils.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

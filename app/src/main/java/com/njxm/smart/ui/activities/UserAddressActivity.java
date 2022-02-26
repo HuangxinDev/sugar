@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(path = GlobalRouter.USER_ADDRESS)
-public class UserAddressActivity extends BaseActivity implements AreaContract.View {
+public class UserAddressActivity extends BaseActivity implements AreaContract.View, View.OnClickListener {
     public static final int PROVINCE_CODE = 0;
     public static final int CITY_CODE = 1;
     public static final int DISTICT_CODE = 2;
@@ -174,7 +174,6 @@ public class UserAddressActivity extends BaseActivity implements AreaContract.Vi
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         if (v == this.tvPop) {
             this.simpleTextAdapter.setNewData(this.provinceBaseBeans);
             this.selectAddressType = 0;

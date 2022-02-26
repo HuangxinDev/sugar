@@ -66,7 +66,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MedicalReportActivity extends BaseActivity {
+public class MedicalReportActivity extends BaseActivity implements View.OnClickListener {
 
 
     public static final int default_icon = R.mipmap.camera_photo;
@@ -287,7 +287,6 @@ public class MedicalReportActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         if (v == this.mUploadBtn || v == this.mRetryUploadBtn) {
             this.invalidateLayoutState(com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_COMMIT);
         } else if (v == this.mCommitBtn) {
@@ -296,7 +295,6 @@ public class MedicalReportActivity extends BaseActivity {
     }
 
     private void uploadMedicalReports() {
-
         List<MultipartBody.Part> parts = new ArrayList<>();
         parts.add(MultipartBody.Part.createFormData("sumrUserId", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
         for (String filePath : this.mDatas) {

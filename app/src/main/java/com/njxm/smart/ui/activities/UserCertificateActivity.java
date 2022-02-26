@@ -8,15 +8,6 @@
 
 package com.njxm.smart.ui.activities;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -33,19 +24,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.njxm.smart.ui.activities.adapter.MyCerticateListAdapter;
-import com.njxm.smart.ui.activities.adapter.MyCertificateAdapter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.SelectCertificateEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
+import com.njxm.smart.ui.activities.adapter.MyCerticateListAdapter;
+import com.njxm.smart.ui.activities.adapter.MyCertificateAdapter;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.ViewUtils;
+import com.sugar.android.common.view.SafeOnClickListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -128,7 +130,16 @@ public class UserCertificateActivity extends BaseActivity {
         this.myCerticateListAdapter = new MyCerticateListAdapter(this, this.mCertificateListItems);
         this.recyclerView.setLayoutManager(layoutManager);
 
-        this.tvUploadBtn.setOnClickListener(this);
+        ViewUtils.setOnClickListener(tvUploadBtn, new SafeOnClickListener() {
+            @Override
+            public void onSafeClick(View view) {
+                rlDefault.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                lastCertificateState = 0;
+                certificateState = 2;
+                init(certificateState);
+            }
+        });
     }
 
     private void init(int certificateState) {
@@ -154,18 +165,6 @@ public class UserCertificateActivity extends BaseActivity {
             this.myCertificateAdapter.setNewData(this.mCertificateItems);
             this.recyclerView.setAdapter(this.myCertificateAdapter);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v == this.tvUploadBtn) {
-            this.rlDefault.setVisibility(View.GONE);
-            this.recyclerView.setVisibility(View.VISIBLE);
-            this.lastCertificateState = 0;
-            this.certificateState = 2;
-        }
-        this.init(this.certificateState);
     }
 
     @Override
@@ -198,6 +197,7 @@ public class UserCertificateActivity extends BaseActivity {
 
     /**
      * 请求后数据，刷新新数据
+     *
      * @param listItems 请求回来的数据列表
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -242,6 +242,7 @@ public class UserCertificateActivity extends BaseActivity {
 
     /**
      * 刷新数据证书类型选择
+     *
      * @param event
      */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

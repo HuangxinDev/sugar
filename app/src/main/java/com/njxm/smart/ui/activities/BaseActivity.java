@@ -39,13 +39,13 @@ import com.njxm.smart.module.login.LoginFragment;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.SPUtils;
-import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
 import com.sugar.android.common.utils.HandlerUtils;
 import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.TextViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -249,11 +249,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     }
 
     private void setRightResource(int resourcesId) {
-        ViewUtils.setImageResource(mActionBarRightBtn, resourcesId);
+        com.sugar.android.common.utils.ViewUtils.setImageResource(mActionBarRightBtn, resourcesId);
     }
 
     public void showRightBtn(boolean show, String text) {
-        ViewUtils.setText(actionBarRightTextView, text);
+        TextViewUtils.setText(actionBarRightTextView, text);
         if (this.actionBarRightTextView != null) {
             this.actionBarRightTextView.setVisibility(show ? View.VISIBLE : View.GONE);
 

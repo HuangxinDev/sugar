@@ -21,8 +21,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.njxm.smart.utils.ViewUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.TextViewUtils;
 
 
 /**
@@ -55,7 +55,7 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
 
 
     public void setIconIv(@DrawableRes int resId) {
-        ViewUtils.setImageResource(iconIv, resId);
+        com.sugar.android.common.utils.ViewUtils.setImageResource(iconIv, resId);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
     }
 
     public void setRightText(String content) {
-        ViewUtils.setText(imageTv, content);
+        TextViewUtils.setText(imageTv, content);
     }
 
     /**
@@ -89,18 +89,18 @@ public class AppEditText extends ConstraintLayout implements View.OnClickListene
     }
 
     public void setEditText(String text) {
-        ViewUtils.setText(inputEditText, text);
+        TextViewUtils.setText(inputEditText, text);
     }
 
     public void setEditText(int resId) {
-        ViewUtils.setText(inputEditText, resId);
+        TextViewUtils.setText(inputEditText, resId);
     }
 
     /**
      * 清除EditText上面的文本
      */
     public void clearText() {
-        ViewUtils.setText(inputEditText, "");
+        TextViewUtils.setText(inputEditText, "");
     }
 
     /**

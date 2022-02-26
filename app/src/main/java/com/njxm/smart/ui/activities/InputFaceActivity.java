@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -41,6 +40,7 @@ import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,7 +82,9 @@ public class InputFaceActivity extends BaseActivity {
         this.showRightBtn(true, R.mipmap.new_add);
 
         this.ivPhoto = this.findViewById(R.id.news_user_input_face);
-        this.ivPhoto.setOnClickListener(this);
+        ViewUtils.setOnClickListener(ivPhoto, (v) -> {
+            takePhoto(InputFaceActivity.TAKE_PHOTO);
+        });
 
         String faceUrl = SPUtils.getStringValue(KeyConstant.KEY_USER_FACE_URL);
         Glide.with(this)
@@ -175,13 +177,6 @@ public class InputFaceActivity extends BaseActivity {
         this.takePhoto(InputFaceActivity.TAKE_PHOTO);
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v == this.ivPhoto) {
-            this.takePhoto(InputFaceActivity.TAKE_PHOTO);
-        }
-    }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {

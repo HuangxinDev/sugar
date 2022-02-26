@@ -18,6 +18,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.ntxm.smart.R;
 import com.sugar.android.common.utils.StringUtils;
+import com.sugar.android.common.utils.TextViewUtils;
+import com.sugar.android.common.utils.ViewUtils;
 
 public class AlertDialogUtils {
 
@@ -44,9 +46,9 @@ public class AlertDialogUtils {
         AppCompatTextView tvConfirm = view.findViewById(R.id.dialog_yes);
         AppCompatTextView tvCancel = view.findViewById(R.id.dialog_no);
         View divider = view.findViewById(R.id.divider2);
-        ViewUtils.setText(tvMsg, message);
-        ViewUtils.setText(tvCancel, noText);
-        ViewUtils.setText(tvConfirm, yesText);
+        TextViewUtils.setText(tvMsg, message);
+        TextViewUtils.setText(tvCancel, noText);
+        TextViewUtils.setText(tvConfirm, yesText);
         boolean isShowConfirmBtn = StringUtils.isNotEmpty(yesText);
         boolean isShowCancelBtn = StringUtils.isNotEmpty(noText);
         ViewUtils.setVisibility(tvConfirm, isShowConfirmBtn);

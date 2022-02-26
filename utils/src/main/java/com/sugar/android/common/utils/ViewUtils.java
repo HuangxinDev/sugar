@@ -1,6 +1,11 @@
 package com.sugar.android.common.utils;
 
+import android.app.Activity;
 import android.view.View;
+import android.widget.ImageView;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
 /**
  * 视图工具类
@@ -10,6 +15,10 @@ import android.view.View;
  */
 public final class ViewUtils {
     private ViewUtils() {
+    }
+
+    public static <V extends View> V findViewById(@NonNull Activity activity, int viewId) {
+        return activity.findViewById(viewId);
     }
 
     /**
@@ -72,6 +81,12 @@ public final class ViewUtils {
     public static void setEnable(View view, boolean enable) {
         if (view != null) {
             view.setEnabled(enable);
+        }
+    }
+
+    public static void setImageResource(ImageView view, @DrawableRes int resId) {
+        if (view != null) {
+            view.setImageResource(resId);
         }
     }
 }

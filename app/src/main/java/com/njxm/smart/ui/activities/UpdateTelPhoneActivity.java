@@ -43,7 +43,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class UpdateTelPhoneActivity extends BaseActivity {
+public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int ONE = 763;
     private static final int TWO = 551;
@@ -172,7 +172,6 @@ public class UpdateTelPhoneActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         if (v == this.mConfirmBtn) {
             switch (com.njxm.smart.ui.activities.UpdateTelPhoneActivity.currentId) {
                 case com.njxm.smart.ui.activities.UpdateTelPhoneActivity.ONE:
