@@ -35,7 +35,6 @@ import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
-import com.njxm.smart.module.login.LoginFragment;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -286,7 +285,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         if (AppUtils.isMainThread()) {
             runnable.run();
         } else {
-            HandlerUtils.postMain(runnable);
+            HandlerUtils.postToMain(runnable);
         }
     }
 
@@ -333,9 +332,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void signUp(LogoutEvent event) {
         SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
-        Intent intent = new Intent(this, LoginFragment.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(intent);
         this.finish();
     }
 

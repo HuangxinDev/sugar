@@ -156,7 +156,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         if (AppUtils.isMainThread()) {
             runnable.run();
         } else {
-            HandlerUtils.postMain(runnable);
+            HandlerUtils.postToMain(runnable);
         }
     }
 

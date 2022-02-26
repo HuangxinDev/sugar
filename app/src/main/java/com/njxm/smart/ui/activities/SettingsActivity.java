@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.ActivityUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -59,7 +60,7 @@ public class SettingsActivity extends BaseActivity {
     protected void resetPwd() {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
         intent.putExtra("action", "2");
-        this.startActivity(intent);
+        ActivityUtils.startActivity(this, intent);
     }
 
     /**
@@ -67,8 +68,7 @@ public class SettingsActivity extends BaseActivity {
      */
     @OnClick(R.id.settings_update_phone)
     protected void updateTelPhone() {
-        Intent intent = new Intent(this, UpdateTelPhoneActivity.class);
-        this.startActivity(intent);
+        ActivityUtils.startActivity(this, new Intent(this, UpdateTelPhoneActivity.class));
     }
 
     @OnClick(R.id.login_exit)

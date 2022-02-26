@@ -1,6 +1,7 @@
 package com.sugar.android.common.utils;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -87,6 +88,12 @@ public final class ViewUtils {
     public static void setImageResource(ImageView view, @DrawableRes int resId) {
         if (view != null) {
             view.setImageResource(resId);
+        }
+    }
+
+    public static void setImageDrawable(ImageView view, Drawable drawable) {
+        if (view != null) {
+            view.setImageDrawable(drawable);
         }
     }
 }

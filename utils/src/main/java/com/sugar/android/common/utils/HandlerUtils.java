@@ -16,7 +16,7 @@ public final class HandlerUtils {
     private HandlerUtils() {
     }
 
-    public static void postMain(Runnable runnable) {
+    public static void postToMain(Runnable runnable) {
         if (runnable != null) {
             mainHandler.post(runnable);
         }
