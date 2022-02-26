@@ -39,11 +39,11 @@ import com.njxm.smart.service.LocationService;
 import com.njxm.smart.ui.activities.BaseActivity;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.ScreenUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+import com.sugar.android.common.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -57,6 +57,7 @@ import wendu.dsbridge.DWebView;
  * 考勤Fragment
  */
 public class AttendanceFragment extends BaseFragment implements IPermission {
+    private static final String TAG = "AttendanceFragment";
 
     @BindView(R.id.webview_kit)
     protected DWebView mWebView;
@@ -65,7 +66,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     private final BDAbstractLocationListener mBdAbstractLocationListener = new BDAbstractLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
-            LogTool.printD(AttendanceFragment.class, "==baidu location success==" + bdLocation.getAddrStr());
+            Logger.d(TAG, "==baidu location success==" + bdLocation.getAddrStr());
             com.njxm.smart.service.LocationService.unregisterListener(this);
             AttendanceFragment.this.mLocationService.stop();
             JSONObject object = new JSONObject();
@@ -85,7 +86,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
      */
     @JavascriptInterface
     public static String checkUserInfo(Object object) {
-        LogTool.printD(AttendanceFragment.class, "==checkUserInfo()==");
+        Logger.d(TAG, "==checkUserInfo()==");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", "200");
         jsonObject.put("data", SPUtils.getStringValue("login_message"));
@@ -142,13 +143,13 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                LogTool.printD(AttendanceFragment.class, "url load start");
+                Logger.d(TAG, "url load start");
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                LogTool.printD(AttendanceFragment.class, "url load finshed");
+                Logger.i(TAG, "url load finshed");
             }
         });
         this.mWebView.loadUrl(UrlPath.PATH_MAIN_KAO_QIN.getUrl());
@@ -215,7 +216,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
      */
     @JavascriptInterface
     public void checkImage(Object object) {
-        LogTool.printD(AttendanceFragment.class, "==checkImage()==");
+        Logger.d(TAG, "==checkImage()==");
         PermissionRequestActivity.startPermissionRequest(this.getActivity(),
                 new String[]{Manifest.permission.CAMERA}, 100, this);
     }

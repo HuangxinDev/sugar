@@ -19,6 +19,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.sugar.android.common.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 public final class BitmapUtils {
+    private static final String TAG = "BitmapUtils";
 
     private BitmapUtils() {
         // 禁止构造
@@ -119,7 +121,7 @@ public final class BitmapUtils {
             bitmap.setPixels(pixels, 0, param.getWidth(), 0, 0, param.getWidth(), param.getHeight());
             return bitmap;
         } catch (WriterException e) {
-            LogTool.printStack(e);
+            Logger.e(TAG, "create qr bitmap exception: " + e.getMessage());
         }
         return null;
     }

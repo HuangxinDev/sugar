@@ -10,13 +10,12 @@ package com.njxm.smart
 import android.app.Application
 import android.content.Context
 import android.os.Vibrator
-import android.util.Log
 import androidx.multidex.MultiDex
 import com.alibaba.android.arouter.launcher.ARouter
 import com.baidu.location.LocationClientOption
 import com.njxm.smart.service.LocationService
-import com.njxm.smart.utils.LogTool
 import com.njxm.smart.utils.SPUtils
+import com.sugar.android.common.Logger
 import com.tencent.bugly.crashreport.CrashReport
 
 class SmartCloudApplication : Application() {
@@ -29,13 +28,10 @@ class SmartCloudApplication : Application() {
 
         smartCloudApplication = this
         SPUtils.initSharedPreferences(this)
-        CrashReport.initCrashReport(this.applicationContext, "2af2871764", true)
+        CrashReport.initCrashReport(this.applicationContext, "2af2871764", false)
         Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
             override fun uncaughtException(t: Thread, e: Throwable) {
-                LogTool.printE(
-                    "%s: \n%s", this.javaClass.simpleName,
-                    Log.getStackTraceString(e)
-                )
+                Logger.e(javaClass.simpleName, "catch exception: " + e.message)
             }
         })
 

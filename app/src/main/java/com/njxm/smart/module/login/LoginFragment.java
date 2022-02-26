@@ -8,24 +8,29 @@
 
 package com.njxm.smart.module.login;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.njxm.smart.activities.login.LoginData;
 import com.njxm.smart.base.BaseFragment;
@@ -38,11 +43,13 @@ import com.njxm.smart.ui.activities.main.MainActivity;
 import com.njxm.smart.utils.RegexUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.StringUtils;
-import com.njxm.smart.utils.ViewUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.ntxm.smart.databinding.ActivityLoginBinding;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.Logger;
+import com.sugar.android.common.TextViewUtils;
+import com.sugar.android.common.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +64,7 @@ import okio.AsyncTimeout;
  * 登录页面
  */
 public class LoginFragment extends BaseFragment implements LoginContract.View, View.OnClickListener {
+    private static final String TAG = "LoginFragment";
     /**
      * 倒计时 60s
      */
@@ -106,9 +114,15 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         super.onCreate(savedInstanceState);
         initPresenter();
         findView();
-        this.switchLoginWay(true);
         this.mLoginNumberEditText.getRightTextView().setOnClickListener(this);
         this.mLoginQrEditText.setOnRightClickListener(v -> this.mLoginPresenter.requestQrCode());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.i(TAG, "onResume");
+        this.switchLoginWay(true);
     }
 
     private void initPresenter() {
@@ -120,23 +134,22 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         initView();
     }
 
-    private void initView() {
-        this.mLoginBtn = this.findViewById(R.id.btn_login);
-        this.mLoginBtn.setOnClickListener(this);
-        this.mQuickLoginBtn = this.findViewById(R.id.quick_login_btn);
-        this.mQuickLoginBtn.setOnClickListener(this);
-        this.mPasswordLoginBtn = this.findViewById(R.id.password_login_btn);
-        this.mPasswordLoginBtn.setOnClickListener(this);
-        this.mForgetPwdBtn = this.findViewById(R.id.forget_password);
-        this.mForgetPwdBtn.setOnClickListener(this);
-        this.mLoginAccountEditText = this.findViewById(R.id.login_account);
-        this.mLoginPwdEditText = this.findViewById(R.id.login_pwd);
-        this.mLoginQrEditText = this.findViewById(R.id.login_qr_code);
-        this.mLoginNumberEditText = this.findViewById(R.id.login_number_code);
-    }
+    private View lineIndicator;
 
-    private <T extends View> T findViewById(@IdRes int id) {
-        return rootView.findViewById(id);
+    void initView() {
+        this.mLoginBtn = ViewUtils.findViewById(rootView, R.id.btn_login);
+        ViewUtils.setOnClickListener(mLoginBtn, this);
+        this.mQuickLoginBtn = ViewUtils.findViewById(rootView, R.id.quick_login_btn);
+        ViewUtils.setOnClickListener(mQuickLoginBtn, this);
+        this.mPasswordLoginBtn = ViewUtils.findViewById(rootView, R.id.password_login_btn);
+        ViewUtils.setOnClickListener(mPasswordLoginBtn, this);
+        this.mForgetPwdBtn = ViewUtils.findViewById(rootView, R.id.forget_password);
+        ViewUtils.setOnClickListener(mForgetPwdBtn, this);
+        this.mLoginAccountEditText = ViewUtils.findViewById(rootView, R.id.login_account);
+        this.mLoginPwdEditText = ViewUtils.findViewById(rootView, R.id.login_pwd);
+        this.mLoginQrEditText = ViewUtils.findViewById(rootView, R.id.login_qr_code);
+        this.mLoginNumberEditText = ViewUtils.findViewById(rootView, R.id.login_number_code);
+        lineIndicator = ViewUtils.findViewById(rootView, R.id.tab_indicator);
     }
 
     private boolean quickStartIfToken() {
@@ -220,12 +233,50 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     }
 
     private void doLogin() {
-        boolean isQuickLogin = !this.mQuickLoginBtn.isEnabled();
-        if (isQuickLogin) {
-            quickLogin();
-        } else {
-            passwordLogin();
-        }
+//        boolean isQuickLogin = !this.mQuickLoginBtn.isEnabled();
+//        if (isQuickLogin) {
+//            quickLogin();
+//        } else {
+//            passwordLogin();
+//        }
+
+
+        AnimatorSet set = new AnimatorSet();
+        Animator translateX = ObjectAnimator.ofFloat(mLoginBtn, "translationX", -mLoginBtn.getWidth(), 0);
+        translateX.setInterpolator(new DecelerateInterpolator());
+        translateX.setDuration(5000);
+
+
+        final View viewById = ViewUtils.findViewById(rootView, R.id.num_tv);
+        ViewUtils.setVisibility(viewById, false);
+
+
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+        valueAnimator.setDuration(320);
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                ViewUtils.setVisibility(viewById, true);
+                viewById.setPivotX(viewById.getX());
+                viewById.setPivotY(viewById.getY());
+                AnimatorSet scaleSet = new AnimatorSet();
+                ObjectAnimator scaleX = ObjectAnimator.ofFloat(viewById, "scaleX", 0f, 1f);
+                ObjectAnimator scaleY = ObjectAnimator.ofFloat(viewById, "scaleY", 0f, 1f);
+                int scaleDuration = 500;
+                scaleX.setDuration(scaleDuration);
+                scaleY.setDuration(scaleDuration);
+                scaleX.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                    }
+                });
+                scaleSet.playTogether(scaleX, scaleY);
+                scaleSet.start();
+            }
+        });
+        set.playTogether(translateX, valueAnimator);
+        set.start();
     }
 
     private void quickLogin() {
@@ -290,41 +341,86 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
      * @param pwdLogin 密码登录
      */
     private void switchLoginWay(boolean pwdLogin) {
-        this.mPasswordLoginBtn.setEnabled(!pwdLogin);
-        this.mQuickLoginBtn.setEnabled(pwdLogin);
-        ViewUtils.setVisibility(mLoginPwdEditText, pwdLogin);
-        ViewUtils.setVisibility(mLoginNumberEditText, !pwdLogin);
-        ViewUtils.setVisibility(mForgetPwdBtn, pwdLogin);
-        ViewUtils.setHint(mLoginAccountEditText.getEditText(), pwdLogin ? R.string.input_username :
+        if (pwdLogin) {
+            refreshUIWithPwdLogin();
+        } else {
+            refreshUIWithQuickLogin();
+        }
+
+
+        TextViewUtils.setText(mLoginAccountEditText.getEditText(), pwdLogin ? R.string.input_username :
                 R.string.input_phone_or_idcard);
         this.mLoginAccountEditText.getEditText().setInputType(pwdLogin ?
                 InputType.TYPE_CLASS_TEXT : InputType.TYPE_CLASS_PHONE);
         this.mLoginAccountEditText.clearText();
-        this.mPasswordLoginBtn.setCompoundDrawables(null, null, null, pwdLogin ? getLineDrawable() : null);
-        this.mQuickLoginBtn.setCompoundDrawables(null, null, null, pwdLogin ? null : getLineDrawable());
+        float toX;
+        float width;
+        int viewId;
+
+
         if (pwdLogin) {
+            viewId = R.id.password_login_btn;
+            toX = mPasswordLoginBtn.getX();
+            width = mPasswordLoginBtn.getWidth();
             this.mLoginNumberEditText.clearText();
         } else {
+            viewId = R.id.quick_login_btn;
+            toX = mQuickLoginBtn.getX();
+            width = mQuickLoginBtn.getWidth();
             this.mLoginPwdEditText.clearText();
         }
 
-        refreshQrCode();
+        int lineIndicatorWidth = lineIndicator.getWidth();
+        if (lineIndicatorWidth == 0) {
+            ConstraintSet set = new ConstraintSet();
+            set.setForceId(false);
+            set.clone((ConstraintLayout) rootView);
+            set.connect(R.id.tab_indicator, ConstraintSet.START, viewId, ConstraintSet.START);
+            set.connect(R.id.tab_indicator, ConstraintSet.END, viewId, ConstraintSet.END);
+            set.applyTo((ConstraintLayout) rootView);
+        } else {
+            AnimatorSet set1 = new AnimatorSet();
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(lineIndicator, "scaleX", 1f,
+                    width / lineIndicatorWidth);
+            scaleX.setDuration(1);
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(lineIndicator, "translationX", lineIndicator.getX(),
+                    toX + (width - lineIndicatorWidth) / 2);
+            objectAnimator.setDuration(300);
+            objectAnimator.start();
+            set1.play(scaleX).before(objectAnimator);
+//        set.play(objectAnimator);
+            set1.start();
+        }
+
+
+//        refreshQrCode();
         this.mLoginQrEditText.clearText();
     }
 
-    private void refreshQrCode() {
+    private void refreshUIWithPwdLogin() {
+        ViewUtils.setEnable(mPasswordLoginBtn, false);
+        ViewUtils.setEnable(mPasswordLoginBtn, true);
+        ViewUtils.setVisibility(mLoginPwdEditText, true);
+        ViewUtils.setVisibility(mLoginNumberEditText, false);
+        ViewUtils.setVisibility(mForgetPwdBtn, true);
+    }
+
+    private void refreshUIWithQuickLogin() {
+        ViewUtils.setEnable(mPasswordLoginBtn, true);
+        ViewUtils.setEnable(mQuickLoginBtn, false);
+        ViewUtils.setVisibility(mLoginPwdEditText, false);
+        ViewUtils.setVisibility(mLoginNumberEditText, true);
+        ViewUtils.setVisibility(mForgetPwdBtn, false);
+    }
+
+    /**
+     * 请求图片验证码
+     */
+    private void requestPictureCode() {
         this.mLoginPresenter.requestQrCode();
     }
 
-    private Drawable getLineDrawable() {
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.line_blue);
-        if (drawable != null) {
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        }
-        return drawable;
-    }
-
-//    @Override
+    //    @Override
 //    public void onResponse(ResponseEvent event) {
 //        String url = event.getUrl();
 //        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
@@ -348,7 +444,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
 
     @Override
     public void onError(@NotNull Throwable throwable) {
-//        LogTool.printE(this.mTag, "onError: MyFirstMvpLog: %s", Log.getStackTraceString(throwable));
     }
 
     @Override

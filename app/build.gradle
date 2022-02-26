@@ -20,7 +20,7 @@ android {
 
     buildFeatures {
         //noinspection DataBindingWithoutKapt
-        dataBinding true
+//        dataBinding true
         viewBinding true
     }
 
@@ -101,6 +101,9 @@ dependencies {
 
 //    implementatibon 'androidx.viewpager2:viewpager:1.0.0' // view pager
 
+//    公共库
+    implementation 'com.wx.android.common:common:1.0.1'
+
 
     // 约束布局
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
@@ -116,6 +119,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.jakewharton:butterknife:10.2.1'
+    implementation project(path: ':utils')
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     // 图片框架
 

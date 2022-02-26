@@ -16,10 +16,11 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
-import com.njxm.smart.utils.LogTool;
 import com.ntxm.smart.R;
+import com.sugar.android.common.Logger;
 
 public class DotsView extends LinearLayout {
+    private static final String TAG = "DotsView";
     private Context context;
     private int selected = -1;
 
@@ -82,7 +83,7 @@ public class DotsView extends LinearLayout {
 
         ImageView view = (ImageView) this.getChildAt(position);
         if (view == null) {
-            LogTool.printD("image view is null");
+            Logger.i(TAG, "image view is null");
             return;
         }
         view.setEnabled(false);

@@ -36,11 +36,11 @@ import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
-import com.njxm.smart.utils.LogTool;
 import com.njxm.smart.utils.ResolutionUtil;
 import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+import com.sugar.android.common.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,6 +60,7 @@ import retrofit2.Response;
 
 @Route(path = GlobalRouter.USER_INPUT_FACE)
 public class InputFaceActivity extends BaseActivity {
+    private static final String TAG = "InputFaceActivity";
 
     private static final int TAKE_PHOTO = 389;
 
@@ -152,7 +153,7 @@ public class InputFaceActivity extends BaseActivity {
                         ServerResponseBean bean = response.body();
 
                         if (bean == null) {
-                            LogTool.printE(InputFaceActivity.class, "文件上传出现问题");
+                            Logger.e(TAG, "文件上传出现问题");
                             return;
                         }
 
@@ -163,7 +164,7 @@ public class InputFaceActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(Call<ServerResponseBean> call, Throwable t) {
-                        LogTool.printD(InputFaceActivity.class, "上传失败: " + Log.getStackTraceString(t));
+                        Logger.e(TAG, "上传失败: " + Log.getStackTraceString(t));
                     }
                 });
     }

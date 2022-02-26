@@ -8,13 +8,7 @@
 
 package com.njxm.smart.ui.activities.fragments;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +19,12 @@ import androidx.fragment.app.Fragment;
 
 import com.njxm.smart.base.BaseRunnable;
 import com.njxm.smart.utils.AppUtils;
-import com.njxm.smart.utils.LogTool;
+import com.sugar.android.common.HandlerUtils;
+import com.sugar.android.common.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
 
@@ -39,8 +38,6 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     final String TAG;
 
     private View mContentView;
-
-    private Handler mHandler;
 
     /**
      * 懒加载标志位, 当加载过了就不再加载了
@@ -59,8 +56,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mHandler = new Handler(Looper.getMainLooper());
-        LogTool.printD(this.getClass(), "==onCreate==");
+        Logger.d(getClass().getSimpleName(), "==onCreate==");
     }
 
     @Nullable
@@ -80,7 +76,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
     @Override
     public void onResume() {
         super.onResume();
-        LogTool.printD(this.getClass(), "==onResume==");
+        Logger.d(getClass().getSimpleName(), "==onResume==");
         if (this.isLazyLoad) {
             this.onLazyLoad();
             this.isLazyLoad = false;
@@ -124,34 +120,30 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         return this.mContentView;
     }
 
-    protected Handler getMainHandler() {
-        return this.mHandler;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        LogTool.printD(this.getClass(), "==onStart()==");
+        Logger.d(this.getClass().getSimpleName(), "==onStart()==");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LogTool.printD(this.getClass(), "==onPause()==");
+        Logger.d(this.getClass().getSimpleName(), "==onPause()==");
     }
 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-        LogTool.printD(this.getClass(), "==onStop()==");
+        Logger.d(this.getClass().getSimpleName(), "==onStop()==");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LogTool.printD(this.getClass(), "==onDestroy==");
+        Logger.d(this.getClass().getSimpleName(), "==onDestroy==");
     }
 
     /**
@@ -164,7 +156,7 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         if (AppUtils.isMainThread()) {
             runnable.run();
         } else {
-            this.mHandler.post(runnable);
+            HandlerUtils.postMain(runnable);
         }
     }
 

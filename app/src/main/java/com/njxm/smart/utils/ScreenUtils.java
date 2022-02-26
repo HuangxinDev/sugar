@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.njxm.smart.base.BaseActivity;
+import com.sugar.android.common.Logger;
 
 /**
  * @author huangxin
@@ -23,7 +24,7 @@ public class ScreenUtils {
         if (resourceId > 0) {
             statusBarHeight = resources.getDimensionPixelSize(resourceId);
         }
-        LogTool.printD(BaseActivity.class, "status bar height: %s", statusBarHeight);
+        Logger.d(BaseActivity.class.getSimpleName(), "status bar height: " + statusBarHeight);
         return statusBarHeight;
     }
 }

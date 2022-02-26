@@ -10,8 +10,8 @@ package com.njxm.smart.module.splash
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import com.njxm.smart.base.BaseActivity
 import com.njxm.smart.module.login.LoginFragment
+import com.njxm.smart.ui.activities.BaseActivity
 import com.ntxm.smart.R
 import com.ntxm.smart.databinding.ActivitySplashLayoutBinding
 
@@ -38,6 +38,10 @@ class SplashActivity : BaseActivity() {
         })
         supportFragmentManager.beginTransaction().replace(R.id.splash_container, splashFragment)
                 .commitAllowingStateLoss()
+    }
+
+    override fun setContentLayoutId(): Int {
+        return -1
     }
 
     private val loginFragment = LoginFragment()
