@@ -35,10 +35,10 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,6 +65,7 @@ public class InputFaceActivity extends BaseActivity {
 
     @BindView(R.id.news_user_input_face)
     ImageView ivPhoto;
+
     private File photoFile;
 
     @Override
@@ -75,16 +76,13 @@ public class InputFaceActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
         this.setActionBarTitle("录入人脸");
         this.showRightBtn(true, R.mipmap.new_add);
-
         this.ivPhoto = this.findViewById(R.id.news_user_input_face);
         ViewUtils.setOnClickListener(ivPhoto, (v) -> {
             takePhoto(InputFaceActivity.TAKE_PHOTO);
         });
-
         String faceUrl = SPUtils.getStringValue(KeyConstant.KEY_USER_FACE_URL);
         Glide.with(this)
                 .asBitmap()
@@ -101,7 +99,6 @@ public class InputFaceActivity extends BaseActivity {
                 @Override
                 public void run() {
                     try {
-
                         Bitmap drawable =
                                 Glide.with(InputFaceActivity.this)
                                         .asBitmap().load(InputFaceActivity.this.photoFile)
@@ -116,7 +113,6 @@ public class InputFaceActivity extends BaseActivity {
                                         .into(InputFaceActivity.this.ivPhoto);
                             }
                         });
-
                         BitmapUtils.saveBitmap(drawable, InputFaceActivity.this.photoFile);
                         InputFaceActivity.this.uploadInputFace();
                     } catch (ExecutionException | InterruptedException e) {
@@ -131,7 +127,6 @@ public class InputFaceActivity extends BaseActivity {
      * 上传录入人脸图像
      */
     private void uploadInputFace() {
-
         HttpUtils.getApi(WebService.class).testArrayTest().enqueue(new Callback<AddressBean>() {
             @Override
             public void onResponse(Call<AddressBean> call, Response<AddressBean> response) {
@@ -139,27 +134,20 @@ public class InputFaceActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<AddressBean> call, Throwable t) {
-
             }
         });
-
-
         WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
         api.uploadFacePhoto(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)),
                 MultipartBody.Part.createFormData("file", this.photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), this.photoFile)))
                 .enqueue(new Callback<ServerResponseBean>() {
                     @Override
                     public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
-
                         ServerResponseBean bean = response.body();
-
                         if (bean == null) {
                             Logger.e(TAG, "文件上传出现问题");
                             return;
                         }
-
                         String msg = bean.getCode() == 200 ? "录入成功" : bean.getMessage();
-
                         EventBus.getDefault().post(new ToastEvent(msg));
                     }
 
@@ -175,7 +163,6 @@ public class InputFaceActivity extends BaseActivity {
         super.onClickRightBtn();
         this.takePhoto(InputFaceActivity.TAKE_PHOTO);
     }
-
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {

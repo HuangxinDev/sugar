@@ -31,10 +31,10 @@ import com.njxm.smart.tools.AppTextWatcher;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -44,18 +44,28 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClickListener {
-
     private static final int ONE = 763;
+
     private static final int TWO = 551;
+
     private static final int THREE = 913;
+
     private static int currentId = com.njxm.smart.ui.activities.UpdateTelPhoneActivity.ONE;
+
     AppCompatImageView mBindPhone;
+
     AppCompatImageView mVerifyPhone;
+
     AppCompatImageView mVerifySuccess;
+
     AppCompatTextView mConfirmBtn;
+
     AppEditText mBindPhoneEdit;
+
     AppEditText mNewPhoneNumberCode;
+
     AppEditText mQRCode;
+
     private final AppTextWatcher mAppTextWatcher = new AppTextWatcher() {
         @Override
         public void afterTextChanged(String s) {
@@ -68,9 +78,13 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+
     View mVerifyPhoneLayout;
+
     private AppCompatTextView tvPhonePop;
+
     private int count = 60;
+
     private Timer timer;
 
     /**
@@ -103,26 +117,20 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
         this.mVerifySuccess.setEnabled(false);
         this.tvPhonePop = this.findViewById(R.id.phone_pop);
         this.tvPhonePop.setPadding(0, ResolutionUtil.dp2Px(35), 0, 0);
-
         this.mBindPhoneEdit.getEditText().addTextChangedListener(new AppTextWatcher() {
             @Override
             public void afterTextChanged(String s) {
                 com.njxm.smart.ui.activities.UpdateTelPhoneActivity.this.mConfirmBtn.setEnabled(StringUtils.isNotEmpty(s));
             }
         });
-
-
         com.njxm.smart.ui.activities.UpdateTelPhoneActivity.requestQrCode();
-
         this.mQRCode.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 com.njxm.smart.ui.activities.UpdateTelPhoneActivity.requestQrCode();
             }
         });
-
         this.mNewPhoneNumberCode.getEditText().addTextChangedListener(this.mAppTextWatcher);
-
         this.mNewPhoneNumberCode.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,11 +138,9 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
                     ToastUtils.showToast("图形验证码不可为空");
                     return;
                 }
-
                 if (com.njxm.smart.ui.activities.UpdateTelPhoneActivity.this.count != 60) {
                     return;
                 }
-
                 com.njxm.smart.ui.activities.UpdateTelPhoneActivity.this.timer = new Timer();
                 com.njxm.smart.ui.activities.UpdateTelPhoneActivity.this.timer.schedule(new TimerTask() {
                     @Override
@@ -148,7 +154,6 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
                                 }
                             }
                         });
-
                     }
 
                     @Override
@@ -196,13 +201,11 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onClickLeftBtn() {
-
         if (this.mVerifySuccess.isEnabled()) {
             com.njxm.smart.ui.activities.UpdateTelPhoneActivity.currentId = com.njxm.smart.ui.activities.UpdateTelPhoneActivity.ONE;
             this.finish();
             return;
         }
-
         switch (com.njxm.smart.ui.activities.UpdateTelPhoneActivity.currentId) {
             case com.njxm.smart.ui.activities.UpdateTelPhoneActivity.TWO:
                 com.njxm.smart.ui.activities.UpdateTelPhoneActivity.currentId = com.njxm.smart.ui.activities.UpdateTelPhoneActivity.ONE;
@@ -210,7 +213,6 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
                 this.mVerifyPhoneLayout.setVisibility(View.GONE);
                 this.mQRCode.clearText();
                 this.mNewPhoneNumberCode.clearText();
-
                 this.mConfirmBtn.setEnabled(StringUtils.isNotEmpty(this.mBindPhoneEdit.getText()));
                 this.mBindPhoneEdit.setVisibility(View.VISIBLE);
                 this.tvPhonePop.setVisibility(View.VISIBLE);
@@ -232,7 +234,6 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
     }
 
     private void updateTelPhone() {
-
         RequestEvent requestEvent = new RequestEvent.Builder()
                 .url(UrlPath.PATH_USER_PHONE_REPLACE.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))
@@ -270,9 +271,7 @@ public class UpdateTelPhoneActivity extends BaseActivity implements View.OnClick
         if (StringUtils.isEmpty(telPhone) || !telPhone.matches("1[0-9]{10}")) {
             return new SpannableString("手机号不存在");
         }
-
         String phone = new StringBuffer(telPhone).replace(3, 7, "****").toString();
-
         int len1 = string.length();
         int len2 = len1 + phone.length();
         SpannableString spannableString = new SpannableString(string + phone);

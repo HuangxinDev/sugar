@@ -28,9 +28,9 @@ import com.njxm.smart.ui.activities.QRUserActivity;
 import com.njxm.smart.ui.activities.RealNameAuthenticationActivity;
 import com.njxm.smart.ui.activities.SettingsActivity;
 import com.njxm.smart.ui.activities.UserCertificateActivity;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -42,8 +42,6 @@ import butterknife.OnClick;
  * "我的" Fragment
  */
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
-
-
     // 个人信息页面按钮
     private AppCompatTextView mUserNewsBtn;
 
@@ -51,14 +49,21 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     // 实名认证
     private View mRealItem;
+
     private View mRealStarItem;
+
     private View mMedicalItem;
+
     private View mMedicalStarItem;
+
     private View mCertItem;
+
     private View mAboutUsItem;
+
     private View mSettingItem;
 
     private LinearLayout llRealNamePop; // 实名认证提示
+
     private LinearLayout llMedicalPop; // 体检报告提示
 
     private static void requestUserBaseNews() {
@@ -97,7 +102,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @OnClick(R.id.qr_btn)
@@ -122,7 +126,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void setUpView() {
-
     }
 
     @Override
@@ -156,10 +159,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         this.mUserNewsBtn.setText(bean.getUserName());
         int medicalStatus =
                 Integer.parseInt(SPUtils.getValue(KeyConstant.KEY_MEDICAL_STATUS, "0"));
-
         this.mMedicalStarItem.setVisibility((medicalStatus == 0 || medicalStatus == 3) ?
                 View.VISIBLE : View.GONE);
-
         if (StringUtils.isNotEmpty(bean.getIcon())) {
             Glide.with(this.getActivity())
                     .load(bean.getIcon())
@@ -167,5 +168,4 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     .into(this.ivUserHead);
         }
     }
-
 }

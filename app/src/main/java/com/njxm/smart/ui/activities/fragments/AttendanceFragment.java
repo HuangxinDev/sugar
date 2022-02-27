@@ -39,11 +39,11 @@ import com.njxm.smart.service.LocationService;
 import com.njxm.smart.ui.activities.BaseActivity;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.utils.ScreenUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.SPUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -63,6 +63,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     protected DWebView mWebView;
 
     private LocationService mLocationService;
+
     private final BDAbstractLocationListener mBdAbstractLocationListener = new BDAbstractLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
@@ -76,12 +77,14 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
             AttendanceFragment.this.mWebView.callHandler("h5Location", new Object[]{object.toJSONString()});
         }
     };
+
     private File photoFile;
 
     /**
      * Js页面获取用户个人信息
      *
      * @param object DWebView相应Js固定参数
+     *
      * @return 个人信息
      */
     @JavascriptInterface
@@ -115,7 +118,6 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
 
     @Override
     protected void setUpData() {
-
     }
 
     @Override
@@ -241,6 +243,5 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
 
     @Override
     public void onPermissionDenied(int requestCode) {
-
     }
 }

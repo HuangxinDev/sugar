@@ -30,9 +30,9 @@ import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.http.WebService;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.CircleImageView;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,7 +55,6 @@ import retrofit2.Response;
  * 个人信息页面（由主页 我的-姓名跳转）.
  */
 public class PersonalInformationActivity extends BaseActivity {
-
     @BindView(R.id.news_user_base_new)
     protected View mUserBaseNews;
 
@@ -111,7 +110,6 @@ public class PersonalInformationActivity extends BaseActivity {
     protected TextView tvUserJobName;
 
     private boolean showDetails = false;
-
 
     @Override
     protected int getLayoutId() {
@@ -187,14 +185,11 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void uploadHeadFile() {
-
         WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
-
         List<MultipartBody.Part> parts = new ArrayList<>();
         parts.add(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));
         parts.add(MultipartBody.Part.createFormData("file", this.photoFile.getName(),
                 RequestBody.create(MediaType.parse("image/png"), this.photoFile)));
-
         api.uploadFile(UrlPath.PATH_USER_HEAD_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
             @Override
             public void onResponse(@NonNull Call<ServerResponseBean> call, @NonNull Response<ServerResponseBean> response) {
@@ -208,7 +203,6 @@ public class PersonalInformationActivity extends BaseActivity {
             }
         });
     }
-
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void refreshUI(UserBean bean) {

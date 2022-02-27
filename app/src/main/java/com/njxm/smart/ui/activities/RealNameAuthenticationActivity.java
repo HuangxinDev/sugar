@@ -32,10 +32,10 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 import com.sugar.android.common.utils.ViewUtils;
 import com.sugar.android.common.view.SafeOnClickListener;
@@ -52,17 +52,26 @@ import okhttp3.RequestBody;
  * 实名认证页面
  */
 public class RealNameAuthenticationActivity extends BaseActivity {
-
     public static final int REQUEST_CARD_1 = 100;
+
     private static final int REQUEST_CARD_2 = 161;
+
     private static final int REQUEST_FACE_1 = 878;
+
     private static final int REQUEST_UPLOAD_BITMAP = 321;
+
     private final SparseArray<File> sparseArray = new SparseArray<>();
+
     private ImageView ivCard1;
+
     private ImageView ivCard2;
+
     private ImageView ivFace;
+
     private EditText etCardId;
+
     private EditText etCardName;
+
     private AppCompatTextView tvCommitBtn;
 
     private final SafeOnClickListener safeOnClickListener = new SafeOnClickListener() {
@@ -77,7 +86,6 @@ public class RealNameAuthenticationActivity extends BaseActivity {
             } else if (view == tvCommitBtn) {
                 uploadBitmap();
             }
-
         }
     };
 
@@ -89,26 +97,21 @@ public class RealNameAuthenticationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.setActionBarTitle("实名认证");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
-
         this.ivCard1 = this.findViewById(R.id.card_id_face);
         this.ivCard2 = this.findViewById(R.id.card_id_native);
         this.ivFace = this.findViewById(R.id.face_detect);
         this.tvCommitBtn = this.findViewById(R.id.commitBtn);
         ViewUtils.setOnClickListener(tvCommitBtn, safeOnClickListener);
-
         this.etCardName = this.findViewById(R.id.card_name);
         this.etCardId = this.findViewById(R.id.card_id);
-
         ViewUtils.setOnClickListener(ivCard1, safeOnClickListener);
         ViewUtils.setOnClickListener(ivCard2, safeOnClickListener);
         ViewUtils.setOnClickListener(ivFace, safeOnClickListener);
     }
 
     private void uploadBitmap() {
-
         if (StringUtils.isEmpty(this.etCardId.getText().toString().trim()) || StringUtils.isEmpty(this.etCardName.getText().toString().trim())) {
             ToastUtils.showToast("请输入姓名和身份证号");
             return;
@@ -117,7 +120,6 @@ public class RealNameAuthenticationActivity extends BaseActivity {
             ToastUtils.showToast("请补全照片");
             return;
         }
-
         MediaType imageType = MediaType.parse("image/jpg");
         HttpUtils.getInstance().doPostFile(new RequestEvent.Builder()
                 .url(UrlPath.PATH_USER_REAL_AUTH.getUrl())
@@ -154,7 +156,6 @@ public class RealNameAuthenticationActivity extends BaseActivity {
         if (this.photoFile == null || !this.photoFile.exists() || this.photoFile.length() == 0) {
             return;
         }
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -174,7 +175,6 @@ public class RealNameAuthenticationActivity extends BaseActivity {
                                             (requestCode == com.njxm.smart.ui.activities.RealNameAuthenticationActivity.REQUEST_CARD_2 ? com.njxm.smart.ui.activities.RealNameAuthenticationActivity.this.ivCard2 : com.njxm.smart.ui.activities.RealNameAuthenticationActivity.this.ivFace));
                         }
                     });
-
                     BitmapUtils.saveBitmap(bitmap, com.njxm.smart.ui.activities.RealNameAuthenticationActivity.this.photoFile);
                     int i = -1;
                     switch (requestCode) {
@@ -192,16 +192,12 @@ public class RealNameAuthenticationActivity extends BaseActivity {
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }).start();
-
-
     }
 
     @Override
     public void onClickLeftBtn() {
         super.onBackPressed();
     }
-
 }

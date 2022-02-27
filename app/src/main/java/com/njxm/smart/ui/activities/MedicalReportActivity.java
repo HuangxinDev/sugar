@@ -43,10 +43,10 @@ import com.njxm.smart.ui.activities.adapter.SimpleImageAdapter;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.SPUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,45 +67,62 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MedicalReportActivity extends BaseActivity implements View.OnClickListener {
-
-
     public static final int default_icon = R.mipmap.camera_photo;
+
     /**
      * 个人信息-详细信息接口中的
      */
     private static final int MEDICAL_VOID = 0; // 未上传
+
     private static final int MEDICAL_CHECK_WAIT = 1; // 未审批
+
     private static final int MEDICAL_CHECK_SUCCESS = 2; // 审核完成
+
     private static final int MEDICAL_CHECK_FAILED = 3; // 审批不通过
 
     private static final int MEDICAL_COMMIT = 194;
+
     private final List<String> mDatas = new ArrayList<>();
+
     @BindView(R.id.default_layout)
     protected View mMedicalVoidLayout;
+
     @BindView(R.id.commit_layout)
     protected View mMedicalCommitLayout;
+
     @BindView(R.id.wait_check_layout)
     protected View mMedicalCheckWaitLayout;
+
     @BindView(R.id.check_failed_layout)
     protected View mMedicalCheckRetryLayout;
+
     @BindView(R.id.upload_success_title)
     protected View mMedicalCheckSuccessHeaderLayout;
+
     @BindView(R.id.upload_time)
     protected TextView tvModifyTime;
+
     // 提交图片资源
     @BindView(R.id.commit_btn)
     protected TextView mCommitBtn;
+
     // 开始上传图片
     @BindView(R.id.upload_btn)
     protected TextView mUploadBtn;
+
     // 重新申请
     @BindView(R.id.retry_upload_btn)
     protected TextView mRetryUploadBtn;
+
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
+
     private SimpleImageAdapter adapter;
+
     private int mLastMedicalState = com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_VOID;
+
     private int mMedicalState = com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_VOID;
+
     private File photoFile;
 
     /**
@@ -128,7 +145,6 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         this.setActionBarTitle("体检报告");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
-
         this.mCommitBtn.setOnClickListener(this);
         this.mUploadBtn.setOnClickListener(this);
         this.mRetryUploadBtn.setOnClickListener(this);
@@ -144,13 +160,11 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
                     ToastUtils.showToast("上传图片已达上限");
                     return;
                 }
-
                 if (position == com.njxm.smart.ui.activities.MedicalReportActivity.this.mDatas.size() - 1) {
                     com.njxm.smart.ui.activities.MedicalReportActivity.this.takePhoto(100);
                 }
             }
         });
-
         this.adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -178,7 +192,6 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
             this.mMedicalState = Integer.parseInt(bean.getMedicalStatus());
         } catch (NumberFormatException e) {
             e.printStackTrace();
-
         }
         this.invalidateLayoutState(this.mMedicalState);
         if (this.mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS) {
@@ -188,9 +201,7 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onResponse(ResponseEvent event) {
-
         String url = event.getUrl();
-
         if (url.equals(UrlPath.PATH_MEDICAL_REPORT_PULL.getUrl())) {
             MedicalBean bean = JSONObject.parseObject(event.getData(), MedicalBean.class);
             EventBus.getDefault().post(bean);
@@ -213,7 +224,6 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
         this.mMedicalCheckSuccessHeaderLayout.setVisibility(mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS ? View.VISIBLE : View.GONE);
         this.mCommitBtn.setVisibility(mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_COMMIT ? View.VISIBLE : View.GONE);
         this.mMedicalCommitLayout.setVisibility((mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_COMMIT || mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS) ? View.VISIBLE : View.GONE);
-
         if (mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_COMMIT) {
             this.mDatas.clear();
             File defalutFile = new File(this.getCacheDir(), "camera_default.png");
@@ -223,7 +233,6 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
             this.adapter.setShowDelete(true);
             this.adapter.setNewData(this.mDatas);
         }
-
         this.showRightBtn(mMedicalState == com.njxm.smart.ui.activities.MedicalReportActivity.MEDICAL_CHECK_SUCCESS, "更新");
     }
 
@@ -235,9 +244,7 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == 100 && this.photoFile != null && this.photoFile.exists() && this.photoFile.length() > 0) {
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -256,7 +263,7 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
                                 com.njxm.smart.ui.activities.MedicalReportActivity.this.update(com.njxm.smart.ui.activities.MedicalReportActivity.this.photoFile.getAbsolutePath());
                             }
                         });
-//                        EventBus.getDefault().post(photoFile.getPath());
+                        //                        EventBus.getDefault().post(photoFile.getPath());
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -305,9 +312,7 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
             parts.add(MultipartBody.Part.createFormData("files", file.getName(),
                     RequestBody.create(MediaType.parse("image/png"), file)));
         }
-
         WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
-
         api.uploadFile(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
             @Override
             public void onResponse(Call<ServerResponseBean> call, Response<ServerResponseBean> response) {
@@ -319,7 +324,6 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
                 EventBus.getDefault().post(new ToastEvent("网络异常"));
             }
         });
-
     }
 
     @Override
@@ -352,12 +356,10 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
 
         public void invoke() {
             MedicalReportActivity.this.tvModifyTime.setText("上传时间:  " + bean.getCreateTime());
-
             MedicalReportActivity.this.mDatas.clear();
             for (String path : bean.getPathList()) {
                 MedicalReportActivity.this.mDatas.add(UrlPath.PATH_PICTURE_PREFIX.getUrl() + path);
             }
-
             MedicalReportActivity.this.adapter.setShowDelete(false);
             MedicalReportActivity.this.adapter.setNewData(MedicalReportActivity.this.mDatas);
         }

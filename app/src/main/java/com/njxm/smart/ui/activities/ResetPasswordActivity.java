@@ -31,12 +31,12 @@ import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.AlertDialogUtils;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.RegexUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
 import com.smart.cloud.utils.VerifyCodeUtils;
 import com.sugar.android.common.safe.SafeIntent;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 import com.sugar.android.common.utils.ViewUtils;
 
@@ -47,20 +47,24 @@ import java.util.TimerTask;
 
 public class ResetPasswordActivity extends BaseActivity implements View.OnClickListener {
     private AppEditText mAccountEdit;
+
     private AppEditText mAccountQR;
+
     private AppEditText mAccountNumber;
+
     private AppEditText mNewPwd1;
+
     private AppEditText mNewPwd2;
+
     private AppCompatTextView mNextStepBtn;
+
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
         }
 
         @Override
@@ -70,7 +74,9 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                     StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mAccountNumber.getText()));
         }
     };
+
     private AppCompatTextView mConfirmBtn;
+
     private final AppTextWatcher watcher = new AppTextWatcher() {
         @Override
         public void afterTextChanged(String s) {
@@ -85,9 +91,13 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             com.njxm.smart.ui.activities.ResetPasswordActivity.this.mConfirmBtn.setEnabled(StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mNewPwd1.getText()) && StringUtils.isNotEmpty(com.njxm.smart.ui.activities.ResetPasswordActivity.this.mNewPwd2.getText()));
         }
     };
+
     private View root_one;
+
     private View root_two;
+
     private boolean isForgetPwd;
+
     private int count = 60;
 
     @Override
@@ -99,11 +109,9 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String action = new SafeIntent(getIntent()).getStringExtra("action");
-
         View divider = ViewUtils.findViewById(this, R.id.divider1);
         View title = this.findViewById(R.id.title);
         this.isForgetPwd = StringUtils.isEqual(action, "1");
-
         if (this.isForgetPwd) {
             ViewUtils.setVisibility(this.mActionBarTitle, View.GONE);
             ViewUtils.setVisibility(divider, View.GONE);
@@ -112,13 +120,9 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             ViewUtils.setVisibility(this.mActionBarRightBtn, View.GONE);
             ViewUtils.setVisibility(title, View.GONE);
         }
-
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
-
-
         this.root_one = this.findViewById(R.id.ll_1);
         this.root_two = this.findViewById(R.id.ll_2);
-
         this.mAccountEdit = this.findViewById(R.id.login_account);
         this.mAccountQR = this.findViewById(R.id.login_qr_code);
         this.mAccountQR.getRightTextView().setOnClickListener(this);
@@ -129,15 +133,12 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         this.mConfirmBtn = this.findViewById(R.id.login_confirm);
         this.mConfirmBtn.setOnClickListener(this);
         ViewUtils.setVisibility(this.root_two, View.GONE);
-
         this.mNewPwd1 = this.findViewById(R.id.new_pwd1);
         this.mNewPwd2 = this.findViewById(R.id.new_pwd2);
-
         this.mAccountEdit.getEditText().addTextChangedListener(this.textWatcher);
         this.mAccountQR.getEditText().addTextChangedListener(this.textWatcher);
         this.mAccountNumber.getEditText().addTextChangedListener(this.textWatcher);
         this.mAccountNumber.getRightTextView().setOnClickListener(this);
-
         if (this.isForgetPwd) {
             this.showView(this.root_one, true);
             this.showView(this.root_two, false);
@@ -149,10 +150,8 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             this.showView(this.root_two, true);
             this.mConfirmBtn.setEnabled(StringUtils.isNotEmpty(this.mNewPwd1.getText()) && StringUtils.isNotEmpty(this.mNewPwd2.getText()));
         }
-
         this.mNewPwd1.getEditText().addTextChangedListener(this.watcher);
         this.mNewPwd2.getEditText().addTextChangedListener(this.watcher);
-
         VerifyCodeUtils.getQRCode();
     }
 
@@ -164,7 +163,6 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             if (manager.hasProperties("kaptcha")) {
                 setCode(manager.getProperties("kaptcha"));
             }
-
             if (manager.hasProperties("kaptchaToken")) {
                 updateToken(manager.getProperties("kaptchaToken"));
             }
@@ -202,7 +200,6 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-
     @Override
     public void onClick(View v) {
         if (v == this.mNextStepBtn) {
@@ -210,17 +207,14 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                 ToastUtils.showToast("请输入正确的手机号");
                 return;
             }
-
             if (StringUtils.isEmpty(this.mAccountQR.getText())) {
                 ToastUtils.showToast("验证码不可为空");
                 return;
             }
-
             if (StringUtils.isEmpty(this.mAccountNumber.getText())) {
                 ToastUtils.showToast("请输入账户密码");
                 return;
             }
-
             ViewUtils.setVisibility(this.root_one, View.GONE);
             ViewUtils.setVisibility(this.root_two, View.VISIBLE);
         } else if (v == this.mAccountNumber.getRightTextView()) {
@@ -240,14 +234,12 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                     }
                 }
             }, 0, 1000);
-
             sendSms();
         } else if (v == this.mConfirmBtn) {
             if (!TextUtils.equals(this.mNewPwd1.getText(), this.mNewPwd2.getText())) {
                 this.showDialog(new DialogMessage("", null, ""));
                 return;
             }
-
             RequestEvent.Builder requestBuilder = new RequestEvent.Builder();
             if (this.isForgetPwd) {
                 requestBuilder.url(UrlPath.PATH_MODIFY_PWD.getUrl())
@@ -303,7 +295,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         this.invoke(
                 () -> AlertDialogUtils.getInstance().showConfirmDialog(this, message.message,
                         message.yesText, message.noText));
-//                        getString(R.string.different_password), null, getString(R.string.input_again)));
+        //                        getString(R.string.different_password), null, getString(R.string.input_again)));
     }
 
     private static final class DialogMessage {

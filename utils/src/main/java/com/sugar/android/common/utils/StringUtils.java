@@ -40,6 +40,4 @@ public final class StringUtils {
             return str1.equals(str2);
         }
     }
-
-
 }

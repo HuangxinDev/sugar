@@ -19,6 +19,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.sugar.android.common.utils.CloseUtils;
 import com.sugar.android.common.utils.Logger;
 
 import java.io.ByteArrayOutputStream;
@@ -55,13 +56,15 @@ public final class BitmapUtils {
      * @param imageFile 文件
      */
     public static File saveBitmap(Bitmap bitmap, File imageFile) {
+        FileOutputStream fos = null;
         try {
-            FileOutputStream fos = new FileOutputStream(imageFile);
+            fos = new FileOutputStream(imageFile);
             bitmap.compress(Bitmap.CompressFormat.PNG, 10, fos);
             fos.flush();
-            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            CloseUtils.close(fos);
         }
         return imageFile;
     }
@@ -70,7 +73,6 @@ public final class BitmapUtils {
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
         return BitmapUtils.saveBitmap(bitmap, imageFile);
     }
-
 
     /**
      * 生成简单二维码
@@ -103,7 +105,6 @@ public final class BitmapUtils {
             }
             /** 2.将配置参数传入到QRCodeWriter的encode方法生成BitMatrix(位矩阵)对象 */
             BitMatrix bitMatrix = new QRCodeWriter().encode(param.getContent(), BarcodeFormat.QR_CODE, param.getWidth(), param.getHeight(), hints);
-
             /** 3.创建像素数组,并根据BitMatrix(位矩阵)对象为数组元素赋颜色值 */
             int[] pixels = new int[param.getWidth() * param.getHeight()];
             for (int y = 0; y < param.getHeight(); y++) {

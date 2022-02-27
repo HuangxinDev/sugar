@@ -9,7 +9,7 @@
 package com.njxm.smart.http;
 
 import com.njxm.smart.global.KeyConstant;
-import com.njxm.smart.utils.SPUtils;
+import com.sugar.android.common.utils.SPUtils;
 
 import java.io.IOException;
 

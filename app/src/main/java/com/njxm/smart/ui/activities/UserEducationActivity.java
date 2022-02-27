@@ -24,9 +24,9 @@ import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.model.jsonbean.EduTypeBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.ui.activities.adapter.EduTypeAdapter;
-import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.R;
 import com.sugar.android.common.safe.SafeIntent;
+import com.sugar.android.common.utils.SPUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -41,13 +41,17 @@ import butterknife.BindView;
  */
 @Route(path = GlobalRouter.USER_CETIFICATION)
 public class UserEducationActivity extends BaseActivity {
-
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
+
     private List<EduTypeBean> typeBeans = new ArrayList<>();
+
     private EduTypeAdapter adapter;
+
     private int lastSelected = 0;
+
     private int selectedId = 0;
+
     private String mUserEdu;
 
     @Override
@@ -76,7 +80,6 @@ public class UserEducationActivity extends BaseActivity {
                     com.njxm.smart.ui.activities.UserEducationActivity.this.typeBeans.get(com.njxm.smart.ui.activities.UserEducationActivity.this.selectedId).setSelected(true);
                     com.njxm.smart.ui.activities.UserEducationActivity.this.typeBeans.get(com.njxm.smart.ui.activities.UserEducationActivity.this.lastSelected).setSelected(false);
                 } catch (ArrayIndexOutOfBoundsException ex) {
-
                 } finally {
                     adapter.notifyDataSetChanged();
                     com.njxm.smart.ui.activities.UserEducationActivity.this.uploadEdu();
@@ -89,7 +92,6 @@ public class UserEducationActivity extends BaseActivity {
                 .build();
         HttpUtils.getInstance().request(requestEvent);
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshEduState(List<EduTypeBean> beans) {
@@ -108,7 +110,6 @@ public class UserEducationActivity extends BaseActivity {
         if (this.selectedId == -1 || this.typeBeans.size() == 0) {
             return;
         }
-
         RequestEvent requestEvent = RequestEvent.newBuilder()
                 .url(UrlPath.PATH_USER_EDU_NEWS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))

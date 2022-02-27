@@ -19,15 +19,15 @@ import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.global.KeyConstant;
 import com.njxm.smart.tools.network.HttpUtils;
-import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 
 @Route(path = GlobalRouter.USER_EMERGENCY_CONTACT)
 public class UserEmergencyContactActivity extends BaseActivity {
-
     private AppCompatEditText etUserName;
+
     private AppCompatEditText etUserPhone;
 
     @Override
@@ -41,10 +41,8 @@ public class UserEmergencyContactActivity extends BaseActivity {
         this.setActionBarTitle("紧急联系人");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
         this.showRightBtn(true, "保存");
-
         this.etUserName = this.findViewById(R.id.user_name);
         this.etUserPhone = this.findViewById(R.id.news_user_phone);
-
         this.etUserName.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT));
         this.etUserPhone.setText(SPUtils.getStringValue(KeyConstant.KEY_USER_EMERGENCY_CONTACT_PHONE));
     }
@@ -61,7 +59,6 @@ public class UserEmergencyContactActivity extends BaseActivity {
             ToastUtils.showToast("姓名和手机号不可为空");
             return;
         }
-
         HttpUtils.getInstance().request(new RequestEvent.Builder()
                 .url(UrlPath.PATH_USER_EMERGENCY_PEOPLE_NEWS_COMMIT.getUrl())
                 .addBodyJson("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID))

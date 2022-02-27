@@ -36,7 +36,6 @@ import com.njxm.smart.presenter.LoginPresenter;
 import com.njxm.smart.ui.activities.ResetPasswordActivity;
 import com.njxm.smart.ui.activities.main.MainActivity;
 import com.njxm.smart.utils.RegexUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.AppEditText;
 import com.ntxm.smart.R;
 import com.ntxm.smart.databinding.ActivityLoginBinding;
@@ -44,6 +43,7 @@ import com.smart.cloud.utils.ToastUtils;
 import com.sugar.android.common.utils.ActivityUtils;
 import com.sugar.android.common.utils.HandlerUtils;
 import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.StringUtils;
 import com.sugar.android.common.utils.TextViewUtils;
 import com.sugar.android.common.utils.ThreadPoolUtils;
@@ -57,32 +57,44 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LoginFragment extends BaseFragment implements LoginContract.View, View.OnClickListener {
     private static final String TAG = "LoginFragment";
+
     /**
      * 倒计时 60s
      */
     private static final int COUNT_TIME = 60;
+
     // 登录按钮
     private TextView mLoginBtn;
+
     // 快捷登录 Tab
     private TextView mQuickLoginBtn;
+
     // 密码登录 Tab
     private TextView mPasswordLoginBtn;
+
     // 账号验证布局
     private AppEditText mLoginAccountEditText;
+
     // 密码验证布局
     private AppEditText mLoginPwdEditText;
+
     // 图形验证布局
     private AppEditText mLoginQrEditText;
+
     // 验证码登录
     private AppEditText mLoginNumberEditText;
+
     // 忘记密码
     private AppCompatTextView mForgetPwdBtn;
+
     private LoginPresenter mLoginPresenter;
+
     private int count = COUNT_TIME;
 
     private final LoginData loginData = new LoginData();
 
     private View rootView;
+
     private View lineIndicator;
 
     @Nullable
@@ -95,23 +107,9 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (isTokenPresent()) {
-            startMainActivity();
-            return;
-        }
         super.onCreate(savedInstanceState);
         initPresenter();
         initView();
-    }
-
-    private boolean isTokenPresent() {
-        return StringUtils.isNotEmpty(SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN));
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        this.startActivity(intent);
-        finishActivity();
     }
 
     private void initPresenter() {
@@ -143,7 +141,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         Logger.i(TAG, "onResume");
         switchLoginWay(true);
     }
-
 
     @Override
     public void onDestroyView() {
@@ -178,17 +175,14 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         if (this.count != COUNT_TIME) {
             return;
         }
-
         String mobile = this.mLoginAccountEditText.getText().trim();
         if (!RegexUtil.isMobilePhone(mobile)) {
             return;
         }
-
         if (StringUtils.isEmpty(this.mLoginQrEditText.getText())) {
             return;
         }
         this.mLoginPresenter.requestSms(this.mLoginAccountEditText.getText().trim(), this.mLoginQrEditText.getText().trim());
-
         reset();
     }
 
@@ -206,12 +200,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         } else {
             passwordLogin();
         }
+        getActivity().getOnBackPressedDispatcher().onBackPressed();
     }
 
     private void quickLogin() {
         String phoneNumber = this.mLoginAccountEditText.getText().trim();
         String verifyCode = this.mLoginNumberEditText.getText().trim();
-
         if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(verifyCode)) {
             ToastUtils.showToast(getString(R.string.null_mobile_or_verify_code));
             return;
@@ -225,12 +219,10 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         String username = this.mLoginAccountEditText.getText().trim();
         String password = this.mLoginPwdEditText.getText().trim();
         String qrCode = this.mLoginQrEditText.getText().trim();
-
         if (checkParam(username, password, qrCode)) {
             ToastUtils.showToast("用户名、密码、校验码不能为空");
             return;
         }
-
         loginData.setUsername(username);
         loginData.setPassword(password);
         loginData.setVerifyCode(qrCode);
@@ -275,8 +267,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         } else {
             refreshUIWithQuickLogin();
         }
-
-
         TextViewUtils.setText(mLoginAccountEditText.getEditText(), pwdLogin ? R.string.input_username :
                 R.string.input_phone_or_idcard);
         this.mLoginAccountEditText.getEditText().setInputType(pwdLogin ?
@@ -285,8 +275,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         float toX;
         float width;
         int viewId;
-
-
         if (pwdLogin) {
             viewId = R.id.password_login_btn;
             toX = mPasswordLoginBtn.getX();
@@ -298,7 +286,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
             width = mQuickLoginBtn.getWidth();
             this.mLoginPwdEditText.clearText();
         }
-
         int lineIndicatorWidth = lineIndicator.getWidth();
         if (lineIndicatorWidth == 0) {
             ConstraintSet set = new ConstraintSet();
@@ -317,12 +304,10 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
             objectAnimator.setDuration(300);
             objectAnimator.start();
             set1.play(scaleX).before(objectAnimator);
-//        set.play(objectAnimator);
+            //        set.play(objectAnimator);
             set1.start();
         }
-
-
-//        refreshQrCode();
+        //        refreshQrCode();
         this.mLoginQrEditText.clearText();
     }
 
@@ -348,18 +333,17 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     private void requestPictureCode() {
         this.mLoginPresenter.requestQrCode();
     }
-
     //    @Override
-//    public void onResponse(ResponseEvent event) {
-//        String url = event.getUrl();
-//        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
-//            JSONObject dataObject = parseObject(event.getData());
-//            String bitmapStr = dataObject.getString("kaptcha");
-//            this.invoke(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.stringToBitmap(bitmapStr))));
-//        } else {
-//            super.onResponse(event);
-//        }
-//    }
+    //    public void onResponse(ResponseEvent event) {
+    //        String url = event.getUrl();
+    //        if (url.equals(UrlPath.PATH_PICTURE_VERIFY.getUrl())) {
+    //            JSONObject dataObject = parseObject(event.getData());
+    //            String bitmapStr = dataObject.getString("kaptcha");
+    //            this.invoke(() -> this.mLoginQrEditText.getRightTextView().setBackgroundDrawable(new BitmapDrawable(this.getResources(), BitmapUtils.stringToBitmap(bitmapStr))));
+    //        } else {
+    //            super.onResponse(event);
+    //        }
+    //    }
 
     @Override
     public void showLoading() {
@@ -391,13 +375,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     @UiThread
     public void onQrCode(Bitmap bitmap) {
         HandlerUtils.postToMain(() -> {
-//            ViewUtils.setImageDrawable(mLoginQrEditText.getRightTextView(), new BitmapDrawable(this.getResources(),
-//                    bitmap));
+            //            ViewUtils.setImageDrawable(mLoginQrEditText.getRightTextView(), new BitmapDrawable(this.getResources(),
+            //                    bitmap));
         });
     }
 
     @Override
     public void showQrCode(Bitmap bitmap) {
-
     }
 }

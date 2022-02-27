@@ -37,13 +37,13 @@ import com.njxm.smart.model.jsonbean.QRCodeBean;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.utils.AppUtils;
 import com.njxm.smart.utils.JsonUtils;
-import com.njxm.smart.utils.SPUtils;
 import com.njxm.smart.view.callbacks.OnActionBarChange;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
 import com.smart.cloud.utils.ToastUtils;
 import com.sugar.android.common.utils.HandlerUtils;
 import com.sugar.android.common.utils.Logger;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.TextViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -64,6 +64,7 @@ import butterknife.Optional;
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange, BaseRunnable {
     protected final String mTag;
+
     @Nullable
     @BindView(R.id.action_bar_left)
     protected AppCompatImageButton mActionBarBackBtn;
@@ -79,6 +80,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Nullable
     @BindView(R.id.action_bar_right_text)
     protected AppCompatTextView actionBarRightTextView;
+
     protected File photoFile;
 
     private View container;
@@ -138,8 +140,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      * View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
      * View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
      */
-
-
     @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
@@ -165,7 +165,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
      *
      * @return
      */
-    protected abstract int getLayoutId();
+    protected int getLayoutId() {
+        return -1;
+    }
 
     /**
      * ActionBar 左侧点击事件 - 默认返回键-点击返回
@@ -184,7 +186,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Optional
     @OnClick({R.id.action_bar_right, R.id.action_bar_right_text})
     public void onClickRightBtn() {
-
     }
 
     /**
@@ -241,7 +242,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
             this.mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
             setRightResource(resourcesId);
         }
-
         if (show && this.actionBarRightTextView != null) {
             this.actionBarRightTextView.setVisibility(View.GONE);
         }
@@ -255,9 +255,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         TextViewUtils.setText(actionBarRightTextView, text);
         if (this.actionBarRightTextView != null) {
             this.actionBarRightTextView.setVisibility(show ? View.VISIBLE : View.GONE);
-
         }
-
         if (show && this.mActionBarRightBtn != null) {
             this.mActionBarRightBtn.setVisibility(View.GONE);
         }
@@ -304,7 +302,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         this.startActivityForResult(intent, requestId);
-
     }
 
     @Subscribe(sticky = true)
@@ -337,14 +334,23 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     public static class MedicalBean {
         protected String id;
+
         private int delFlag;
+
         private String createTime;
+
         private String createUser;
+
         private String modifyTime;
+
         private String modifyUser;
+
         private String sumrStatus;
+
         private String sumrUserId;
+
         private String files;
+
         private List<String> pathList;
 
         public String getId() {

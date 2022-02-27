@@ -25,6 +25,7 @@ import com.njxm.smart.tools.network.HttpMethod;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.ArrayUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,23 +39,32 @@ import butterknife.OnClick;
  * 关于我们
  */
 public class AboutUsActivity extends BaseActivity {
+    private static final String TAG = "AboutUsActivity";
 
     private static final int REQUEST_WEBVIEW_URL = 316;
+
     private final List<UrlBean> mUrls = new ArrayList<>();
+
     // 服务协议
     @BindView(R.id.about_us_service)
     protected View mAppServiceBtn;
+
     // 版权信息
     @BindView(R.id.about_us_version)
     protected View mAppCopyRightBtn;
+
     // 隐私政策
     @BindView(R.id.about_us_secret)
     protected View mAppPrivacyBtn;
+
     // 新功能介绍
     @BindView(R.id.about_us_feature)
     protected View mAppFeaturesBtn;
+
     private AppCompatImageView mAppIcon;
+
     private AppCompatTextView mAppName;
+
     private AppCompatTextView mAppVersion;
 
     public static List<UrlBean> getLocalBean() {
@@ -76,27 +86,22 @@ public class AboutUsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         this.setActionBarTitle("关于我们");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
-
         HttpUtils.getInstance().request(RequestEvent.newBuilder()
                 .url(UrlPath.PATH_ABOUT_US.getUrl())
                 .method(HttpMethod.GET)
                 .build());
-
-//        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_ABOUT_US).build();
-//
-//        HttpUtils.getInstance().postData(0, request, null);
+        //        Request request = new Request.Builder().url(HttpUrlGlobal.HTTP_ABOUT_US).build();
+        //
+        //        HttpUtils.getInstance().postData(0, request, null);
     }
 
     @OnClick({R.id.about_us_feature, R.id.about_us_secret, R.id.about_us_service, R.id.about_us_version})
     public void onViewClicked(View view) {
-
         if (this.mUrls.size() < 4) {
             this.mUrls.clear();
-            this.mUrls.addAll(com.njxm.smart.ui.activities.AboutUsActivity.getLocalBean());
+            this.mUrls.addAll(ArrayUtils.getNonNullList(getLocalBean()));
         }
-
         UrlBean urlBean = null;
-
         switch (view.getId()) {
             case R.id.about_us_feature:
                 urlBean = this.getRequestUrlBean("新功能介绍");
@@ -122,7 +127,7 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     public UrlBean getRequestUrlBean(String name) {
-        for (UrlBean bean : this.mUrls) {
+        for (UrlBean bean : ArrayUtils.getNonNullList(mUrls)) {
             if (bean.getName().equals(name)) {
                 return bean;
             }

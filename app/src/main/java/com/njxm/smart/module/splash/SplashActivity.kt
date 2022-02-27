@@ -5,48 +5,67 @@
  * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
+
 package com.njxm.smart.module.splash
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import com.njxm.smart.global.KeyConstant
 import com.njxm.smart.module.login.LoginFragment
 import com.njxm.smart.ui.activities.BaseActivity
+import com.njxm.smart.ui.activities.main.MainActivity
 import com.ntxm.smart.R
 import com.ntxm.smart.databinding.ActivitySplashLayoutBinding
+import com.sugar.android.common.utils.ActivityUtils
+import com.sugar.android.common.utils.FragmentUtils
+import com.sugar.android.common.utils.SPUtils
+import com.sugar.android.common.utils.StringUtils
 
 /**
  * 引导页
  */
 class SplashActivity : BaseActivity() {
-
-    private lateinit var viewBinding: ActivitySplashLayoutBinding
+    private lateinit var layoutBinding: ActivitySplashLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivitySplashLayoutBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
+        layoutBinding = ActivitySplashLayoutBinding.inflate(layoutInflater)
+        setContentView(layoutBinding.root)
 
         val splashFragment = SplashFragment()
         onBackPressedDispatcher.addCallback(splashFragment, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-//                viewBinding.root.removeView(viewBinding.splashContainer)
-                viewBinding.splashContainer.visibility = View.GONE;
-                supportFragmentManager.beginTransaction().remove(splashFragment).commitAllowingStateLoss()
+                layoutBinding.splashContainer.visibility = View.GONE;
+                FragmentUtils.removeFragment(supportFragmentManager, splashFragment)
                 initLoginFragment()
             }
         })
-        supportFragmentManager.beginTransaction().replace(R.id.splash_container, splashFragment)
-                .commitAllowingStateLoss()
+        FragmentUtils.showFragment(supportFragmentManager, R.id.splash_container, splashFragment)
     }
 
-    override fun getLayoutId(): Int {
-        return -1
-    }
-
-    private val loginFragment = LoginFragment()
     private fun initLoginFragment() {
+        if (isTokenPresent()) {
+            startMainActivityBeforeFinishSelf()
+            return
+        }
+        val loginFragment = LoginFragment()
+        onBackPressedDispatcher.addCallback(loginFragment, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                startMainActivityBeforeFinishSelf()
+            }
+        })
+        FragmentUtils.showFragment(supportFragmentManager, R.id.login_container, loginFragment)
+    }
 
-        supportFragmentManager.beginTransaction().replace(R.id.login_container, loginFragment).commitAllowingStateLoss()
+    private fun startMainActivityBeforeFinishSelf() {
+        val intent = Intent(this, MainActivity::class.java)
+        ActivityUtils.startActivity(this, intent)
+        finish()
+    }
+
+    private fun isTokenPresent(): Boolean {
+        return StringUtils.isNotEmpty(SPUtils.getStringValue(KeyConstant.KEY_USER_TOKEN))
     }
 }

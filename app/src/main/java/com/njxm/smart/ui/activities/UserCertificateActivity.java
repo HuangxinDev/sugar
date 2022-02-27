@@ -35,8 +35,8 @@ import com.njxm.smart.ui.activities.adapter.MyCertificateAdapter;
 import com.njxm.smart.utils.BitmapUtils;
 import com.njxm.smart.utils.JsonUtils;
 import com.njxm.smart.utils.ResolutionUtil;
-import com.njxm.smart.utils.SPUtils;
 import com.ntxm.smart.R;
+import com.sugar.android.common.utils.SPUtils;
 import com.sugar.android.common.utils.ViewUtils;
 import com.sugar.android.common.view.SafeOnClickListener;
 
@@ -56,27 +56,35 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class UserCertificateActivity extends BaseActivity {
-
     private final List<CertificateItem> mCertificateItems = new ArrayList<>();
+
     @BindView(R.id.default_layout)
     protected RelativeLayout rlDefault;
+
     @BindView(R.id.upload_btn)
     protected TextView tvUploadBtn;
+
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
+
     @BindView(R.id.adapter_layout)
     protected LinearLayout llAdapterLayout;
+
     @BindView(R.id.commit_btn)
     protected AppCompatTextView tvCommitBtn;
+
     protected int clickPosition = -1;
+
     /**
      * 添加证书adapter
      */
     MyCertificateAdapter myCertificateAdapter;
+
     /**
      * 证书展示Adapter
      */
     MyCerticateListAdapter myCerticateListAdapter;
+
     /**
      * 0:空页面
      * 1:有证书数据页面
@@ -84,7 +92,9 @@ public class UserCertificateActivity extends BaseActivity {
      * 3:选择证书类型页面
      */
     private int certificateState = 0;
+
     private int lastCertificateState = 0;
+
     private List<CertificateListItem> mCertificateListItems = new ArrayList<>();
 
     /**
@@ -108,12 +118,9 @@ public class UserCertificateActivity extends BaseActivity {
         this.setActionBarTitle("持有证书");
         this.showLeftBtn(true, R.mipmap.arrow_back_blue);
         this.showRightBtn(true, R.mipmap.new_add);
-
         com.njxm.smart.ui.activities.UserCertificateActivity.refreshCertificateList();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         this.myCertificateAdapter = new MyCertificateAdapter(this);
-
         this.myCertificateAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -126,10 +133,8 @@ public class UserCertificateActivity extends BaseActivity {
                 }
             }
         });
-
         this.myCerticateListAdapter = new MyCerticateListAdapter(this, this.mCertificateListItems);
         this.recyclerView.setLayoutManager(layoutManager);
-
         ViewUtils.setOnClickListener(tvUploadBtn, new SafeOnClickListener() {
             @Override
             public void onSafeClick(View view) {
@@ -144,7 +149,6 @@ public class UserCertificateActivity extends BaseActivity {
 
     private void init(int certificateState) {
         this.certificateState = certificateState;
-
         if (certificateState == 0) {
             this.llAdapterLayout.setVisibility(View.GONE);
             this.rlDefault.setVisibility(View.VISIBLE);
@@ -267,7 +271,6 @@ public class UserCertificateActivity extends BaseActivity {
             }
             requestBuilder.addPart(MultipartBody.Part.createFormData("files", item.id + ".jpg", RequestBody.create(MediaType.parse("image/png"), item.file)));
         }
-
         HttpUtils.getInstance().doPostFile(requestBuilder.build());
     }
 
@@ -284,13 +287,16 @@ public class UserCertificateActivity extends BaseActivity {
 
     public static class CertificateItem {
         public String id;
+
         public String name;
+
         public File file;
     }
 
     public static class CertificateListItem {
         @JSONField(name = "filePath")
         public String certificateImage;
+
         @JSONField(name = "typeName")
         public String certificateName;
 
