@@ -10,130 +10,78 @@ package com.njxm.smart.ui.activities.main
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.RadioGroup
-import androidx.navigation.Navigation
+import androidx.core.view.forEach
+import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.njxm.smart.ui.activities.AppBaseActivity
+import com.njxm.smart.ui.activities.BaseActivity
+import com.njxm.smart.ui.activities.fragments.AttendanceFragment
+import com.njxm.smart.ui.activities.fragments.MessagesFragment
+import com.njxm.smart.ui.activities.fragments.PersonalFragment
+import com.njxm.smart.ui.activities.fragments.WorkCenterFragment
 import com.ntxm.smart.R
-import com.smart.cloud.utils.ToastUtils
-import java.util.*
+import com.ntxm.smart.databinding.ActivityMainBinding
+import com.sugar.android.common.utils.FragmentUtils
+import com.sugar.android.common.utils.Logger
 
 /**
  * 主页 RadioGroup + Fragment 实现不可滑动的切换效果
  */
 @Route(path = "/app/main")
-class MainActivity : AppBaseActivity<MainView?, MainPresenter?>(), MainView {
-    private val navTabs: MutableList<NavTab> = ArrayList()
-    private var lastSelected = R.id.first_btn
-    private var selectedTab: Int = 0
+class MainActivity : BaseActivity() {
+    private lateinit var layoutBinding: ActivityMainBinding
+
+    private val fragmentMap: HashMap<Int, Fragment> = java.util.HashMap()
+
+    private var currentFragment: Fragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        layoutBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(layoutBinding.root)
+        initFragments()
         initViews()
-        initNavTabs()
+    }
+
+    private fun initFragments() {
+        layoutBinding.radioGroup.forEach {
+            when (it.id) {
+                R.id.first_btn -> {
+                    fragmentMap[it.id] = AttendanceFragment()
+                }
+                R.id.btn2 -> {
+                    fragmentMap[it.id] = WorkCenterFragment()
+                }
+                R.id.btn3 -> {
+                    fragmentMap[it.id] = MessagesFragment()
+                }
+                R.id.btn4 -> {
+                    fragmentMap[it.id] = PersonalFragment()
+                }
+                else -> {
+                    Logger.e(TAG, "not impl main tab.")
+                }
+            }
+        }
+        currentFragment = fragmentMap[R.id.first_btn]
+        FragmentUtils.showFragment(supportFragmentManager, R.id.fragment_container, currentFragment)
     }
 
     @SuppressLint("NonConstantResourceId")
     private fun initViews() {
         val radioGroup = findViewById<RadioGroup>(R.id.radio_group)
         radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
-            ToastUtils.showToast("checkId: $checkedId")
-            if (lastSelected == checkedId) {
-                return@setOnCheckedChangeListener
+            Logger.i(TAG, "radio group select checkId: $checkedId")
+            val fragment = fragmentMap[checkedId]
+            if (fragment != null) {
+                FragmentUtils.showFragment(supportFragmentManager, R.id.fragment_container, currentFragment, fragment)
+                currentFragment = fragment
+            } else {
+                Logger.e(TAG, "undefine fragment, can not jump it.")
             }
-            lastSelected = checkedId
-
-            val actionId = getNavActionId(lastSelected, checkedId)
-            lastSelected = checkedId
-            if (actionId != INVALID_ACTION) {
-                Navigation.findNavController(this, R.id.fragment_container).navigate(actionId)
-            }
-        }
-    }
-
-    private fun switchFragmentTo(tabIndex: Int) {
-        when (tabIndex) {
-            0 -> {
-
-            }
-            1 -> {
-
-            }
-            2 -> {
-
-            }
-            3 -> {
-
-            }
-            else -> {
-
-            }
-
-        }
-    }
-
-
-    /**
-     * 添加页面和导航action的映射关系
-     */
-    private fun initNavTabs() {
-        navTabs.add(NavTab(R.id.first_btn, R.id.btn2, R.id.action_attendanceFragment_to_workCenterFragment))
-        navTabs.add(NavTab(R.id.first_btn, R.id.btn3, R.id.action_attendanceFragment_to_messageFragment))
-        navTabs.add(NavTab(R.id.first_btn, R.id.btn4, R.id.action_attendanceFragment_to_personalFragment))
-        navTabs.add(NavTab(R.id.btn2, R.id.first_btn, R.id.action_workCenterFragment_to_attendanceFragment))
-        navTabs.add(NavTab(R.id.btn2, R.id.btn3, R.id.action_workCenterFragment_to_messageFragment))
-        navTabs.add(NavTab(R.id.btn2, R.id.btn4, R.id.action_workCenterFragment_to_personalFragment))
-        navTabs.add(NavTab(R.id.btn3, R.id.first_btn, R.id.action_messageFragment_to_attendanceFragment))
-        navTabs.add(NavTab(R.id.btn3, R.id.btn2, R.id.action_messageFragment_to_workCenterFragment))
-        navTabs.add(NavTab(R.id.btn3, R.id.btn4, R.id.action_messageFragment_to_personalFragment))
-        navTabs.add(NavTab(R.id.btn4, R.id.first_btn, R.id.action_personalFragment_to_attendanceFragment))
-        navTabs.add(NavTab(R.id.btn4, R.id.btn2, R.id.action_personalFragment_to_workCenterFragment))
-        navTabs.add(NavTab(R.id.btn4, R.id.btn3, R.id.action_personalFragment_to_messageFragment))
-
-        // this is a mementation
-
-        // realty corp
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.activity_main
-    }
-
-    override fun onResume() {
-        super.onResume()
-        MainPresenter.fetchCountryAddresses()
-    }
-
-    private fun getNavActionId(from: Int, to: Int): Int {
-        for (navTab in navTabs) {
-            if (navTab == NavTab(from, to, -1)) {
-                return navTab.action
-            }
-        }
-        return INVALID_ACTION
-    }
-
-    override fun newPresenter(): MainPresenter {
-        return MainPresenter()
-    }
-
-    private class NavTab(var from: Int, var to: Int, var action: Int) {
-        override fun equals(o: Any?): Boolean {
-            if (this === o) {
-                return true
-            }
-            if (o == null || this.javaClass != o.javaClass) {
-                return false
-            }
-            val navTab = o as NavTab
-            return from == navTab.from &&
-                    to == navTab.to
-        }
-
-        override fun hashCode(): Int {
-            return Objects.hash(from, to)
         }
     }
 
     companion object {
-        private const val INVALID_ACTION = -1
+        private const val TAG = "MainActivity"
     }
 }

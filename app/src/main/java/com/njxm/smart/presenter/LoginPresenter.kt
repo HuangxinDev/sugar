@@ -8,7 +8,6 @@
 
 package com.njxm.smart.presenter
 
-import android.os.SystemClock
 import com.njxm.smart.contract.LoginContract
 import com.njxm.smart.contract.LoginContract.Presenter
 import com.njxm.smart.model.LoginModel
@@ -32,7 +31,6 @@ class LoginPresenter : BasePresenter<LoginContract.View>(), Presenter {
 
     override fun loginAccount(objectMap: Map<String, String>?) {
         mView?.showLoading()
-        SystemClock.sleep(2000)
         mLoginModel?.login("")
         mView?.hideLoading()
         mView?.onLoginState(1)
