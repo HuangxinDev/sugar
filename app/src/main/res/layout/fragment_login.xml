@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/login_title_tv"
+        style="@style/BaseTextViewStyle.Black.26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="75dp"
+        android:enabled="false"
+        android:text="@string/login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/quick_login_tab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:fontFamily="@font/msyh"
+        android:gravity="center"
+        android:padding="@dimen/padding_m"
+        android:text="@string/quick_login_text"
+        android:textColor="@drawable/login_text_color_selector"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/login_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/login_title_tv" />
+
+    <TextView
+        android:id="@+id/password_login_tab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_m"
+        android:fontFamily="@font/msyh"
+        android:padding="@dimen/padding_m"
+        android:text="@string/password_login_text"
+        android:textColor="@drawable/login_text_color_selector"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/quick_login_tab_btn"
+        app:layout_constraintLeft_toRightOf="@+id/quick_login_tab_btn" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/tab_btns_bottom_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="quick_login_tab_btn, password_login_tab_btn" />
+
+    <View
+        android:id="@+id/btn_tab_indicator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/line_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_btns_bottom_barrier" />
+
+    <View
+        android:id="@+id/divider_login"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginHorizontal="@dimen/margin_l"
+        android:background="@color/divider_color_ffdedede"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_tab_indicator" />
+
+    <com.njxm.smart.view.AppEditText
+        android:id="@id/login_account"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        app:edit_text="@{user.userName}"
+        app:hint="@string/hint_user_login_account"
+        app:layout_constraintTop_toBottomOf="@id/divider_login"
+        app:leftIcon="@mipmap/edt_icon_user_account"
+        app:right_type="none" />
+
+    <com.njxm.smart.view.AppEditText
+        android:id="@id/login_qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        app:hint="@string/hint_user_login_pic"
+        app:inputType="textCapWords"
+        app:layout_constraintTop_toBottomOf="@id/login_account"
+        app:leftIcon="@mipmap/edt_icon_pwd_verify"
+        app:rightIcon="@mipmap/ic_launcher"
+        app:right_type="image"
+        app:toRightOfEdit="true" />
+    <com.njxm.smart.view.AppEditText
+        android:id="@id/login_number_code"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        app:hint="请输入验证码"
+        app:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/login_qr_code"
+        app:leftIcon="@mipmap/edt_icon_pwd_verify"
+        app:rightText="@string/text_get_code"
+        app:rightTextColor="@color/color_007AFF"
+        app:right_type="text" />
+
+    <com.njxm.smart.view.AppEditText
+        android:id="@id/login_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        app:edit_text="123456"
+        app:hint="@string/user_password_hint_text"
+        app:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/login_number_code"
+        app:leftIcon="@mipmap/edt_icon_user_password"
+        app:right_type="none" />
+
+    <TextView
+        android:id="@+id/btn_login"
+        style="@style/TextViewStyle1"
+        android:layout_width="287dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="@dimen/margin_l"
+        android:onClick="@{user.login}"
+        android:text="@string/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_pwd" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/forget_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/dp_28"
+        android:layout_marginEnd="@dimen/dp_61"
+        android:text="忘记密码"
+        android:textColor="@color/color_007AFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_login" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
