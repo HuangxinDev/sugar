@@ -23,10 +23,10 @@ import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.njxm.smart.api.GetUserFuctionItemsApi;
 import com.njxm.smart.bean.PermissionBean;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.http.WebService;
 import com.njxm.smart.ui.activities.SuggestionsActivity;
 import com.njxm.smart.ui.activities.adapter.WorkCenterItemAdapter;
 import com.ntxm.smart.R;
@@ -101,7 +101,7 @@ public class WorkCenterFragment extends BaseFragment {
         });
         this.mRecyclerView.setAdapter(this.mAdapter);
 
-        GetUserFuctionItemsApi api = com.njxm.smart.tools.network.HttpUtils.getApi(GetUserFuctionItemsApi.class);
+        WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
         api.getFeatureItems().enqueue(new Callback<ServerResponseBean<List<PermissionBean>>>() {
             @Override
             public void onResponse(Call<ServerResponseBean<List<PermissionBean>>> call, Response<ServerResponseBean<List<PermissionBean>>> response) {

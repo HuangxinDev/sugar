@@ -23,13 +23,12 @@ import androidx.core.content.FileProvider;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.njxm.smart.api.GetAreaApi;
-import com.njxm.smart.api.UploadInputFaceApi;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.http.WebService;
 import com.njxm.smart.model.jsonbean.AddressBean;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
@@ -133,7 +132,7 @@ public class InputFaceActivity extends BaseActivity {
      */
     private void uploadInputFace() {
 
-        HttpUtils.getApi(GetAreaApi.class).testArrayTest().enqueue(new Callback<AddressBean>() {
+        HttpUtils.getApi(WebService.class).testArrayTest().enqueue(new Callback<AddressBean>() {
             @Override
             public void onResponse(Call<AddressBean> call, Response<AddressBean> response) {
             }
@@ -145,7 +144,7 @@ public class InputFaceActivity extends BaseActivity {
         });
 
 
-        UploadInputFaceApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadInputFaceApi.class);
+        WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
         api.uploadFacePhoto(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)),
                 MultipartBody.Part.createFormData("file", this.photoFile.getName(), RequestBody.create(MediaType.parse("image/png"), this.photoFile)))
                 .enqueue(new Callback<ServerResponseBean>() {

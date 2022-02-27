@@ -8,14 +8,14 @@
 
 package com.njxm.smart.contract;
 
-import java.util.Map;
-
 import android.graphics.Bitmap;
 
 import androidx.annotation.UiThread;
 
-import com.njxm.smart.bean.LoginBean;
+import com.njxm.smart.http.bean.LoginBean;
 import com.njxm.smart.view.BaseView;
+
+import java.util.Map;
 
 /**
  * Created by Hxin on 2020/5/14

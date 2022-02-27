@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.njxm.smart.bean;
+package com.njxm.smart.http.bean;
 
 import java.util.List;
 
@@ -14,9 +14,7 @@ import java.util.List;
  * Created by Hxin on 2020/3/28
  * Function: 登录接口
  */
-public class LoginBean<T> {
-
-
+public final class LoginBean {
     /**
      * teamName :
      * deptName : 王子国际
@@ -54,37 +52,67 @@ public class LoginBean<T> {
      */
 
     private String teamName;
+
     private String deptName;
+
     private int suDeviceType;
+
     private String suPhone;
+
     private String companyName;
+
     private int suGender;
+
     private String suEducation;
+
     private String suSalt;
+
     private String modifyUser;
+
     private long modifyTime;
+
     private String id;
+
     private String suCity;
+
     private String roleCodes;
+
     private int ssSafetyScore;
+
     private String suPassword;
+
     private int suAge;
+
     private String suAddress;
+
     private String suDistrict;
+
     private int delFlag;
+
     private String suAccount;
+
     private String suName;
+
     private int suMedicalStatus;
+
     private String suStatus;
+
     private String token;
+
     private String suProvince;
+
     private int suReal;
+
     private long createTime;
+
     private String createUser;
+
     private String suIdCardNum;
+
     private List<String> authorities;
+
     private List<OrgsBean> orgs;
-    private List<T> managers;
+
     private List<String> permissionIds;
 
     public String getTeamName() {
@@ -335,14 +363,6 @@ public class LoginBean<T> {
         this.orgs = orgs;
     }
 
-    public List<T> getManagers() {
-        return managers;
-    }
-
-    public void setManagers(List<T> managers) {
-        this.managers = managers;
-    }
-
     public List<String> getPermissionIds() {
         return permissionIds;
     }
@@ -359,7 +379,9 @@ public class LoginBean<T> {
          */
 
         private String orgName;
+
         private int admin;
+
         private String orgId;
 
         public String getOrgName() {

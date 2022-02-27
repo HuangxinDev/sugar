@@ -21,13 +21,13 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.njxm.smart.api.UploadFileApi;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.GlobalRouter;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.http.WebService;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.utils.SPUtils;
@@ -188,7 +188,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void uploadHeadFile() {
 
-        UploadFileApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadFileApi.class);
+        WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
 
         List<MultipartBody.Part> parts = new ArrayList<>();
         parts.add(MultipartBody.Part.createFormData("id", SPUtils.getStringValue(KeyConstant.KEY_USER_ID)));

@@ -8,11 +8,11 @@
 
 package com.njxm.smart.tools.network;
 
-import com.njxm.smart.api.ConvertFactory;
 import com.njxm.smart.eventbus.LogoutEvent;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
+import com.njxm.smart.http.ConvertFactory;
 import com.njxm.smart.http.HeaderInterceptor;
 import com.njxm.smart.utils.JsonUtils;
 
@@ -31,8 +31,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public final class HttpUtils {
 
     private static final HttpUtils sInstance = null;
+
     private static final Object sLock = new Object();
+
     private static OkHttpClient sOkHttpClient;
+
     private String baseUrl;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -48,7 +51,6 @@ public final class HttpUtils {
                 .addInterceptor(new HeaderInterceptor())
                 .build();
     }
-
 
     private HttpUtils(Builder builder) {
         this.baseUrl = builder.baseUrl;
@@ -79,12 +81,10 @@ public final class HttpUtils {
             ResponseEvent responseEvent = JsonUtils.getJsonObject(response.body().string(),
                     ResponseEvent.class);
             responseEvent.setUrl(requestEvent.url);
-
             if (!responseEvent.isSuccess()) {
                 EventBus.getDefault().post(new ToastEvent(responseEvent.getMessage()));
                 return;
             }
-
             int code = responseEvent.getCode();
             if (code == 401 || code == 999) {
                 // 身份信息过期,需要重新登录
@@ -121,8 +121,6 @@ public final class HttpUtils {
      * @param requestEvent
      */
     public void request(RequestEvent requestEvent) {
-
-
 //        RequestBody body;
 //        StringBuilder url = new StringBuilder(requestEvent.url);
 //        if (requestEvent.params != null && requestEvent.params.size() > 0) {
@@ -220,7 +218,6 @@ public final class HttpUtils {
         private String baseUrl;
 
         public Builder() {
-
         }
 
         public Builder baseUrl(String baseUrl) {

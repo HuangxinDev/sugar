@@ -30,13 +30,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.njxm.smart.api.UploadFileApi;
 import com.njxm.smart.bean.ServerResponseBean;
 import com.njxm.smart.constant.UrlPath;
 import com.njxm.smart.eventbus.RequestEvent;
 import com.njxm.smart.eventbus.ResponseEvent;
 import com.njxm.smart.eventbus.ToastEvent;
 import com.njxm.smart.global.KeyConstant;
+import com.njxm.smart.http.WebService;
 import com.njxm.smart.model.jsonbean.UserBean;
 import com.njxm.smart.tools.network.HttpUtils;
 import com.njxm.smart.ui.activities.adapter.SimpleImageAdapter;
@@ -306,7 +306,7 @@ public class MedicalReportActivity extends BaseActivity implements View.OnClickL
                     RequestBody.create(MediaType.parse("image/png"), file)));
         }
 
-        UploadFileApi api = com.njxm.smart.tools.network.HttpUtils.getApi(UploadFileApi.class);
+        WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
 
         api.uploadFile(UrlPath.PATH_MEDICAL_REPORT_COMMIT.getPath(), parts).enqueue(new Callback<ServerResponseBean>() {
             @Override

@@ -1,4 +1,4 @@
-package com.njxm.smart.api;
+package com.njxm.smart.http;
 
 import com.alibaba.fastjson.JSON;
 

@@ -1,8 +1,8 @@
 package com.njxm.smart.activities.login;
 
-import com.njxm.smart.api.LoginApi;
-import com.njxm.smart.bean.LoginBean;
 import com.njxm.smart.bean.ServerResponseBean;
+import com.njxm.smart.http.WebService;
+import com.njxm.smart.http.bean.LoginBean;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import retrofit2.Response;
  * @date 2021/7/20
  */
 public class LoginRepository {
-    private LoginApi api;
+    private WebService api;
 
-    public LoginRepository(LoginApi api) {
+    public LoginRepository(WebService api) {
         this.api = api;
     }
 
