@@ -15,12 +15,11 @@ import com.ntxm.smart.R;
  */
 public class MessagesFragment extends BaseFragment {
     @Override
-    protected int setLayoutResourceID() {
+    protected int getLayoutId() {
         return R.layout.fragment_main_messages;
     }
 
     @Override
     protected void onLazyLoad() {
-
     }
 }

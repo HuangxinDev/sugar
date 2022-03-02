@@ -48,14 +48,17 @@ import retrofit2.Response;
  */
 public class WorkCenterFragment extends BaseFragment {
     private final List<MultiItemEntity> mData = new ArrayList<>();
+
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
+
     @BindView(R.id.suggestion_box)
     protected AppCompatTextView mSuggestionBox;
+
     private WorkCenterItemAdapter mAdapter;
 
     @Override
-    protected int setLayoutResourceID() {
+    protected int getLayoutId() {
         return R.layout.fragment_main_workcenter;
     }
 
@@ -77,11 +80,9 @@ public class WorkCenterFragment extends BaseFragment {
                 return;
             }
             PermissionBean workCenterData = (PermissionBean) adapter.getItem(position);
-
             if (workCenterData == null || StringUtils.isEmpty(workCenterData.getUrl())) {
                 return;
             }
-
             String routerPath = workCenterData.getSrLinkType() == 0 ?
                     "/" + workCenterData.getUrl().replace(":", "/") : "/app/webview";
             ARouter.getInstance().build(routerPath)
@@ -89,7 +90,6 @@ public class WorkCenterFragment extends BaseFragment {
                     .navigation(this.getActivity(), new NavCallback() {
                         @Override
                         public void onArrival(Postcard postcard) {
-
                         }
 
                         @Override
@@ -100,7 +100,6 @@ public class WorkCenterFragment extends BaseFragment {
                     });
         });
         this.mRecyclerView.setAdapter(this.mAdapter);
-
         WebService api = com.njxm.smart.tools.network.HttpUtils.getApi(WebService.class);
         api.getFeatureItems().enqueue(new Callback<ServerResponseBean<List<PermissionBean>>>() {
             @Override

@@ -9,6 +9,7 @@ package com.njxm.smart.ui.activities.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Window
 import android.widget.RadioGroup
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.njxm.smart.ui.activities.fragments.AttendanceFragment
 import com.njxm.smart.ui.activities.fragments.MessagesFragment
 import com.njxm.smart.ui.activities.fragments.PersonalFragment
 import com.njxm.smart.ui.activities.fragments.WorkCenterFragment
+import com.njxm.smart.utils.StatusBarUtil
 import com.ntxm.smart.R
 import com.ntxm.smart.databinding.ActivityMainBinding
 import com.sugar.android.common.utils.FragmentUtils
@@ -35,7 +37,11 @@ class MainActivity : BaseActivity() {
     private var currentFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.requestFeature(Window.FEATURE_NO_TITLE)
+        StatusBarUtil.setTranslucentStatus(this)
+//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         super.onCreate(savedInstanceState)
+
         layoutBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(layoutBinding.root)
         initFragments()

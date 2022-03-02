@@ -1,39 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
-  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
-  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
-  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
-  -->
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent">
-
-    <!--    android:background="@color/background_white"-->
 
     <ImageView
         android:id="@+id/header_background"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/header_background_blue"
         app:layout_constraintDimensionRatio="H,16:9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/personal_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginHorizontal="@dimen/margin_l"
         android:src="@mipmap/header_background_white"
         app:layout_constraintBottom_toBottomOf="@id/header_background" />
-
 
     <com.njxm.smart.view.CircleImageView
         android:id="@+id/user_head"
@@ -51,8 +38,7 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:fontFamily="@font/msyh"
+        android:layout_marginStart="@dimen/margin_m"
         android:text="李建国"
         android:textColor="@color/color_252525"
         android:textSize="@dimen/sp_17"
@@ -65,7 +51,6 @@
         android:id="@+id/user_score_pop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/msyh"
         android:text="安全分 "
         android:textColor="@color/color_96A1AD"
         android:textSize="@dimen/sp_11"
@@ -249,6 +234,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <ImageView

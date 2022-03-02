@@ -26,15 +26,18 @@ import butterknife.BindView;
  * Function: 考试Fragment
  */
 public class ExamFragment extends BaseFragment {
-
     private static final String PARAM_EXAM = "exam_param";
+
     @BindView(R.id.title_type)
     protected TextView mQuestionTypeTv;
+
     @BindView(R.id.title)
     protected TextView mQuestionTitleTv;
+
     @Nullable
     @BindView(R.id.select_group)
     protected RadioGroup mSelectGroup;
+
     private String name;
 
     public static Fragment newInstance(String name) {
@@ -53,14 +56,12 @@ public class ExamFragment extends BaseFragment {
 
     @Override
     protected void onLazyLoad() {
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         this.mQuestionTypeTv.setText(this.name);
-
         if (this.mSelectGroup != null) {
             this.mSelectGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -74,8 +75,7 @@ public class ExamFragment extends BaseFragment {
     }
 
     @Override
-    protected int setLayoutResourceID() {
-
+    protected int getLayoutId() {
         if ("判断".equals(this.name)) {
             return R.layout.item_safe_exam_judge;
         } else if ("多选".equals(this.name)) {
@@ -83,6 +83,5 @@ public class ExamFragment extends BaseFragment {
         } else {
             return R.layout.item_safe_exam_single_selection;
         }
-
     }
 }

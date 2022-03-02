@@ -75,7 +75,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    protected int setLayoutResourceID() {
+    protected int getLayoutId() {
         return R.layout.my_activity;
     }
 

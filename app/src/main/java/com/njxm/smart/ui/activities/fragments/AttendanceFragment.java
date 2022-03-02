@@ -15,14 +15,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
@@ -42,6 +47,7 @@ import com.njxm.smart.utils.FileUtils;
 import com.njxm.smart.utils.ScreenUtils;
 import com.ntxm.smart.BuildConfig;
 import com.ntxm.smart.R;
+import com.ntxm.smart.databinding.FragmentAttendaceBinding;
 import com.sugar.android.common.utils.Logger;
 import com.sugar.android.common.utils.SPUtils;
 
@@ -50,35 +56,40 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.UUID;
 
-import butterknife.BindView;
-import wendu.dsbridge.DWebView;
-
 /**
  * 考勤Fragment
  */
 public class AttendanceFragment extends BaseFragment implements IPermission {
     private static final String TAG = "AttendanceFragment";
 
-    @BindView(R.id.webview_kit)
-    protected DWebView mWebView;
+    private static final String H_5_LOCATION = "h5Location";
+
+    private FragmentAttendaceBinding layoutBinding;
 
     private LocationService mLocationService;
+
+    private File photoFile;
 
     private final BDAbstractLocationListener mBdAbstractLocationListener = new BDAbstractLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             Logger.d(TAG, "==baidu location success==" + bdLocation.getAddrStr());
-            com.njxm.smart.service.LocationService.unregisterListener(this);
-            AttendanceFragment.this.mLocationService.stop();
+            LocationService.unregisterListener(this);
+            mLocationService.stop();
             JSONObject object = new JSONObject();
             object.put("x", bdLocation.getLongitude());
             object.put("y", bdLocation.getLatitude());
             object.put("address", bdLocation.getAddrStr());
-            AttendanceFragment.this.mWebView.callHandler("h5Location", new Object[]{object.toJSONString()});
+            layoutBinding.webviewKit.callHandler(H_5_LOCATION, new Object[]{object.toJSONString()});
         }
     };
 
-    private File photoFile;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        layoutBinding = FragmentAttendaceBinding.inflate(inflater);
+        return layoutBinding.getRoot();
+    }
 
     /**
      * Js页面获取用户个人信息
@@ -96,15 +107,10 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
         return jsonObject.toJSONString();
     }
 
-    @Override
-    protected int setLayoutResourceID() {
-        return R.layout.my_attendance_activity;
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void init() {
-        WebSettings settings = this.mWebView.getSettings();
+        WebSettings settings = layoutBinding.webviewKit.getSettings();
         settings.setJavaScriptEnabled(true);
     }
 
@@ -123,15 +129,15 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     @Override
     public void onResume() {
         super.onResume();
-        this.mWebView.addJavascriptObject(this, null);
+        layoutBinding.webviewKit.addJavascriptObject(this, null);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        com.njxm.smart.service.LocationService.unregisterListener(this.mBdAbstractLocationListener);
+        LocationService.unregisterListener(this.mBdAbstractLocationListener);
         this.mLocationService.stop();
-        this.mWebView.removeJavascriptObject(null);
+        layoutBinding.webviewKit.removeJavascriptObject(null);
     }
 
     @Override
@@ -141,7 +147,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
 
     @Override
     protected void onLazyLoad() {
-        this.mWebView.setWebViewClient(new WebViewClient() {
+        layoutBinding.webviewKit.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -154,7 +160,7 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
                 Logger.i(TAG, "url load finshed");
             }
         });
-        this.mWebView.loadUrl(UrlPath.PATH_MAIN_KAO_QIN.getUrl());
+        layoutBinding.webviewKit.loadUrl(UrlPath.PATH_MAIN_KAO_QIN.getUrl());
         this.mLocationService = ((SmartCloudApplication) SmartCloudApplication.getApplication()).locationService;
     }
 
@@ -180,21 +186,19 @@ public class AttendanceFragment extends BaseFragment implements IPermission {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 999 && resultCode == Activity.RESULT_OK) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (AttendanceFragment.this.getActivity() == null) {
-                        return;
-                    }
-                    try {
-                        Bitmap bitmap = Glide.with(AttendanceFragment.this.getActivity()).asBitmap().load(AttendanceFragment.this.photoFile).submit(200, 200).get();
-                        String bitmapStr = Base64.encodeToString(BitmapUtils.transform(bitmap), Base64.DEFAULT);
-                        AttendanceFragment.this.mWebView.callHandler("h5Photos", new Object[]{bitmapStr});
-                        EventBus.getDefault().post(new ToastEvent("图片大小: " + bitmapStr.length()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        EventBus.getDefault().post(new ToastEvent("图片处理异常"));
-                    }
+            new Thread(() -> {
+                if (getActivity() == null) {
+                    return;
+                }
+                try {
+                    final int IMAGE_SIZE = 200;
+                    Bitmap bitmap = Glide.with(getActivity()).asBitmap().load(photoFile).submit(IMAGE_SIZE, IMAGE_SIZE).get();
+                    String bitmapStr = Base64.encodeToString(BitmapUtils.transform(bitmap), Base64.DEFAULT);
+                    layoutBinding.webviewKit.callHandler("h5Photos", new Object[]{bitmapStr});
+                    EventBus.getDefault().post(new ToastEvent("图片大小: " + bitmapStr.length()));
+                } catch (Exception e) {
+                    Logger.e(TAG, "no found.");
+                    EventBus.getDefault().post(new ToastEvent("图片处理异常"));
                 }
             }).start();
         }

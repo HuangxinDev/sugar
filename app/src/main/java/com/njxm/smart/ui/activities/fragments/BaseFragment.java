@@ -27,14 +27,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
-
 // 类似于android support v4包下的Fragment
 
 /**
  * Fragment基类
  */
 public abstract class BaseFragment extends Fragment implements BaseRunnable {
-
     final String TAG;
 
     private View mContentView;
@@ -65,7 +63,9 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
         if (this.mContentView != null) {
             return this.mContentView;
         }
-        this.mContentView = inflater.inflate(this.setLayoutResourceID(), container, false);
+        if (getLayoutId() != -1) {
+            this.mContentView = inflater.inflate(this.getLayoutId(), container, false);
+        }
         ButterKnife.bind(this, this.mContentView);
         this.init();
         this.setUpView();
@@ -93,27 +93,26 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
      *
      * @return 布局文件资源ID
      */
-    protected abstract int setLayoutResourceID();
+    protected int getLayoutId() {
+        return -1;
+    }
 
     /**
      * 一些View的相关操作
      */
     protected void setUpView() {
-
     }
 
     /**
      * 一些Data的相关操作
      */
     protected void setUpData() {
-
     }
 
     /**
      *
      */
     protected void init() {
-
     }
 
     View getContentView() {
@@ -162,6 +161,5 @@ public abstract class BaseFragment extends Fragment implements BaseRunnable {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(String msg) {
-
     }
 }

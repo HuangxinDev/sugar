@@ -2,6 +2,18 @@ plugins {
     id 'com.android.library'
 }
 
+apply plugin: "maven-publish"
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.sugar'
+            artifactId = 'utils'
+            version = '1.0.0'
+        }
+    }
+}
+
 android {
     compileSdk 31
 
