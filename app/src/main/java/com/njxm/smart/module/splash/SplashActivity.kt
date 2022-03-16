@@ -16,6 +16,7 @@ import com.njxm.smart.global.KeyConstant
 import com.njxm.smart.module.login.LoginFragment
 import com.njxm.smart.ui.activities.BaseActivity
 import com.njxm.smart.ui.activities.main.MainActivity
+import com.njxm.smart.utils.StatusBarUtil
 import com.ntxm.smart.R
 import com.ntxm.smart.databinding.ActivitySplashLayoutBinding
 import com.sugar.android.common.utils.ActivityUtils
@@ -30,6 +31,7 @@ class SplashActivity : BaseActivity() {
     private lateinit var layoutBinding: ActivitySplashLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        StatusBarUtil.setTranslucentStatus(this)
         super.onCreate(savedInstanceState)
         layoutBinding = ActivitySplashLayoutBinding.inflate(layoutInflater)
         setContentView(layoutBinding.root)

@@ -1,0 +1,7 @@
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        
+    }
+}

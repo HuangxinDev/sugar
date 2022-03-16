@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply from: "$rootDir/pinProject.gradle"
+apply from: "$rootDir/common.gradle"
 
 dependencies {
     implementation project(path: ':common:common_ability')

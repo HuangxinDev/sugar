@@ -12,8 +12,8 @@
 
 
     <!--    闪屏主题-->
-    <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
-<!--        <item name="android:windowBackground">@mipmap/app_background_lunch_screen</item>-->
+    <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
+        <!--        <item name="android:windowBackground">@mipmap/app_background_lunch_screen</item>-->
         <item name="android:windowBackground">@color/background_white</item>
         <item name="android:screenOrientation">portrait</item>
         <item name="android:launchMode">singleTask</item>

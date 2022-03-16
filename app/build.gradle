@@ -1,18 +1,12 @@
 apply plugin: 'com.android.application'
 
 
-/*
- * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
- */
-
 // 编译kotlin代码
 apply plugin: 'kotlin-android'
 // 可选 代码支持通过view id 获取对象，不再需要findViewById
 apply plugin: 'kotlin-android-extensions'
+
+apply from: "$rootDir/common.gradle"
 
 android {
     compileSdkVersion 31
@@ -120,6 +114,8 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.jakewharton:butterknife:10.2.1'
     implementation project(path: ':utils')
+    implementation project(path: ':common:common_ability')
+    implementation project(path: ':common:common_ui')
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     // 图片框架
 

@@ -8,11 +8,6 @@
 
 package com.njxm.smart.utils;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
@@ -25,19 +20,24 @@ import androidx.annotation.IntDef;
 
 import com.ntxm.smart.R;
 
-public class StatusBarUtil {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-    public final static int TYPE_MIUI = 0;
-    public final static int TYPE_FLYME = 1;
-    public final static int TYPE_M = 3; //6.0
+public class StatusBarUtil {
+    final static int TYPE_MIUI = 0;
+
+    final static int TYPE_FLYME = 1;
+
+    final static int TYPE_M = 3; //6.0
 
     /**
      * 修改状态栏颜色，支持4.4以上版本
      *
      * @param colorId 颜色
      */
-    public static void setStatusBarColor(Activity activity, int colorId) {
-
+    private static void setStatusBarColor(Activity activity, int colorId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             StatusBarUtil.setTranslucentStatus(activity);
@@ -56,9 +56,8 @@ public class StatusBarUtil {
      */
     @TargetApi(19)
     public static void setTranslucentStatus(Activity activity) {
-
         // 5.0以上系统状态栏透明
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         Window window = activity.getWindow();
         //清除透明状态栏
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -67,9 +66,9 @@ public class StatusBarUtil {
         //设置状态栏颜色必须添加
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);//设置透明
-//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //19
-//            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        }
+        //        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //19
+        //            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //        }
     }
 
     /**
@@ -96,7 +95,7 @@ public class StatusBarUtil {
     /**
      * 设置文字颜色
      */
-    public static void setStatusBarFontIconDark(Activity activity, @ViewType int type) {
+    private static void setStatusBarFontIconDark(Activity activity, @ViewType int type) {
         switch (type) {
             case StatusBarUtil.TYPE_MIUI:
                 StatusBarUtil.setMiuiUI(activity, true);
@@ -111,7 +110,7 @@ public class StatusBarUtil {
     }
 
     //设置6.0的字体
-    public static void setCommonUI(Activity activity) {
+    private static void setCommonUI(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             activity.getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -120,7 +119,7 @@ public class StatusBarUtil {
     }
 
     //设置Flyme的字体
-    public static void setFlymeUI(Activity activity, boolean dark) {
+    private static void setFlymeUI(Activity activity, boolean dark) {
         try {
             Window window = activity.getWindow();
             WindowManager.LayoutParams lp = window.getAttributes();
@@ -143,7 +142,7 @@ public class StatusBarUtil {
     }
 
     //设置MIUI字体
-    public static void setMiuiUI(Activity activity, boolean dark) {
+    private static void setMiuiUI(Activity activity, boolean dark) {
         try {
             Window window = activity.getWindow();
             Class clazz = activity.getWindow().getClass();

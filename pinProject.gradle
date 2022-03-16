@@ -1,6 +1,31 @@
+import java.util.stream.Stream
+
 //pin 工程gradle配置
 
 def getPinDirs() {
-    File file = File(getProjectDir(), 'src/')
-    file.listFiles()
+    File file = new File(getProjectDir(), "src")
+    Stream.of(file.listFiles()).filter(dirFile -> dirFile.getName().startsWith("p_")).forEach {
+        new File(it, "main").mkdirs()
+        new File(it, "androidTest").mkdirs()
+        new File(it, "test").mkdirs()
+    }
+    return file.listFiles()
 }
+
+android {
+
+    println "begin android config"
+    Stream.of(getPinDirs()).forEach { dirFile ->
+        sourceSets {
+            main {
+                java.srcDirs "${dirFile.getAbsolutePath()}/main/java"
+                resources.srcDirs "${dirFile.getAbsolutePath()}/main/res"
+            }
+        }
+    }
+
+//    afterEvaluate {
+//        getPinDirs()
+//    }
+}
+

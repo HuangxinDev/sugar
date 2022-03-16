@@ -63,30 +63,30 @@ import butterknife.Optional;
  * 基类，提供共用方法和回调
  */
 public abstract class BaseActivity extends AppCompatActivity implements OnActionBarChange, BaseRunnable {
-    protected final String mTag;
+    private final String mTag;
 
     @Nullable
     @BindView(R.id.action_bar_left)
-    protected AppCompatImageButton mActionBarBackBtn;
+    AppCompatImageButton mActionBarBackBtn;
 
     @Nullable
     @BindView(R.id.action_bar_title)
-    protected AppCompatTextView mActionBarTitle;
+    AppCompatTextView mActionBarTitle;
 
     @Nullable
     @BindView(R.id.action_bar_right)
-    protected AppCompatImageButton mActionBarRightBtn;
+    AppCompatImageButton mActionBarRightBtn;
 
     @Nullable
     @BindView(R.id.action_bar_right_text)
-    protected AppCompatTextView actionBarRightTextView;
+    AppCompatTextView actionBarRightTextView;
 
-    protected File photoFile;
+    File photoFile;
 
     private View container;
 
     protected BaseActivity() {
-        this.mTag = this.getClass().getSimpleName();
+        mTag = getClass().getSimpleName();
     }
 
     protected ActionBarItem getActionBarItem() {
@@ -97,10 +97,10 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getLayoutId() > 0) {
-            this.setContentView(this.getLayoutId());
+            setContentView(getLayoutId());
         }
         ButterKnife.bind(this);
-        this.container = this.findViewById(R.id.ll_root);
+        container = findViewById(R.id.ll_root);
         Logger.d(mTag, "activity lifecycle onCreate");
     }
 
@@ -115,17 +115,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     protected void onResume() {
         super.onResume();
         Logger.d(mTag, "activity lifecycle onResume");
-        if (this.container != null) {
-            this.container.postDelayed(() -> {
-                this.container.setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LOW_PROFILE |
-                                View.SYSTEM_UI_FLAG_FULLSCREEN |
-                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-            }, 500);
-        }
     }
 
     @Override
@@ -176,7 +165,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Optional
     @OnClick(R.id.action_bar_left)
     public void onClickLeftBtn() {
-        this.onBackPressed();
+        onBackPressed();
     }
 
     /**
@@ -196,17 +185,17 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Override
     @Optional
     public void setActionBarTitle(String title) {
-        if (this.mActionBarTitle != null) {
-            this.mActionBarTitle.setText(title);
-            this.mActionBarTitle.setVisibility(View.VISIBLE);
+        if (mActionBarTitle != null) {
+            mActionBarTitle.setText(title);
+            mActionBarTitle.setVisibility(View.VISIBLE);
         }
     }
 
     @Optional
     public void setActionBarTitle(int resId) {
-        if (this.mActionBarTitle != null) {
-            this.mActionBarTitle.setText(resId);
-            this.mActionBarTitle.setVisibility(View.VISIBLE);
+        if (mActionBarTitle != null) {
+            mActionBarTitle.setText(resId);
+            mActionBarTitle.setVisibility(View.VISIBLE);
         }
     }
 
@@ -226,24 +215,24 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     @Override
     public void showLeftBtn(boolean show, int resourcesId) {
-        if (this.mActionBarBackBtn != null) {
+        if (mActionBarBackBtn != null) {
             if (show) {
                 setRightResource(resourcesId);
-                this.mActionBarBackBtn.setVisibility(View.VISIBLE);
+                mActionBarBackBtn.setVisibility(View.VISIBLE);
             } else {
-                this.mActionBarBackBtn.setVisibility(View.GONE);
+                mActionBarBackBtn.setVisibility(View.GONE);
             }
         }
     }
 
     @Override
     public void showRightBtn(boolean show, int resourcesId) {
-        if (this.mActionBarRightBtn != null) {
-            this.mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (mActionBarRightBtn != null) {
+            mActionBarRightBtn.setVisibility(show ? View.VISIBLE : View.GONE);
             setRightResource(resourcesId);
         }
-        if (show && this.actionBarRightTextView != null) {
-            this.actionBarRightTextView.setVisibility(View.GONE);
+        if (show && actionBarRightTextView != null) {
+            actionBarRightTextView.setVisibility(View.GONE);
         }
     }
 
@@ -253,22 +242,22 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
 
     public void showRightBtn(boolean show, String text) {
         TextViewUtils.setText(actionBarRightTextView, text);
-        if (this.actionBarRightTextView != null) {
-            this.actionBarRightTextView.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (actionBarRightTextView != null) {
+            actionBarRightTextView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
-        if (show && this.mActionBarRightBtn != null) {
-            this.mActionBarRightBtn.setVisibility(View.GONE);
+        if (show && mActionBarRightBtn != null) {
+            mActionBarRightBtn.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void showTitle(boolean show, String title) {
-        if (this.mActionBarTitle != null) {
+        if (mActionBarTitle != null) {
             if (show) {
-                this.mActionBarTitle.setText(title);
-                this.mActionBarTitle.setVisibility(View.VISIBLE);
+                mActionBarTitle.setText(title);
+                mActionBarTitle.setVisibility(View.VISIBLE);
             } else {
-                this.mActionBarTitle.setVisibility(View.GONE);
+                mActionBarTitle.setVisibility(View.GONE);
             }
         }
     }
@@ -291,17 +280,17 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         PermissionRequestActivity.startPermissionRequest(this, new String[]{Manifest.permission.CAMERA}, 100, null);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         UUID uuid = UUID.randomUUID();
-        this.photoFile = new File(this.getFilesDir(), uuid + ".jpg");
+        photoFile = new File(getFilesDir(), uuid + ".jpg");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
-                    ".fileProvider", this.photoFile);
+                    ".fileProvider", photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         } else {
-            Uri uri = Uri.fromFile(this.photoFile);
+            Uri uri = Uri.fromFile(photoFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        this.startActivityForResult(intent, requestId);
+        startActivityForResult(intent, requestId);
     }
 
     @Subscribe(sticky = true)
@@ -329,7 +318,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void signUp(LogoutEvent event) {
         SPUtils.putValue(KeyConstant.KEY_USER_TOKEN, "");
-        this.finish();
+        finish();
     }
 
     public static class MedicalBean {
@@ -354,7 +343,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         private List<String> pathList;
 
         public String getId() {
-            return this.id;
+            return id;
         }
 
         public void setId(String id) {
@@ -362,15 +351,15 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public int getDelFlag() {
-            return this.delFlag;
+            return delFlag;
         }
 
         public void setDelFlag(int delFlag) {
             this.delFlag = delFlag;
         }
 
-        public String getCreateTime() {
-            return this.createTime;
+        String getCreateTime() {
+            return createTime;
         }
 
         public void setCreateTime(String createTime) {
@@ -378,7 +367,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public String getCreateUser() {
-            return this.createUser;
+            return createUser;
         }
 
         public void setCreateUser(String createUser) {
@@ -386,7 +375,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public String getModifyTime() {
-            return this.modifyTime;
+            return modifyTime;
         }
 
         public void setModifyTime(String modifyTime) {
@@ -394,7 +383,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public String getModifyUser() {
-            return this.modifyUser;
+            return modifyUser;
         }
 
         public void setModifyUser(String modifyUser) {
@@ -402,7 +391,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public String getSumrStatus() {
-            return this.sumrStatus;
+            return sumrStatus;
         }
 
         public void setSumrStatus(String sumrStatus) {
@@ -410,7 +399,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public String getSumrUserId() {
-            return this.sumrUserId;
+            return sumrUserId;
         }
 
         public void setSumrUserId(String sumrUserId) {
@@ -418,15 +407,15 @@ public abstract class BaseActivity extends AppCompatActivity implements OnAction
         }
 
         public String getFiles() {
-            return this.files;
+            return files;
         }
 
         public void setFiles(String files) {
             this.files = files;
         }
 
-        public List<String> getPathList() {
-            return this.pathList;
+        List<String> getPathList() {
+            return pathList;
         }
 
         public void setPathList(List<String> pathList) {

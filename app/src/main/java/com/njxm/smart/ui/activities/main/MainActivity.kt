@@ -9,6 +9,7 @@ package com.njxm.smart.ui.activities.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.widget.RadioGroup
 import androidx.core.view.forEach
@@ -39,11 +40,10 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_NO_TITLE)
         StatusBarUtil.setTranslucentStatus(this)
-//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         super.onCreate(savedInstanceState)
-
         layoutBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(layoutBinding.root)
+        setStatusBarColor(false)
         initFragments()
         initViews()
     }
@@ -89,5 +89,18 @@ class MainActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
+    }
+
+    private fun setStatusBarColor(isDark: Boolean) {
+        val decor: View = window.decorView
+        if (isDark) {
+            decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//            window.statusBarColor = Color.WHITE
+//            window.decorView.setBackgroundColor(Color.WHITE)
+        } else {
+            decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//            window.decorView.setBackgroundColor(Color.BLACK)
+//            window.statusBarColor = Color.BLACK
+        }
     }
 }
