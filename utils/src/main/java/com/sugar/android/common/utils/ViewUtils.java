@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 
@@ -94,6 +95,12 @@ public final class ViewUtils {
     public static void setImageDrawable(ImageView view, Drawable drawable) {
         if (view != null) {
             view.setImageDrawable(drawable);
+        }
+    }
+
+    public static void setBackgroundColor(View view, @ColorRes int color) {
+        if (view != null) {
+            view.setBackgroundColor(view.getResources().getColor(color));
         }
     }
 }
